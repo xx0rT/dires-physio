@@ -28,11 +28,6 @@ interface RouteProps {
     label: string
 }
 
-interface FeatureProps {
-    title: string
-    description: string
-}
-
 const routeList: RouteProps[] = [
     {
         href: "#features",
@@ -52,24 +47,93 @@ const routeList: RouteProps[] = [
     }
 ]
 
-const featureList: FeatureProps[] = [
-    {
-        title: "Showcase Your Value",
-        description:
-            "Highlight how your product solves user problems effectively."
-    },
-    {
-        title: "Build Trust",
-        description:
-            "Leverage social proof elements to establish trust and credibility."
-    },
-
-    {
-        title: "Scale Fast",
-        description:
-            "Built-in tools and integrations to help you scale your business."
-    }
-]
+const menuContent = {
+    solutions: [
+        {
+            title: "Showcase Your Value",
+            description: "Highlight how your product solves user problems effectively.",
+            href: "#features"
+        },
+        {
+            title: "Build Trust",
+            description: "Leverage social proof elements to establish trust and credibility.",
+            href: "#testimonials"
+        },
+        {
+            title: "Scale Fast",
+            description: "Built-in tools and integrations to help you scale your business.",
+            href: "#features"
+        }
+    ],
+    features: [
+        {
+            title: "Advanced Analytics",
+            description: "Track and analyze your key metrics in real-time.",
+            href: "#features"
+        },
+        {
+            title: "Seamless Integration",
+            description: "Connect with your favorite tools and services.",
+            href: "#features"
+        },
+        {
+            title: "Custom Workflows",
+            description: "Build automated workflows tailored to your needs.",
+            href: "#features"
+        }
+    ],
+    testimonials: [
+        {
+            title: "Customer Stories",
+            description: "Read how our customers achieved success.",
+            href: "#testimonials"
+        },
+        {
+            title: "Case Studies",
+            description: "Detailed analysis of real-world implementations.",
+            href: "#testimonials"
+        },
+        {
+            title: "Reviews",
+            description: "See what our users are saying about us.",
+            href: "#testimonials"
+        }
+    ],
+    pricing: [
+        {
+            title: "Starter Plan",
+            description: "Perfect for individuals and small teams.",
+            href: "#pricing"
+        },
+        {
+            title: "Professional",
+            description: "Advanced features for growing businesses.",
+            href: "#pricing"
+        },
+        {
+            title: "Enterprise",
+            description: "Custom solutions for large organizations.",
+            href: "#pricing"
+        }
+    ],
+    contact: [
+        {
+            title: "Get in Touch",
+            description: "Reach out to our team for any questions.",
+            href: "#contact"
+        },
+        {
+            title: "Sales Inquiry",
+            description: "Talk to our sales team about your needs.",
+            href: "#contact"
+        },
+        {
+            title: "Support",
+            description: "Get help from our support team.",
+            href: "#contact"
+        }
+    ]
+}
 
 export const Navbar = () => {
     const [isOpen, setIsOpen] = React.useState(false)
@@ -132,17 +196,18 @@ export const Navbar = () => {
                                                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                                             </div>
                                             <ul className="flex flex-col gap-3">
-                                                {featureList.map(
+                                                {menuContent.solutions.map(
                                                     ({
                                                         title,
-                                                        description
+                                                        description,
+                                                        href
                                                     }) => (
                                                         <li key={title}>
                                                             <NavigationMenuLink
                                                                 asChild
                                                             >
                                                                 <a
-                                                                    href="#features"
+                                                                    href={href}
                                                                     className="group block rounded-lg p-3 text-sm transition-colors hover:bg-accent/50"
                                                                 >
                                                                     <p className="mb-1 font-semibold text-foreground leading-none group-hover:text-primary">
@@ -163,18 +228,201 @@ export const Navbar = () => {
                                     </NavigationMenuContent>
                                 </NavigationMenuItem>
 
-                                {routeList.map(({ href, label }) => (
-                                    <NavigationMenuItem key={href}>
-                                        <NavigationMenuLink asChild>
-                                            <a
-                                                href={href}
-                                                className="rounded-lg px-4 py-2 font-medium text-sm transition-colors hover:bg-accent/50 hover:text-primary"
-                                            >
-                                                {label}
-                                            </a>
-                                        </NavigationMenuLink>
-                                    </NavigationMenuItem>
-                                ))}
+                                <NavigationMenuItem>
+                                    <NavigationMenuTrigger className="h-auto bg-transparent px-4 py-2 font-medium text-foreground hover:bg-accent/50">
+                                        Features
+                                    </NavigationMenuTrigger>
+                                    <NavigationMenuContent>
+                                        <div className="grid w-[600px] grid-cols-2 gap-6 p-6">
+                                            <div className="relative overflow-hidden rounded-lg">
+                                                <img
+                                                    src="/demo-img.png"
+                                                    alt="Product Demo"
+                                                    className="h-full w-full object-cover"
+                                                    width={300}
+                                                    height={200}
+                                                />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                                            </div>
+                                            <ul className="flex flex-col gap-3">
+                                                {menuContent.features.map(
+                                                    ({
+                                                        title,
+                                                        description,
+                                                        href
+                                                    }) => (
+                                                        <li key={title}>
+                                                            <NavigationMenuLink
+                                                                asChild
+                                                            >
+                                                                <a
+                                                                    href={href}
+                                                                    className="group block rounded-lg p-3 text-sm transition-colors hover:bg-accent/50"
+                                                                >
+                                                                    <p className="mb-1 font-semibold text-foreground leading-none group-hover:text-primary">
+                                                                        {title}
+                                                                    </p>
+                                                                    <p className="line-clamp-2 text-muted-foreground text-xs">
+                                                                        {
+                                                                            description
+                                                                        }
+                                                                    </p>
+                                                                </a>
+                                                            </NavigationMenuLink>
+                                                        </li>
+                                                    )
+                                                )}
+                                            </ul>
+                                        </div>
+                                    </NavigationMenuContent>
+                                </NavigationMenuItem>
+
+                                <NavigationMenuItem>
+                                    <NavigationMenuTrigger className="h-auto bg-transparent px-4 py-2 font-medium text-foreground hover:bg-accent/50">
+                                        Testimonials
+                                    </NavigationMenuTrigger>
+                                    <NavigationMenuContent>
+                                        <div className="grid w-[600px] grid-cols-2 gap-6 p-6">
+                                            <div className="relative overflow-hidden rounded-lg">
+                                                <img
+                                                    src="/demo-img.png"
+                                                    alt="Product Demo"
+                                                    className="h-full w-full object-cover"
+                                                    width={300}
+                                                    height={200}
+                                                />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                                            </div>
+                                            <ul className="flex flex-col gap-3">
+                                                {menuContent.testimonials.map(
+                                                    ({
+                                                        title,
+                                                        description,
+                                                        href
+                                                    }) => (
+                                                        <li key={title}>
+                                                            <NavigationMenuLink
+                                                                asChild
+                                                            >
+                                                                <a
+                                                                    href={href}
+                                                                    className="group block rounded-lg p-3 text-sm transition-colors hover:bg-accent/50"
+                                                                >
+                                                                    <p className="mb-1 font-semibold text-foreground leading-none group-hover:text-primary">
+                                                                        {title}
+                                                                    </p>
+                                                                    <p className="line-clamp-2 text-muted-foreground text-xs">
+                                                                        {
+                                                                            description
+                                                                        }
+                                                                    </p>
+                                                                </a>
+                                                            </NavigationMenuLink>
+                                                        </li>
+                                                    )
+                                                )}
+                                            </ul>
+                                        </div>
+                                    </NavigationMenuContent>
+                                </NavigationMenuItem>
+
+                                <NavigationMenuItem>
+                                    <NavigationMenuTrigger className="h-auto bg-transparent px-4 py-2 font-medium text-foreground hover:bg-accent/50">
+                                        Pricing
+                                    </NavigationMenuTrigger>
+                                    <NavigationMenuContent>
+                                        <div className="grid w-[600px] grid-cols-2 gap-6 p-6">
+                                            <div className="relative overflow-hidden rounded-lg">
+                                                <img
+                                                    src="/demo-img.png"
+                                                    alt="Product Demo"
+                                                    className="h-full w-full object-cover"
+                                                    width={300}
+                                                    height={200}
+                                                />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                                            </div>
+                                            <ul className="flex flex-col gap-3">
+                                                {menuContent.pricing.map(
+                                                    ({
+                                                        title,
+                                                        description,
+                                                        href
+                                                    }) => (
+                                                        <li key={title}>
+                                                            <NavigationMenuLink
+                                                                asChild
+                                                            >
+                                                                <a
+                                                                    href={href}
+                                                                    className="group block rounded-lg p-3 text-sm transition-colors hover:bg-accent/50"
+                                                                >
+                                                                    <p className="mb-1 font-semibold text-foreground leading-none group-hover:text-primary">
+                                                                        {title}
+                                                                    </p>
+                                                                    <p className="line-clamp-2 text-muted-foreground text-xs">
+                                                                        {
+                                                                            description
+                                                                        }
+                                                                    </p>
+                                                                </a>
+                                                            </NavigationMenuLink>
+                                                        </li>
+                                                    )
+                                                )}
+                                            </ul>
+                                        </div>
+                                    </NavigationMenuContent>
+                                </NavigationMenuItem>
+
+                                <NavigationMenuItem>
+                                    <NavigationMenuTrigger className="h-auto bg-transparent px-4 py-2 font-medium text-foreground hover:bg-accent/50">
+                                        Contact
+                                    </NavigationMenuTrigger>
+                                    <NavigationMenuContent>
+                                        <div className="grid w-[600px] grid-cols-2 gap-6 p-6">
+                                            <div className="relative overflow-hidden rounded-lg">
+                                                <img
+                                                    src="/demo-img.png"
+                                                    alt="Product Demo"
+                                                    className="h-full w-full object-cover"
+                                                    width={300}
+                                                    height={200}
+                                                />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                                            </div>
+                                            <ul className="flex flex-col gap-3">
+                                                {menuContent.contact.map(
+                                                    ({
+                                                        title,
+                                                        description,
+                                                        href
+                                                    }) => (
+                                                        <li key={title}>
+                                                            <NavigationMenuLink
+                                                                asChild
+                                                            >
+                                                                <a
+                                                                    href={href}
+                                                                    className="group block rounded-lg p-3 text-sm transition-colors hover:bg-accent/50"
+                                                                >
+                                                                    <p className="mb-1 font-semibold text-foreground leading-none group-hover:text-primary">
+                                                                        {title}
+                                                                    </p>
+                                                                    <p className="line-clamp-2 text-muted-foreground text-xs">
+                                                                        {
+                                                                            description
+                                                                        }
+                                                                    </p>
+                                                                </a>
+                                                            </NavigationMenuLink>
+                                                        </li>
+                                                    )
+                                                )}
+                                            </ul>
+                                        </div>
+                                    </NavigationMenuContent>
+                                </NavigationMenuItem>
                             </NavigationMenuList>
                         </NavigationMenu>
                     </div>
