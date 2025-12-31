@@ -39,7 +39,7 @@ export const BenefitsSection = () => {
     return (
         <section id="benefits" className="container mx-auto px-4 py-16 sm:py-20">
             <div className="grid place-items-center lg:grid-cols-2 lg:gap-24">
-                <div>
+                <div data-aos="fade-right">
                     <h2 className="mb-2 text-lg text-primary tracking-wider">
                         Benefits
                     </h2>
@@ -52,11 +52,13 @@ export const BenefitsSection = () => {
                     </p>
                 </div>
 
-                <div className="grid w-full gap-4 lg:grid-cols-2">
+                <div className="grid w-full gap-4 lg:grid-cols-2" data-aos="fade-left">
                     {benefitList.map(({ icon, title, description }, index) => (
                         <Card
                             key={title}
                             className="group/number transition-all delay-75 hover:bg-sidebar"
+                            data-aos="fade-up"
+                            data-aos-delay={index * 100}
                         >
                             <CardHeader>
                                 <div className="flex justify-between">

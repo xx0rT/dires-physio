@@ -73,11 +73,25 @@ const featureList: FeatureProps[] = [
 
 export const Navbar = () => {
     const [isOpen, setIsOpen] = React.useState(false)
+    const [isScrolled, setIsScrolled] = React.useState(false)
+
+    React.useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 50)
+        }
+
+        window.addEventListener('scroll', handleScroll)
+        return () => window.removeEventListener('scroll', handleScroll)
+    }, [])
 
     return (
-        <div className="sticky top-2 z-50 mx-auto w-[98%] max-w-7xl px-4">
-            <nav className="rounded-xl border border-border bg-card/50 shadow-black/2 shadow-sm backdrop-blur-sm">
-                <div className="flex items-center justify-between px-4 py-3 lg:px-6">
+        <div className="sticky top-2 z-50 mx-auto w-[98%] max-w-7xl px-4 transition-all duration-300">
+            <nav className={`rounded-xl border border-border bg-card/50 shadow-black/2 shadow-sm backdrop-blur-sm transition-all duration-300 ${
+                isScrolled ? 'scale-[0.98]' : 'scale-100'
+            }`}>
+                <div className={`flex items-center justify-between px-4 lg:px-6 transition-all duration-300 ${
+                    isScrolled ? 'py-2' : 'py-3'
+                }`}>
                     {/* Logo */}
                     <Link
                         to="/"

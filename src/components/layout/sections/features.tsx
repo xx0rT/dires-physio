@@ -56,21 +56,21 @@ const featureList: FeaturesProps[] = [
 export const FeaturesSection = () => {
     return (
         <section id="features" className="container mx-auto px-4 py-16 sm:py-20">
-            <h2 className="mb-2 text-center text-lg text-primary tracking-wider">
+            <h2 className="mb-2 text-center text-lg text-primary tracking-wider" data-aos="fade-up">
                 Features
             </h2>
 
-            <h2 className="mb-4 text-center font-bold text-3xl md:text-4xl">
+            <h2 className="mb-4 text-center font-bold text-3xl md:text-4xl" data-aos="fade-up" data-aos-delay="100">
                 Everything You Need
             </h2>
 
-            <h3 className="mx-auto mb-8 text-center text-muted-foreground text-xl md:w-1/2">
+            <h3 className="mx-auto mb-8 text-center text-muted-foreground text-xl md:w-1/2" data-aos="fade-up" data-aos-delay="200">
                 Launch your SaaS faster with our carefully chosen tech stack and pre-built features. Focus on your unique value proposition, not boilerplate.
             </h3>
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {featureList.map(({ icon, title, description }) => (
-                    <div key={title}>
+                {featureList.map(({ icon, title, description }, index) => (
+                    <div key={title} data-aos="zoom-in" data-aos-delay={index * 100}>
                         <Card className="h-full border-0 bg-background shadow-none">
                             <CardHeader className="flex items-center justify-center gap-4 align-middle pb-2">
                                 <div className="rounded-full bg-primary/20 p-2 ring-8 ring-primary/10">

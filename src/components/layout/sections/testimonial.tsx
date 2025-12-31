@@ -79,11 +79,11 @@ export const TestimonialSection = () => {
     return (
         <section id="testimonials" className="container mx-auto px-4 py-16 sm:py-20">
             <div className="mb-8 text-center">
-                <h2 className="mb-2 text-center text-lg text-primary tracking-wider">
+                <h2 className="mb-2 text-center text-lg text-primary tracking-wider" data-aos="fade-up">
                     Testimonials
                 </h2>
 
-                <h2 className="mb-4 text-center font-bold text-3xl md:text-4xl">
+                <h2 className="mb-4 text-center font-bold text-3xl md:text-4xl" data-aos="fade-up" data-aos-delay="100">
                     Hear What Our 1000+ Clients Say
                 </h2>
             </div>

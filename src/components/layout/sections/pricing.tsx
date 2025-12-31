@@ -73,15 +73,15 @@ const plans: PlanProps[] = [
 export const PricingSection = () => {
     return (
         <section id="pricing" className="container mx-auto px-4 py-16 sm:py-20">
-            <h2 className="mb-2 text-center text-lg text-primary tracking-wider">
+            <h2 className="mb-2 text-center text-lg text-primary tracking-wider" data-aos="fade-up">
                 Pricing
             </h2>
 
-            <h2 className="mb-4 text-center font-bold text-3xl md:text-4xl">
+            <h2 className="mb-4 text-center font-bold text-3xl md:text-4xl" data-aos="fade-up" data-aos-delay="100">
                 Get unlimited access
             </h2>
 
-            <h3 className="mx-auto pb-14 text-center text-muted-foreground text-xl md:w-1/2">
+            <h3 className="mx-auto pb-14 text-center text-muted-foreground text-xl md:w-1/2" data-aos="fade-up" data-aos-delay="200">
                 Choose the perfect plan that fits your needs and budget.
             </h3>
 
@@ -94,9 +94,11 @@ export const PricingSection = () => {
                         description,
                         buttonText,
                         benefitList
-                    }) => (
+                    }, index) => (
                         <Card
                             key={title}
+                            data-aos="flip-up"
+                            data-aos-delay={index * 150}
                             className={
                                 popular === PopularPlan?.YES
                                     ? "border-[1.5px] border-primary shadow-black/10 drop-shadow-xl lg:scale-[1.1] dark:shadow-white/10"

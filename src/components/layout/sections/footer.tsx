@@ -1,3 +1,4 @@
+import React from "react"
 import { Mail } from "lucide-react"
 import XIcon from "@/components/icons/x-icon"
 import GithubIcon from "@/components/icons/github-icon"
@@ -83,11 +84,33 @@ const socialLinks: FooterLinkProps[] = [
 ]
 
 export const FooterSection = () => {
+    const [isNearFooter, setIsNearFooter] = React.useState(false)
+    const footerRef = React.useRef<HTMLElement>(null)
+
+    React.useEffect(() => {
+        const handleScroll = () => {
+            if (!footerRef.current) return
+
+            const footerTop = footerRef.current.getBoundingClientRect().top
+            const windowHeight = window.innerHeight
+
+            setIsNearFooter(footerTop < windowHeight * 1.2)
+        }
+
+        window.addEventListener('scroll', handleScroll)
+        handleScroll()
+        return () => window.removeEventListener('scroll', handleScroll)
+    }, [])
+
     return (
-        <footer id="footer">
+        <footer id="footer" ref={footerRef}>
             <div className="mx-auto max-w-7xl pt-16 pb-0 lg:pb-12">
-                <div className="relative overflow-hidden rounded-xl border border-border bg-card/50 shadow-xl backdrop-blur-sm">
-                    <div className="relative p-8 lg:p-12">
+                <div className={`relative overflow-hidden rounded-xl border border-border bg-card/50 shadow-xl backdrop-blur-sm transition-all duration-700 ${
+                    isNearFooter ? 'scale-100 opacity-100' : 'scale-95 opacity-80'
+                }`}>
+                    <div className={`relative transition-all duration-700 ${
+                        isNearFooter ? 'p-8 lg:p-12' : 'p-6 lg:p-10'
+                    }`}>
                         {/* Main Footer Content */}
                         <div className="space-y-8 lg:space-y-0">
                             {/* Desktop Layout: Side by side */}
