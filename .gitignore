@@ -48,3 +48,4 @@ yarn-error.log*
 
 # drizzle migrations
 migrations/
+.env
