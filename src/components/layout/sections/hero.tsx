@@ -1,8 +1,6 @@
-"use client"
 import { ArrowRight, Lock } from "lucide-react"
 import { RiGithubFill } from "@remixicon/react"
-import Image from "next/image"
-import Link from "next/link"
+import { Link } from "react-router-dom"
 import { useTheme } from "next-themes"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -46,7 +44,7 @@ export const HeroSection = () => {
                             size="lg"
                             className="group/arrow rounded-full"
                         >
-                            <Link href="/auth/sign-up">
+                            <Link to="/auth/sign-up">
                                 Get Started
                                 <ArrowRight className="ml-2 size-5 transition-transform group-hover/arrow:translate-x-1" />
                             </Link>
@@ -59,7 +57,7 @@ export const HeroSection = () => {
                             className="rounded-full"
                         >
                             <Link
-                                href={site.links.github}
+                                to={site.links.github}
                                 target="_blank"
                                 className="flex items-center gap-2"
                             >
@@ -100,7 +98,7 @@ export const HeroSection = () => {
                         </div>
                     </div>
 
-                    <Image
+                    <img
                         width={1400}
                         height={1400}
                         className="relative flex w-full items-center"
@@ -108,7 +106,6 @@ export const HeroSection = () => {
                             theme === "light" ? "/dash-light.png" : "/dash.png"
                         }
                         alt="dashboard preview"
-                        priority
                     />
 
                     {/* Decorative elements */}

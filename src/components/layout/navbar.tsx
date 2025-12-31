@@ -1,9 +1,6 @@
-"use client"
-import { SignedIn, SignedOut, UserButton } from "@daveyplate/better-auth-ui"
 import { Menu, X } from "lucide-react"
 import { RiGithubFill } from "@remixicon/react"
-import Image from "next/image"
-import Link from "next/link"
+import { Link } from "react-router-dom"
 import React from "react"
 import { ModeToggle } from "./mode-toggle"
 import { Button } from "../ui/button"
@@ -83,11 +80,11 @@ export const Navbar = () => {
                 <div className="flex items-center justify-between px-4 py-3 lg:px-6">
                     {/* Logo */}
                     <Link
-                        href="/"
+                        to="/"
                         className="group flex items-center gap-2 font-bold"
                     >
                         <div className="relative">
-                            <Image
+                            <img
                                 src={site.logo}
                                 alt={site.name}
                                 width={30}
@@ -110,7 +107,7 @@ export const Navbar = () => {
                                     <NavigationMenuContent>
                                         <div className="grid w-[600px] grid-cols-2 gap-6 p-6">
                                             <div className="relative overflow-hidden rounded-lg">
-                                                <Image
+                                                <img
                                                     src="/demo-img.png"
                                                     alt="Product Demo"
                                                     className="h-full w-full object-cover"
@@ -130,7 +127,7 @@ export const Navbar = () => {
                                                                 asChild
                                                             >
                                                                 <Link
-                                                                    href="#features"
+                                                                    to="#features"
                                                                     className="group block rounded-lg p-3 text-sm transition-colors hover:bg-accent/50"
                                                                 >
                                                                     <p className="mb-1 font-semibold text-foreground leading-none group-hover:text-primary">
@@ -155,7 +152,7 @@ export const Navbar = () => {
                                     <NavigationMenuItem key={href}>
                                         <NavigationMenuLink asChild>
                                             <Link
-                                                href={href}
+                                                to={href}
                                                 className="rounded-lg px-4 py-2 font-medium text-sm transition-colors hover:bg-accent/50 hover:text-primary"
                                             >
                                                 {label}
@@ -176,7 +173,7 @@ export const Navbar = () => {
                             className="size-10 rounded-full"
                         >
                             <Link
-                                href={site.links.github}
+                                to={site.links.github}
                                 target="_blank"
                                 aria-label="View on GitHub"
                             >
@@ -184,38 +181,34 @@ export const Navbar = () => {
                             </Link>
                         </Button>
                         <ModeToggle />
-                        
-                        <SignedOut>
-                            <Button
-                                asChild
-                                size="sm"
-                                variant="outline"
-                                className="ml-2"
-                            >
-                                <Link href="/auth/sign-in?redirectTo=/dashboard">
-                                    Sign In
-                                </Link>
-                            </Button>
-                            <Button
-                                asChild
-                                size="sm"
-                                className="bg-primary hover:bg-primary/90"
-                            >
-                                <Link href="/auth/sign-up?redirectTo=/dashboard">
-                                    Get Started
-                                </Link>
-                            </Button>
-                        </SignedOut>
-                        <SignedIn>
-                            <Button
-                                asChild
-                                size="sm"
-                                variant="outline"
-                                className="ml-2"
-                            >
-                                <Link href="/dashboard">Dashboard</Link>
-                            </Button>
-                        </SignedIn>
+
+                        <Button
+                            asChild
+                            size="sm"
+                            variant="outline"
+                            className="ml-2"
+                        >
+                            <Link to="/auth/sign-in?redirectTo=/dashboard">
+                                Sign In
+                            </Link>
+                        </Button>
+                        <Button
+                            asChild
+                            size="sm"
+                            className="bg-primary hover:bg-primary/90"
+                        >
+                            <Link to="/auth/sign-up?redirectTo=/dashboard">
+                                Get Started
+                            </Link>
+                        </Button>
+                        <Button
+                            asChild
+                            size="sm"
+                            variant="outline"
+                            className="ml-2"
+                        >
+                            <Link to="/dashboard">Dashboard</Link>
+                        </Button>
                     </div>
 
                     {/* Mobile Menu Button */}
@@ -227,7 +220,7 @@ export const Navbar = () => {
                             className="size-10 rounded-full"
                         >
                             <Link
-                                href={site.links.github}
+                                to={site.links.github}
                                 target="_blank"
                                 aria-label="View on GitHub"
                             >
@@ -259,11 +252,11 @@ export const Navbar = () => {
                                     <SheetHeader className="pb-4">
                                         <SheetTitle>
                                             <Link
-                                                href="/"
+                                                to="/"
                                                 className="flex items-center gap-2"
                                                 onClick={() => setIsOpen(false)}
                                             >
-                                                <Image
+                                                <img
                                                     src={site.logo}
                                                     alt={site.name}
                                                     width={32}
@@ -292,7 +285,7 @@ export const Navbar = () => {
                                                         variant="ghost"
                                                         className="h-auto w-full justify-start px-3 py-2.5 font-medium hover:bg-accent/50"
                                                     >
-                                                        <Link href={href}>
+                                                        <Link to={href}>
                                                             {label}
                                                         </Link>
                                                     </Button>
@@ -303,42 +296,35 @@ export const Navbar = () => {
 
                                     {/* Mobile Actions */}
                                     <SheetFooter className="flex-row gap-2 border-border/50 border-t pt-4">
-                                        <SignedOut>
-                                            <Button
-                                                asChild
-                                                variant="outline"
-                                                className="w-full"
-                                                onClick={() => setIsOpen(false)}
-                                            >
-                                                <Link href="/auth/sign-in?redirectTo=/dashboard">
-                                                    Sign In
-                                                </Link>
-                                            </Button>
-                                            <Button
-                                                asChild
-                                                className="w-full bg-primary hover:bg-primary/90"
-                                                onClick={() => setIsOpen(false)}
-                                            >
-                                                <Link href="/auth/sign-up?redirectTo=/dashboard">
-                                                    Get Started
-                                                </Link>
-                                            </Button>
-                                        </SignedOut>
-                                        <SignedIn>
-                                            <Button
-                                                asChild
-                                                variant="outline"
-                                                className="w-full"
-                                                onClick={() => setIsOpen(false)}
-                                            >
-                                                <Link href="/dashboard">
-                                                    Dashboard
-                                                </Link>
-                                            </Button>
-                                            <div className="flex justify-end pt-2">
-                                                <UserButton size="icon" />
-                                            </div>
-                                        </SignedIn>
+                                        <Button
+                                            asChild
+                                            variant="outline"
+                                            className="w-full"
+                                            onClick={() => setIsOpen(false)}
+                                        >
+                                            <Link to="/auth/sign-in?redirectTo=/dashboard">
+                                                Sign In
+                                            </Link>
+                                        </Button>
+                                        <Button
+                                            asChild
+                                            className="w-full bg-primary hover:bg-primary/90"
+                                            onClick={() => setIsOpen(false)}
+                                        >
+                                            <Link to="/auth/sign-up?redirectTo=/dashboard">
+                                                Get Started
+                                            </Link>
+                                        </Button>
+                                        <Button
+                                            asChild
+                                            variant="outline"
+                                            className="w-full"
+                                            onClick={() => setIsOpen(false)}
+                                        >
+                                            <Link to="/dashboard">
+                                                Dashboard
+                                            </Link>
+                                        </Button>
                                     </SheetFooter>
                                 </div>
                             </SheetContent>

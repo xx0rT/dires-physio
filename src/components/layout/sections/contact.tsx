@@ -1,4 +1,3 @@
-"use client"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Building2, Clock, Mail, Phone } from "lucide-react"
 import { useForm } from "react-hook-form"

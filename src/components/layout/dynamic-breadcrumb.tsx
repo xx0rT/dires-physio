@@ -1,7 +1,5 @@
-"use client"
-
-import { usePathname } from "next/navigation"
-import Link from "next/link"
+import { useLocation } from "react-router-dom"
+import { Link } from "react-router-dom"
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -58,7 +56,7 @@ function generateDynamicBreadcrumbs(pathname: string): BreadcrumbSegment[] {
     // Build breadcrumbs from URL segments
     let currentPath = ''
     
-    segments.forEach((segment, index) => {
+    segments.forEach((segment) => {
         currentPath += `/${segment}`
         
         // Generate readable label from segment
@@ -75,7 +73,8 @@ function generateDynamicBreadcrumbs(pathname: string): BreadcrumbSegment[] {
 }
 
 export function DynamicBreadcrumb() {
-    const pathname = usePathname()
+    const location = useLocation()
+    const pathname = location.pathname
     
     // Don't show breadcrumbs for root path only
     if (pathname === '/') {
@@ -102,7 +101,7 @@ export function DynamicBreadcrumb() {
                                 <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
                             ) : (
                                 <BreadcrumbLink asChild>
-                                    <Link href={crumb.href}>{crumb.label}</Link>
+                                    <Link to={crumb.href}>{crumb.label}</Link>
                                 </BreadcrumbLink>
                             )}
                         </BreadcrumbItem>

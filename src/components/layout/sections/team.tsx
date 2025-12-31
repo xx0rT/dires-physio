@@ -1,5 +1,4 @@
-import Image from "next/image"
-import Link from "next/link"
+import { Link } from "react-router-dom"
 import GithubIcon from "@/components/icons/github-icon"
 import LinkedInIcon from "@/components/icons/linkedin-icon"
 import XIcon from "@/components/icons/x-icon"
@@ -197,7 +196,7 @@ export const TeamSection = () => {
                         >
                             {/* Header - Image Section */}
                             <div className="relative overflow-hidden">
-                                <Image
+                                <img
                                     src={imageUrl}
                                     alt={`${firstName} ${lastName}`}
                                     width={300}
@@ -232,7 +231,7 @@ export const TeamSection = () => {
                                 {socialNetworks.map(({ name, url }, index) => (
                                     <Link
                                         key={index}
-                                        href={url}
+                                        to={url}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="transition-all duration-200 hover:scale-110 hover:opacity-80"

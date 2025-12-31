@@ -1,6 +1,4 @@
-"use client"
 import { motion, useInView } from "framer-motion"
-import Image from "next/image"
 import { useRef } from "react"
 import Marquee from "@/components/ui/marquee"
 import { cn } from "@/lib/utils"
@@ -33,7 +31,7 @@ const LogoCard = ({ img }: { img: string }) => {
             transition={{ duration: 0.5, ease: "easeOut" }}
         >
             <div className="flex flex-row items-center justify-center gap-6">
-                <Image
+                <img
                     width={180}
                     height={180}
                     className="rounded-full"

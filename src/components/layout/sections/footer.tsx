@@ -3,8 +3,7 @@ import XIcon from "@/components/icons/x-icon"
 import GithubIcon from "@/components/icons/github-icon"
 import LinkedInIcon from "@/components/icons/linkedin-icon"
 
-import Image from "next/image"
-import Link from "next/link"
+import { Link } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { site } from "@/config/site"
@@ -96,10 +95,10 @@ export const FooterSection = () => {
                                 {/* Brand Section */}
                                 <div className="col-span-2">
                                     <Link
-                                        href="/"
+                                        to="/"
                                         className="group mb-4 flex gap-2 font-bold"
                                     >
-                                        <Image
+                                        <img
                                                 src={site.logo}
                                                 alt={site.name}
                                                 width={30}
@@ -126,7 +125,7 @@ export const FooterSection = () => {
                                                 className="p-2 hover:bg-accent/50"
                                             >
                                                 <Link
-                                                    href={social.href}
+                                                    to={social.href}
                                                     target={
                                                         social.external
                                                             ? "_blank"
@@ -159,7 +158,7 @@ export const FooterSection = () => {
                                             {section.links.map((link) => (
                                                 <li key={link.label}>
                                                     <Link
-                                                        href={link.href}
+                                                        to={link.href}
                                                         className="text-muted-foreground text-sm underline-offset-4 transition-colors duration-200 hover:text-foreground hover:underline"
                                                     >
                                                         {link.label}
@@ -176,11 +175,11 @@ export const FooterSection = () => {
                                 {/* Brand Section Mobile */}
                                 <div className="mb-8">
                                     <Link
-                                        href="/"
+                                        to="/"
                                         className="group mb-4 flex gap-2 font-bold"
                                     >
                                         <div className="relative">
-                                            <Image
+                                            <img
                                                 src={site.logo}
                                                 alt={site.name}
                                                 width={30}
@@ -208,7 +207,7 @@ export const FooterSection = () => {
                                                 className="p-2 hover:bg-accent/50"
                                             >
                                                 <Link
-                                                    href={social.href}
+                                                    to={social.href}
                                                     target={
                                                         social.external
                                                             ? "_blank"
@@ -242,7 +241,7 @@ export const FooterSection = () => {
                                                 {section.links.map((link) => (
                                                     <li key={link.label}>
                                                         <Link
-                                                            href={link.href}
+                                                            to={link.href}
                                                             className="text-muted-foreground text-sm underline-offset-4 transition-colors duration-200 hover:text-foreground hover:underline"
                                                         >
                                                             {link.label}
@@ -273,10 +272,10 @@ export const FooterSection = () => {
                                     <span>This SaaS Starter is built by</span>
                                     <Link
                                         target="_blank"
-                                        href="https://indietech.dev/?utm_source=indiesaas"
+                                        to="https://indietech.dev/?utm_source=indiesaas"
                                         className="flex items-center gap-1 font-semibold"
                                     >
-                                        <Image
+                                        <img
                                             src="https://indietech.dev/logo.svg"
                                             alt="Indietech"
                                             width={16}

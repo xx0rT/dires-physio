@@ -1,5 +1,3 @@
-"use client"
-
 import { motion } from "framer-motion"
 import { MoonIcon, SunIcon } from "lucide-react"
 import { useTheme } from "next-themes"
