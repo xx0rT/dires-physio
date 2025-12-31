@@ -1,0 +1,216 @@
+import { useState } from 'react'
+import { Link, Navigate } from 'react-router-dom'
+import { useAuth } from '@/lib/auth-context'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Checkbox } from '@/components/ui/checkbox'
+import { toast } from 'sonner'
+import { RiGithubFill, RiArrowRightLine } from '@remixicon/react'
+import { site } from '@/config/site'
+
+export default function SignUpPage() {
+  const { user, signUp } = useAuth()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [agreeToTerms, setAgreeToTerms] = useState(false)
+  const [loading, setLoading] = useState(false)
+
+  if (user) {
+    return <Navigate to="/dashboard" replace />
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (password !== confirmPassword) {
+      toast.error('Passwords do not match')
+      return
+    }
+
+    if (!agreeToTerms) {
+      toast.error('Please agree to the terms and conditions')
+      return
+    }
+
+    if (password.length < 6) {
+      toast.error('Password must be at least 6 characters')
+      return
+    }
+
+    setLoading(true)
+
+    try {
+      await signUp(email, password)
+      toast.success('Account created successfully!')
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to create account')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="flex min-h-screen">
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary/20 via-primary/10 to-background items-center justify-center p-12 relative overflow-hidden">
+        <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:20px_20px]" />
+        <div className="relative z-10 max-w-lg">
+          <Link to="/" className="inline-flex items-center gap-2 mb-8">
+            <img src={site.logo} alt={site.name} width={40} height={40} />
+            <span className="text-2xl font-bold">{site.name}</span>
+          </Link>
+          <h2 className="text-4xl font-bold mb-4">Start your journey today</h2>
+          <p className="text-xl text-muted-foreground mb-8">
+            Join thousands of users who trust us with their business.
+          </p>
+          <div className="space-y-4">
+            <div className="flex items-start gap-3">
+              <div className="mt-1 rounded-full bg-primary/20 p-2">
+                <svg className="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="font-semibold mb-1">100% Secure</h3>
+                <p className="text-muted-foreground text-sm">Your information is encrypted and protected.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="mt-1 rounded-full bg-primary/20 p-2">
+                <svg className="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="font-semibold mb-1">Quick Setup</h3>
+                <p className="text-muted-foreground text-sm">Get started in less than 2 minutes.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="mt-1 rounded-full bg-primary/20 p-2">
+                <svg className="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="font-semibold mb-1">24/7 Support</h3>
+                <p className="text-muted-foreground text-sm">We're here to help whenever you need us.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex-1 flex items-center justify-center p-4 lg:p-12">
+        <Card className="w-full max-w-md border-0 shadow-none lg:shadow-sm lg:border">
+          <CardHeader className="space-y-1">
+            <div className="flex items-center gap-2 mb-2 lg:hidden">
+              <img src={site.logo} alt={site.name} width={32} height={32} />
+              <span className="text-xl font-bold">{site.name}</span>
+            </div>
+            <CardTitle className="text-2xl">Create an account</CardTitle>
+            <CardDescription>
+              Enter your information to get started
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="name@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  autoComplete="email"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Create a strong password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  autoComplete="new-password"
+                  minLength={6}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  placeholder="Confirm your password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  autoComplete="new-password"
+                />
+              </div>
+              <div className="flex items-start space-x-2">
+                <Checkbox
+                  id="terms"
+                  checked={agreeToTerms}
+                  onCheckedChange={(checked: boolean) => setAgreeToTerms(checked)}
+                  className="mt-0.5"
+                />
+                <label
+                  htmlFor="terms"
+                  className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  I agree to the{' '}
+                  <Link to="/terms" className="text-primary hover:underline">
+                    Terms of Service
+                  </Link>{' '}
+                  and{' '}
+                  <Link to="/privacy" className="text-primary hover:underline">
+                    Privacy Policy
+                  </Link>
+                </label>
+              </div>
+              <Button type="submit" className="w-full group" disabled={loading}>
+                {loading ? 'Creating account...' : 'Create account'}
+                <RiArrowRightLine className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </form>
+
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-card px-2 text-muted-foreground">
+                  Or continue with
+                </span>
+              </div>
+            </div>
+
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={() => toast.info('Social login coming soon!')}
+            >
+              <RiGithubFill className="mr-2 h-4 w-4" />
+              GitHub
+            </Button>
+
+            <p className="mt-6 text-center text-sm text-muted-foreground">
+              Already have an account?{' '}
+              <Link to="/auth/sign-in" className="font-medium text-primary hover:underline">
+                Sign in
+              </Link>
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  )
+}

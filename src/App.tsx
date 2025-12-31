@@ -11,7 +11,9 @@ import ApiPage from './pages/api-page'
 import BillingPage from './pages/billing-page'
 import IntegrationsPage from './pages/integrations-page'
 import SettingsPage from './pages/settings-page'
-import AuthPage from './pages/auth-page'
+import SignInPage from './pages/sign-in-page'
+import SignUpPage from './pages/sign-up-page'
+import ForgotPasswordPage from './pages/forgot-password-page'
 
 export default function App() {
   return (
@@ -21,7 +23,9 @@ export default function App() {
           <Route path="/" element={<MarketingLayout />}>
             <Route index element={<HomePage />} />
           </Route>
-          <Route path="/auth/*" element={<AuthPage />} />
+          <Route path="/auth/sign-in" element={<SignInPage />} />
+          <Route path="/auth/sign-up" element={<SignUpPage />} />
+          <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/dashboard" element={<DashboardLayout />}>
             <Route index element={<DashboardPage />} />
             <Route path="analytics" element={<AnalyticsPage />} />
