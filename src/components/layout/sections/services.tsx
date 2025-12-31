@@ -16,27 +16,27 @@ interface ServiceProps {
 }
 const serviceList: ServiceProps[] = [
     {
-        title: "Manual Therapy Techniques",
+        title: "Manuální Terapeutické Techniky",
         description:
-            "Master soft tissue mobilization, joint manipulation, and myofascial release using traditional Czech methods.",
+            "Ovládněte mobilizaci měkkých tkání, manipulaci kloubů a myofasciální uvolnění pomocí tradičních českých metod.",
         pro: 0
     },
     {
-        title: "Sports Rehabilitation",
+        title: "Sportovní Rehabilitace",
         description:
-            "Specialized training in sports injury treatment and athletic performance optimization.",
+            "Specializované školení v léčbě sportovních zranění a optimalizaci sportovního výkonu.",
         pro: 0
     },
     {
-        title: "Neurological Rehabilitation",
+        title: "Neurologická Rehabilitace",
         description:
-            "Advanced techniques for treating neurological conditions using Vojta and Bobath approaches.",
+            "Pokročilé techniky pro léčbu neurologických stavů pomocí Vojtovy a Bobathovy metody.",
         pro: 0
     },
     {
-        title: "Pediatric Physiotherapy",
+        title: "Dětská Fyzioterapie",
         description:
-            "Specialized courses in child development and treatment of pediatric conditions.",
+            "Specializované kurzy ve vývoji dítěte a léčbě pediatrických onemocnění.",
         pro: 1
     }
 ]
@@ -48,15 +48,15 @@ export const ServicesSection = () => {
             className="container mx-auto px-4 py-16 sm:py-20"
         >
             <h2 className="mb-2 text-center text-lg text-primary tracking-wider">
-                Course Specializations
+                Specializace Kurzů
             </h2>
 
             <h2 className="mb-4 text-center font-bold text-3xl md:text-4xl">
-                Areas of Expertise
+                Oblasti Odbornosti
             </h2>
             <h3 className="mx-auto mb-8 text-center text-muted-foreground text-xl md:w-1/2">
-                Choose from our comprehensive range of specialized physiotherapy courses.
-                Each program is designed to provide deep expertise in specific treatment areas.
+                Vyberte si z naší komplexní nabídky specializovaných fyzioterapeutických kurzů.
+                Každý program je navržen tak, aby poskytoval hlubokou expertízu v konkrétních léčebných oblastech.
             </h3>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" />
 

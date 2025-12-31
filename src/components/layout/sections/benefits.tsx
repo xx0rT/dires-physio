@@ -11,27 +11,27 @@ interface BenefitsProps {
 const benefitList: BenefitsProps[] = [
     {
         icon: "Rocket",
-        title: "Fast-Track Learning",
+        title: "Rychlé Vzdělávání",
         description:
-            "Accelerated programs designed to get you practicing effectively in months, not years. Intensive modules focused on practical skills."
+            "Zrychlené programy navržené tak, abyste mohli efektivně praktikovat během měsíců, ne let. Intenzivní moduly zaměřené na praktické dovednosti."
     },
     {
         icon: "Award",
-        title: "International Recognition",
+        title: "Mezinárodní Uznání",
         description:
-            "Certificates recognized across Europe and internationally. Open doors to practice in multiple countries with Czech-certified credentials."
+            "Certifikáty uznávané v celé Evropě a mezinárodně. Otevřete si dveře k praxi v mnoha zemích s českými certifikovanými referencemi."
     },
     {
         icon: "Users",
-        title: "Expert Mentorship",
+        title: "Odborné Mentorství",
         description:
-            "One-on-one guidance from experienced physiotherapists. Get personalized feedback and career advice throughout your journey."
+            "Individuální vedení od zkušených fyzioterapeutů. Získejte osobní zpětnou vazbu a kariérní rady během celé vaší cesty."
     },
     {
         icon: "Shield",
-        title: "Proven Methods",
+        title: "Osvědčené Metody",
         description:
-            "Learn time-tested Czech techniques backed by decades of clinical research and successful patient outcomes worldwide."
+            "Učte se časem ověřené české techniky podložené desetiletími klinického výzkumu a úspěšnými výsledky pacientů po celém světě."
     }
 ]
 
@@ -41,14 +41,14 @@ export const BenefitsSection = () => {
             <div className="grid place-items-center lg:grid-cols-2 lg:gap-24">
                 <div data-aos="fade-right">
                     <h2 className="mb-2 text-lg text-primary tracking-wider">
-                        Benefits
+                        Výhody
                     </h2>
 
                     <h2 className="mb-4 font-bold text-3xl md:text-4xl">
-                        Your Path to Excellence
+                        Vaše Cesta k Dokonalosti
                     </h2>
                     <p className="mb-8 text-muted-foreground text-xl">
-                        Join hundreds of successful physiotherapists who have transformed their careers through our Czech-method training programs. Expert instruction, practical experience, and lifetime support.
+                        Připojte se ke stovkám úspěšných fyzioterapeutů, kteří transformovali své kariéry prostřednictvím našich vzdělávacích programů českých metod. Odborná výuka, praktické zkušenosti a celoživotní podpora.
                     </p>
                 </div>
 

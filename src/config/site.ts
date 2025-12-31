@@ -1,16 +1,16 @@
 const site_url = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
 export const site = {
-  name: "Czech Physio Academy",
-  description: "Professional physiotherapy courses taught by certified Czech practitioners",
+  name: "Dires",
+  description: "Profesionální fyzioterapeutické kurzy od certifikovaných českých odborníků",
   url: site_url,
   ogImage: `${site_url}/og.jpg`,
   logo: "/logo.svg",
-  mailSupport: "info@czechphysio.cz",
-  mailFrom: process.env.MAIL_FROM || "noreply@czechphysio.cz",
+  mailSupport: "info@dires.cz",
+  mailFrom: process.env.MAIL_FROM || "noreply@dires.cz",
   links: {
-    twitter: "https://twitter.com/czechphysio",
-    github: "https://github.com/czechphysio",
-    linkedin: "https://www.linkedin.com/company/czech-physio-academy/",
+    twitter: "https://twitter.com/dires",
+    github: "https://github.com/dires",
+    linkedin: "https://www.linkedin.com/company/dires/",
   }
 } as const;

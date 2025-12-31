@@ -17,39 +17,39 @@ interface FeaturesProps {
 const featureList: FeaturesProps[] = [
     {
         icon: <RiShieldKeyholeLine size={24} className="text-primary" />,
-        title: "Certified Training",
+        title: "Certifikované Vzdělávání",
         description:
-            "All courses are certified and recognized by Czech medical associations and international physiotherapy boards."
+            "Všechny kurzy jsou certifikované a uznávané českými lékařskými asociacemi a mezinárodními fyzioterapeutickými radami."
     },
     {
         icon: <RiDashboard3Line size={24} className="text-primary" />,
-        title: "Hands-On Practice",
+        title: "Praktická Výuka",
         description:
-            "Extensive practical sessions with real patients under expert supervision in modern facilities."
+            "Rozsáhlé praktické lekce se skutečnými pacienty pod odborným dohledem v moderních zařízeních."
     },
     {
         icon: <RiUploadCloud2Line size={24} className="text-primary" />,
-        title: "Online Resources",
+        title: "Online Materiály",
         description:
-            "Access comprehensive video libraries, course materials, and documentation anytime, anywhere."
+            "Přístup ke komplexním video knihovnám, studijním materiálům a dokumentaci kdykoli a kdekoli."
     },
     {
         icon: <RiDatabase2Line size={24} className="text-primary" />,
-        title: "Expert Instructors",
+        title: "Zkušení Lektoři",
         description:
-            "Learn from experienced Czech physiotherapists with decades of clinical practice and teaching experience."
+            "Učte se od zkušených českých fyzioterapeutů s desetiletími klinické praxe a výukových zkušeností."
     },
     {
         icon: <RiFireFill size={24} className="text-primary" />,
-        title: "Small Groups",
+        title: "Malé Skupiny",
         description:
-            "Limited class sizes ensure personalized attention and optimal learning outcomes for every student."
+            "Omezená velikost tříd zajišťuje individuální pozornost a optimální výsledky pro každého studenta."
     },
     {
         icon: <RiStackLine size={24} className="text-primary" />,
-        title: "Lifetime Support",
+        title: "Celoživotní Podpora",
         description:
-            "Join our alumni network with continued access to resources, updates, and professional development opportunities."
+            "Připojte se k naší síti absolventů s neustálým přístupem ke zdrojům, aktualizacím a možnostem profesního rozvoje."
     }
 ]
 
@@ -57,15 +57,15 @@ export const FeaturesSection = () => {
     return (
         <section id="features" className="container mx-auto px-4 py-16 sm:py-20">
             <h2 className="mb-2 text-center text-lg text-primary tracking-wider" data-aos="fade-up">
-                Course Features
+                Vlastnosti Kurzů
             </h2>
 
             <h2 className="mb-4 text-center font-bold text-3xl md:text-4xl" data-aos="fade-up" data-aos-delay="100">
-                Why Choose Us
+                Proč Si Vybrat Nás
             </h2>
 
             <h3 className="mx-auto mb-8 text-center text-muted-foreground text-xl md:w-1/2" data-aos="fade-up" data-aos-delay="200">
-                Our comprehensive physiotherapy courses combine traditional Czech methods with modern rehabilitation techniques to provide the best learning experience.
+                Naše komplexní fyzioterapeutické kurzy kombinují tradiční české metody s moderními rehabilitačními technikami pro nejlepší vzdělávací zkušenost.
             </h3>
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

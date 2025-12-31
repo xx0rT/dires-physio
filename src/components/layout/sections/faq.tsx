@@ -13,28 +13,28 @@ interface FAQProps {
 
 const FAQList: FAQProps[] = [
     {
-        question: "Are the courses internationally recognized?",
-        answer: "Yes! All our certificates are recognized by Czech medical associations and meet European physiotherapy standards, allowing you to practice across the EU.",
+        question: "Jsou kurzy mezinárodně uznávané?",
+        answer: "Ano! Všechny naše certifikáty jsou uznávané českými lékařskými asociacemi a splňují evropské standardy fyzioterapie, což vám umožňuje praktikovat v celé EU.",
         value: "item-1"
     },
     {
-        question: "What's included in the course fee?",
-        answer: "Course fees include all training sessions, comprehensive course materials, access to video libraries, practical equipment usage, certification exam, and ongoing resource access.",
+        question: "Co je zahrnuto v ceně kurzu?",
+        answer: "Cena kurzu zahrnuje všechny výukové lekce, komplexní studijní materiály, přístup k video knihovnám, užívání praktického vybavení, certifikační zkoušku a průběžný přístup ke zdrojům.",
         value: "item-2"
     },
     {
-        question: "How long does it take to complete a course?",
-        answer: "Course duration varies by level. Foundation courses run 2-3 weeks, Professional programs take 4-6 weeks, and Master level courses extend 8-12 weeks with flexible scheduling options.",
+        question: "Jak dlouho trvá absolvování kurzu?",
+        answer: "Délka kurzu se liší podle úrovně. Základní kurzy trvají 2-3 týdny, Profesionální programy zabírají 4-6 týdnů a Mistrovské kurzy trvají 8-12 týdnů s flexibilními možnostmi rozvrhu.",
         value: "item-3"
     },
     {
-        question: "Do I need prior experience?",
-        answer: "Foundation courses are open to licensed healthcare professionals. Professional and Master levels require previous physiotherapy certification and clinical experience.",
+        question: "Potřebuji předchozí zkušenosti?",
+        answer: "Základní kurzy jsou otevřené licencovaným zdravotnickým profesionálům. Profesionální a Mistrovské úrovně vyžadují předchozí fyzioterapeutickou certifikaci a klinické zkušenosti.",
         value: "item-4"
     },
     {
-        question: "What languages are courses taught in?",
-        answer: "Courses are primarily taught in Czech and English. Translation services and materials in other European languages can be arranged for group bookings.",
+        question: "V jakých jazycích se kurzy vyučují?",
+        answer: "Kurzy se primárně vyučují v češtině a angličtině. Překladatelské služby a materiály v dalších evropských jazycích lze domluvit pro skupinové rezervace.",
         value: "item-5"
     }
 ]
@@ -44,11 +44,11 @@ export const FAQSection = () => {
         <section id="faq" className="container mx-auto px-4 py-16 sm:py-20 md:w-[700px]">
             <div className="mb-8 text-center">
                 <h2 className="mb-2 text-center text-lg text-primary tracking-wider">
-                    FAQs
+                    Časté Dotazy
                 </h2>
 
                 <h2 className="text-center font-bold text-3xl md:text-4xl">
-                    Common Questions
+                    Běžné Otázky
                 </h2>
             </div>
 

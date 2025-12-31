@@ -38,7 +38,7 @@ export const ContactSection = () => {
             firstName: "",
             lastName: "",
             email: "",
-            subject: "Web Development",
+            subject: "Manuální Terapie",
             message: ""
         }
     })
@@ -58,34 +58,34 @@ export const ContactSection = () => {
                 <div className="md:text-right md:pr-8">
                     <div className="mb-4">
                         <h2 className="mb-2 text-lg text-primary tracking-wider">
-                            Contact
+                            Kontakt
                         </h2>
 
                         <h2 className="font-bold text-3xl md:text-4xl">
-                            Connect with us
+                            Spojte Se S Námi
                         </h2>
                     </div>
                     <p className="mb-8 text-muted-foreground md:ml-auto md:w-5/6">
-                        Ready to advance your physiotherapy career? Contact us for course information,
-                        enrollment details, or to schedule a facility tour. We're here to help you succeed.
+                        Připraveni posunout svou fyzioterapeutickou kariéru? Kontaktujte nás pro informace o kurzech,
+                        detaily přihlášení nebo pro domluvení prohlídky zařízení. Jsme tu, abychom vám pomohli uspět.
                     </p>
 
                     <div className="flex flex-col gap-4">
                         <div>
                             <div className="mb-1 flex gap-2 md:justify-end">
                                 <Building2 />
-                                <div className="font-bold">Find us</div>
+                                <div className="font-bold">Najděte nás</div>
                             </div>
 
                             <div>
-                                Karlovo náměstí 13, Prague 2, 120 00
+                                Karlovo náměstí 13, Praha 2, 120 00
                             </div>
                         </div>
 
                         <div>
                             <div className="mb-1 flex gap-2 md:justify-end">
                                 <Phone />
-                                <div className="font-bold">Call us</div>
+                                <div className="font-bold">Zavolejte nám</div>
                             </div>
 
                             <div>+420 224 915 765</div>
@@ -94,7 +94,7 @@ export const ContactSection = () => {
                         <div>
                             <div className="mb-1 flex gap-2 md:justify-end">
                                 <Mail />
-                                <div className="font-bold">Mail us</div>
+                                <div className="font-bold">Napište nám</div>
                             </div>
 
                             <div>{site.mailSupport}</div>
@@ -103,12 +103,12 @@ export const ContactSection = () => {
                         <div>
                             <div className="flex gap-2 md:justify-end">
                                 <Clock />
-                                <div className="font-bold">Visit us</div>
+                                <div className="font-bold">Navštivte nás</div>
                             </div>
 
                             <div>
-                                <div>Monday - Friday</div>
-                                <div>9AM - 6PM CET</div>
+                                <div>Pondělí - Pátek</div>
+                                <div>9:00 - 18:00 CET</div>
                             </div>
                         </div>
                     </div>
@@ -128,11 +128,11 @@ export const ContactSection = () => {
                                         render={({ field }) => (
                                             <FormItem className="w-full">
                                                 <FormLabel>
-                                                    First Name
+                                                    Jméno
                                                 </FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                        placeholder="Indie"
+                                                        placeholder="Jan"
                                                         {...field}
                                                     />
                                                 </FormControl>
@@ -145,10 +145,10 @@ export const ContactSection = () => {
                                         name="lastName"
                                         render={({ field }) => (
                                             <FormItem className="w-full">
-                                                <FormLabel>Last Name</FormLabel>
+                                                <FormLabel>Příjmení</FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                        placeholder="CEO"
+                                                        placeholder="Novák"
                                                         {...field}
                                                     />
                                                 </FormControl>
@@ -184,7 +184,7 @@ export const ContactSection = () => {
                                         name="subject"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Subject</FormLabel>
+                                                <FormLabel>Předmět</FormLabel>
                                                 <Select
                                                     onValueChange={
                                                         field.onChange
@@ -193,24 +193,24 @@ export const ContactSection = () => {
                                                 >
                                                     <FormControl>
                                                         <SelectTrigger>
-                                                            <SelectValue placeholder="Select a subject" />
+                                                            <SelectValue placeholder="Vyberte předmět" />
                                                         </SelectTrigger>
                                                     </FormControl>
                                                     <SelectContent>
-                                                        <SelectItem value="Web Development">
-                                                            Web Development
+                                                        <SelectItem value="Manuální Terapie">
+                                                            Manuální Terapie
                                                         </SelectItem>
-                                                        <SelectItem value="Mobile Development">
-                                                            Mobile Development
+                                                        <SelectItem value="Sportovní Rehabilitace">
+                                                            Sportovní Rehabilitace
                                                         </SelectItem>
-                                                        <SelectItem value="Figma Design">
-                                                            Figma Design
+                                                        <SelectItem value="Neurologická Rehabilitace">
+                                                            Neurologická Rehabilitace
                                                         </SelectItem>
-                                                        <SelectItem value="REST API">
-                                                            REST API
+                                                        <SelectItem value="Dětská Fyzioterapie">
+                                                            Dětská Fyzioterapie
                                                         </SelectItem>
-                                                        <SelectItem value="FullStack Project">
-                                                            FullStack Project
+                                                        <SelectItem value="Obecný Dotaz">
+                                                            Obecný Dotaz
                                                         </SelectItem>
                                                     </SelectContent>
                                                 </Select>
@@ -226,11 +226,11 @@ export const ContactSection = () => {
                                         name="message"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Message</FormLabel>
+                                                <FormLabel>Zpráva</FormLabel>
                                                 <FormControl>
                                                     <Textarea
                                                         rows={5}
-                                                        placeholder="Your message..."
+                                                        placeholder="Vaše zpráva..."
                                                         className="resize-none"
                                                         {...field}
                                                     />
@@ -242,7 +242,7 @@ export const ContactSection = () => {
                                     />
                                 </div>
 
-                                <Button className="mt-4 w-fit">Send message</Button>
+                                <Button className="mt-4 w-fit">Odeslat zprávu</Button>
                             </form>
                         </Form>
                     </CardContent>

@@ -27,50 +27,50 @@ const reviewList: ReviewProps[] = [
     {
         image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=580&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         name: "Martin Novák",
-        userName: "Sports Physiotherapist",
+        userName: "Sportovní Fyzioterapeut",
         comment:
-            "The manual therapy techniques I learned here transformed my practice. My patients see results faster and my confidence has grown tremendously.",
+            "Techniky manuální terapie, které jsem se zde naučil, transformovaly mou praxi. Moji pacienti vidí výsledky rychleji a moje důvěra enormně vzrostla.",
         rating: 5.0
     },
     {
         image: "https://images.unsplash.com/photo-1658281097220-eb7672eed00b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDN8fHByb2ZpbGUlMjBwaG90b3xlbnwwfDJ8MHx8fDA%3D",
         name: "Anna Schmidt",
-        userName: "Clinical Physiotherapist, Germany",
+        userName: "Klinická Fyzioterapeutka, Německo",
         comment:
-            "Exceptional instructors with deep knowledge of Czech methods. The hands-on practice sessions were invaluable for mastering advanced techniques.",
+            "Výjimeční lektoři s hlubokými znalostmi českých metod. Praktické lekce byly neocenitelné pro zvládnutí pokročilých technik.",
         rating: 4.8
     },
 
     {
         image: "https://images.unsplash.com/photo-1618018352910-72bdafdc82a6?q=80&w=580&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         name: "David Williams",
-        userName: "Rehabilitation Specialist, UK",
+        userName: "Specialista na Rehabilitaci, UK",
         comment:
-            "The neurological rehabilitation course exceeded my expectations. The Vojta method training was comprehensive and the patient outcomes speak for themselves.",
+            "Kurz neurologické rehabilitace překonal mé očekávání. Výuka Vojtovy metody byla komplexní a výsledky pacientů mluví samy za sebe.",
         rating: 4.9
     },
     {
         image: "https://images.unsplash.com/photo-1584999734482-0361aecad844?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fHByb2ZpbGV8ZW58MHwyfDB8fHww",
         name: "Elena Popescu",
-        userName: "Pediatric Physiotherapist, Romania",
+        userName: "Dětská Fyzioterapeutka, Rumunsko",
         comment:
-            "Best investment in my career! The pediatric course gave me specialized skills that are in high demand. I now treat children with complex developmental needs.",
+            "Nejlepší investice do mé kariéry! Pediatrický kurz mi dal specializované dovednosti, které jsou velmi žádané. Nyní léčím děti se složitými vývojovými potřebami.",
         rating: 5.0
     },
     {
         image: "https://images.unsplash.com/photo-1586297135537-94bc9ba060aa?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mjh8fHByb2ZpbGUlMjBwaG90b3xlbnwwfDJ8MHx8fDA%3D",
         name: "Marie Dubois",
-        userName: "Private Practice Owner, France",
+        userName: "Majitelka Soukromé Praxe, Francie",
         comment:
-            "The certification opened doors across Europe for me. The practical approach and lifetime access to materials means I keep learning and improving.",
+            "Certifikace mi otevřela dveře po celé Evropě. Praktický přístup a celoživotní přístup k materiálům znamená, že se stále učím a zlepšuji.",
         rating: 5.0
     },
     {
         image: "https://images.unsplash.com/photo-1623517006691-00db997b4c58?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTUwfHxwcm9maWxlJTIwcGhvdG98ZW58MHwyfDB8fHww",
         name: "Jakub Kowalski",
-        userName: "Hospital Physiotherapist, Poland",
+        userName: "Nemocniční Fyzioterapeut, Polsko",
         comment:
-            "Small class sizes and expert mentorship made all the difference. I received personalized feedback that helped me perfect my technique rapidly.",
+            "Malé třídy a odborné mentorství udělaly velký rozdíl. Dostal jsem osobní zpětnou vazbu, která mi pomohla rychle zdokonalit mou techniku.",
         rating: 4.9
     }
 ]
@@ -80,11 +80,11 @@ export const TestimonialSection = () => {
         <section id="testimonials" className="container mx-auto px-4 py-16 sm:py-20">
             <div className="mb-8 text-center">
                 <h2 className="mb-2 text-center text-lg text-primary tracking-wider" data-aos="fade-up">
-                    Testimonials
+                    Reference
                 </h2>
 
                 <h2 className="mb-4 text-center font-bold text-3xl md:text-4xl" data-aos="fade-up" data-aos-delay="100">
-                    Success Stories from Our Students
+                    Příběhy Úspěchu Našich Studentů
                 </h2>
             </div>
 

@@ -24,48 +24,48 @@ interface PlanProps {
 
 const plans: PlanProps[] = [
     {
-        title: "Foundation",
+        title: "Základní",
         popular: 0,
         price: 890,
         description:
-            "Perfect for beginners starting their physiotherapy journey with essential techniques.",
-        buttonText: "Enroll Now",
+            "Ideální pro začátečníky zahajující svou fyzioterapeutickou cestu se základními technikami.",
+        buttonText: "Přihlásit se",
         benefitList: [
-            "40 hours of training",
-            "Basic manual therapy",
-            "Online course materials",
-            "Certificate of completion",
-            "6 months resource access"
+            "40 hodin výuky",
+            "Základní manuální terapie",
+            "Online studijní materiály",
+            "Certifikát o absolvování",
+            "6 měsíců přístupu ke zdrojům"
         ]
     },
     {
-        title: "Professional",
+        title: "Profesionální",
         popular: 1,
         price: 1590,
         description:
-            "Comprehensive program for practitioners seeking advanced certification.",
-        buttonText: "Enroll Now",
+            "Komplexní program pro praktiky hledající pokročilou certifikaci.",
+        buttonText: "Přihlásit se",
         benefitList: [
-            "80 hours of training",
-            "Advanced manual techniques",
-            "Clinical practice sessions",
-            "International certificate",
-            "Lifetime resource access"
+            "80 hodin výuky",
+            "Pokročilé manuální techniky",
+            "Klinické praktické lekce",
+            "Mezinárodní certifikát",
+            "Celoživotní přístup ke zdrojům"
         ]
     },
     {
-        title: "Master",
+        title: "Mistrovský",
         popular: 0,
         price: 2890,
         description:
-            "Elite training program for experienced professionals specializing in advanced methods.",
-        buttonText: "Contact Us",
+            "Elitní výukový program pro zkušené odborníky specializující se na pokročilé metody.",
+        buttonText: "Kontaktujte nás",
         benefitList: [
-            "120+ hours of training",
-            "Specialty certifications",
-            "One-on-one mentorship",
-            "Teaching certification",
-            "Alumni network access"
+            "120+ hodin výuky",
+            "Specializované certifikace",
+            "Individuální mentorství",
+            "Certifikace lektora",
+            "Přístup do sítě absolventů"
         ]
     }
 ]
@@ -74,15 +74,15 @@ export const PricingSection = () => {
     return (
         <section id="pricing" className="container mx-auto px-4 py-16 sm:py-20">
             <h2 className="mb-2 text-center text-lg text-primary tracking-wider" data-aos="fade-up">
-                Course Pricing
+                Ceník Kurzů
             </h2>
 
             <h2 className="mb-4 text-center font-bold text-3xl md:text-4xl" data-aos="fade-up" data-aos-delay="100">
-                Invest in Your Career
+                Investujte do Své Kariéry
             </h2>
 
             <h3 className="mx-auto pb-14 text-center text-muted-foreground text-xl md:w-1/2" data-aos="fade-up" data-aos-delay="200">
-                Select the course level that matches your experience and career goals. All prices include materials and certification.
+                Vyberte si úroveň kurzu, která odpovídá vašim zkušenostem a kariérním cílům. Všechny ceny zahrnují materiály a certifikaci.
             </h3>
 
             <div className="grid space-x-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-4">
@@ -118,7 +118,7 @@ export const PricingSection = () => {
                                     </span>
                                     <span className="text-muted-foreground">
                                         {" "}
-                                        /course
+                                        /kurz
                                     </span>
                                 </div>
                             </CardHeader>

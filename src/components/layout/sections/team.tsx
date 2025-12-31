@@ -22,11 +22,11 @@ export const TeamSection = () => {
                 "https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&w=1760&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
             firstName: "Dr. Petr",
             lastName: "Svoboda",
-            positions: ["Manual Therapy Specialist", "30 Years Clinical Experience"],
+            positions: ["Specialista Manuální Terapie", "30 Let Klinické Praxe"],
             socialNetworks: [
                 {
                     name: "LinkedIn",
-                    url: "https://www.linkedin.com/company/czech-physio-academy"
+                    url: "https://www.linkedin.com/company/dires"
                 }
             ]
         },
@@ -35,11 +35,11 @@ export const TeamSection = () => {
                 "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1528&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
             firstName: "Dr. Jana",
             lastName: "Nováková",
-            positions: ["Sports Rehabilitation Expert", "Former Olympic Team Physiotherapist"],
+            positions: ["Expertka na Sportovní Rehabilitaci", "Bývalá Fyzioterapeutka Olympijského Týmu"],
             socialNetworks: [
                 {
                     name: "LinkedIn",
-                    url: "https://www.linkedin.com/company/czech-physio-academy"
+                    url: "https://www.linkedin.com/company/dires"
                 }
             ]
         },
@@ -48,11 +48,11 @@ export const TeamSection = () => {
                 "https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1480&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
             firstName: "Dr. Martin",
             lastName: "Dvořák",
-            positions: ["Neurological Rehabilitation", "Vojta Method Certified Instructor"],
+            positions: ["Neurologická Rehabilitace", "Certifikovaný Instruktor Vojtovy Metody"],
             socialNetworks: [
                 {
                     name: "LinkedIn",
-                    url: "https://www.linkedin.com/company/czech-physio-academy"
+                    url: "https://www.linkedin.com/company/dires"
                 }
             ]
         },
@@ -61,11 +61,11 @@ export const TeamSection = () => {
                 "https://images.unsplash.com/photo-1573497161161-c3e73707e25c?q=80&w=1587&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
             firstName: "Dr. Eva",
             lastName: "Horáková",
-            positions: ["Pediatric Physiotherapy Lead", "Child Development Specialist"],
+            positions: ["Vedoucí Dětské Fyzioterapie", "Specialistka na Vývoj Dítěte"],
             socialNetworks: [
                 {
                     name: "LinkedIn",
-                    url: "https://www.linkedin.com/company/czech-physio-academy"
+                    url: "https://www.linkedin.com/company/dires"
                 }
             ]
         }
@@ -85,11 +85,11 @@ export const TeamSection = () => {
         <section id="team" className="container mx-auto px-4 py-16 sm:py-20">
             <div className="mb-8 text-center">
                 <h2 className="mb-2 text-center text-lg text-primary tracking-wider">
-                    Team
+                    Tým
                 </h2>
 
                 <h2 className="text-center font-bold text-3xl md:text-4xl">
-                    Our Expert Instructors
+                    Naši Odborní Lektoři
                 </h2>
             </div>
 

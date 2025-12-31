@@ -17,24 +17,24 @@ export const HeroSection = () => {
                         className="rounded-2xl py-2 text-sm"
                     >
                         <span className="mr-2 text-primary">
-                            <Badge>New</Badge>
+                            <Badge>Nové</Badge>
                         </span>
-                        <span> Enroll in our upcoming courses! </span>
+                        <span> Přihlaste se do našich nadcházejících kurzů! </span>
                     </Badge>
 
                     <div className="font-bold text-4xl md:text-5xl lg:text-6xl">
                         <h1>
-                            Master
+                            Ovládněte
                             <span className="bg-gradient-to-r from-[#7033ff] to-primary bg-clip-text px-2 text-transparent">
-                                Czech Physiotherapy
+                                České Fyzioterapeutické
                             </span>
-                            Techniques
+                            Techniky
                         </h1>
                     </div>
 
                     <p className="mx-auto max-w-lg text-muted-foreground text-lg leading-relaxed md:mx-0 lg:text-xl xl:max-w-xl">
-                        {`Learn from certified Czech practitioners using proven rehabilitation methods.
-            Comprehensive courses combining theory, practice, and hands-on experience.`}
+                        {`Učte se od certifikovaných českých odborníků využívajících osvědčené rehabilitační metody.
+            Komplexní kurzy kombinující teorii, praxi a praktické zkušenosti.`}
                     </p>
 
                     <div className="flex flex-col items-center space-y-4 md:flex-row md:space-x-4 md:space-y-0 md:justify-start">
@@ -44,7 +44,7 @@ export const HeroSection = () => {
                             className="group/arrow rounded-full"
                         >
                             <Link to="/auth/sign-up">
-                                Enroll Now
+                                Přihlásit se nyní
                                 <ArrowRight className="ml-2 size-5 transition-transform group-hover/arrow:translate-x-1" />
                             </Link>
                         </Button>
@@ -59,7 +59,7 @@ export const HeroSection = () => {
                                 to="#courses"
                                 className="flex items-center gap-2"
                             >
-                                View Courses
+                                Zobrazit kurzy
                             </Link>
                         </Button>
                     </div>
