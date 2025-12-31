@@ -1,6 +1,6 @@
 [build]
-command = "npx next build"
-publish = ".next"
+command = "npx vite build"
+publish = "dist"
 
 [[plugins]]
 package = "@netlify/plugin-nextjs"
