@@ -126,8 +126,8 @@ export const Navbar = () => {
                                                             <NavigationMenuLink
                                                                 asChild
                                                             >
-                                                                <Link
-                                                                    to="#features"
+                                                                <a
+                                                                    href="#features"
                                                                     className="group block rounded-lg p-3 text-sm transition-colors hover:bg-accent/50"
                                                                 >
                                                                     <p className="mb-1 font-semibold text-foreground leading-none group-hover:text-primary">
@@ -138,7 +138,7 @@ export const Navbar = () => {
                                                                             description
                                                                         }
                                                                     </p>
-                                                                </Link>
+                                                                </a>
                                                             </NavigationMenuLink>
                                                         </li>
                                                     )
@@ -151,12 +151,12 @@ export const Navbar = () => {
                                 {routeList.map(({ href, label }) => (
                                     <NavigationMenuItem key={href}>
                                         <NavigationMenuLink asChild>
-                                            <Link
-                                                to={href}
+                                            <a
+                                                href={href}
                                                 className="rounded-lg px-4 py-2 font-medium text-sm transition-colors hover:bg-accent/50 hover:text-primary"
                                             >
                                                 {label}
-                                            </Link>
+                                            </a>
                                         </NavigationMenuLink>
                                     </NavigationMenuItem>
                                 ))}
@@ -188,7 +188,7 @@ export const Navbar = () => {
                             variant="outline"
                             className="ml-2"
                         >
-                            <Link to="/auth/sign-in?redirectTo=/dashboard">
+                            <Link to="/auth/sign-in">
                                 Sign In
                             </Link>
                         </Button>
@@ -197,17 +197,9 @@ export const Navbar = () => {
                             size="sm"
                             className="bg-primary hover:bg-primary/90"
                         >
-                            <Link to="/auth/sign-up?redirectTo=/dashboard">
+                            <Link to="/auth/sign-up">
                                 Get Started
                             </Link>
-                        </Button>
-                        <Button
-                            asChild
-                            size="sm"
-                            variant="outline"
-                            className="ml-2"
-                        >
-                            <Link to="/dashboard">Dashboard</Link>
                         </Button>
                     </div>
 
@@ -285,9 +277,9 @@ export const Navbar = () => {
                                                         variant="ghost"
                                                         className="h-auto w-full justify-start px-3 py-2.5 font-medium hover:bg-accent/50"
                                                     >
-                                                        <Link to={href}>
+                                                        <a href={href}>
                                                             {label}
-                                                        </Link>
+                                                        </a>
                                                     </Button>
                                                 )
                                             )}
@@ -302,7 +294,7 @@ export const Navbar = () => {
                                             className="w-full"
                                             onClick={() => setIsOpen(false)}
                                         >
-                                            <Link to="/auth/sign-in?redirectTo=/dashboard">
+                                            <Link to="/auth/sign-in">
                                                 Sign In
                                             </Link>
                                         </Button>
@@ -311,18 +303,8 @@ export const Navbar = () => {
                                             className="w-full bg-primary hover:bg-primary/90"
                                             onClick={() => setIsOpen(false)}
                                         >
-                                            <Link to="/auth/sign-up?redirectTo=/dashboard">
+                                            <Link to="/auth/sign-up">
                                                 Get Started
-                                            </Link>
-                                        </Button>
-                                        <Button
-                                            asChild
-                                            variant="outline"
-                                            className="w-full"
-                                            onClick={() => setIsOpen(false)}
-                                        >
-                                            <Link to="/dashboard">
-                                                Dashboard
                                             </Link>
                                         </Button>
                                     </SheetFooter>
