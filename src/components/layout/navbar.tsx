@@ -185,14 +185,15 @@ export const Navbar = () => {
                                     </NavigationMenuTrigger>
                                     <NavigationMenuContent>
                                         <div className="grid w-[600px] grid-cols-2 gap-6 p-6">
-                                            <div className="relative overflow-hidden rounded-lg">
-                                                <img
-                                                    src="/demo-img.png"
-                                                    alt="Product Demo"
-                                                    className="h-full w-full object-cover"
-                                                    width={300}
-                                                    height={200}
-                                                />
+                                            <div className="relative overflow-hidden rounded-lg bg-muted">
+                                                <div className="flex h-full w-full items-center justify-center text-muted-foreground">
+                                                    <svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+                                                        <rect width="300" height="200" fill="currentColor" opacity="0.1"/>
+                                                        <text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="currentColor" opacity="0.5">
+                                                            Image
+                                                        </text>
+                                                    </svg>
+                                                </div>
                                                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                                             </div>
                                             <ul className="flex flex-col gap-3">
@@ -234,14 +235,15 @@ export const Navbar = () => {
                                     </NavigationMenuTrigger>
                                     <NavigationMenuContent>
                                         <div className="grid w-[600px] grid-cols-2 gap-6 p-6">
-                                            <div className="relative overflow-hidden rounded-lg">
-                                                <img
-                                                    src="/demo-img.png"
-                                                    alt="Product Demo"
-                                                    className="h-full w-full object-cover"
-                                                    width={300}
-                                                    height={200}
-                                                />
+                                            <div className="relative overflow-hidden rounded-lg bg-muted">
+                                                <div className="flex h-full w-full items-center justify-center text-muted-foreground">
+                                                    <svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+                                                        <rect width="300" height="200" fill="currentColor" opacity="0.1"/>
+                                                        <text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="currentColor" opacity="0.5">
+                                                            Image
+                                                        </text>
+                                                    </svg>
+                                                </div>
                                                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                                             </div>
                                             <ul className="flex flex-col gap-3">
@@ -283,14 +285,15 @@ export const Navbar = () => {
                                     </NavigationMenuTrigger>
                                     <NavigationMenuContent>
                                         <div className="grid w-[600px] grid-cols-2 gap-6 p-6">
-                                            <div className="relative overflow-hidden rounded-lg">
-                                                <img
-                                                    src="/demo-img.png"
-                                                    alt="Product Demo"
-                                                    className="h-full w-full object-cover"
-                                                    width={300}
-                                                    height={200}
-                                                />
+                                            <div className="relative overflow-hidden rounded-lg bg-muted">
+                                                <div className="flex h-full w-full items-center justify-center text-muted-foreground">
+                                                    <svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+                                                        <rect width="300" height="200" fill="currentColor" opacity="0.1"/>
+                                                        <text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="currentColor" opacity="0.5">
+                                                            Image
+                                                        </text>
+                                                    </svg>
+                                                </div>
                                                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                                             </div>
                                             <ul className="flex flex-col gap-3">
@@ -332,14 +335,15 @@ export const Navbar = () => {
                                     </NavigationMenuTrigger>
                                     <NavigationMenuContent>
                                         <div className="grid w-[600px] grid-cols-2 gap-6 p-6">
-                                            <div className="relative overflow-hidden rounded-lg">
-                                                <img
-                                                    src="/demo-img.png"
-                                                    alt="Product Demo"
-                                                    className="h-full w-full object-cover"
-                                                    width={300}
-                                                    height={200}
-                                                />
+                                            <div className="relative overflow-hidden rounded-lg bg-muted">
+                                                <div className="flex h-full w-full items-center justify-center text-muted-foreground">
+                                                    <svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+                                                        <rect width="300" height="200" fill="currentColor" opacity="0.1"/>
+                                                        <text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="currentColor" opacity="0.5">
+                                                            Image
+                                                        </text>
+                                                    </svg>
+                                                </div>
                                                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                                             </div>
                                             <ul className="flex flex-col gap-3">
@@ -381,14 +385,15 @@ export const Navbar = () => {
                                     </NavigationMenuTrigger>
                                     <NavigationMenuContent>
                                         <div className="grid w-[600px] grid-cols-2 gap-6 p-6">
-                                            <div className="relative overflow-hidden rounded-lg">
-                                                <img
-                                                    src="/demo-img.png"
-                                                    alt="Product Demo"
-                                                    className="h-full w-full object-cover"
-                                                    width={300}
-                                                    height={200}
-                                                />
+                                            <div className="relative overflow-hidden rounded-lg bg-muted">
+                                                <div className="flex h-full w-full items-center justify-center text-muted-foreground">
+                                                    <svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+                                                        <rect width="300" height="200" fill="currentColor" opacity="0.1"/>
+                                                        <text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="currentColor" opacity="0.5">
+                                                            Image
+                                                        </text>
+                                                    </svg>
+                                                </div>
                                                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                                             </div>
                                             <ul className="flex flex-col gap-3">
