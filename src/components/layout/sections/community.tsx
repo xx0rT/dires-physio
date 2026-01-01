@@ -80,11 +80,13 @@ export const CommunitySection = () => {
         }
     ]
 
+    const cardWidths = [240, 280, 320, 260, 300, 270, 290, 250]
+
     const firstRow = reviews.slice(0, 4)
     const secondRow = reviews.slice(4)
 
-    const ReviewCard = ({ review }: { review: Review }) => (
-        <Card className="w-[280px] flex-shrink-0">
+    const ReviewCard = ({ review, width }: { review: Review; width: number }) => (
+        <Card className="flex-shrink-0" style={{ width: `${width}px` }}>
             <CardContent className="pt-6">
                 <div className="flex items-start gap-4 mb-4">
                     <img
@@ -112,9 +114,14 @@ export const CommunitySection = () => {
     )
 
     return (
-        <section id="community" className="container mx-auto py-12 overflow-hidden">
+        <section id="community" className="container mx-auto py-12 overflow-hidden relative">
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+                <span className="text-[12rem] md:text-[16rem] lg:text-[20rem] font-black text-gray-100 dark:text-gray-900 opacity-50 select-none">
+                    RECENZE
+                </span>
+            </div>
             <hr className="border-secondary" />
-            <div className="container py-20 sm:py-20">
+            <div className="container py-20 sm:py-20 relative z-10">
                 <div className="mb-12 text-center">
                     <h2 className="mb-2 text-lg text-primary tracking-wider">
                         Recenze
@@ -137,14 +144,14 @@ export const CommunitySection = () => {
                 </div>
 
                 <div className="relative flex w-full flex-col items-center justify-center overflow-hidden gap-6">
-                    <Marquee className="[--duration:35s]">
-                        {firstRow.map((review) => (
-                            <ReviewCard key={review.id} review={review} />
+                    <Marquee className="[--duration:17.5s]">
+                        {firstRow.map((review, index) => (
+                            <ReviewCard key={review.id} review={review} width={cardWidths[index]} />
                         ))}
                     </Marquee>
-                    <Marquee reverse className="[--duration:35s]">
-                        {secondRow.map((review) => (
-                            <ReviewCard key={review.id} review={review} />
+                    <Marquee reverse className="[--duration:17.5s]">
+                        {secondRow.map((review, index) => (
+                            <ReviewCard key={review.id} review={review} width={cardWidths[index + 4]} />
                         ))}
                     </Marquee>
                     <div className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-background to-transparent" />
