@@ -25,53 +25,44 @@ interface ReviewProps {
 
 const reviewList: ReviewProps[] = [
     {
-        image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=580&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        name: "Martin Novák",
-        userName: "Sportovní Fyzioterapeut",
+        image: "",
+        name: "Zuzana Hykyšová",
+        userName: "Před 2 měsíci",
         comment:
-            "Techniky manuální terapie, které jsem se zde naučil, transformovaly mou praxi. Moji pacienti vidí výsledky rychleji a moje důvěra enormně vzrostla.",
+            "Honza Kottas mi opět pomohl od problému, který mě měsíc trápil a se kterým mi nepomohly ani masáže, ani akupunktura. Honzova jemná, citlivá práce mi přinesla znatelnou úlevu a zlepšení ne úplně okamžitě, ale za pár hodin jsem zjistila, že už mě to nebolí, netáhne v zádech, nebrní v ruce, nepálí na hrudi. Honzu považuji za šamana, léčitele.",
         rating: 5.0
     },
     {
-        image: "https://images.unsplash.com/photo-1658281097220-eb7672eed00b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDN8fHByb2ZpbGUlMjBwaG90b3xlbnwwfDJ8MHx8fDA%3D",
-        name: "Anna Schmidt",
-        userName: "Klinická Fyzioterapeutka, Německo",
+        image: "",
+        name: "Lukáš Lebeda",
+        userName: "Před 7 měsíci",
         comment:
-            "Výjimeční lektoři s hlubokými znalostmi českých metod. Praktické lekce byly neocenitelné pro zvládnutí pokročilých technik.",
-        rating: 4.8
-    },
-
-    {
-        image: "https://images.unsplash.com/photo-1618018352910-72bdafdc82a6?q=80&w=580&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        name: "David Williams",
-        userName: "Specialista na Rehabilitaci, UK",
-        comment:
-            "Kurz neurologické rehabilitace překonal mé očekávání. Výuka Vojtovy metody byla komplexní a výsledky pacientů mluví samy za sebe.",
-        rating: 4.9
-    },
-    {
-        image: "https://images.unsplash.com/photo-1584999734482-0361aecad844?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fHByb2ZpbGV8ZW58MHwyfDB8fHww",
-        name: "Elena Popescu",
-        userName: "Dětská Fyzioterapeutka, Rumunsko",
-        comment:
-            "Nejlepší investice do mé kariéry! Pediatrický kurz mi dal specializované dovednosti, které jsou velmi žádané. Nyní léčím děti se složitými vývojovými potřebami.",
+            "Velice doporučuji pana Kottase, se kterým řeším dlouhodobý neurologický problém. Docházel jsem na různá fyzio cvičení/terapie a poprvé cítím, že problému někdo opravdu rozumí a používá správnou cestu a techniku.",
         rating: 5.0
     },
     {
-        image: "https://images.unsplash.com/photo-1586297135537-94bc9ba060aa?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mjh8fHByb2ZpbGUlMjBwaG90b3xlbnwwfDJ8MHx8fDA%3D",
-        name: "Marie Dubois",
-        userName: "Majitelka Soukromé Praxe, Francie",
+        image: "",
+        name: "Veronika Harapátová",
+        userName: "Před rokem",
         comment:
-            "Certifikace mi otevřela dveře po celé Evropě. Praktický přístup a celoživotní přístup k materiálům znamená, že se stále učím a zlepšuji.",
+            "Nevěřila jsem, že moje 3 letá dcera dokáže být hodinu v klidu, ale z pana Kottase vyzařuje takový klid, že se jí celá návštěva líbila a i když se jí hned ulevilo, tak by tam chtěla jezdit znovu, jak jí bylo celé ošetření příjemné.",
         rating: 5.0
     },
     {
-        image: "https://images.unsplash.com/photo-1623517006691-00db997b4c58?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTUwfHxwcm9maWxlJTIwcGhvdG98ZW58MHwyfDB8fHww",
-        name: "Jakub Kowalski",
-        userName: "Nemocniční Fyzioterapeut, Polsko",
+        image: "",
+        name: "Hanka Ježková",
+        userName: "Před rokem",
         comment:
-            "Malé třídy a odborné mentorství udělaly velký rozdíl. Dostal jsem osobní zpětnou vazbu, která mi pomohla rychle zdokonalit mou techniku.",
-        rating: 4.9
+            "Děkuju za skvělý přístup! Pan Kottas byl úžasný a hned po první návštěvě se mi dost ulevilo. Co ještě oceňuji je dostupnost do Diresu - tramvajová zastávka je kousíček :)",
+        rating: 5.0
+    },
+    {
+        image: "",
+        name: "Žaneta Kárová",
+        userName: "Před rokem",
+        comment:
+            "Skvělý osobní přístup, velice doporučuji a děkuji 🙏",
+        rating: 5.0
     }
 ]
 
@@ -84,7 +75,7 @@ export const TestimonialSection = () => {
                 </h2>
 
                 <h2 className="mb-4 text-center font-bold text-3xl md:text-4xl" data-aos="fade-up" data-aos-delay="100">
-                    Příběhy Úspěchu Našich Studentů
+                    Co říkají naši klienti
                 </h2>
             </div>
 
@@ -119,9 +110,11 @@ export const TestimonialSection = () => {
                                         <Avatar>
                                             <AvatarImage
                                                 src={review.image}
-                                                alt="radix"
+                                                alt={review.name}
                                             />
-                                            <AvatarFallback>SV</AvatarFallback>
+                                            <AvatarFallback>
+                                                {review.name.split(' ').map(n => n[0]).join('')}
+                                            </AvatarFallback>
                                         </Avatar>
 
                                         <div className="flex flex-col">
