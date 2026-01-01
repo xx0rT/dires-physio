@@ -1,6 +1,6 @@
 import { Star } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
-import { useEffect, useRef, useState } from "react"
+import Marquee from "@/components/ui/marquee"
 
 interface Review {
     id: number
@@ -12,8 +12,6 @@ interface Review {
 }
 
 export const CommunitySection = () => {
-    const [scrollY, setScrollY] = useState(0)
-    const sectionRef = useRef<HTMLDivElement>(null)
 
     const reviews: Review[] = [
         {
@@ -82,32 +80,39 @@ export const CommunitySection = () => {
         }
     ]
 
-    useEffect(() => {
-        const handleScroll = () => {
-            if (sectionRef.current) {
-                const rect = sectionRef.current.getBoundingClientRect()
-                const sectionTop = rect.top
-                const sectionHeight = rect.height
-                const windowHeight = window.innerHeight
+    const firstRow = reviews.slice(0, 4)
+    const secondRow = reviews.slice(4)
 
-                if (sectionTop < windowHeight && sectionTop + sectionHeight > 0) {
-                    const scrollProgress = (windowHeight - sectionTop) / (windowHeight + sectionHeight)
-                    setScrollY(scrollProgress)
-                }
-            }
-        }
-
-        window.addEventListener('scroll', handleScroll)
-        handleScroll()
-
-        return () => window.removeEventListener('scroll', handleScroll)
-    }, [])
-
-    const row1Transform = scrollY * 300
-    const row2Transform = scrollY * -300
+    const ReviewCard = ({ review }: { review: Review }) => (
+        <Card className="w-[280px] flex-shrink-0">
+            <CardContent className="pt-6">
+                <div className="flex items-start gap-4 mb-4">
+                    <img
+                        src={review.avatar}
+                        alt={review.name}
+                        className="w-12 h-12 rounded-full object-cover"
+                    />
+                    <div className="flex-1">
+                        <h3 className="font-semibold">{review.name}</h3>
+                        <div className="flex items-center gap-2">
+                            <div className="flex">
+                                {[...Array(review.rating)].map((_, i) => (
+                                    <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                                ))}
+                            </div>
+                            <span className="text-muted-foreground text-sm">{review.date}</span>
+                        </div>
+                    </div>
+                </div>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                    {review.text}
+                </p>
+            </CardContent>
+        </Card>
+    )
 
     return (
-        <section id="community" ref={sectionRef} className="container mx-auto py-12 overflow-hidden">
+        <section id="community" className="container mx-auto py-12 overflow-hidden">
             <hr className="border-secondary" />
             <div className="container py-20 sm:py-20">
                 <div className="mb-12 text-center">
@@ -131,72 +136,19 @@ export const CommunitySection = () => {
                     </div>
                 </div>
 
-                <div className="relative space-y-6">
-                    <div
-                        className="flex gap-6 transition-transform duration-100 ease-out"
-                        style={{ transform: `translateX(-${row1Transform}px)` }}
-                    >
-                        {[...reviews.slice(0, 4), ...reviews.slice(0, 4)].map((review, index) => (
-                            <Card key={`row1-${review.id}-${index}`} className="min-w-[350px] flex-shrink-0">
-                                <CardContent className="pt-6">
-                                    <div className="flex items-start gap-4 mb-4">
-                                        <img
-                                            src={review.avatar}
-                                            alt={review.name}
-                                            className="w-12 h-12 rounded-full object-cover"
-                                        />
-                                        <div className="flex-1">
-                                            <h3 className="font-semibold">{review.name}</h3>
-                                            <div className="flex items-center gap-2">
-                                                <div className="flex">
-                                                    {[...Array(review.rating)].map((_, i) => (
-                                                        <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                                                    ))}
-                                                </div>
-                                                <span className="text-muted-foreground text-sm">{review.date}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p className="text-muted-foreground text-sm leading-relaxed">
-                                        {review.text}
-                                    </p>
-                                </CardContent>
-                            </Card>
+                <div className="relative flex w-full flex-col items-center justify-center overflow-hidden gap-6">
+                    <Marquee className="[--duration:35s]">
+                        {firstRow.map((review) => (
+                            <ReviewCard key={review.id} review={review} />
                         ))}
-                    </div>
-
-                    <div
-                        className="flex gap-6 transition-transform duration-100 ease-out"
-                        style={{ transform: `translateX(${row2Transform}px)` }}
-                    >
-                        {[...reviews.slice(4), ...reviews.slice(4)].map((review, index) => (
-                            <Card key={`row2-${review.id}-${index}`} className="min-w-[350px] flex-shrink-0">
-                                <CardContent className="pt-6">
-                                    <div className="flex items-start gap-4 mb-4">
-                                        <img
-                                            src={review.avatar}
-                                            alt={review.name}
-                                            className="w-12 h-12 rounded-full object-cover"
-                                        />
-                                        <div className="flex-1">
-                                            <h3 className="font-semibold">{review.name}</h3>
-                                            <div className="flex items-center gap-2">
-                                                <div className="flex">
-                                                    {[...Array(review.rating)].map((_, i) => (
-                                                        <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                                                    ))}
-                                                </div>
-                                                <span className="text-muted-foreground text-sm">{review.date}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p className="text-muted-foreground text-sm leading-relaxed">
-                                        {review.text}
-                                    </p>
-                                </CardContent>
-                            </Card>
+                    </Marquee>
+                    <Marquee reverse className="[--duration:35s]">
+                        {secondRow.map((review) => (
+                            <ReviewCard key={review.id} review={review} />
                         ))}
-                    </div>
+                    </Marquee>
+                    <div className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-background to-transparent" />
+                    <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-background to-transparent" />
                 </div>
             </div>
             <hr className="border-secondary" />
