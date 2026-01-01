@@ -1,12 +1,9 @@
 import { ArrowRight, Lock } from "lucide-react"
 import { Link } from "react-router-dom"
-import { useTheme } from "next-themes"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { site } from "@/config/site"
 
 export const HeroSection = () => {
-    const { theme } = useTheme()
     return (
         <section className="container mx-auto w-full px-4">
             <div className="grid gap-12 py-24 md:grid-cols-2 md:items-center md:gap-14 lg:grid-cols-[0.8fr,1.2fr] lg:gap-20 xl:gap-24 xl:py-32">
@@ -87,22 +84,22 @@ export const HeroSection = () => {
                                 <div className="flex h-5 items-center justify-center gap-2 rounded-md bg-background/80 px-Z shadow-sm ">
                                     <Lock className="size-2 text-muted-foreground" />
                                     <div className="text-muted-foreground text-xs">
-                                        {site.url}
+                                        Dires.cz
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <img
-                        width={1400}
-                        height={1400}
+                    <video
                         className="relative flex w-full items-center"
-                        src={
-                            theme === "light" ? "/dash-light.png" : "/dash.png"
-                        }
-                        alt="dashboard preview"
-                    />
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                    >
+                        <source src="/logos/uvodnistrana.mp4" type="video/mp4" />
+                    </video>
 
                     {/* Decorative elements */}
                     <div className="-right-8 -bottom-8 absolute -z-10 size-32 rounded-full bg-primary/30 blur-3xl lg:size-40" />
