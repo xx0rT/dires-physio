@@ -37,18 +37,8 @@ const benefitList: BenefitsProps[] = [
 
 export const BenefitsSection = () => {
     return (
-        <section id="benefits" className="container mx-auto px-4 py-16 sm:py-20 relative overflow-hidden">
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <span className="text-[12rem] md:text-[16rem] lg:text-[20rem] font-black select-none uppercase tracking-tighter"
-                      style={{
-                          WebkitTextStroke: '2px rgba(128, 128, 128, 0.1)',
-                          color: 'transparent',
-                          transform: 'rotate(-3deg)',
-                      }}>
-                    VÝHODY
-                </span>
-            </div>
-            <div className="grid place-items-start lg:grid-cols-2 lg:gap-24 relative z-10">
+        <section id="benefits" className="container mx-auto px-4 py-16 sm:py-20">
+            <div className="grid place-items-start lg:grid-cols-2 lg:gap-24">
                 <div className="sticky top-32 self-start" data-aos="fade-right">
                     <h2 className="mb-2 text-lg text-primary tracking-wider">
                         Výhody

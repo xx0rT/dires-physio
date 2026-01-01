@@ -155,18 +155,8 @@ export const TeamSection = () => {
     }
 
     return (
-        <section id="team" className="container mx-auto px-4 py-16 sm:py-20 relative overflow-hidden">
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <span className="text-[12rem] md:text-[16rem] lg:text-[20rem] font-black select-none uppercase tracking-tighter"
-                      style={{
-                          WebkitTextStroke: '2px rgba(128, 128, 128, 0.1)',
-                          color: 'transparent',
-                          transform: 'rotate(2deg)',
-                      }}>
-                    TÝM
-                </span>
-            </div>
-            <div className="mb-8 text-center relative z-10">
+        <section id="team" className="container mx-auto px-4 py-16 sm:py-20">
+            <div className="mb-8 text-center">
                 <h2 className="mb-2 text-center text-lg text-primary tracking-wider">
                     Tým
                 </h2>
@@ -176,7 +166,7 @@ export const TeamSection = () => {
                 </h2>
             </div>
 
-            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 relative z-10">
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {teamList.map((member, index) => (
                     <Card
                         key={index}

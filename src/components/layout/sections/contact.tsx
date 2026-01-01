@@ -53,18 +53,8 @@ export const ContactSection = () => {
     }
 
     return (
-        <section id="contact" className="container mx-auto px-4 py-16 sm:py-20 relative overflow-hidden">
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <span className="text-[12rem] md:text-[16rem] lg:text-[20rem] font-black select-none uppercase tracking-tighter"
-                      style={{
-                          WebkitTextStroke: '2px rgba(128, 128, 128, 0.1)',
-                          color: 'transparent',
-                          transform: 'rotate(-4deg)',
-                      }}>
-                    KONTAKT
-                </span>
-            </div>
-            <section className="grid grid-cols-1 gap-8 md:grid-cols-2 relative z-10">
+        <section id="contact" className="container mx-auto px-4 py-16 sm:py-20">
+            <section className="grid grid-cols-1 gap-8 md:grid-cols-2">
                 <div className="md:text-right md:pr-8">
                     <div className="mb-4">
                         <h2 className="mb-2 text-lg text-primary tracking-wider">

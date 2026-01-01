@@ -25,67 +25,57 @@ interface ReviewProps {
 
 const reviewList: ReviewProps[] = [
     {
-        image: "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg",
-        name: "Sarah Johnson",
-        userName: "CEO at TechStart",
+        image: "",
+        name: "Zuzana Hykyšová",
+        userName: "Před 2 měsíci",
         comment:
-            "This platform has completely transformed how we manage our business operations. The intuitive interface and powerful features have saved us countless hours every week.",
+            "Honza Kottas mi opět pomohl od problému, který mě měsíc trápil a se kterým mi nepomohly ani masáže, ani akupunktura. Honzova jemná, citlivá práce mi přinesla znatelnou úlevu a zlepšení ne úplně okamžitě, ale za pár hodin jsem zjistila, že už mě to nebolí, netáhne v zádech, nebrní v ruce, nepálí na hrudi. Honzu považuji za šamana, léčitele.",
         rating: 5.0
     },
     {
-        image: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg",
-        name: "Michael Chen",
-        userName: "Product Manager",
+        image: "",
+        name: "Lukáš Lebeda",
+        userName: "Před 7 měsíci",
         comment:
-            "I've tried many solutions, but this one stands out. The team's attention to detail and customer support is exceptional. Highly recommend!",
+            "Velice doporučuji pana Kottase, se kterým řeším dlouhodobý neurologický problém. Docházel jsem na různá fyzio cvičení/terapie a poprvé cítím, že problému někdo opravdu rozumí a používá správnou cestu a techniku.",
         rating: 5.0
     },
     {
-        image: "https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg",
-        name: "Emma Williams",
-        userName: "Freelance Designer",
+        image: "",
+        name: "Veronika Harapátová",
+        userName: "Před rokem",
         comment:
-            "As a solo entrepreneur, I needed something reliable and easy to use. This platform exceeded my expectations and helped me scale my business.",
+            "Nevěřila jsem, že moje 3 letá dcera dokáže být hodinu v klidu, ale z pana Kottase vyzařuje takový klid, že se jí celá návštěva líbila a i když se jí hned ulevilo, tak by tam chtěla jezdit znovu, jak jí bylo celé ošetření příjemné.",
         rating: 5.0
     },
     {
-        image: "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg",
-        name: "David Martinez",
-        userName: "Marketing Director",
+        image: "",
+        name: "Hanka Ježková",
+        userName: "Před rokem",
         comment:
-            "The ROI has been incredible. We saw improvements in our workflow within the first week. The analytics features are particularly impressive.",
+            "Děkuju za skvělý přístup! Pan Kottas byl úžasný a hned po první návštěvě se mi dost ulevilo. Co ještě oceňuji je dostupnost do Diresu - tramvajová zastávka je kousíček :)",
         rating: 5.0
     },
     {
-        image: "https://images.pexels.com/photos/712513/pexels-photo-712513.jpeg",
-        name: "Lisa Anderson",
-        userName: "Startup Founder",
+        image: "",
+        name: "Žaneta Kárová",
+        userName: "Před rokem",
         comment:
-            "Game changer for our team! The collaboration features and automation capabilities have streamlined our entire process.",
+            "Skvělý osobní přístup, velice doporučuji a děkuji 🙏",
         rating: 5.0
     }
 ]
 
 export const TestimonialSection = () => {
     return (
-        <section id="testimonials" className="container mx-auto px-4 py-16 sm:py-20 relative overflow-hidden">
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <span className="text-[12rem] md:text-[16rem] lg:text-[20rem] font-black select-none uppercase tracking-tighter"
-                      style={{
-                          WebkitTextStroke: '2px rgba(128, 128, 128, 0.1)',
-                          color: 'transparent',
-                          transform: 'rotate(6deg)',
-                      }}>
-                    REVIEWS
-                </span>
-            </div>
-            <div className="mb-8 text-center relative z-10">
+        <section id="testimonials" className="container mx-auto px-4 py-16 sm:py-20">
+            <div className="mb-8 text-center">
                 <h2 className="mb-2 text-center text-lg text-primary tracking-wider" data-aos="fade-up">
-                    Testimonials
+                    Reference
                 </h2>
 
                 <h2 className="mb-4 text-center font-bold text-3xl md:text-4xl" data-aos="fade-up" data-aos-delay="100">
-                    What Our Customers Say
+                    Co říkají naši klienti
                 </h2>
             </div>
 
@@ -93,7 +83,7 @@ export const TestimonialSection = () => {
                 opts={{
                     align: "start"
                 }}
-                className="relative mx-auto w-[80%] sm:w-[90%] lg:max-w-screen-xl z-10"
+                className="relative mx-auto w-[80%] sm:w-[90%] lg:max-w-screen-xl"
             >
                 <CarouselContent>
                     {reviewList.map((review) => (

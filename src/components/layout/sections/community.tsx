@@ -1,6 +1,6 @@
 import { Star } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
-import Marquee from "@/components/ui/marquee"
+import { useEffect, useRef, useState } from "react"
 
 interface Review {
     id: number
@@ -12,6 +12,8 @@ interface Review {
 }
 
 export const CommunitySection = () => {
+    const [scrollY, setScrollY] = useState(0)
+    const sectionRef = useRef<HTMLDivElement>(null)
 
     const reviews: Review[] = [
         {
@@ -80,53 +82,34 @@ export const CommunitySection = () => {
         }
     ]
 
-    const cardWidths = [350, 420, 380, 450, 400, 370, 440, 390]
+    useEffect(() => {
+        const handleScroll = () => {
+            if (sectionRef.current) {
+                const rect = sectionRef.current.getBoundingClientRect()
+                const sectionTop = rect.top
+                const sectionHeight = rect.height
+                const windowHeight = window.innerHeight
 
-    const firstRow = reviews.slice(0, 4)
-    const secondRow = reviews.slice(4)
+                if (sectionTop < windowHeight && sectionTop + sectionHeight > 0) {
+                    const scrollProgress = (windowHeight - sectionTop) / (windowHeight + sectionHeight)
+                    setScrollY(scrollProgress)
+                }
+            }
+        }
 
-    const ReviewCard = ({ review, width }: { review: Review; width: number }) => {
-        const height = Math.round(width * 27 / 100)
-        return (
-            <Card className="flex-shrink-0 overflow-hidden" style={{ width: `${width}px`, height: `${height}px` }}>
-                <CardContent className="p-4 h-full flex items-center gap-3">
-                    <img
-                        src={review.avatar}
-                        alt={review.name}
-                        className="w-10 h-10 rounded-full object-cover flex-shrink-0"
-                    />
-                    <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                            <h3 className="font-semibold text-sm truncate">{review.name}</h3>
-                            <div className="flex flex-shrink-0">
-                                {[...Array(review.rating)].map((_, i) => (
-                                    <Star key={i} className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                                ))}
-                            </div>
-                        </div>
-                        <p className="text-muted-foreground text-xs line-clamp-2 leading-tight">
-                            {review.text}
-                        </p>
-                    </div>
-                </CardContent>
-            </Card>
-        )
-    }
+        window.addEventListener('scroll', handleScroll)
+        handleScroll()
+
+        return () => window.removeEventListener('scroll', handleScroll)
+    }, [])
+
+    const row1Transform = scrollY * 300
+    const row2Transform = scrollY * -300
 
     return (
-        <section id="community" className="container mx-auto py-12 overflow-hidden relative">
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
-                <span className="text-[12rem] md:text-[16rem] lg:text-[20rem] font-black select-none uppercase tracking-tighter"
-                      style={{
-                          WebkitTextStroke: '2px rgba(128, 128, 128, 0.1)',
-                          color: 'transparent',
-                          transform: 'rotate(-5deg)',
-                      }}>
-                    RECENZE
-                </span>
-            </div>
+        <section id="community" ref={sectionRef} className="container mx-auto py-12 overflow-hidden">
             <hr className="border-secondary" />
-            <div className="container py-20 sm:py-20 relative z-10">
+            <div className="container py-20 sm:py-20">
                 <div className="mb-12 text-center">
                     <h2 className="mb-2 text-lg text-primary tracking-wider">
                         Recenze
@@ -148,19 +131,72 @@ export const CommunitySection = () => {
                     </div>
                 </div>
 
-                <div className="relative flex w-full flex-col items-center justify-center overflow-hidden gap-6">
-                    <Marquee className="[--duration:17.5s]">
-                        {firstRow.map((review, index) => (
-                            <ReviewCard key={review.id} review={review} width={cardWidths[index]} />
+                <div className="relative space-y-6">
+                    <div
+                        className="flex gap-6 transition-transform duration-100 ease-out"
+                        style={{ transform: `translateX(-${row1Transform}px)` }}
+                    >
+                        {[...reviews.slice(0, 4), ...reviews.slice(0, 4)].map((review, index) => (
+                            <Card key={`row1-${review.id}-${index}`} className="min-w-[350px] flex-shrink-0">
+                                <CardContent className="pt-6">
+                                    <div className="flex items-start gap-4 mb-4">
+                                        <img
+                                            src={review.avatar}
+                                            alt={review.name}
+                                            className="w-12 h-12 rounded-full object-cover"
+                                        />
+                                        <div className="flex-1">
+                                            <h3 className="font-semibold">{review.name}</h3>
+                                            <div className="flex items-center gap-2">
+                                                <div className="flex">
+                                                    {[...Array(review.rating)].map((_, i) => (
+                                                        <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                                                    ))}
+                                                </div>
+                                                <span className="text-muted-foreground text-sm">{review.date}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p className="text-muted-foreground text-sm leading-relaxed">
+                                        {review.text}
+                                    </p>
+                                </CardContent>
+                            </Card>
                         ))}
-                    </Marquee>
-                    <Marquee reverse className="[--duration:17.5s]">
-                        {secondRow.map((review, index) => (
-                            <ReviewCard key={review.id} review={review} width={cardWidths[index + 4]} />
+                    </div>
+
+                    <div
+                        className="flex gap-6 transition-transform duration-100 ease-out"
+                        style={{ transform: `translateX(${row2Transform}px)` }}
+                    >
+                        {[...reviews.slice(4), ...reviews.slice(4)].map((review, index) => (
+                            <Card key={`row2-${review.id}-${index}`} className="min-w-[350px] flex-shrink-0">
+                                <CardContent className="pt-6">
+                                    <div className="flex items-start gap-4 mb-4">
+                                        <img
+                                            src={review.avatar}
+                                            alt={review.name}
+                                            className="w-12 h-12 rounded-full object-cover"
+                                        />
+                                        <div className="flex-1">
+                                            <h3 className="font-semibold">{review.name}</h3>
+                                            <div className="flex items-center gap-2">
+                                                <div className="flex">
+                                                    {[...Array(review.rating)].map((_, i) => (
+                                                        <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                                                    ))}
+                                                </div>
+                                                <span className="text-muted-foreground text-sm">{review.date}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p className="text-muted-foreground text-sm leading-relaxed">
+                                        {review.text}
+                                    </p>
+                                </CardContent>
+                            </Card>
                         ))}
-                    </Marquee>
-                    <div className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-background to-transparent" />
-                    <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-background to-transparent" />
+                    </div>
                 </div>
             </div>
             <hr className="border-secondary" />

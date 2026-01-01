@@ -72,18 +72,7 @@ const plans: PlanProps[] = [
 
 export const PricingSection = () => {
     return (
-        <section id="pricing" className="container mx-auto px-4 py-16 sm:py-20 relative overflow-hidden">
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <span className="text-[12rem] md:text-[16rem] lg:text-[20rem] font-black select-none uppercase tracking-tighter"
-                      style={{
-                          WebkitTextStroke: '2px rgba(128, 128, 128, 0.1)',
-                          color: 'transparent',
-                          transform: 'rotate(4deg)',
-                      }}>
-                    CENÍK
-                </span>
-            </div>
-            <div className="relative z-10">
+        <section id="pricing" className="container mx-auto px-4 py-16 sm:py-20">
             <h2 className="mb-2 text-center text-lg text-primary tracking-wider" data-aos="fade-up">
                 Ceník Kurzů
             </h2>
@@ -162,7 +151,6 @@ export const PricingSection = () => {
                         </Card>
                     )
                 )}
-            </div>
             </div>
         </section>
     )

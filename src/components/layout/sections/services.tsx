@@ -45,19 +45,8 @@ export const ServicesSection = () => {
     return (
         <section
             id="services"
-            className="container mx-auto px-4 py-16 sm:py-20 relative overflow-hidden"
+            className="container mx-auto px-4 py-16 sm:py-20"
         >
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <span className="text-[12rem] md:text-[16rem] lg:text-[20rem] font-black select-none uppercase tracking-tighter"
-                      style={{
-                          WebkitTextStroke: '2px rgba(128, 128, 128, 0.1)',
-                          color: 'transparent',
-                          transform: 'rotate(-2deg)',
-                      }}>
-                    KURZY
-                </span>
-            </div>
-            <div className="relative z-10">
             <h2 className="mb-2 text-center text-lg text-primary tracking-wider">
                 Specializace Kurzů
             </h2>
@@ -86,7 +75,6 @@ export const ServicesSection = () => {
                        
                     </Card>
                 ))}
-            </div>
             </div>
         </section>
     )
