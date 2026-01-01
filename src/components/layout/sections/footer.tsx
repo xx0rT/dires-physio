@@ -292,7 +292,7 @@ export const FooterSection = () => {
                                
                                 
                                 <div className="flex items-center gap-2 text-muted-foreground text-sm">
-                                    <span>This SaaS Starter is built by</span>
+                                    <span>Made with love by Troxx</span>
                                     <Link
                                         target="_blank"
                                         to="https://indietech.dev/?utm_source=indiesaas"
