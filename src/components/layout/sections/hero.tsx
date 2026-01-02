@@ -25,11 +25,11 @@ export const HeroSection = () => {
                             Ovládněte{" "}
                             <ShinyText
                                 text="České Fyzioterapeutické Techniky"
-                                speed={3}
+                                speed={2.5}
                                 delay={0}
-                                color="hsl(var(--primary))"
-                                shineColor="hsl(var(--foreground))"
-                                spread={150}
+                                color="#1a1a1a"
+                                shineColor="#7033ff"
+                                spread={200}
                                 direction="right"
                                 yoyo={true}
                                 pauseOnHover={false}
