@@ -39,7 +39,7 @@ export const ServicesSection = () => {
     return (
         <section
             id="services"
-            className="w-full py-16 sm:py-20 min-h-screen"
+            className="w-full py-16 sm:py-20"
         >
             <div className="container mx-auto px-4 mb-12">
                 <h2 className="mb-2 text-center text-lg text-primary tracking-wider">
@@ -55,9 +55,14 @@ export const ServicesSection = () => {
                 </h3>
             </div>
 
-            <div className="w-full flex justify-center">
+            <div className="w-full flex justify-center px-4">
                 <ScrollStack
                     itemDistance={110}
+                    itemStackDistance={30}
+                    stackPosition="20%"
+                    baseScale={0.85}
+                    rotationAmount={0}
+                    blurAmount={0}
                     useWindowScroll={true}
                 >
                     {serviceList.map(({ title, description, gradient, borderColor, image }) => (

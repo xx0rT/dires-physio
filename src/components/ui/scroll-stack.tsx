@@ -327,7 +327,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   if (useWindowScroll) {
     return (
       <div className={`relative w-full ${className}`.trim()}>
-        <div className="scroll-stack-inner pb-[100vh]">
+        <div className="scroll-stack-inner pb-[50vh]">
           {children}
           <div className="scroll-stack-end w-full h-px" />
         </div>
