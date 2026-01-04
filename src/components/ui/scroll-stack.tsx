@@ -100,10 +100,8 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
     [useWindowScroll]
   );
 
-  const updateCardTransforms = useCallback(() => {
-    if (!cardsRef.current.length || isUpdatingRef.current) return;
-
-    isUpdatingRef.current = true;
+  const performUpdate = useCallback(() => {
+    if (!cardsRef.current.length) return;
 
     const { scrollTop, containerHeight } = getScrollData();
     const stackPositionPx = parsePercentage(stackPosition, containerHeight);
@@ -190,8 +188,6 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
         }
       }
     });
-
-    isUpdatingRef.current = false;
   }, [
     itemScale,
     itemStackDistance,
@@ -208,6 +204,18 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
     getElementOffset
   ]);
 
+  const updateCardTransforms = useCallback(() => {
+    if (!cardsRef.current.length) return;
+    if (isUpdatingRef.current) return;
+
+    isUpdatingRef.current = true;
+
+    requestAnimationFrame(() => {
+      performUpdate();
+      isUpdatingRef.current = false;
+    });
+  }, [performUpdate]);
+
   const handleScroll = useCallback(() => {
     updateCardTransforms();
   }, [updateCardTransforms]);
@@ -215,15 +223,14 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   const setupLenis = useCallback(() => {
     if (useWindowScroll) {
       const lenis = new Lenis({
-        duration: 1.2,
-        easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        duration: 0.6,
+        easing: t => t,
         smoothWheel: true,
-        touchMultiplier: 2,
+        touchMultiplier: 1.5,
         infinite: false,
-        wheelMultiplier: 1,
-        lerp: 0.1,
-        syncTouch: true,
-        syncTouchLerp: 0.075
+        wheelMultiplier: 0.8,
+        lerp: 0.05,
+        syncTouch: false
       });
 
       lenis.on('scroll', handleScroll);
