@@ -1,6 +1,7 @@
 import React, { useLayoutEffect, useRef, useCallback } from 'react';
 import type { ReactNode } from 'react';
 import Lenis from 'lenis';
+import './ScrollStack.css';
 
 export interface ScrollStackItemProps {
   itemClassName?: string;
@@ -8,15 +9,7 @@ export interface ScrollStackItemProps {
 }
 
 export const ScrollStackItem: React.FC<ScrollStackItemProps> = ({ children, itemClassName = '' }) => (
-  <div
-    className={`scroll-stack-card relative w-full h-80 my-8 p-8 md:p-12 rounded-[40px] shadow-[0_0_30px_rgba(0,0,0,0.1)] box-border origin-top will-change-transform ${itemClassName}`.trim()}
-    style={{
-      backfaceVisibility: 'hidden',
-      transformStyle: 'preserve-3d'
-    }}
-  >
-    {children}
-  </div>
+  <div className={`scroll-stack-card ${itemClassName}`.trim()}>{children}</div>
 );
 
 interface ScrollStackProps {
@@ -81,9 +74,9 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
     } else {
       const scroller = scrollerRef.current;
       return {
-        scrollTop: scroller ? scroller.scrollTop : 0,
-        containerHeight: scroller ? scroller.clientHeight : 0,
-        scrollContainer: scroller
+        scrollTop: scroller!.scrollTop,
+        containerHeight: scroller!.clientHeight,
+        scrollContainer: scroller!
       };
     }
   }, [useWindowScroll]);
@@ -100,16 +93,18 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
     [useWindowScroll]
   );
 
-  const performUpdate = useCallback(() => {
-    if (!cardsRef.current.length) return;
+  const updateCardTransforms = useCallback(() => {
+    if (!cardsRef.current.length || isUpdatingRef.current) return;
+
+    isUpdatingRef.current = true;
 
     const { scrollTop, containerHeight } = getScrollData();
     const stackPositionPx = parsePercentage(stackPosition, containerHeight);
     const scaleEndPositionPx = parsePercentage(scaleEndPosition, containerHeight);
 
     const endElement = useWindowScroll
-      ? (document.querySelector('.scroll-stack-end') as HTMLElement | null)
-      : (scrollerRef.current?.querySelector('.scroll-stack-end') as HTMLElement | null);
+      ? (document.querySelector('.scroll-stack-end') as HTMLElement)
+      : (scrollerRef.current?.querySelector('.scroll-stack-end') as HTMLElement);
 
     const endElementTop = endElement ? getElementOffset(endElement) : 0;
 
@@ -188,6 +183,8 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
         }
       }
     });
+
+    isUpdatingRef.current = false;
   }, [
     itemScale,
     itemStackDistance,
@@ -204,18 +201,6 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
     getElementOffset
   ]);
 
-  const updateCardTransforms = useCallback(() => {
-    if (!cardsRef.current.length) return;
-    if (isUpdatingRef.current) return;
-
-    isUpdatingRef.current = true;
-
-    requestAnimationFrame(() => {
-      performUpdate();
-      isUpdatingRef.current = false;
-    });
-  }, [performUpdate]);
-
   const handleScroll = useCallback(() => {
     updateCardTransforms();
   }, [updateCardTransforms]);
@@ -223,14 +208,15 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   const setupLenis = useCallback(() => {
     if (useWindowScroll) {
       const lenis = new Lenis({
-        duration: 0.6,
-        easing: t => t,
+        duration: 1.2,
+        easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         smoothWheel: true,
-        touchMultiplier: 1.5,
+        touchMultiplier: 2,
         infinite: false,
-        wheelMultiplier: 0.8,
-        lerp: 0.05,
-        syncTouch: false
+        wheelMultiplier: 1,
+        lerp: 0.1,
+        syncTouch: true,
+        syncTouchLerp: 0.075
       });
 
       lenis.on('scroll', handleScroll);
@@ -283,6 +269,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
         ? document.querySelectorAll('.scroll-stack-card')
         : (scrollerRef.current?.querySelectorAll('.scroll-stack-card') ?? [])
     ) as HTMLElement[];
+
     cardsRef.current = cards;
     const transformsCache = lastTransformsRef.current;
 
@@ -334,30 +321,19 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   if (useWindowScroll) {
     return (
       <div className={`relative w-full ${className}`.trim()}>
-        <div className="scroll-stack-inner pb-[50vh]">
+        <div className="scroll-stack-inner">
           {children}
-          <div className="scroll-stack-end w-full h-px" />
+          <div className="scroll-stack-end" />
         </div>
       </div>
     );
   }
 
   return (
-    <div
-      className={`relative w-full h-full overflow-y-auto overflow-x-visible ${className}`.trim()}
-      ref={scrollerRef}
-      style={{
-        overscrollBehavior: 'contain',
-        WebkitOverflowScrolling: 'touch',
-        scrollBehavior: 'smooth',
-        WebkitTransform: 'translateZ(0)',
-        transform: 'translateZ(0)',
-        willChange: 'scroll-position'
-      }}
-    >
-      <div className="scroll-stack-inner pt-[20vh] px-4 md:px-20 pb-[50rem] min-h-screen">
+    <div className={`scroll-stack-scroller ${className}`.trim()} ref={scrollerRef}>
+      <div className="scroll-stack-inner">
         {children}
-        <div className="scroll-stack-end w-full h-px" />
+        <div className="scroll-stack-end" />
       </div>
     </div>
   );
