@@ -13,28 +13,28 @@ interface BenefitsProps {
 
 const benefitList: BenefitsProps[] = [
     {
-        icon: "CheckCircle2",
-        title: "Vyšetříte pacienta do 15 minut",
+        icon: "Rocket",
+        title: "Rychlý Start Kariéry",
         description:
-            "Naučíte se efektivní diagnostické postupy, které ihned použijete v ambulanci."
+            "Získejte certifikát během 3-6 měsíců a začněte praktikovat rychleji než tradičními programy."
     },
     {
-        icon: "Target",
-        title: "Přestanete si být nejistí",
+        icon: "Award",
+        title: "Mezinárodní Certifikát",
         description:
-            "Zvládnete manuální techniky s jistotou a bez strachu z chyby."
+            "Uznávaný v celé Evropě. Otevřete si možnosti práce v jakékoli zemi."
     },
     {
-        icon: "TrendingUp",
-        title: "Zvýšíte svou hodnotu na trhu",
+        icon: "Users",
+        title: "Osobní Mentoring",
         description:
-            "S mezinárodním certifikátem získáte lepší pozice a vyšší plat."
+            "Individuální vedení od zkušených fyzioterapeutů pro vaše nejlepší výsledky."
     },
     {
-        icon: "Clock",
-        title: "Použijete hned druhý den",
+        icon: "Shield",
+        title: "Ověřené Techniky",
         description:
-            "100% praktické techniky bez zbytečné teorie - přímo do praxe."
+            "České metody prověřené desetiletími úspěšné klinické praxe."
     }
 ]
 
@@ -52,14 +52,14 @@ export const BenefitsSection = () => {
                     </h2>
 
                     <h2 className="mb-4 font-bold text-3xl md:text-4xl">
-                        Co Díky Kurzu Budete UMĚT
+                        Proč Si Vybrat Naše Kurzy
                     </h2>
                     <p className="mb-8 text-muted-foreground text-xl">
-                        Ne jenom teorie - <span className="font-semibold text-foreground">reálné dovednosti pro praxi.</span> Výsledky, které změní vaši kariéru.
+                        Staňte se certifikovaným fyzioterapeutem rychleji a efektivněji. <span className="font-semibold text-foreground">Začněte svou kariéru ještě dnes.</span>
                     </p>
-                    <Button asChild size="lg" className="group/arrow rounded-full text-base">
+                    <Button asChild size="lg" className="group/arrow rounded-full">
                         <Link to="/auth/sign-up">
-                            Chci se zlepšit v praxi
+                            Vytvořit účet zdarma
                             <ArrowRight className="ml-2 size-5 transition-transform group-hover/arrow:translate-x-1" />
                         </Link>
                     </Button>

@@ -7,7 +7,6 @@ import {
     CardHeader,
     CardTitle
 } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { Link } from "react-router-dom"
 
 enum PopularPlan {
@@ -30,14 +29,14 @@ const plans: PlanProps[] = [
         popular: 0,
         price: 890,
         description:
-            "Pro začínající fyzioterapeuty, kteří chtějí získat pevný základ.",
-        buttonText: "Rezervovat místo",
+            "Ideální pro začátečníky zahajující svou fyzioterapeutickou cestu se základními technikami.",
+        buttonText: "Přihlásit se",
         benefitList: [
-            "✔️ Vyšetříte pacienta rychleji",
-            "✔️ Zvládnete základní techniky",
-            "✔️ Získáte uznávaný certifikát",
-            "🎁 Bonus: Video knihovna",
-            "🛡️ 14denní garance vrácení"
+            "40 hodin výuky",
+            "Základní manuální terapie",
+            "Online studijní materiály",
+            "Certifikát o absolvování",
+            "6 měsíců přístupu ke zdrojům"
         ]
     },
     {
@@ -45,14 +44,14 @@ const plans: PlanProps[] = [
         popular: 1,
         price: 1590,
         description:
-            "Nejlepší volba pro praktikující fyzioterapeuty.",
-        buttonText: "Získat certifikaci",
+            "Komplexní program pro praktiky hledající pokročilou certifikaci.",
+        buttonText: "Přihlásit se",
         benefitList: [
-            "✔️ Zvládnete pokročilé techniky",
-            "✔️ Buďte si jistí u každého pacienta",
-            "✔️ Mezinárodní certifikát",
-            "🎁 Bonus: Osobní konzultace",
-            "🛡️ 14denní garance vrácení"
+            "80 hodin výuky",
+            "Pokročilé manuální techniky",
+            "Klinické praktické lekce",
+            "Mezinárodní certifikát",
+            "Celoživotní přístup ke zdrojům"
         ]
     },
     {
@@ -60,14 +59,14 @@ const plans: PlanProps[] = [
         popular: 0,
         price: 2890,
         description:
-            "Pro pokročilé odborníky s ambicí stát se lektory.",
-        buttonText: "Kontaktovat nás",
+            "Elitní výukový program pro zkušené odborníky specializující se na pokročilé metody.",
+        buttonText: "Kontaktujte nás",
         benefitList: [
-            "✔️ Staňte se odborníkem ve svém oboru",
-            "✔️ Individuální mentoring",
-            "✔️ Certifikace lektora",
-            "🎁 Bonus: Síť absolventů",
-            "🛡️ 14denní garance vrácení"
+            "120+ hodin výuky",
+            "Specializované certifikace",
+            "Individuální mentorství",
+            "Certifikace lektora",
+            "Přístup do sítě absolventů"
         ]
     }
 ]
@@ -84,21 +83,12 @@ export const PricingSection = () => {
             </h2>
 
             <h2 className="mb-4 text-center font-bold text-3xl md:text-4xl" data-aos="fade-up" data-aos-delay="100">
-                Vyberte Si Svůj Kurz
+                Investujte do Své Kariéry
             </h2>
 
-            <h3 className="mx-auto pb-2 text-center text-muted-foreground text-xl md:w-1/2" data-aos="fade-up" data-aos-delay="200">
-                <span className="font-semibold text-foreground">⏳ Pouze 12 míst v každém kurzu.</span> Rezervujte si své místo ještě dnes.
+            <h3 className="mx-auto pb-14 text-center text-muted-foreground text-xl md:w-1/2" data-aos="fade-up" data-aos-delay="200">
+                Vyberte si kurz podle svých zkušeností. <span className="font-semibold text-foreground">Zahrnuje vše:</span> materiály, certifikát, podporu.
             </h3>
-
-            <div className="flex justify-center gap-4 pb-12 text-sm" data-aos="fade-up" data-aos-delay="300">
-                <div className="flex items-center gap-2">
-                    <span>🛡️ 14denní garance vrácení peněz</span>
-                </div>
-                <div className="flex items-center gap-2">
-                    <span>🎓 Certifikát uznávaný v ČR</span>
-                </div>
-            </div>
 
             <div className="grid space-x-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-4">
                 {plans.map(
@@ -116,17 +106,10 @@ export const PricingSection = () => {
                             data-aos-delay={index * 150}
                             className={
                                 popular === PopularPlan?.YES
-                                    ? "border-[1.5px] border-primary shadow-black/10 drop-shadow-xl lg:scale-[1.1] dark:shadow-white/10 relative"
-                                    : "relative"
+                                    ? "border-[1.5px] border-primary shadow-black/10 drop-shadow-xl lg:scale-[1.1] dark:shadow-white/10"
+                                    : ""
                             }
                         >
-                            {popular === PopularPlan?.YES && (
-                                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                                    <Badge className="bg-primary text-primary-foreground px-4 py-1">
-                                        ⭐ Nejlepší volba
-                                    </Badge>
-                                </div>
-                            )}
                             <CardHeader>
                                 <CardTitle className="pb-2">{title}</CardTitle>
 

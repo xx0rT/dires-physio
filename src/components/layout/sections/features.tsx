@@ -7,6 +7,7 @@ import {
     RiStackLine
 } from "@remixicon/react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import RotatingText from "@/components/ui/rotating-text"
 
 interface FeaturesProps {
     icon: React.ReactNode
@@ -61,12 +62,24 @@ export const FeaturesSection = () => {
                     Vlastnosti Kurzů
                 </h2>
 
-                <h2 className="mb-4 text-center font-bold text-3xl md:text-4xl" data-aos="fade-up" data-aos-delay="100">
-                    Jak To Probíhá
-                </h2>
+                <div className="mb-4 flex justify-center items-center gap-2 font-bold text-3xl md:text-4xl" data-aos="fade-up" data-aos-delay="100">
+                    <span>Proč Si Vybrat</span>
+                  <RotatingText
+                    texts={['Certifikované Vzdělávání', 'Praktickou Výuku', 'Online Materiály', 'Zkušené Lektory', 'Malé Skupiny', 'Celoživotní Podporu']}
+                    mainClassName="px-2 sm:px-2 md:px-3 bg-purple-300 text-black overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center rounded-lg"
+                    staggerFrom={"last"}
+                    initial={{ y: "100%" }}
+                    animate={{ y: 0 }}
+                    exit={{ y: "-120%" }}
+                    staggerDuration={0.025}
+                    splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
+                    transition={{ type: "spring", damping: 30, stiffness: 400 }}
+                    rotationInterval={2000}
+                  />
+                </div>
 
                 <h3 className="mx-auto text-center text-muted-foreground text-xl md:w-1/2" data-aos="fade-up" data-aos-delay="200">
-                    Praktický přístup - <span className="font-semibold text-foreground">od přihlášení po certifikát během měsíců.</span>
+                    České metody + moderní techniky = <span className="font-semibold text-foreground">Vaše úspěšná kariéra</span>
                 </h3>
             </div>
 

@@ -9,40 +9,37 @@ export const HeroSection = () => {
             <div className="grid gap-12 py-24 md:grid-cols-2 md:items-center md:gap-14 lg:grid-cols-[0.8fr,1.2fr] lg:gap-20 xl:gap-24 xl:py-32">
                 {/* Left side - Copy */}
                 <div className="space-y-8 text-center md:space-y-10 md:text-left" data-aos="fade-right">
-                    <div className="flex flex-wrap justify-center md:justify-start gap-4 text-sm">
-                        <Badge variant="outline" className="rounded-full py-2 px-4">
-                            🎓 Už 1 200+ absolventů
-                        </Badge>
-                        <Badge variant="outline" className="rounded-full py-2 px-4">
-                            ⭐ 4.9/5 hodnocení
-                        </Badge>
-                        <Badge variant="outline" className="rounded-full py-2 px-4">
-                            ⏳ Pouze 12 míst
-                        </Badge>
-                    </div>
+                    <Badge
+                        variant="outline"
+                        className="rounded-2xl py-2 text-sm"
+                    >
+                        <span className="mr-2 text-primary">
+                            <Badge>Nové</Badge>
+                        </span>
+                        <span> Přihlaste se do našich nadcházejících kurzů! </span>
+                    </Badge>
 
                     <div className="font-bold text-4xl md:text-5xl lg:text-6xl">
                         <h1>
                             Staňte se{" "}
                             <span className="bg-gradient-to-r from-[#7033ff] to-primary bg-clip-text text-transparent">
-                                Sebejistým Fyzioterapeutem
-                            </span>{" "}
-                            v Klinické Praxi
+                                Certifikovaným Fyzioterapeutem
+                            </span>
                         </h1>
                     </div>
 
                     <p className="mx-auto max-w-lg text-muted-foreground text-lg leading-relaxed md:mx-0 lg:text-xl xl:max-w-xl">
-                        Praktické kurzy českých fyzioterapeutických technik – <span className="font-semibold text-foreground">ihned použitelné u pacientů.</span> Získejte certifikaci a zvyšte svou hodnotu na trhu práce.
+                        Profesionální kurzy od českých odborníků. Získejte mezinárodně uznávaný certifikát během měsíců.
                     </p>
 
                     <div className="flex flex-col items-center space-y-4 md:flex-row md:space-x-4 md:space-y-0 md:justify-start">
                         <Button
                             asChild
                             size="lg"
-                            className="group/arrow rounded-full text-base"
+                            className="group/arrow rounded-full"
                         >
                             <Link to="/auth/sign-up">
-                                Rezervovat místo
+                                Začít zdarma
                                 <ArrowRight className="ml-2 size-5 transition-transform group-hover/arrow:translate-x-1" />
                             </Link>
                         </Button>
@@ -51,13 +48,13 @@ export const HeroSection = () => {
                             asChild
                             variant="outline"
                             size="lg"
-                            className="rounded-full text-base"
+                            className="rounded-full"
                         >
                             <Link
                                 to="#pricing"
                                 className="flex items-center gap-2"
                             >
-                                Zobrazit kurzy a ceny
+                                Zobrazit ceník
                             </Link>
                         </Button>
                     </div>
