@@ -4,6 +4,7 @@ import { ContactSection } from '@/components/layout/sections/contact'
 import { FAQSection } from '@/components/layout/sections/faq'
 import { FeaturesSection } from '@/components/layout/sections/features'
 import { HeroSection } from '@/components/layout/sections/hero'
+import { LeadMagnetSection } from '@/components/layout/sections/lead-magnet'
 import { PricingSection } from '@/components/layout/sections/pricing'
 import { ServicesSection } from '@/components/layout/sections/services'
 import { TeamSection } from '@/components/layout/sections/team'
@@ -43,6 +44,10 @@ export default function HomePage() {
 
       <div className="bg-background transition-colors duration-700">
         <CommunitySection />
+      </div>
+
+      <div className="bg-background transition-colors duration-700">
+        <LeadMagnetSection />
       </div>
 
       <div className="bg-muted/70 transition-colors duration-700">

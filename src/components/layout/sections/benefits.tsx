@@ -13,28 +13,28 @@ interface BenefitsProps {
 
 const benefitList: BenefitsProps[] = [
     {
-        icon: "Rocket",
-        title: "Rychlý Start Kariéry",
+        icon: "CheckCircle2",
+        title: "Vyšetříte pacienta do 15 minut",
         description:
-            "Získejte certifikát během 3-6 měsíců a začněte praktikovat rychleji než tradičními programy."
+            "Naučíte se efektivní diagnostické postupy, které ihned použijete v ambulanci."
     },
     {
-        icon: "Award",
-        title: "Mezinárodní Certifikát",
+        icon: "Target",
+        title: "Přestanete si být nejistí",
         description:
-            "Uznávaný v celé Evropě. Otevřete si možnosti práce v jakékoli zemi."
+            "Zvládnete manuální techniky s jistotou a bez strachu z chyby."
     },
     {
-        icon: "Users",
-        title: "Osobní Mentoring",
+        icon: "TrendingUp",
+        title: "Zvýšíte svou hodnotu na trhu",
         description:
-            "Individuální vedení od zkušených fyzioterapeutů pro vaše nejlepší výsledky."
+            "S mezinárodním certifikátem získáte lepší pozice a vyšší plat."
     },
     {
-        icon: "Shield",
-        title: "Ověřené Techniky",
+        icon: "Clock",
+        title: "Použijete hned druhý den",
         description:
-            "České metody prověřené desetiletími úspěšné klinické praxe."
+            "100% praktické techniky bez zbytečné teorie - přímo do praxe."
     }
 ]
 
@@ -52,14 +52,14 @@ export const BenefitsSection = () => {
                     </h2>
 
                     <h2 className="mb-4 font-bold text-3xl md:text-4xl">
-                        Proč Si Vybrat Naše Kurzy
+                        Co Díky Kurzu Budete UMĚT
                     </h2>
                     <p className="mb-8 text-muted-foreground text-xl">
-                        Staňte se certifikovaným fyzioterapeutem rychleji a efektivněji. <span className="font-semibold text-foreground">Začněte svou kariéru ještě dnes.</span>
+                        Ne jenom teorie - <span className="font-semibold text-foreground">reálné dovednosti pro praxi.</span> Výsledky, které změní vaši kariéru.
                     </p>
-                    <Button asChild size="lg" className="group/arrow rounded-full">
+                    <Button asChild size="lg" className="group/arrow rounded-full text-base">
                         <Link to="/auth/sign-up">
-                            Vytvořit účet zdarma
+                            Chci se zlepšit v praxi
                             <ArrowRight className="ml-2 size-5 transition-transform group-hover/arrow:translate-x-1" />
                         </Link>
                     </Button>
