@@ -1,165 +1,124 @@
-import { Button } from "@/components/ui/button"
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle
-} from "@/components/ui/card"
-import { Link } from "react-router-dom"
+import { Check, ChevronRight } from "lucide-react";
+import { type SVGProps, useId } from "react";
 
-enum PopularPlan {
-    NO = 0,
-    YES = 1
-}
-
-interface PlanProps {
-    title: string
-    popular: PopularPlan
-    price: number
-    description: string
-    buttonText: string
-    benefitList: string[]
-}
-
-const plans: PlanProps[] = [
-    {
-        title: "Základní",
-        popular: 0,
-        price: 890,
-        description:
-            "Ideální pro začátečníky zahajující svou fyzioterapeutickou cestu se základními technikami.",
-        buttonText: "Přihlásit se",
-        benefitList: [
-            "40 hodin výuky",
-            "Základní manuální terapie",
-            "Online studijní materiály",
-            "Certifikát o absolvování",
-            "6 měsíců přístupu ke zdrojům"
-        ]
-    },
-    {
-        title: "Profesionální",
-        popular: 1,
-        price: 1590,
-        description:
-            "Komplexní program pro praktiky hledající pokročilou certifikaci.",
-        buttonText: "Přihlásit se",
-        benefitList: [
-            "80 hodin výuky",
-            "Pokročilé manuální techniky",
-            "Klinické praktické lekce",
-            "Mezinárodní certifikát",
-            "Celoživotní přístup ke zdrojům"
-        ]
-    },
-    {
-        title: "Mistrovský",
-        popular: 0,
-        price: 2890,
-        description:
-            "Elitní výukový program pro zkušené odborníky specializující se na pokročilé metody.",
-        buttonText: "Kontaktujte nás",
-        benefitList: [
-            "120+ hodin výuky",
-            "Specializované certifikace",
-            "Individuální mentorství",
-            "Certifikace lektora",
-            "Přístup do sítě absolventů"
-        ]
-    }
-]
+import { Button } from "@/components/ui/button";
 
 export const PricingSection = () => {
-    return (
-        <section id="pricing" className="container mx-auto px-4 py-16 sm:py-20 relative">
-            <div className="absolute inset-0 -z-10 pointer-events-none">
-                <div className="-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2 h-[55%] w-[80%] animate-pulse bg-gradient-to-r from-primary/25 via-purple-500/25 to-primary/25 blur-3xl" />
-            </div>
+  return (
+    <section className="py-32 text-background md:container md:max-w-5xl">
+      <div className="relative isolate container grid items-center overflow-hidden bg-linear-to-r from-primary to-primary/75 py-8 max-lg:gap-10 max-md:gap-6 md:rounded-3xl lg:grid-cols-2 lg:px-8">
+        <div className="absolute inset-0 -z-10 [mask-image:linear-gradient(to_left,black_50%,transparent_100%)]">
+          <PlusSigns className="h-full w-full text-background/[0.05]" />
+        </div>
+        <div className="border-background/20 lg:border-e lg:py-16 lg:pr-20">
+          <h2 className="text-3xl font-semibold tracking-tight md:text-4xl lg:text-5xl">
+            Launch today
+          </h2>
+          <p className="mt-3 text-sm font-medium text-background/70">
+            In the past, new financial companies had to rely on expensive
+            middleware that linked them to outdated sponsor bank systems,
+            restricting their potential. Our API solves this today.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-4 max-md:hidden">
+            <Button size="lg" variant="secondary" className="group" asChild>
+              <a href="/signup">
+                Start for free
+                <ChevronRight className="ml-1 size-4 transition-transform group-hover:translate-x-0.5" />
+              </a>
+            </Button>
+            <Button size="lg" className="group bg-secondary-foreground" asChild>
+              <a href="/">
+                Get a demo
+                <ChevronRight className="ml-1 size-4 transition-transform group-hover:translate-x-0.5" />
+              </a>
+            </Button>
+          </div>
+        </div>
 
-            <h2 className="mb-2 text-center text-lg text-primary tracking-wider" data-aos="fade-up">
-                Ceník Kurzů
-            </h2>
-
-            <h2 className="mb-4 text-center font-bold text-3xl md:text-4xl" data-aos="fade-up" data-aos-delay="100">
-                Investujte do Své Kariéry
-            </h2>
-
-            <h3 className="mx-auto pb-14 text-center text-muted-foreground text-xl md:w-1/2" data-aos="fade-up" data-aos-delay="200">
-                Vyberte si kurz podle svých zkušeností. <span className="font-semibold text-foreground">Zahrnuje vše:</span> materiály, certifikát, podporu.
+        <div className="space-y-6 lg:py-10 lg:pl-20">
+          <div>
+            <h3 className="text-3xl font-semibold text-background md:text-4xl lg:text-5xl">
+              $29.99
             </h3>
+            <p className="mt-1 text-xl font-medium text-background/70">
+              per user per month
+            </p>
+          </div>
+          <ul className="space-y-3 text-sm text-background/70">
+            <li className="flex items-center gap-2">
+              <Check className="size-4" />
+              All free plan features and...
+            </li>
+            <li className="flex items-center gap-2">
+              <Check className="size-4" />
+              Mainline AI
+            </li>
+            <li className="flex items-center gap-2">
+              <Check className="size-4" />
+              Unlimited teams
+            </li>
+          </ul>
+          <div className="mt-10 flex flex-wrap gap-4 md:hidden">
+            <Button size="lg" variant="secondary" className="group w-full">
+              <a href="/signup" className="flex items-center gap-2">
+                Start building for free
+                <ChevronRight className="ml-1 size-4 transition-transform group-hover:translate-x-0.5" />
+              </a>
+            </Button>
+            <Button size="lg" className="group w-full bg-secondary-foreground">
+              <a href="/" className="flex items-center gap-2">
+                Get a demo
+                <ChevronRight className="ml-1 size-4 transition-transform group-hover:translate-x-0.5" />
+              </a>
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
 
-            <div className="grid space-x-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-4">
-                {plans.map(
-                    ({
-                        title,
-                        popular,
-                        price,
-                        description,
-                        buttonText,
-                        benefitList
-                    }, index) => (
-                        <Card
-                            key={title}
-                            data-aos="fade-up"
-                            data-aos-delay={index * 150}
-                            className={
-                                popular === PopularPlan?.YES
-                                    ? "border-[1.5px] border-primary shadow-black/10 drop-shadow-xl lg:scale-[1.1] dark:shadow-white/10"
-                                    : ""
-                            }
-                        >
-                            <CardHeader>
-                                <CardTitle className="pb-2">{title}</CardTitle>
-
-                                <CardDescription className="pb-4">
-                                    {description}
-                                </CardDescription>
-
-                                <div>
-                                    <span className="font-bold text-3xl">
-                                        €{price}
-                                    </span>
-                                    <span className="text-muted-foreground">
-                                        {" "}
-                                        /kurz
-                                    </span>
-                                </div>
-                            </CardHeader>
-
-                            <CardContent className="flex">
-                                <div className="space-y-4">
-                                    {benefitList.map((benefit) => (
-                                        <span key={benefit} className="flex items-center gap-2">
-                                            <svg width="21" height="21" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0 fill-current">
-                                            <path d="M14.3589 2.6492H7.3756C4.34227 2.6492 2.53394 4.45753 2.53394 7.49087V14.4659C2.53394 17.5075 4.34227 19.3159 7.3756 19.3159H14.3506C17.3839 19.3159 19.1923 17.5075 19.1923 14.4742V7.49087C19.2006 4.45753 17.3923 2.6492 14.3589 2.6492ZM14.8506 9.06587L10.1256 13.7909C10.0089 13.9075 9.8506 13.9742 9.68394 13.9742C9.51727 13.9742 9.35894 13.9075 9.24227 13.7909L6.88394 11.4325C6.64227 11.1909 6.64227 10.7909 6.88394 10.5492C7.1256 10.3075 7.5256 10.3075 7.76727 10.5492L9.68394 12.4659L13.9673 8.18253C14.2089 7.94087 14.6089 7.94087 14.8506 8.18253C15.0923 8.4242 15.0923 8.81587 14.8506 9.06587Z" />
-                                            </svg>
-                                            <h3>{benefit}</h3>
-                                        </span>
-                                    ))}
-                                </div>
-                            </CardContent>
-
-                            <CardFooter>
-                                <Button
-                                    asChild
-                                    variant={
-                                        popular === PopularPlan?.YES
-                                            ? "default"
-                                            : "secondary"
-                                    }
-                                    className="w-full"
-                                >
-                                    <Link to="/auth/sign-up">
-                                        {buttonText}
-                                    </Link>
-                                </Button>
-                            </CardFooter>
-                        </Card>
-                    )
-                )}
-            </div>
-        </section>
-    )
+interface PlusSignsProps extends SVGProps<SVGSVGElement> {
+  className?: string;
 }
+
+const PlusSigns = ({ className, ...props }: PlusSignsProps) => {
+  const GAP = 16;
+  const STROKE_WIDTH = 1;
+  const PLUS_SIZE = 6;
+  const id = useId();
+  const patternId = `plus-pattern-${id}`;
+
+  return (
+    <svg width={GAP * 2} height={GAP * 2} className={className} {...props}>
+      <defs>
+        <pattern
+          id={patternId}
+          x="0"
+          y="0"
+          width={GAP}
+          height={GAP}
+          patternUnits="userSpaceOnUse"
+        >
+          <line
+            x1={GAP / 2}
+            y1={(GAP - PLUS_SIZE) / 2}
+            x2={GAP / 2}
+            y2={(GAP + PLUS_SIZE) / 2}
+            stroke="currentColor"
+            strokeWidth={STROKE_WIDTH}
+          />
+          <line
+            x1={(GAP - PLUS_SIZE) / 2}
+            y1={GAP / 2}
+            x2={(GAP + PLUS_SIZE) / 2}
+            y2={GAP / 2}
+            stroke="currentColor"
+            strokeWidth={STROKE_WIDTH}
+          />
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill={`url(#${patternId})`} />
+    </svg>
+  );
+};
