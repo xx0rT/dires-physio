@@ -40,7 +40,7 @@ export function NavUser() {
               <AvatarFallback>...</AvatarFallback>
             </Avatar>
             <div className="ms-1 grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-medium">Loading...</span>
+              <span className="truncate font-medium">Načítání...</span>
             </div>
           </SidebarMenuButton>
         </SidebarMenuItem>
@@ -85,40 +85,40 @@ export function NavUser() {
             <DropdownMenuItem asChild className="gap-3 px-1">
               <Link to="/dashboard">
                 <RiTimer2Line size={20} className="text-muted-foreground/70" aria-hidden="true" />
-                <span>Dashboard</span>
+                <span>Přehled</span>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild className="gap-3 px-1">
               <Link to="/dashboard/settings">
                 <RiUserLine size={20} className="text-muted-foreground/70" aria-hidden="true" />
-                <span>Account</span>
+                <span>Účet</span>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild className="gap-3 px-1">
               <Link to="/dashboard/billing">
                 <RiBankCardLine size={20} className="text-muted-foreground/70" aria-hidden="true" />
-                <span>Billing</span>
+                <span>Fakturace</span>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem className="gap-3 px-1">
               <RiLockLine size={20} className="text-muted-foreground/70" aria-hidden="true" />
-              <span>Security</span>
+              <span>Zabezpečení</span>
             </DropdownMenuItem>
             <DropdownMenuItem className="gap-3 px-1">
               <RiFindReplaceLine size={20} className="text-muted-foreground/70" aria-hidden="true" />
-              <span>History</span>
+              <span>Historie</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild className="gap-3 px-1">
               <Link to="/">
                 <RiHomeLine size={20} className="text-muted-foreground/70" aria-hidden="true" />
-                <span>Homepage</span>
+                <span>Domovská stránka</span>
               </Link>
             </DropdownMenuItem>
 
             <DropdownMenuItem className="cursor-pointer gap-3 px-1" onClick={signOut}>
               <RiLogoutCircleLine size={20} className="text-muted-foreground/70" aria-hidden="true" />
-              <span>Log out</span>
+              <span>Odhlásit se</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
