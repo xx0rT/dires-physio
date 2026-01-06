@@ -52,10 +52,10 @@ const Timeline2 = ({ className, sections, heading }: Timeline2Props) => {
   return (
     <section className={cn("py-32", className)}>
       <div className="container max-w-7xl">
-        <h1 className="mb-14 max-w-2xl text-4xl font-semibold text-balance md:text-5xl">
+        <h1 className="mb-14 mx-auto max-w-2xl text-center text-4xl font-semibold text-balance md:text-5xl">
           {heading}
         </h1>
-        <div className="flex justify-between gap-20">
+        <div className="flex justify-between gap-20 mx-auto">
           <div className="flex flex-col gap-16 md:w-1/2">
             {sections.map((section, index) => (
               <div
