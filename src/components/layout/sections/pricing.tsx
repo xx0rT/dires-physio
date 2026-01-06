@@ -1,124 +1,325 @@
-import { Check, ChevronRight } from "lucide-react";
-import { type SVGProps, useId } from "react";
+"use client";
 
+import { Check, ChevronDown, Info, X } from "lucide-react";
+import { Fragment, useState } from "react";
+
+import { cn } from "@/lib/utils";
+
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
-export const PricingSection = () => {
-  return (
-    <section className="py-32 text-background md:container md:max-w-5xl mx-auto">
-      <div className="relative isolate container grid items-center overflow-hidden bg-linear-to-r from-primary to-primary/75 py-8 max-lg:gap-10 max-md:gap-6 md:rounded-3xl lg:grid-cols-2 lg:px-8">
-        <div className="absolute inset-0 -z-10 [mask-image:linear-gradient(to_left,black_50%,transparent_100%)]">
-          <PlusSigns className="h-full w-full text-background/[0.05]" />
-        </div>
-        <div className="border-background/20 lg:border-e lg:py-16 lg:pr-20">
-          <h2 className="text-3xl font-semibold tracking-tight md:text-4xl lg:text-5xl">
-            Launch today
-          </h2>
-          <p className="mt-3 text-sm font-medium text-background/70">
-            In the past, new financial companies had to rely on expensive
-            middleware that linked them to outdated sponsor bank systems,
-            restricting their potential. Our API solves this today.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-4 max-md:hidden">
-            <Button size="lg" variant="secondary" className="group" asChild>
-              <a href="/signup">
-                Start for free
-                <ChevronRight className="ml-1 size-4 transition-transform group-hover:translate-x-0.5" />
-              </a>
-            </Button>
-            <Button size="lg" className="group bg-secondary-foreground" asChild>
-              <a href="/">
-                Get a demo
-                <ChevronRight className="ml-1 size-4 transition-transform group-hover:translate-x-0.5" />
-              </a>
-            </Button>
-          </div>
-        </div>
+const plans = [
+  {
+    title: "Free",
+    price: { monthly: "$9", annually: "$9" },
+    href: "#",
+    recommended: false,
+  },
+  {
+    title: "Basic",
+    price: { monthly: "$50", annually: "$45" },
+    href: "#",
+    recommended: false,
+  },
+  {
+    title: "Team",
+    price: { monthly: "$100", annually: "$90" },
+    href: "#",
+    recommended: true,
+  },
+  {
+    title: "Enterprise",
+    price: { monthly: "$200", annually: "$160" },
+    href: "#",
+    recommended: false,
+  },
+];
 
-        <div className="space-y-6 lg:py-10 lg:pl-20">
-          <div>
-            <h3 className="text-3xl font-semibold text-background md:text-4xl lg:text-5xl">
-              $29.99
-            </h3>
-            <p className="mt-1 text-xl font-medium text-background/70">
-              per user per month
-            </p>
-          </div>
-          <ul className="space-y-3 text-sm text-background/70">
-            <li className="flex items-center gap-2">
-              <Check className="size-4" />
-              All free plan features and...
-            </li>
-            <li className="flex items-center gap-2">
-              <Check className="size-4" />
-              Mainline AI
-            </li>
-            <li className="flex items-center gap-2">
-              <Check className="size-4" />
-              Unlimited teams
-            </li>
-          </ul>
-          <div className="mt-10 flex flex-wrap gap-4 md:hidden">
-            <Button size="lg" variant="secondary" className="group w-full">
-              <a href="/signup" className="flex items-center gap-2">
-                Start building for free
-                <ChevronRight className="ml-1 size-4 transition-transform group-hover:translate-x-0.5" />
-              </a>
-            </Button>
-            <Button size="lg" className="group w-full bg-secondary-foreground">
-              <a href="/" className="flex items-center gap-2">
-                Get a demo
-                <ChevronRight className="ml-1 size-4 transition-transform group-hover:translate-x-0.5" />
-              </a>
-            </Button>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
+const featureMatrix = [
+  {
+    title: "Overview",
+    features: [
+      {
+        title: "Always included reature",
+        inclusions: [
+          {
+            plan: "Free",
+            content: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+          },
+          {
+            plan: "Basic",
+            content: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+          },
+          {
+            plan: "Teams",
+            content: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+          },
+          {
+            plan: "Enterprise",
+            content: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+          },
+        ],
+      },
+      {
+        title: "Number of products",
+        info: "Help text",
+        inclusions: [
+          { plan: "Free", content: "1" },
+          { plan: "Basic", content: "1" },
+          { plan: "Teams", content: "3" },
+          { plan: "Enterprise", content: "5" },
+        ],
+      },
+      {
+        title: "Number of transactions",
+        info: "Help text",
+        inclusions: [
+          { plan: "Free", content: "30 monthly" },
+          { plan: "Basic", content: "Unlimited" },
+          { plan: "Teams", content: "Unlimited" },
+          { plan: "Enterprise", content: "Unlimited" },
+        ],
+      },
+    ],
+  },
+  {
+    title: "Other features",
+    features: [
+      {
+        title: "Basic feature",
+        inclusions: [
+          {
+            plan: "Free",
+            content: <Check className="size-4 lg:size-5" />,
+          },
+          {
+            plan: "Basic",
+            content: <Check className="size-4 lg:size-5" />,
+          },
+          {
+            plan: "Teams",
+            content: <Check className="size-4 lg:size-5" />,
+          },
+          {
+            plan: "Enterprise",
+            content: <Check className="size-4 lg:size-5" />,
+          },
+        ],
+      },
+      {
+        title: "Enterprise feature",
+        info: "Hello",
+        inclusions: [
+          {
+            plan: "Free",
+            content: <X className="size-4 text-muted-foreground lg:size-5" />,
+          },
+          {
+            plan: "Basic",
+            content: <X className="size-4 text-muted-foreground lg:size-5" />,
+          },
+          {
+            plan: "Teams",
+            content: <X className="size-4 text-muted-foreground lg:size-5" />,
+          },
+          {
+            plan: "Enterprise",
+            content: <Check className="size-5" />,
+          },
+        ],
+      },
+      {
+        title: "Optional feature",
+        info: "Hello",
+        inclusions: [
+          {
+            plan: "Free",
+            content: <X className="size-4 text-muted-foreground lg:size-5" />,
+          },
+          {
+            plan: "Basic",
+            content: <X className="size-4 text-muted-foreground lg:size-5" />,
+          },
+          {
+            plan: "Teams",
+            content: <Badge>Add-on</Badge>,
+          },
+          {
+            plan: "Enterprise",
+            content: <Badge>Add-on</Badge>,
+          },
+        ],
+      },
+    ],
+  },
+];
 
-interface PlusSignsProps extends SVGProps<SVGSVGElement> {
+interface Pricing11Props {
   className?: string;
 }
 
-const PlusSigns = ({ className, ...props }: PlusSignsProps) => {
-  const GAP = 16;
-  const STROKE_WIDTH = 1;
-  const PLUS_SIZE = 6;
-  const id = useId();
-  const patternId = `plus-pattern-${id}`;
-
+export const PricingSection = ({ className }: Pricing11Props) => {
+  const [billing, setBilling] = useState<"monthly" | "annually">("monthly");
   return (
-    <svg width={GAP * 2} height={GAP * 2} className={className} {...props}>
-      <defs>
-        <pattern
-          id={patternId}
-          x="0"
-          y="0"
-          width={GAP}
-          height={GAP}
-          patternUnits="userSpaceOnUse"
-        >
-          <line
-            x1={GAP / 2}
-            y1={(GAP - PLUS_SIZE) / 2}
-            x2={GAP / 2}
-            y2={(GAP + PLUS_SIZE) / 2}
-            stroke="currentColor"
-            strokeWidth={STROKE_WIDTH}
-          />
-          <line
-            x1={(GAP - PLUS_SIZE) / 2}
-            y1={GAP / 2}
-            x2={(GAP + PLUS_SIZE) / 2}
-            y2={GAP / 2}
-            stroke="currentColor"
-            strokeWidth={STROKE_WIDTH}
-          />
-        </pattern>
-      </defs>
-      <rect width="100%" height="100%" fill={`url(#${patternId})`} />
-    </svg>
+    <section className={cn("py-32", className)}>
+      <div className="container mb-8 lg:mb-0">
+        <div className="grid grid-cols-2 gap-y-12 md:gap-y-16">
+          <div className="col-span-2 flex flex-col lg:col-span-1">
+            <h1 className="my-6 text-3xl font-bold text-pretty md:text-4xl xl:text-5xl">
+              Pricing Plans
+            </h1>
+            <p className="text-muted-foreground lg:text-xl">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            </p>
+          </div>
+        </div>
+        <div className="bg-background lg:sticky lg:top-16">
+          <div className="mb-8 pt-8">
+            <div className="grid items-end gap-6 border-b border-border pb-8 lg:grid-cols-6">
+              <div className="col-span-2">
+                <div className="flex h-full flex-col justify-end">
+                  <span className="mb-2 text-xs font-medium text-muted-foreground">
+                    Billing
+                  </span>
+                  <Tabs
+                    value={billing}
+                    onValueChange={setBilling as (value: string) => void}
+                  >
+                    <TabsList>
+                      <TabsTrigger value="monthly">Monthly</TabsTrigger>
+                      <TabsTrigger value="annually">Annually</TabsTrigger>
+                    </TabsList>
+                  </Tabs>
+                </div>
+              </div>
+              {plans.map((plan) => (
+                <div
+                  key={plan.title}
+                  className="rounded-lg border border-border p-3 2xl:p-4"
+                >
+                  <h3 className="mb-1 text-xl font-medium xl:text-2xl">
+                    {plan.title}
+                  </h3>
+                  <p className="mb-4 text-sm font-medium text-muted-foreground">
+                    {plan.price[billing]}
+                    <span className="hidden 2xl:inline"> / monthly</span>
+                  </p>
+                  <Button
+                    variant={plan.recommended ? "default" : "outline"}
+                    className="w-full"
+                  >
+                    <span className="2xl:hidden">Register</span>
+                    <span className="hidden 2xl:inline">
+                      Get started for free
+                    </span>
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="space-y-8 lg:space-y-14">
+          {featureMatrix.map((category) => (
+            <div key={category.title}>
+              <h3 className="mb-6 text-lg font-medium lg:mb-3">
+                {category.title}
+              </h3>
+              <div className="space-y-4 lg:space-y-0">
+                <TooltipProvider delayDuration={150}>
+                  {category.features.map((feature) => (
+                    <Fragment key={feature.title}>
+                      <dl className="hidden grid-cols-6 gap-6 border-b border-border lg:grid">
+                        <dt className="col-span-2 justify-between py-4 pb-4">
+                          <Tooltip>
+                            <h4 className="group flex min-h-6 items-center gap-x-1 font-medium">
+                              {feature.title}{" "}
+                              {feature.info && (
+                                <TooltipTrigger asChild>
+                                  <Info className="ml-2 size-4 cursor-pointer text-muted-foreground group-hover:text-accent-foreground" />
+                                </TooltipTrigger>
+                              )}
+                            </h4>
+                            {feature.info && (
+                              <TooltipContent>{feature.info}</TooltipContent>
+                            )}
+                          </Tooltip>
+                        </dt>
+                        {feature.inclusions.map((inclusion) => (
+                          <dd
+                            key={inclusion.plan}
+                            className="hidden py-4 text-sm text-muted-foreground lg:block"
+                          >
+                            {inclusion.content}
+                          </dd>
+                        ))}
+                      </dl>
+                      <Collapsible
+                        className="group lg:hidden"
+                        defaultOpen={false}
+                      >
+                        <dl
+                          key={feature.title}
+                          className="border-b border-border"
+                        >
+                          <CollapsibleTrigger className="w-full">
+                            <dt className="flex items-center justify-between pb-4">
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <h4 className="group flex items-center gap-x-1 text-sm font-medium md:text-base">
+                                    {feature.title}
+                                    {feature.info && (
+                                      <Info className="ml-2 size-4 cursor-pointer text-muted-foreground group-hover:text-accent-foreground" />
+                                    )}
+                                  </h4>
+                                </TooltipTrigger>
+                                {feature.info && (
+                                  <TooltipContent>
+                                    {feature.info}
+                                  </TooltipContent>
+                                )}
+                              </Tooltip>
+
+                              <ChevronDown className='size-5 transition-transform group-data-[state="open"]:rotate-180' />
+                            </dt>
+                          </CollapsibleTrigger>
+                          <CollapsibleContent>
+                            {feature.inclusions.map((inclusion) => (
+                              <dd
+                                key={inclusion.plan}
+                                className="flex items-center border-b border-border py-3 text-xs text-muted-foreground last:border-b-0 md:py-3.5"
+                              >
+                                <div className="w-1/2 md:w-1/4">
+                                  {inclusion.plan}
+                                </div>
+                                {inclusion.content}
+                              </dd>
+                            ))}
+                          </CollapsibleContent>
+                        </dl>
+                      </Collapsible>
+                    </Fragment>
+                  ))}
+                </TooltipProvider>
+              </div>
+            </div>
+          ))}
+        </div>
+        <p className="mt-4 hidden text-xs text-muted-foreground md:block">
+          * Caveats and other conditions
+        </p>
+      </div>
+    </section>
   );
 };
