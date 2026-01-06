@@ -175,8 +175,8 @@ export const PricingSection = ({ className }: Pricing11Props) => {
   return (
     <section className={cn("py-32", className)}>
       <div className="container mb-8 lg:mb-0">
-        <div className="flex flex-col items-center text-center gap-y-12 md:gap-y-16">
-          <div className="flex flex-col">
+        <div className="flex flex-col items-center text-center gap-y-12 md:gap-y-16 mb-12">
+          <div className="flex flex-col items-center max-w-3xl mx-auto">
             <h1 className="my-6 text-3xl font-bold text-pretty md:text-4xl xl:text-5xl">
               Pricing Plans
             </h1>
