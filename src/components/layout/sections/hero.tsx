@@ -8,7 +8,7 @@ export const HeroSection = () => {
         <section className="container mx-auto w-full px-4">
             <div className="grid gap-12 py-24 md:grid-cols-2 md:items-center md:gap-14 lg:grid-cols-[0.8fr,1.2fr] lg:gap-20 xl:gap-24 xl:py-32">
                 {/* Left side - Copy */}
-                <div className="space-y-8 text-center md:space-y-10 md:text-left" data-aos="fade-right">
+                <div className="space-y-8 text-center md:space-y-10" data-aos="fade-right">
                     <Badge
                         variant="outline"
                         className="rounded-2xl py-2 text-sm"
@@ -28,11 +28,11 @@ export const HeroSection = () => {
                         </h1>
                     </div>
 
-                    <p className="mx-auto max-w-lg text-muted-foreground text-lg leading-relaxed md:mx-0 lg:text-xl xl:max-w-xl">
+                    <p className="mx-auto max-w-lg text-muted-foreground text-lg leading-relaxed lg:text-xl xl:max-w-xl">
                         Profesionální kurzy od českých odborníků. Získejte mezinárodně uznávaný certifikát během měsíců.
                     </p>
 
-                    <div className="flex flex-col items-center space-y-4 md:flex-row md:space-x-4 md:space-y-0 md:justify-start">
+                    <div className="flex flex-col items-center justify-center space-y-4 md:flex-row md:space-x-4 md:space-y-0">
                         <Button
                             asChild
                             size="lg"
