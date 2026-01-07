@@ -304,7 +304,7 @@ export default function CoursesPage() {
                           {user ? (
                             isEnrolled ? (
                               <Button asChild>
-                                <Link to="/dashboard/integrations">
+                                <Link to={`/course/${course.id}`}>
                                   {progress === 100 ? 'Prohlédnout' : 'Pokračovat'}
                                 </Link>
                               </Button>
