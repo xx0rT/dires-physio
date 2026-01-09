@@ -220,9 +220,6 @@ export default function CoursesPage() {
                           {course.description}
                         </CardDescription>
                       </div>
-                      <div className="text-right">
-                        <p className="text-3xl font-bold">€{course.price}</p>
-                      </div>
                     </div>
                   </CardHeader>
 

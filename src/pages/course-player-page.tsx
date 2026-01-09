@@ -167,11 +167,32 @@ export const CoursePlayerPage = () => {
         .eq("user_id", user.id)
         .eq("course_id", courseId);
 
-      toast.success("Modul dokončen!", {
-        description: currentModuleIndex < modules.length - 1
-          ? "Přechod na další modul..."
-          : "Gratulujeme, dokončili jste celý kurz!"
-      });
+      if (progressPercentage === 100) {
+        const { data: nextCourse } = await supabase
+          .from("courses")
+          .select("id, title, order_index")
+          .eq("is_published", true)
+          .gt("order_index", course?.order_index ?? 0)
+          .order("order_index", { ascending: true })
+          .limit(1)
+          .maybeSingle();
+
+        if (nextCourse) {
+          toast.success("Gratulujeme, dokončili jste celý kurz!", {
+            description: `Odemkli jste další kurz: ${nextCourse.title}`,
+            duration: 5000,
+          });
+        } else {
+          toast.success("Gratulujeme, dokončili jste celý kurz!", {
+            description: "Dokončili jste všechny dostupné kurzy!",
+            duration: 5000,
+          });
+        }
+      } else {
+        toast.success("Modul dokončen!", {
+          description: "Přechod na další modul..."
+        });
+      }
 
       if (currentModuleIndex < modules.length - 1) {
         setTimeout(() => {
