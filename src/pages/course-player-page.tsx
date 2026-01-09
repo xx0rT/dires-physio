@@ -129,10 +129,10 @@ export const CoursePlayerPage = () => {
         .eq("user_id", user.id)
         .eq("course_id", courseId);
 
-      toast.success("Modul dokončen!", {
+      toast.success("✅ Modul dokončen!", {
         description: currentModuleIndex < modules.length - 1
           ? "Přechod na další modul..."
-          : "Nyní můžete odemknout další kurz!"
+          : "🎯 Nyní můžete odemknout další kurz!"
       });
 
       if (currentModuleIndex < modules.length - 1) {
@@ -142,7 +142,7 @@ export const CoursePlayerPage = () => {
       }
     } catch (error) {
       console.error("Error marking module complete:", error);
-      toast.error("Chyba při dokončování modulu", {
+      toast.error("❌ Chyba při dokončování modulu", {
         description: "Zkuste to prosím znovu."
       });
     }
@@ -170,12 +170,20 @@ export const CoursePlayerPage = () => {
         .maybeSingle();
 
       if (nextCourse) {
-        toast.success("Kurz dokončen!", {
+        await supabase
+          .from("user_course_enrollments")
+          .insert({
+            user_id: user.id,
+            course_id: nextCourse.id,
+            progress_percentage: 0,
+          });
+
+        toast.success("🎉 Kurz úspěšně dokončen!", {
           description: `Odemkli jste další kurz: ${nextCourse.title}`,
           duration: 5000,
         });
       } else {
-        toast.success("Kurz dokončen!", {
+        toast.success("🏆 Kurz úspěšně dokončen!", {
           description: "Gratulujeme! Dokončili jste všechny dostupné kurzy!",
           duration: 5000,
         });
@@ -186,7 +194,7 @@ export const CoursePlayerPage = () => {
       }, 2000);
     } catch (error) {
       console.error("Error unlocking next course:", error);
-      toast.error("Chyba při odemykání dalšího kurzu", {
+      toast.error("❌ Chyba při odemykání dalšího kurzu", {
         description: "Zkuste to prosím znovu."
       });
     }
@@ -273,6 +281,7 @@ export const CoursePlayerPage = () => {
             {currentModule.video_url && (
               <div className="relative aspect-video w-full bg-muted rounded-lg overflow-hidden shadow-2xl">
                 <iframe
+                  key={currentModule.id}
                   ref={videoRef}
                   src={currentModule.video_url}
                   title={currentModule.title}
