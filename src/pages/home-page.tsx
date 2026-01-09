@@ -1,6 +1,7 @@
 import { BenefitsSection } from '@/components/layout/sections/benefits'
 import { CommunitySection } from '@/components/layout/sections/community'
 import { ContactSection } from '@/components/layout/sections/contact'
+import { ContributorsSection } from '@/components/layout/sections/contributors'
 import { FAQSection } from '@/components/layout/sections/faq'
 import { FeaturesSection } from '@/components/layout/sections/features'
 import { HeroSection } from '@/components/layout/sections/hero'
@@ -34,6 +35,10 @@ export default function HomePage() {
       </div>
 
       <div className="bg-background transition-colors duration-700">
+        <ContributorsSection />
+      </div>
+
+      <div className="bg-muted/70 transition-colors duration-700">
         <TestimonialSection />
       </div>
 
