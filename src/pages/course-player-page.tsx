@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { toast } from "sonner";
 
 interface Course {
   id: string;
@@ -37,13 +38,50 @@ export const CoursePlayerPage = () => {
   const [completedModules, setCompletedModules] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const [isEnrolled, setIsEnrolled] = useState(false);
+  const [watchedSeconds, setWatchedSeconds] = useState(0);
+  const [canComplete, setCanComplete] = useState(false);
   const videoRef = useRef<HTMLIFrameElement>(null);
+  const watchTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (user && courseId) {
       loadCourseData();
     }
   }, [user, courseId]);
+
+  useEffect(() => {
+    const currentModule = modules[currentModuleIndex];
+    if (!currentModule) return;
+
+    if (completedModules.has(currentModule.id)) {
+      setCanComplete(true);
+      setWatchedSeconds(currentModule.duration_minutes * 60);
+      return;
+    }
+
+    setWatchedSeconds(0);
+    setCanComplete(false);
+
+    watchTimerRef.current = setInterval(() => {
+      setWatchedSeconds(prev => {
+        const newSeconds = prev + 1;
+        const requiredSeconds = currentModule.duration_minutes * 60;
+        const watchPercentage = (newSeconds / requiredSeconds) * 100;
+
+        if (watchPercentage >= 90 && !canComplete) {
+          setCanComplete(true);
+        }
+
+        return newSeconds;
+      });
+    }, 1000);
+
+    return () => {
+      if (watchTimerRef.current) {
+        clearInterval(watchTimerRef.current);
+      }
+    };
+  }, [currentModuleIndex, modules, completedModules]);
 
   const loadCourseData = async () => {
     try {
@@ -101,7 +139,7 @@ export const CoursePlayerPage = () => {
   };
 
   const markModuleComplete = async (moduleId: string) => {
-    if (!user || completedModules.has(moduleId)) return;
+    if (!user || completedModules.has(moduleId) || !canComplete) return;
 
     try {
       await supabase.from("user_module_progress").upsert({
@@ -128,8 +166,23 @@ export const CoursePlayerPage = () => {
         })
         .eq("user_id", user.id)
         .eq("course_id", courseId);
+
+      toast.success("Modul dokončen!", {
+        description: currentModuleIndex < modules.length - 1
+          ? "Přechod na další modul..."
+          : "Gratulujeme, dokončili jste celý kurz!"
+      });
+
+      if (currentModuleIndex < modules.length - 1) {
+        setTimeout(() => {
+          goToNextModule();
+        }, 1500);
+      }
     } catch (error) {
       console.error("Error marking module complete:", error);
+      toast.error("Chyba při dokončování modulu", {
+        description: "Zkuste to prosím znovu."
+      });
     }
   };
 
@@ -186,6 +239,11 @@ export const CoursePlayerPage = () => {
   const currentModule = modules[currentModuleIndex];
   const isCurrentModuleCompleted = completedModules.has(currentModule.id);
   const courseProgress = (completedModules.size / modules.length) * 100;
+  const requiredSeconds = currentModule.duration_minutes * 60;
+  const watchProgress = Math.min((watchedSeconds / requiredSeconds) * 100, 100);
+  const remainingSeconds = Math.max(0, requiredSeconds - watchedSeconds);
+  const remainingMinutes = Math.floor(remainingSeconds / 60);
+  const remainingSecondsDisplay = remainingSeconds % 60;
 
   return (
     <div className="min-h-screen bg-background">
@@ -224,12 +282,36 @@ export const CoursePlayerPage = () => {
 
             <Card>
               <CardContent className="pt-6">
+                {!isCurrentModuleCompleted && (
+                  <div className="mb-6 space-y-3">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="font-medium">Sledování videa</span>
+                      <span className="text-muted-foreground">
+                        {canComplete ? (
+                          <span className="text-green-600 font-medium">Můžete dokončit</span>
+                        ) : (
+                          <span>
+                            Zbývá: {remainingMinutes}:{remainingSecondsDisplay.toString().padStart(2, '0')}
+                          </span>
+                        )}
+                      </span>
+                    </div>
+                    <Progress value={watchProgress} className="h-2" />
+                    <p className="text-xs text-muted-foreground">
+                      {canComplete
+                        ? "Nyní můžete označit modul jako dokončený a pokračovat na další."
+                        : "Sledujte video, abyste mohli odemknout další modul. Vyžadováno: 90% videa."}
+                    </p>
+                  </div>
+                )}
+
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-lg font-semibold">O tomto modulu</h3>
                   {!isCurrentModuleCompleted && (
                     <Button
                       onClick={() => markModuleComplete(currentModule.id)}
                       variant="default"
+                      disabled={!canComplete}
                     >
                       <CheckCircle2 className="h-4 w-4 mr-2" />
                       Označit jako dokončené
@@ -293,39 +375,48 @@ export const CoursePlayerPage = () => {
               <CardContent className="pt-6">
                 <h3 className="text-lg font-semibold mb-4">Moduly kurzu</h3>
                 <div className="space-y-2">
-                  {modules.map((module, index) => (
-                    <button
-                      key={module.id}
-                      onClick={() => setCurrentModuleIndex(index)}
-                      className={`w-full text-left p-3 rounded-lg border transition-colors ${
-                        index === currentModuleIndex
-                          ? "border-primary bg-primary/5"
-                          : "border-border hover:border-primary/50"
-                      }`}
-                    >
-                      <div className="flex items-start gap-3">
-                        <div
-                          className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs ${
-                            completedModules.has(module.id)
-                              ? "bg-green-500/20 text-green-600"
-                              : "bg-muted text-muted-foreground"
-                          }`}
-                        >
-                          {completedModules.has(module.id) ? (
-                            <CheckCircle2 className="h-4 w-4" />
-                          ) : (
-                            index + 1
-                          )}
+                  {modules.map((module, index) => {
+                    const isPreviousCompleted = index === 0 || completedModules.has(modules[index - 1].id);
+                    const isLocked = !isPreviousCompleted && !completedModules.has(module.id);
+
+                    return (
+                      <button
+                        key={module.id}
+                        onClick={() => !isLocked && setCurrentModuleIndex(index)}
+                        disabled={isLocked}
+                        className={`w-full text-left p-3 rounded-lg border transition-colors ${
+                          index === currentModuleIndex
+                            ? "border-primary bg-primary/5"
+                            : isLocked
+                            ? "border-border opacity-50 cursor-not-allowed"
+                            : "border-border hover:border-primary/50"
+                        }`}
+                      >
+                        <div className="flex items-start gap-3">
+                          <div
+                            className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs ${
+                              completedModules.has(module.id)
+                                ? "bg-green-500/20 text-green-600"
+                                : "bg-muted text-muted-foreground"
+                            }`}
+                          >
+                            {completedModules.has(module.id) ? (
+                              <CheckCircle2 className="h-4 w-4" />
+                            ) : (
+                              index + 1
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium truncate">{module.title}</p>
+                            <p className="text-xs text-muted-foreground">
+                              {module.duration_minutes} min
+                              {isLocked && " • Zamčeno"}
+                            </p>
+                          </div>
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium truncate">{module.title}</p>
-                          <p className="text-xs text-muted-foreground">
-                            {module.duration_minutes} min
-                          </p>
-                        </div>
-                      </div>
-                    </button>
-                  ))}
+                      </button>
+                    );
+                  })}
                 </div>
               </CardContent>
             </Card>
