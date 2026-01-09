@@ -1,3 +1,5 @@
+"use client";
+
 import { motion } from "framer-motion";
 import { Forward } from "lucide-react";
 import { useState } from "react";
@@ -10,58 +12,58 @@ interface Feature283Props {
   className?: string;
 }
 
-const ContributorsSection = ({ className }: Feature283Props) => {
+const Feature283 = ({ className }: Feature283Props) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const images = [
     {
-      src: "https://images.pexels.com/photos/1212984/pexels-photo-1212984.jpeg",
+      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/guri3/img11.jpeg",
       className:
         "w-40 absolute -left-10 top-1/2 h-52 -translate-x-full -translate-y-1/2 overflow-hidden rounded-2xl",
     },
     {
-      src: "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg",
+      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/guri3/img1.jpeg",
       className:
         "size-28 absolute -top-3 left-10 -translate-x-full -translate-y-full overflow-hidden rounded-2xl",
     },
     {
-      src: "https://images.pexels.com/photos/1845534/pexels-photo-1845534.jpeg",
+      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/guri3/img7.jpeg",
       className:
         "size-32 absolute -bottom-3 left-10 -translate-x-full translate-y-full overflow-hidden rounded-2xl",
     },
     {
-      src: "https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg",
+      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/guri3/img12.jpeg",
       className:
         "w-45 absolute -right-10 top-1/2 h-52 -translate-y-1/2 translate-x-full overflow-hidden rounded-2xl",
     },
     {
-      src: "https://images.pexels.com/photos/1516680/pexels-photo-1516680.jpeg",
+      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/guri3/img13.jpeg",
       className:
         "size-28 absolute -top-3 right-10 -translate-y-full translate-x-full overflow-hidden rounded-2xl",
     },
     {
-      src: "https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg",
+      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/guri3/img3.jpeg",
       className:
         "size-32 absolute -bottom-3 right-10 translate-x-full translate-y-full overflow-hidden rounded-2xl",
     },
   ];
 
   return (
-    <section className={cn("min-h-screen overflow-hidden py-32 flex items-center justify-center", className)}>
-      <div className="container mx-auto flex flex-col items-center justify-center px-4">
-        <div className="relative flex flex-col items-center justify-center max-w-4xl mx-auto">
+    <section className={cn("h-full h-screen overflow-hidden py-32", className)}>
+      <div className="container flex h-full w-full flex-col items-center justify-center px-4">
+        <div className="relative flex flex-col items-center justify-center">
           <h2 className="relative py-2 text-center font-sans text-4xl font-semibold tracking-tighter md:text-5xl">
-            Famous Faces You May Have Seen
+            Built by and for Developers
           </h2>
           <p className="mx-auto mt-2 max-w-xl px-5 text-center text-sm text-muted-foreground/50 md:text-base">
-            Join the community of creators, innovators, and dreamers from Czech Republic
-            who are making their mark. From entrepreneurs to artists, these are the faces
-            shaping tomorrow.
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem
+            suscipit dolor blanditiis voluptatum minus est labore amet
+            necessitatibus quod distinctio! ipsum dolor sit
           </p>
           <Button className="mt-10 h-10 rounded-xl">
             Be a contributor <Forward />
           </Button>
-          <div className="relative w-full min-h-[400px] flex items-center justify-center">
+          <div>
             {images.map((image, index) => (
               <motion.div
                 drag
@@ -103,4 +105,4 @@ const ContributorsSection = ({ className }: Feature283Props) => {
   );
 };
 
-export { ContributorsSection };
+export { Feature283 };
