@@ -170,13 +170,22 @@ export const CoursePlayerPage = () => {
         .maybeSingle();
 
       if (nextCourse) {
-        await supabase
+        const { data: existingEnrollment } = await supabase
           .from("user_course_enrollments")
-          .insert({
-            user_id: user.id,
-            course_id: nextCourse.id,
-            progress_percentage: 0,
-          });
+          .select("id")
+          .eq("user_id", user.id)
+          .eq("course_id", nextCourse.id)
+          .maybeSingle();
+
+        if (!existingEnrollment) {
+          await supabase
+            .from("user_course_enrollments")
+            .insert({
+              user_id: user.id,
+              course_id: nextCourse.id,
+              progress_percentage: 0,
+            });
+        }
 
         toast.success("🎉 Kurz úspěšně dokončen!", {
           description: `Odemkli jste další kurz: ${nextCourse.title}`,
