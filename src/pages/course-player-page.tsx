@@ -38,50 +38,13 @@ export const CoursePlayerPage = () => {
   const [completedModules, setCompletedModules] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const [isEnrolled, setIsEnrolled] = useState(false);
-  const [watchedSeconds, setWatchedSeconds] = useState(0);
-  const [canComplete, setCanComplete] = useState(false);
   const videoRef = useRef<HTMLIFrameElement>(null);
-  const watchTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (user && courseId) {
       loadCourseData();
     }
   }, [user, courseId]);
-
-  useEffect(() => {
-    const currentModule = modules[currentModuleIndex];
-    if (!currentModule) return;
-
-    if (completedModules.has(currentModule.id)) {
-      setCanComplete(true);
-      setWatchedSeconds(currentModule.duration_minutes * 60);
-      return;
-    }
-
-    setWatchedSeconds(0);
-    setCanComplete(false);
-
-    watchTimerRef.current = setInterval(() => {
-      setWatchedSeconds(prev => {
-        const newSeconds = prev + 1;
-        const requiredSeconds = currentModule.duration_minutes * 60;
-        const watchPercentage = (newSeconds / requiredSeconds) * 100;
-
-        if (watchPercentage >= 90 && !canComplete) {
-          setCanComplete(true);
-        }
-
-        return newSeconds;
-      });
-    }, 1000);
-
-    return () => {
-      if (watchTimerRef.current) {
-        clearInterval(watchTimerRef.current);
-      }
-    };
-  }, [currentModuleIndex, modules, completedModules]);
 
   const loadCourseData = async () => {
     try {
@@ -139,7 +102,7 @@ export const CoursePlayerPage = () => {
   };
 
   const markModuleComplete = async (moduleId: string) => {
-    if (!user || completedModules.has(moduleId) || !canComplete) return;
+    if (!user || completedModules.has(moduleId)) return;
 
     try {
       await supabase.from("user_module_progress").upsert({
@@ -162,37 +125,15 @@ export const CoursePlayerPage = () => {
         .from("user_course_enrollments")
         .update({
           progress_percentage: progressPercentage,
-          completed_at: progressPercentage === 100 ? new Date().toISOString() : null,
         })
         .eq("user_id", user.id)
         .eq("course_id", courseId);
 
-      if (progressPercentage === 100) {
-        const { data: nextCourse } = await supabase
-          .from("courses")
-          .select("id, title, order_index")
-          .eq("is_published", true)
-          .gt("order_index", course?.order_index ?? 0)
-          .order("order_index", { ascending: true })
-          .limit(1)
-          .maybeSingle();
-
-        if (nextCourse) {
-          toast.success("Gratulujeme, dokončili jste celý kurz!", {
-            description: `Odemkli jste další kurz: ${nextCourse.title}`,
-            duration: 5000,
-          });
-        } else {
-          toast.success("Gratulujeme, dokončili jste celý kurz!", {
-            description: "Dokončili jste všechny dostupné kurzy!",
-            duration: 5000,
-          });
-        }
-      } else {
-        toast.success("Modul dokončen!", {
-          description: "Přechod na další modul..."
-        });
-      }
+      toast.success("Modul dokončen!", {
+        description: currentModuleIndex < modules.length - 1
+          ? "Přechod na další modul..."
+          : "Nyní můžete odemknout další kurz!"
+      });
 
       if (currentModuleIndex < modules.length - 1) {
         setTimeout(() => {
@@ -202,6 +143,50 @@ export const CoursePlayerPage = () => {
     } catch (error) {
       console.error("Error marking module complete:", error);
       toast.error("Chyba při dokončování modulu", {
+        description: "Zkuste to prosím znovu."
+      });
+    }
+  };
+
+  const unlockNextCourse = async () => {
+    if (!user || !course) return;
+
+    try {
+      await supabase
+        .from("user_course_enrollments")
+        .update({
+          completed_at: new Date().toISOString(),
+        })
+        .eq("user_id", user.id)
+        .eq("course_id", courseId);
+
+      const { data: nextCourse } = await supabase
+        .from("courses")
+        .select("id, title, order_index")
+        .eq("is_published", true)
+        .gt("order_index", course.order_index)
+        .order("order_index", { ascending: true })
+        .limit(1)
+        .maybeSingle();
+
+      if (nextCourse) {
+        toast.success("Kurz dokončen!", {
+          description: `Odemkli jste další kurz: ${nextCourse.title}`,
+          duration: 5000,
+        });
+      } else {
+        toast.success("Kurz dokončen!", {
+          description: "Gratulujeme! Dokončili jste všechny dostupné kurzy!",
+          duration: 5000,
+        });
+      }
+
+      setTimeout(() => {
+        window.location.href = "/courses";
+      }, 2000);
+    } catch (error) {
+      console.error("Error unlocking next course:", error);
+      toast.error("Chyba při odemykání dalšího kurzu", {
         description: "Zkuste to prosím znovu."
       });
     }
@@ -260,11 +245,8 @@ export const CoursePlayerPage = () => {
   const currentModule = modules[currentModuleIndex];
   const isCurrentModuleCompleted = completedModules.has(currentModule.id);
   const courseProgress = (completedModules.size / modules.length) * 100;
-  const requiredSeconds = currentModule.duration_minutes * 60;
-  const watchProgress = Math.min((watchedSeconds / requiredSeconds) * 100, 100);
-  const remainingSeconds = Math.max(0, requiredSeconds - watchedSeconds);
-  const remainingMinutes = Math.floor(remainingSeconds / 60);
-  const remainingSecondsDisplay = remainingSeconds % 60;
+  const isLastModule = currentModuleIndex === modules.length - 1;
+  const allModulesCompleted = completedModules.size === modules.length;
 
   return (
     <div className="min-h-screen bg-background">
@@ -303,36 +285,12 @@ export const CoursePlayerPage = () => {
 
             <Card>
               <CardContent className="pt-6">
-                {!isCurrentModuleCompleted && (
-                  <div className="mb-6 space-y-3">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="font-medium">Sledování videa</span>
-                      <span className="text-muted-foreground">
-                        {canComplete ? (
-                          <span className="text-green-600 font-medium">Můžete dokončit</span>
-                        ) : (
-                          <span>
-                            Zbývá: {remainingMinutes}:{remainingSecondsDisplay.toString().padStart(2, '0')}
-                          </span>
-                        )}
-                      </span>
-                    </div>
-                    <Progress value={watchProgress} className="h-2" />
-                    <p className="text-xs text-muted-foreground">
-                      {canComplete
-                        ? "Nyní můžete označit modul jako dokončený a pokračovat na další."
-                        : "Sledujte video, abyste mohli odemknout další modul. Vyžadováno: 90% videa."}
-                    </p>
-                  </div>
-                )}
-
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-lg font-semibold">O tomto modulu</h3>
                   {!isCurrentModuleCompleted && (
                     <Button
                       onClick={() => markModuleComplete(currentModule.id)}
                       variant="default"
-                      disabled={!canComplete}
                     >
                       <CheckCircle2 className="h-4 w-4 mr-2" />
                       Označit jako dokončené
@@ -363,13 +321,23 @@ export const CoursePlayerPage = () => {
                 <ChevronLeft className="h-4 w-4 mr-2" />
                 Předchozí modul
               </Button>
-              <Button
-                onClick={goToNextModule}
-                disabled={currentModuleIndex === modules.length - 1}
-              >
-                Další modul
-                <ChevronRight className="h-4 w-4 ml-2" />
-              </Button>
+              {isLastModule && allModulesCompleted ? (
+                <Button
+                  onClick={unlockNextCourse}
+                  className="bg-green-600 hover:bg-green-700"
+                >
+                  <CheckCircle2 className="h-4 w-4 mr-2" />
+                  Odemknout další kurz
+                </Button>
+              ) : (
+                <Button
+                  onClick={goToNextModule}
+                  disabled={currentModuleIndex === modules.length - 1}
+                >
+                  Další modul
+                  <ChevronRight className="h-4 w-4 ml-2" />
+                </Button>
+              )}
             </div>
           </div>
 
