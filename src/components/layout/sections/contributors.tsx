@@ -47,9 +47,9 @@ const ContributorsSection = ({ className }: Feature283Props) => {
   ];
 
   return (
-    <section className={cn("h-full h-screen overflow-hidden py-32", className)}>
-      <div className="container flex h-full w-full flex-col items-center justify-center px-4">
-        <div className="relative flex flex-col items-center justify-center">
+    <section className={cn("min-h-screen overflow-hidden py-32 flex items-center justify-center", className)}>
+      <div className="container mx-auto flex flex-col items-center justify-center px-4">
+        <div className="relative flex flex-col items-center justify-center max-w-4xl mx-auto">
           <h2 className="relative py-2 text-center font-sans text-4xl font-semibold tracking-tighter md:text-5xl">
             Famous Faces You May Have Seen
           </h2>
@@ -61,7 +61,7 @@ const ContributorsSection = ({ className }: Feature283Props) => {
           <Button className="mt-10 h-10 rounded-xl">
             Be a contributor <Forward />
           </Button>
-          <div>
+          <div className="relative w-full min-h-[400px] flex items-center justify-center">
             {images.map((image, index) => (
               <motion.div
                 drag
