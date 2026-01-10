@@ -62,11 +62,11 @@ const Feature283 = ({ className }: Feature283Props) => {
 
   const title = "Naši úspěšní absolventi, na které můžete být hrdí";
   const description =
-    "Setkejte se s inspirativními fyzioterapeuty, kteří prošli našimi kurzy a dnes dosahují výjimečných výsledků ve svých kariérách. Každý z těchto odborníků začal na stejném místě jako vy - s touhou rozšířit své znalosti a dovednosti. Díky našim specializovaným vzdělávacím programům se z nich stali uznávaní specialisté, kteří pomáhají tisícům pacientů po celé České republice i v zahraničí. Jejich cesta k úspěchu začala právě tady, a vaše může začít dnes. Připojte se k rostoucí komunitě profesionálů, kteří díky kvalitnímu vzdělání dosáhli svých kariérních cílů a změnili životy svých pacientů k lepšímu.";
+    "Setkejte se s inspirativními fyzioterapeuty, kteří prošli našimi kurzy a dnes dosahují výjimečných výsledků ve svých kariérách. Každý z těchto odborníků začal na stejném místě jako vy - s touhou rozšířit své znalosti a dovednosti.";
 
   return (
     <section className={cn("h-full h-screen overflow-hidden py-32", className)}>
-      <div className="container mx-auto flex h-full w-full flex-col items-center justify-center px-4">
+      <div className="container flex h-full w-full flex-col items-center justify-center px-4">
         <div className="relative flex flex-col items-center justify-center">
           <h2
             className="relative py-2 text-center font-sans text-4xl font-semibold tracking-tighter md:text-5xl"
@@ -74,7 +74,7 @@ const Feature283 = ({ className }: Feature283Props) => {
             {title}
           </h2>
           <p
-            className="mx-auto mt-4 max-w-3xl px-5 text-center text-sm text-muted-foreground md:text-base leading-relaxed"
+            className="mx-auto mt-2 max-w-xl px-5 text-center text-sm text-muted-foreground/50 md:text-base"
           >
             {description}
           </p>
