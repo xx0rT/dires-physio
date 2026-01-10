@@ -1,5 +1,5 @@
 import AutoScroll from "embla-carousel-auto-scroll";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -14,90 +14,102 @@ import {
 
 const testimonials1 = [
   {
-    name: "John Doe",
-    role: "CEO & Founder",
+    name: "Marie Kolářová",
+    role: "Fyzioterapeutka",
     avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-1.webp",
     content:
-      "Lorem ipsum dolor sit, amet Odio, incidunt. Ratione, ullam? Iusto id ut omnis repellat.",
+      "Kurz mi otevřel zcela nové možnosti v kariéře. Po absolvování jsem získala pozici vedoucí fyzioterapeutky v prestižní klinice.",
+    journey: "Z asistentky na vedoucí fyzioterapeutku za 2 roky"
   },
   {
-    name: "Jane Doe",
-    role: "CTO",
+    name: "Tomáš Novotný",
+    role: "Sportovní rehabilitátor",
     avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-2.webp",
     content:
-      "Lorem ipsum dolor sit, amet Odio, incidunt. Ratione, ullam? Iusto id ut omnis repellat.",
+      "Díky vzdělání z tohoto kurzu pracuji s olympijskými sportovci. Každá technika, kterou jsem se naučil, je prakticky využitelná.",
+    journey: "Ze začátečníka na rehabilitátora olympioniků"
   },
   {
-    name: "John Smith",
-    role: "COO",
+    name: "Jana Dvořáková",
+    role: "Dětská fyzioterapeutka",
     avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-3.webp",
     content:
-      "Lorem ipsum dolor sit, amet Odio, incidunt. Ratione, ullam? Iusto id ut omnis repellat.",
+      "Program mi dal sebedůvěru a dovednosti, abych mohla otevřít vlastní ordinaci specializující se na dětskou fyzioterapii.",
+    journey: "Od zaměstnankyně k majitelce vlastní ordinace"
   },
   {
-    name: "Jane Smith",
-    role: "Tech Lead",
+    name: "Petr Svoboda",
+    role: "Neurorehabilitační specialista",
     avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-4.webp",
     content:
-      "Lorem ipsum dolor sit, amet Odio, incidunt. Ratione, ullam? Iusto id ut omnis repellat.",
+      "Kurz mi poskytl znalosti, které jsem okamžitě aplikoval v praxi. Moje výsledky u pacientů se dramaticky zlepšily.",
+    journey: "Od všeobecné praxe k neurorehabilitačnímu specialistovi"
   },
   {
-    name: "Richard Doe",
-    role: "Designer",
+    name: "Lucie Procházková",
+    role: "Manuální terapeutka",
     avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-5.webp",
     content:
-      "Lorem ipsum dolor sit, amet Odio, incidunt. Ratione, ullam? Iusto id ut omnis repellat.",
+      "Po absolutoriu jsem zdvojnásobila svůj příjem a pracuji s klienty, o kterých jsem dříve jen snila. Nejlepší investice do kariéry.",
+    journey: "Zdvojnásobení příjmu a práce s VIP klienty"
   },
   {
-    name: "Gordon Doe",
-    role: "Developer",
+    name: "Martin Černý",
+    role: "Lektor fyzioterapie",
     avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-6.webp",
     content:
-      "Lorem ipsum dolor sit, amet Odio, incidunt. Ratione, ullam? Iusto id ut omnis repellat.",
+      "Kurz mě inspiroval natolik, že jsem se sám stal lektorem. Nyní předávám své znalosti dalším generacím fyzioterapeutů.",
+    journey: "Od studenta k uznávanému lektorovi za 3 roky"
   },
 ];
 const testimonials2 = [
   {
-    name: "John Doe",
-    role: "CEO & Founder",
+    name: "Eva Málková",
+    role: "Ortopedická specialistka",
     avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-1.webp",
     content:
-      "Lorem ipsum dolor sit, amet Odio, incidunt. Ratione, ullam? Iusto id ut omnis repellat.",
+      "Vzdělání mi umožnilo specializovat se na ortopedii a pracovat v nejvyhlášenějších klinikách v Praze.",
+    journey: "K práci v top pražských klinikách"
   },
   {
-    name: "Jane Doe",
-    role: "CTO",
+    name: "David Horák",
+    role: "Mezinárodní konzultant",
     avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-2.webp",
     content:
-      "Lorem ipsum dolor sit, amet Odio, incidunt. Ratione, ullam? Iusto id ut omnis repellat.",
+      "Kurz byl odrazovým můstkem k mezinárodní kariéře. Nyní cestuji po světě a školím fyzioterapeuty v různých zemích.",
+    journey: "K mezinárodní kariéře a konzultacím po celém světě"
   },
   {
-    name: "John Smith",
-    role: "COO",
+    name: "Kateřina Nováková",
+    role: "Zakladatelka kliniky",
     avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-3.webp",
     content:
-      "Lorem ipsum dolor sit, amet Odio, incidunt. Ratione, ullam? Iusto id ut omnis repellat.",
+      "Po absolutoriu jsem založila síť rehabilitačních center, která dnes zaměstnává přes 50 fyzioterapeutů.",
+    journey: "K vlastní síti rehabilitačních center"
   },
   {
-    name: "Jane Smith",
-    role: "Tech Lead",
+    name: "Jakub Veselý",
+    role: "Výzkumník v rehabilitaci",
     avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-4.webp",
     content:
-      "Lorem ipsum dolor sit, amet Odio, incidunt. Ratione, ullam? Iusto id ut omnis repellat.",
+      "Kurz mě inspiroval k výzkumu v oboru. Publikoval jsem několik odborných článků a pracuji na univerzitě.",
+    journey: "Od praktika k výzkumníkovi a vysokoškolskému pedagogovi"
   },
   {
-    name: "Richard Doe",
-    role: "Designer",
+    name: "Barbora Králová",
+    role: "Online vzdělávatelka",
     avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-5.webp",
     content:
-      "Lorem ipsum dolor sit, amet Odio, incidunt. Ratione, ullam? Iusto id ut omnis repellat.",
+      "Znalosti z kurzu jsem transformovala do online platformy, která pomáhá tisícům fyzioterapeutů po celém světě.",
+    journey: "K online platformě s tisíci studenty globálně"
   },
   {
-    name: "Gordon Doe",
-    role: "Developer",
+    name: "Michal Dvořák",
+    role: "Celebrity fyzioterapeut",
     avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-6.webp",
     content:
-      "Lorem ipsum dolor sit, amet Odio, incidunt. Ratione, ullam? Iusto id ut omnis repellat.",
+      "Dnes pracuji s celebritami a špičkovými sportovci. Kurz mi dal dovednosti a důvěru, abych se dostal tam, kde jsem teď.",
+    journey: "K práci s celebritami a profesionálními sportovci"
   },
 ];
 
@@ -106,6 +118,8 @@ interface CommunityProps {
 }
 
 export const CommunitySection = ({ className }: CommunityProps) => {
+  const [hoveredIndex, setHoveredIndex] = useState<string | null>(null);
+
   const plugin1 = useRef(
     AutoScroll({
       startDelay: 500,
@@ -122,16 +136,16 @@ export const CommunitySection = ({ className }: CommunityProps) => {
   );
   return (
     <section className={cn("py-32", className)}>
-      <div className="container flex flex-col items-center gap-6">
+      <div className="container mx-auto max-w-6xl flex flex-col items-center gap-6 px-4">
         <h2 className="mb-2 text-center text-3xl font-semibold lg:text-5xl">
-          Meet our happy clients
+          Známé tváře, které jste možná viděli
         </h2>
-        <p className="text-muted-foreground lg:text-lg">
-          All of our 1000+ clients are happy
+        <p className="text-center text-muted-foreground lg:text-lg max-w-4xl">
+          Naše vzdělávací programy transformovaly kariéry stovek fyzioterapeutů po celé České republice. Od těch, kteří začínali jako asistenti, až po ty, kteří dnes vedou vlastní kliniky a školí další generace odborníků. Každý z našich absolventů má svůj unikátní příběh úspěchu, který začal právě zde. Prohlédněte si jejich cesty a nechte se inspirovat tím, kam vás může tento kurz dovést. Přejeďte myší přes fotografii a objevte jejich neuvěřitelnou cestu a jak tento kurz transformoval jejich kariéru.
         </p>
-        <Button className="mt-6">Get started for free</Button>
+        <Button className="mt-6">Začít zdarma</Button>
       </div>
-      <div className="lg:container">
+      <div className="w-full overflow-hidden">
         <div className="mt-16 space-y-4">
           <Carousel
             opts={{
@@ -143,22 +157,38 @@ export const CommunitySection = ({ className }: CommunityProps) => {
             <CarouselContent>
               {testimonials1.map((testimonial, index) => (
                 <CarouselItem key={index} className="basis-auto">
-                  <Card className="max-w-96 p-6 select-none">
+                  <Card
+                    className="max-w-96 p-6 select-none transition-all duration-300 hover:shadow-lg"
+                    onMouseEnter={() => setHoveredIndex(`t1-${index}`)}
+                    onMouseLeave={() => setHoveredIndex(null)}
+                  >
                     <div className="mb-4 flex gap-4">
-                      <Avatar className="size-9 rounded-full ring-1 ring-input">
-                        <AvatarImage
-                          src={testimonial.avatar}
-                          alt={testimonial.name}
-                        />
-                      </Avatar>
-                      <div className="text-sm">
+                      <div className="relative group">
+                        <Avatar className="size-12 rounded-full ring-1 ring-input transition-all duration-300 group-hover:ring-2 group-hover:ring-primary">
+                          <AvatarImage
+                            src={testimonial.avatar}
+                            alt={testimonial.name}
+                          />
+                        </Avatar>
+                        {hoveredIndex === `t1-${index}` && (
+                          <div className="absolute -top-2 -right-2 size-5 bg-primary rounded-full flex items-center justify-center">
+                            <span className="text-primary-foreground text-xs">✨</span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="text-sm flex-1">
                         <p className="font-medium">{testimonial.name}</p>
                         <p className="text-muted-foreground">
                           {testimonial.role}
                         </p>
+                        {hoveredIndex === `t1-${index}` && (
+                          <p className="text-xs text-primary font-semibold mt-1 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                            {testimonial.journey}
+                          </p>
+                        )}
                       </div>
                     </div>
-                    <q>{testimonial.content}</q>
+                    <q className="text-sm">{testimonial.content}</q>
                   </Card>
                 </CarouselItem>
               ))}
@@ -174,22 +204,38 @@ export const CommunitySection = ({ className }: CommunityProps) => {
             <CarouselContent>
               {testimonials2.map((testimonial, index) => (
                 <CarouselItem key={index} className="basis-auto">
-                  <Card className="max-w-96 p-6 select-none">
+                  <Card
+                    className="max-w-96 p-6 select-none transition-all duration-300 hover:shadow-lg"
+                    onMouseEnter={() => setHoveredIndex(`t2-${index}`)}
+                    onMouseLeave={() => setHoveredIndex(null)}
+                  >
                     <div className="mb-4 flex gap-4">
-                      <Avatar className="size-9 rounded-full ring-1 ring-input">
-                        <AvatarImage
-                          src={testimonial.avatar}
-                          alt={testimonial.name}
-                        />
-                      </Avatar>
-                      <div className="text-sm">
+                      <div className="relative group">
+                        <Avatar className="size-12 rounded-full ring-1 ring-input transition-all duration-300 group-hover:ring-2 group-hover:ring-primary">
+                          <AvatarImage
+                            src={testimonial.avatar}
+                            alt={testimonial.name}
+                          />
+                        </Avatar>
+                        {hoveredIndex === `t2-${index}` && (
+                          <div className="absolute -top-2 -right-2 size-5 bg-primary rounded-full flex items-center justify-center">
+                            <span className="text-primary-foreground text-xs">✨</span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="text-sm flex-1">
                         <p className="font-medium">{testimonial.name}</p>
                         <p className="text-muted-foreground">
                           {testimonial.role}
                         </p>
+                        {hoveredIndex === `t2-${index}` && (
+                          <p className="text-xs text-primary font-semibold mt-1 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                            {testimonial.journey}
+                          </p>
+                        )}
                       </div>
                     </div>
-                    <q>{testimonial.content}</q>
+                    <q className="text-sm">{testimonial.content}</q>
                   </Card>
                 </CarouselItem>
               ))}
