@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Forward } from "lucide-react";
 import { useState } from "react";
 
@@ -79,24 +79,34 @@ const Feature283 = ({ className }: Feature283Props) => {
     <section className={cn("h-full h-screen overflow-hidden py-32", className)}>
       <div className="container mx-auto flex h-full w-full flex-col items-center justify-center px-4">
         <div className="relative flex flex-col items-center justify-center">
-          <motion.h2
-            key={displayTitle}
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeInOut" }}
-            className="relative py-2 text-center font-sans text-4xl font-semibold tracking-tighter md:text-5xl"
-          >
-            {displayTitle}
-          </motion.h2>
-          <motion.p
-            key={displayDescription}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, ease: "easeInOut" }}
-            className="mx-auto mt-2 max-w-xl px-5 text-center text-sm text-muted-foreground/50 md:text-base min-h-[60px] flex items-center justify-center"
-          >
-            {displayDescription}
-          </motion.p>
+          <div className="relative h-[80px] md:h-[100px] flex items-center justify-center w-full">
+            <AnimatePresence mode="wait">
+              <motion.h2
+                key={displayTitle}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+                className="absolute py-2 text-center font-sans text-4xl font-semibold tracking-tighter md:text-5xl w-full"
+              >
+                {displayTitle}
+              </motion.h2>
+            </AnimatePresence>
+          </div>
+          <div className="relative h-[100px] md:h-[80px] flex items-center justify-center w-full max-w-xl">
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={displayDescription}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+                className="absolute mx-auto px-5 text-center text-sm text-muted-foreground/50 md:text-base flex items-center justify-center w-full"
+              >
+                {displayDescription}
+              </motion.p>
+            </AnimatePresence>
+          </div>
           <Button className="mt-10 h-10 rounded-xl">
             Staňte se přispěvatelem <Forward />
           </Button>
@@ -107,22 +117,20 @@ const Feature283 = ({ className }: Feature283Props) => {
                 key={index}
                 initial={{ y: "50%", opacity: 0, scale: 0.8 }}
                 whileInView={{ y: 0, opacity: 1, scale: 1 }}
-                transition={{
-                  duration: 0.2,
-                  ease: "easeOut",
-                  delay: index * 0.1 + 0.5,
-                }}
                 animate={{
                   filter:
                     hoveredIndex !== null && hoveredIndex !== index
                       ? "blur(10px)"
                       : "blur(0px)",
                   scale: hoveredIndex === index ? 1.05 : 1,
-                  transition: {
-                    duration: 0.6,
-                    ease: "easeInOut",
-                    delay: 0,
-                  },
+                  y: 0,
+                  opacity: 1,
+                }}
+                transition={{
+                  y: { duration: 0.2, ease: "easeOut", delay: index * 0.1 + 0.5 },
+                  opacity: { duration: 0.2, ease: "easeOut", delay: index * 0.1 + 0.5 },
+                  filter: { duration: 0.5, ease: [0.4, 0, 0.2, 1] },
+                  scale: { duration: 0.5, ease: [0.4, 0, 0.2, 1] },
                 }}
                 onHoverStart={() => setHoveredIndex(index)}
                 onHoverEnd={() => setHoveredIndex(null)}
