@@ -28,48 +28,48 @@ const Feature283 = ({ className }: Feature283Props) => {
       className:
         "w-40 absolute -left-10 top-1/2 h-52 -translate-x-full -translate-y-1/2 overflow-hidden rounded-2xl",
       name: "Sarah Mitchell",
-      story: "From zero to launching her own startup in 6 months. This course gave her the foundation to build her dream product and raise seed funding.",
+      story: "Z nuly ke spuštění vlastního startupu za 6 měsíců. Tento kurz jí dal základy pro vytvoření jejího vysněného produktu a získání počátečního financování.",
     },
     {
       src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/guri3/img1.jpeg",
       className:
         "size-28 absolute -top-3 left-10 -translate-x-full -translate-y-full overflow-hidden rounded-2xl",
       name: "James Chen",
-      story: "Transitioned from marketing to engineering. Now works at a top tech company building products used by millions worldwide.",
+      story: "Přešel z marketingu do programování. Nyní pracuje v prestižní technologické společnosti a vyvíjí produkty používané miliony lidí po celém světě.",
     },
     {
       src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/guri3/img7.jpeg",
       className:
         "size-32 absolute -bottom-3 left-10 -translate-x-full translate-y-full overflow-hidden rounded-2xl",
       name: "Maria Rodriguez",
-      story: "Built three successful SaaS products after completing the course. Now teaches others while running her own agency.",
+      story: "Vytvořila tři úspěšné SaaS produkty po dokončení kurzu. Nyní učí ostatní a zároveň řídí vlastní agenturu.",
     },
     {
       src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/guri3/img12.jpeg",
       className:
         "w-45 absolute -right-10 top-1/2 h-52 -translate-y-1/2 translate-x-full overflow-hidden rounded-2xl",
       name: "David Park",
-      story: "Left his corporate job to become a freelance developer. Now makes 3x his previous salary working on projects he loves.",
+      story: "Opustil korporátní práci a stal se freelance vývojářem. Nyní vydělává 3x více než dříve a pracuje na projektech, které miluje.",
     },
     {
       src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/guri3/img13.jpeg",
       className:
         "size-28 absolute -top-3 right-10 -translate-y-full translate-x-full overflow-hidden rounded-2xl",
       name: "Emma Thompson",
-      story: "Started as a complete beginner and now leads a team of developers at a fast-growing startup. This course was her launchpad.",
+      story: "Začala jako úplný začátečník a nyní vede tým vývojářů v rychle rostoucím startupu. Tento kurz byl její odrazový můstek.",
     },
     {
       src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/guri3/img3.jpeg",
       className:
         "size-32 absolute -bottom-3 right-10 translate-x-full translate-y-full overflow-hidden rounded-2xl",
       name: "Alex Kumar",
-      story: "Shipped his first app in 4 weeks and it hit the front page of Product Hunt. Now runs a portfolio of profitable indie projects.",
+      story: "Vydal svou první aplikaci za 4 týdny a dostala se na titulní stránku Product Hunt. Nyní spravuje portfolio ziskových indie projektů.",
     },
   ];
 
-  const defaultTitle = "Famous faces you may have seen";
+  const defaultTitle = "Známé tváře, které jste možná viděli";
   const defaultDescription =
-    "Hover over any photo to discover their incredible journey and how this course transformed their career";
+    "Najeďte myší na jakoukoli fotku a objevte jejich neuvěřitelnou cestu a jak tento kurz změnil jejich kariéru";
 
   const displayTitle = hoveredIndex !== null ? images[hoveredIndex].name : defaultTitle;
   const displayDescription =
@@ -83,7 +83,7 @@ const Feature283 = ({ className }: Feature283Props) => {
             key={displayTitle}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.6, ease: "easeInOut" }}
             className="relative py-2 text-center font-sans text-4xl font-semibold tracking-tighter md:text-5xl"
           >
             {displayTitle}
@@ -92,13 +92,13 @@ const Feature283 = ({ className }: Feature283Props) => {
             key={displayDescription}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.6, ease: "easeInOut" }}
             className="mx-auto mt-2 max-w-xl px-5 text-center text-sm text-muted-foreground/50 md:text-base min-h-[60px] flex items-center justify-center"
           >
             {displayDescription}
           </motion.p>
           <Button className="mt-10 h-10 rounded-xl">
-            Be a contributor <Forward />
+            Staňte se přispěvatelem <Forward />
           </Button>
           <div>
             {images.map((image, index) => (
@@ -119,8 +119,8 @@ const Feature283 = ({ className }: Feature283Props) => {
                       : "blur(0px)",
                   scale: hoveredIndex === index ? 1.05 : 1,
                   transition: {
-                    duration: 0.3,
-                    ease: "easeOut",
+                    duration: 0.6,
+                    ease: "easeInOut",
                     delay: 0,
                   },
                 }}
