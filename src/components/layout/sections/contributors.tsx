@@ -107,10 +107,10 @@ const Feature283 = ({ className }: Feature283Props) => {
               </motion.p>
             </AnimatePresence>
           </div>
-          <Button className="mt-10 h-10 rounded-xl">
+          <Button className="mt-10 h-10 rounded-xl mb-16">
             Staňte se přispěvatelem <Forward />
           </Button>
-          <div>
+          <div className="mt-16">
             {images.map((image, index) => (
               <motion.div
                 drag
