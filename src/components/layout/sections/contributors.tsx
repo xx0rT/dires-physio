@@ -60,7 +60,6 @@ const Feature283 = ({ className }: Feature283Props) => {
     },
   ];
 
-  const title = "Naši úspěšní absolventi, na které můžete být hrdí";
   const description =
     "Setkejte se s inspirativními fyzioterapeuty, kteří prošli našimi kurzy a dnes dosahují výjimečných výsledků ve svých kariérách.";
 
@@ -71,7 +70,7 @@ const Feature283 = ({ className }: Feature283Props) => {
           <h2
             className="relative py-2 text-center font-sans text-4xl font-semibold tracking-tighter md:text-5xl"
           >
-            {title}
+            Naši úspěšní absolventi,<br />na které můžete být hrdí
           </h2>
           <p
             className="mx-auto mt-4 max-w-xl px-5 text-center text-sm text-muted-foreground md:text-base leading-relaxed"
