@@ -1,11 +1,14 @@
 import { useEffect } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 import { Navbar } from '@/components/layout/navbar'
 import { FooterSection } from '@/components/layout/sections/footer'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 
 export default function MarketingLayout() {
+  const location = useLocation()
+  const hideFooter = location.pathname.startsWith('/product/')
+
   useEffect(() => {
     AOS.init({
       duration: 800,
@@ -21,7 +24,7 @@ export default function MarketingLayout() {
       <main className="flex-1">
         <Outlet />
       </main>
-      <FooterSection />
+      {!hideFooter && <FooterSection />}
     </div>
   )
 }
