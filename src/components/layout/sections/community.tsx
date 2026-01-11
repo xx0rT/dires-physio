@@ -1,10 +1,9 @@
 import AutoScroll from "embla-carousel-auto-scroll";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 import { cn } from "@/lib/utils";
 
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
   Carousel,
@@ -118,8 +117,6 @@ interface CommunityProps {
 }
 
 export const CommunitySection = ({ className }: CommunityProps) => {
-  const [hoveredIndex, setHoveredIndex] = useState<string | null>(null);
-
   const plugin1 = useRef(
     AutoScroll({
       startDelay: 500,
@@ -140,10 +137,6 @@ export const CommunitySection = ({ className }: CommunityProps) => {
         <h2 className="mb-2 text-center text-3xl font-semibold lg:text-5xl">
           Známé tváře, které jste možná viděli
         </h2>
-        <p className="text-center text-muted-foreground lg:text-lg max-w-4xl">
-          Naše vzdělávací programy transformovaly kariéry stovek fyzioterapeutů po celé České republice. Od těch, kteří začínali jako asistenti, až po ty, kteří dnes vedou vlastní kliniky a školí další generace odborníků. Každý z našich absolventů má svůj unikátní příběh úspěchu, který začal právě zde. Prohlédněte si jejich cesty a nechte se inspirovat tím, kam vás může tento kurz dovést. Přejeďte myší přes fotografii a objevte jejich neuvěřitelnou cestu a jak tento kurz transformoval jejich kariéru.
-        </p>
-        <Button className="mt-6">Začít zdarma</Button>
       </div>
       <div className="w-full overflow-hidden">
         <div className="mt-16 space-y-4">
@@ -157,35 +150,19 @@ export const CommunitySection = ({ className }: CommunityProps) => {
             <CarouselContent>
               {testimonials1.map((testimonial, index) => (
                 <CarouselItem key={index} className="basis-auto">
-                  <Card
-                    className="max-w-96 p-6 select-none transition-all duration-300 hover:shadow-lg"
-                    onMouseEnter={() => setHoveredIndex(`t1-${index}`)}
-                    onMouseLeave={() => setHoveredIndex(null)}
-                  >
+                  <Card className="max-w-96 p-6 select-none">
                     <div className="mb-4 flex gap-4">
-                      <div className="relative group">
-                        <Avatar className="size-12 rounded-full ring-1 ring-input transition-all duration-300 group-hover:ring-2 group-hover:ring-primary">
-                          <AvatarImage
-                            src={testimonial.avatar}
-                            alt={testimonial.name}
-                          />
-                        </Avatar>
-                        {hoveredIndex === `t1-${index}` && (
-                          <div className="absolute -top-2 -right-2 size-5 bg-primary rounded-full flex items-center justify-center">
-                            <span className="text-primary-foreground text-xs">✨</span>
-                          </div>
-                        )}
-                      </div>
+                      <Avatar className="size-12 rounded-full">
+                        <AvatarImage
+                          src={testimonial.avatar}
+                          alt={testimonial.name}
+                        />
+                      </Avatar>
                       <div className="text-sm flex-1">
                         <p className="font-medium">{testimonial.name}</p>
                         <p className="text-muted-foreground">
                           {testimonial.role}
                         </p>
-                        {hoveredIndex === `t1-${index}` && (
-                          <p className="text-xs text-primary font-semibold mt-1 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                            {testimonial.journey}
-                          </p>
-                        )}
                       </div>
                     </div>
                     <q className="text-sm">{testimonial.content}</q>
@@ -204,35 +181,19 @@ export const CommunitySection = ({ className }: CommunityProps) => {
             <CarouselContent>
               {testimonials2.map((testimonial, index) => (
                 <CarouselItem key={index} className="basis-auto">
-                  <Card
-                    className="max-w-96 p-6 select-none transition-all duration-300 hover:shadow-lg"
-                    onMouseEnter={() => setHoveredIndex(`t2-${index}`)}
-                    onMouseLeave={() => setHoveredIndex(null)}
-                  >
+                  <Card className="max-w-96 p-6 select-none">
                     <div className="mb-4 flex gap-4">
-                      <div className="relative group">
-                        <Avatar className="size-12 rounded-full ring-1 ring-input transition-all duration-300 group-hover:ring-2 group-hover:ring-primary">
-                          <AvatarImage
-                            src={testimonial.avatar}
-                            alt={testimonial.name}
-                          />
-                        </Avatar>
-                        {hoveredIndex === `t2-${index}` && (
-                          <div className="absolute -top-2 -right-2 size-5 bg-primary rounded-full flex items-center justify-center">
-                            <span className="text-primary-foreground text-xs">✨</span>
-                          </div>
-                        )}
-                      </div>
+                      <Avatar className="size-12 rounded-full">
+                        <AvatarImage
+                          src={testimonial.avatar}
+                          alt={testimonial.name}
+                        />
+                      </Avatar>
                       <div className="text-sm flex-1">
                         <p className="font-medium">{testimonial.name}</p>
                         <p className="text-muted-foreground">
                           {testimonial.role}
                         </p>
-                        {hoveredIndex === `t2-${index}` && (
-                          <p className="text-xs text-primary font-semibold mt-1 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                            {testimonial.journey}
-                          </p>
-                        )}
                       </div>
                     </div>
                     <q className="text-sm">{testimonial.content}</q>
