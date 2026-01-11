@@ -1,4 +1,5 @@
-import { Eye, ShoppingCart } from "lucide-react";
+import { Eye, ShoppingCart, Tag, Truck } from "lucide-react";
+import { useState } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -7,6 +8,7 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ProductQuickView5 } from "@/components/shop/product-detail-modal";
 
 const STOCK_STATUS = {
   IN_STOCK: "IN_STOCK",
@@ -38,7 +40,9 @@ interface Product {
   }>;
 }
 
-type ProductCardProps = Product;
+type ProductCardProps = Product & {
+  onQuickView?: () => void;
+};
 
 interface FeaturedPromotion {
   kicker: string;
@@ -387,6 +391,14 @@ interface ProductList10Props {
 }
 
 const ProductList10 = ({ className }: ProductList10Props) => {
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleQuickView = (product: Product) => {
+    setSelectedProduct(product);
+    setIsModalOpen(true);
+  };
+
   return (
     <section className={cn("py-32", className)}>
       <div className="flex flex-col gap-5">
@@ -404,6 +416,7 @@ const ProductList10 = ({ className }: ProductList10Props) => {
                   <ProductCard
                     {...product}
                     key={`product-10-list-card-${index}`}
+                    onQuickView={() => handleQuickView(product)}
                   />
                 ))}
               </div>
@@ -411,6 +424,86 @@ const ProductList10 = ({ className }: ProductList10Props) => {
           </div>
         ))}
       </div>
+      {selectedProduct && (
+        <ProductQuickView5
+          open={isModalOpen}
+          onOpenChange={setIsModalOpen}
+          images={[
+            {
+              src: selectedProduct.image.src,
+              thumbnail: selectedProduct.image.src,
+              alt: selectedProduct.image.alt,
+              width: 1200,
+              height: 1200,
+            },
+          ]}
+          badges={selectedProduct.badges?.map((b) => b.text)}
+          rate={4.5}
+          name={selectedProduct.name}
+          price={selectedProduct.price}
+          stockStatus={
+            selectedProduct.stockStatusCode === "IN_STOCK"
+              ? { code: "IN_STOCK", quantity: 100 }
+              : { code: "OUT_OF_STOCK" }
+          }
+          services={[
+            { icon: Truck, text: "Fast worldwide delivery" },
+            { icon: Tag, text: "Buy 5, get 2 free" },
+          ]}
+          hinges={{
+            color: {
+              label: "Color",
+              id: "color",
+              name: "color",
+              options: [
+                {
+                  id: "color-1",
+                  value: "color-1",
+                  label: "Default",
+                  thumbnail: selectedProduct.image.src,
+                  stockStatusCode: "IN_STOCK",
+                },
+              ],
+            },
+            quantity: {
+              label: "Quantity",
+              id: "quantity",
+              name: "quantity",
+              min: 1,
+              max: 90,
+            },
+          }}
+          link={selectedProduct.link}
+          accordion={[
+            {
+              value: "description",
+              title: "Description",
+              content: {
+                text: "Experience the perfect blend of comfort and style with this carefully crafted product. Designed for everyday use and built to last.",
+              },
+            },
+            {
+              value: "features",
+              title: "Features",
+              content: {
+                list: [
+                  "- High-quality materials",
+                  "- Durable construction",
+                  "- Elegant design",
+                  "- Easy to maintain",
+                ],
+              },
+            },
+            {
+              value: "shipping",
+              title: "Shipping",
+              content: {
+                text: "Free shipping on orders over $50. Most orders are delivered within 5–7 business days.",
+              },
+            },
+          ]}
+        />
+      )}
     </section>
   );
 };
@@ -421,6 +514,7 @@ const ProductCard = ({
   name,
   price,
   stockStatusCode,
+  onQuickView,
 }: ProductCardProps) => {
   const { regular, sale, currency } = price;
 
@@ -459,7 +553,15 @@ const ProductCard = ({
                 <ShoppingCart />
                 Add to cart
               </Button>
-              <Button variant="secondary" className="w-full">
+              <Button
+                variant="secondary"
+                className="w-full relative z-70"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onQuickView?.();
+                }}
+              >
                 <Eye />
                 Quick View
               </Button>

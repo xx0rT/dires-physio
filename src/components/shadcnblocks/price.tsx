@@ -42,4 +42,10 @@ const PriceValue = ({ price, currency, variant, className }: PriceValueProps) =>
   );
 };
 
+export type PriceType = {
+  regular: number;
+  sale?: number;
+  currency: string;
+};
+
 export { Price, PriceValue };
