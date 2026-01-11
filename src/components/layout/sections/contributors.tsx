@@ -62,11 +62,11 @@ const Feature283 = ({ className }: Feature283Props) => {
 
   const title = "Naši úspěšní absolventi, na které můžete být hrdí";
   const description =
-    "Setkejte se s inspirativními fyzioterapeuty, kteří prošli našimi kurzy a dnes dosahují výjimečných výsledků ve svých kariérách. Každý z těchto odborníků začal na stejném místě jako vy - s touhou rozšířit své znalosti a dovednosti.";
+    "Setkejte se s inspirativními fyzioterapeuty, kteří prošli našimi kurzy a dnes dosahují výjimečných výsledků ve svých kariérách.";
 
   return (
     <section className={cn("h-full h-screen overflow-hidden py-32", className)}>
-      <div className="container flex h-full w-full flex-col items-center justify-center px-4">
+      <div className="container mx-auto flex h-full w-full flex-col items-center justify-center px-4">
         <div className="relative flex flex-col items-center justify-center">
           <h2
             className="relative py-2 text-center font-sans text-4xl font-semibold tracking-tighter md:text-5xl"
@@ -74,7 +74,7 @@ const Feature283 = ({ className }: Feature283Props) => {
             {title}
           </h2>
           <p
-            className="mx-auto mt-2 max-w-xl px-5 text-center text-sm text-muted-foreground/50 md:text-base"
+            className="mx-auto mt-4 max-w-xl px-5 text-center text-sm text-muted-foreground md:text-base leading-relaxed"
           >
             {description}
           </p>
