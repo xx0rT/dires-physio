@@ -31,6 +31,7 @@ import {
 import { Avatar, AvatarFallback } from "../ui/avatar"
 import { site } from "@/config/site"
 import { useAuth } from "@/lib/auth-context"
+import { ShoppingCartButton } from "../shop/shopping-cart-button"
 
 interface RouteProps {
     href: string
@@ -373,6 +374,7 @@ export const Navbar = () => {
 
                     {/* Desktop Actions */}
                     <div className="hidden items-center gap-2 lg:flex">
+                        <ShoppingCartButton />
                         <ModeToggle />
 
                         {user ? (
@@ -444,6 +446,7 @@ export const Navbar = () => {
 
                     {/* Mobile Menu Button */}
                     <div className="flex items-center gap-2 lg:hidden">
+                        <ShoppingCartButton />
                         <ModeToggle />
                         <Sheet open={isOpen} onOpenChange={setIsOpen}>
                             <SheetTrigger asChild>

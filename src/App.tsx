@@ -7,6 +7,7 @@ import DashboardLayout from './layouts/dashboard-layout'
 import HomePage from './pages/home-page'
 import CoursesPage from './pages/courses-page'
 import ShopPage from './pages/shop-page'
+import CartPage from './pages/cart-page'
 import DashboardPage from './pages/dashboard-page'
 import AnalyticsPage from './pages/analytics-page'
 import ApiPage from './pages/api-page'
@@ -27,6 +28,7 @@ export default function App() {
             <Route index element={<HomePage />} />
             <Route path="courses" element={<CoursesPage />} />
             <Route path="shop" element={<ShopPage />} />
+            <Route path="cart" element={<CartPage />} />
           </Route>
           <Route path="/auth/sign-in" element={<SignInPage />} />
           <Route path="/auth/sign-up" element={<SignUpPage />} />

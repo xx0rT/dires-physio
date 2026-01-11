@@ -389,29 +389,27 @@ interface ProductList10Props {
 const ProductList10 = ({ className }: ProductList10Props) => {
   return (
     <section className={cn("py-32", className)}>
-      <div className="container">
-        <div className="flex flex-col gap-5">
-          {PRODUCTS_LIST.map((item, index) => (
-            <div
-              className="flex flex-col gap-5 lg:flex-row lg:even:flex-row-reverse"
-              key={`product-list-10-featured-promo-${index}`}
-            >
-              <div className="flex-1/3">
-                <FeaturedPromotionCard {...item.featuredPromotion} />
-              </div>
-              <div className="flex-2/3">
-                <div className="grid grid-cols-2 gap-5 md:grid-cols-4">
-                  {item.products.map((product, index) => (
-                    <ProductCard
-                      {...product}
-                      key={`product-10-list-card-${index}`}
-                    />
-                  ))}
-                </div>
+      <div className="flex flex-col gap-5">
+        {PRODUCTS_LIST.map((item, index) => (
+          <div
+            className="flex flex-col gap-5 lg:flex-row lg:even:flex-row-reverse"
+            key={`product-list-10-featured-promo-${index}`}
+          >
+            <div className="flex-1/3">
+              <FeaturedPromotionCard {...item.featuredPromotion} />
+            </div>
+            <div className="flex-2/3">
+              <div className="grid grid-cols-2 gap-5 md:grid-cols-4">
+                {item.products.map((product, index) => (
+                  <ProductCard
+                    {...product}
+                    key={`product-10-list-card-${index}`}
+                  />
+                ))}
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </section>
   );

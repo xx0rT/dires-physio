@@ -5,9 +5,11 @@ import { Reviews5 } from "@/components/shop/reviews"
 export default function ShopPage() {
   return (
     <div className="min-h-screen">
-      <ProductCategories2 />
-      <ProductList10 />
-      <Reviews5 />
+      <div className="container mx-auto">
+        <ProductCategories2 />
+        <ProductList10 />
+        <Reviews5 />
+      </div>
     </div>
   )
 }

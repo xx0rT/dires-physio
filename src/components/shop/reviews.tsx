@@ -143,7 +143,7 @@ const Reviews5 = ({ reviews = DEFAULT_REVIEWS, className }: Reviews5Props) => {
 
   return (
     <section className={cn("py-16 md:py-24", className)}>
-      <div className="container max-w-3xl">
+      <div className="max-w-3xl mx-auto">
         <div className="mb-6 flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <h2 className="text-2xl font-semibold tracking-tight">

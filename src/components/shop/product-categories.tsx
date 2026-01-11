@@ -91,24 +91,22 @@ const ProductCategories2 = ({
 }: ProductCategories2Props) => {
   return (
     <section className={cn("py-32", className)}>
-      <div className="container">
-        <div className="flex flex-col gap-10">
-          <h2 className="animate-in text-center text-4xl leading-snug font-medium duration-600 fade-in slide-in-from-bottom-6">
-            {title}
-          </h2>
-          <div className="gap grid grid-cols-2 gap-x-2.5 gap-y-10 lg:grid-cols-3">
-            {productCategories?.map((item, index) => (
-              <div
-                key={item.title}
-                style={{
-                  animationDelay: `${100 * index}ms`,
-                }}
-                className="animate-out opacity-0 duration-700 fade-in-100 fill-mode-forwards"
-              >
-                <ProductCategoryCard {...item} />
-              </div>
-            ))}
-          </div>
+      <div className="flex flex-col gap-10">
+        <h2 className="animate-in text-center text-4xl leading-snug font-medium duration-600 fade-in slide-in-from-bottom-6">
+          {title}
+        </h2>
+        <div className="gap grid grid-cols-2 gap-x-2.5 gap-y-10 lg:grid-cols-3">
+          {productCategories?.map((item, index) => (
+            <div
+              key={item.title}
+              style={{
+                animationDelay: `${100 * index}ms`,
+              }}
+              className="animate-out opacity-0 duration-700 fade-in-100 fill-mode-forwards"
+            >
+              <ProductCategoryCard {...item} />
+            </div>
+          ))}
         </div>
       </div>
     </section>
