@@ -8,6 +8,7 @@ import HomePage from './pages/home-page'
 import CoursesPage from './pages/courses-page'
 import ShopPage from './pages/shop-page'
 import CartPage from './pages/cart-page'
+import ProductDetailPage from './pages/product-detail-page'
 import DashboardPage from './pages/dashboard-page'
 import AnalyticsPage from './pages/analytics-page'
 import ApiPage from './pages/api-page'
@@ -28,6 +29,7 @@ export default function App() {
             <Route index element={<HomePage />} />
             <Route path="courses" element={<CoursesPage />} />
             <Route path="shop" element={<ShopPage />} />
+            <Route path="product/:productId" element={<ProductDetailPage />} />
             <Route path="cart" element={<CartPage />} />
           </Route>
           <Route path="/auth/sign-in" element={<SignInPage />} />
