@@ -135,7 +135,7 @@ export const CommunitySection = ({ className }: CommunityProps) => {
     <section className={cn("py-32", className)}>
       <div className="container mx-auto max-w-6xl flex flex-col items-center gap-6 px-4">
         <h2 className="mb-2 text-center text-3xl font-semibold lg:text-5xl">
-          Známé tváře, které jste možná viděli
+          Další naše reference!
         </h2>
       </div>
       <div className="w-full overflow-hidden">
