@@ -39,8 +39,8 @@ interface RouteProps {
 
 const routeList: RouteProps[] = [
     {
-        href: "#features",
-        label: "Vlastnosti"
+        href: "/shop",
+        label: "Obchod"
     },
     {
         href: "#testimonials",
@@ -207,53 +207,15 @@ export const Navbar = () => {
                                 </NavigationMenuItem>
 
                                 <NavigationMenuItem>
-                                    <NavigationMenuTrigger className="h-auto bg-transparent px-4 py-2 font-medium text-foreground hover:bg-accent/50">
-                                        Vlastnosti
-                                    </NavigationMenuTrigger>
-                                    <NavigationMenuContent>
-                                        <div className="grid w-[600px] grid-cols-2 gap-6 p-6">
-                                            <div className="relative overflow-hidden rounded-lg bg-muted">
-                                                <div className="flex h-full w-full items-center justify-center text-muted-foreground">
-                                                    <svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
-                                                        <rect width="300" height="200" fill="currentColor" opacity="0.1"/>
-                                                        <text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="currentColor" opacity="0.5">
-                                                            Image
-                                                        </text>
-                                                    </svg>
-                                                </div>
-                                                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                                            </div>
-                                            <ul className="flex flex-col gap-3">
-                                                {menuContent.features.map(
-                                                    ({
-                                                        title,
-                                                        description,
-                                                        href
-                                                    }) => (
-                                                        <li key={title}>
-                                                            <NavigationMenuLink
-                                                                asChild
-                                                            >
-                                                                <a
-                                                                    href={href}
-                                                                    className="group block rounded-lg p-3 text-sm transition-colors hover:bg-accent/50"
-                                                                >
-                                                                    <p className="mb-1 font-semibold text-foreground leading-none group-hover:text-primary">
-                                                                        {title}
-                                                                    </p>
-                                                                    <p className="line-clamp-2 text-muted-foreground text-xs">
-                                                                        {
-                                                                            description
-                                                                        }
-                                                                    </p>
-                                                                </a>
-                                                            </NavigationMenuLink>
-                                                        </li>
-                                                    )
-                                                )}
-                                            </ul>
-                                        </div>
-                                    </NavigationMenuContent>
+                                    <Button
+                                        asChild
+                                        variant="ghost"
+                                        className="h-auto bg-transparent px-4 py-2 font-medium text-foreground hover:bg-accent/50"
+                                    >
+                                        <Link to="/shop">
+                                            Obchod
+                                        </Link>
+                                    </Button>
                                 </NavigationMenuItem>
 
                                 <NavigationMenuItem>

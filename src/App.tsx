@@ -6,6 +6,7 @@ import MarketingLayout from './layouts/marketing-layout'
 import DashboardLayout from './layouts/dashboard-layout'
 import HomePage from './pages/home-page'
 import CoursesPage from './pages/courses-page'
+import ShopPage from './pages/shop-page'
 import DashboardPage from './pages/dashboard-page'
 import AnalyticsPage from './pages/analytics-page'
 import ApiPage from './pages/api-page'
@@ -25,6 +26,7 @@ export default function App() {
           <Route path="/" element={<MarketingLayout />}>
             <Route index element={<HomePage />} />
             <Route path="courses" element={<CoursesPage />} />
+            <Route path="shop" element={<ShopPage />} />
           </Route>
           <Route path="/auth/sign-in" element={<SignInPage />} />
           <Route path="/auth/sign-up" element={<SignUpPage />} />
