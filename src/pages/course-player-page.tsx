@@ -60,6 +60,8 @@ export const CoursePlayerPage = () => {
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [videoProgress, setVideoProgress] = useState(0);
   const [watchedTime, setWatchedTime] = useState(0);
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const videoRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
@@ -86,6 +88,25 @@ export const CoursePlayerPage = () => {
 
     return () => clearInterval(interval);
   }, [currentModuleIndex, modules]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY < 100) {
+        setIsHeaderVisible(true);
+      } else if (currentScrollY > lastScrollY) {
+        setIsHeaderVisible(false);
+      } else if (currentScrollY < lastScrollY) {
+        setIsHeaderVisible(true);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
 
   const loadCourseData = async () => {
     try {
@@ -318,7 +339,11 @@ export const CoursePlayerPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
+      <div
+        className={`border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 transition-transform duration-300 ease-in-out ${
+          isHeaderVisible ? 'translate-y-0' : '-translate-y-full'
+        }`}
+      >
         <div className="container max-w-7xl mx-auto py-4 px-4">
           <Breadcrumb className="w-fit rounded-lg border px-3 py-2 mb-3">
             <BreadcrumbList>

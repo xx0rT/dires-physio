@@ -9,6 +9,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
+import { PatternPlaceholder } from "@/components/shadcnblocks/pattern-placeholder";
 
 const DATA = [
   {
@@ -49,8 +50,17 @@ interface Faq10Props {
 
 export const FAQSection = ({ className }: Faq10Props) => {
   return (
-    <section className={cn("py-32", className)}>
-      <div className="container mx-auto">
+    <section className={cn("relative py-32", className)}>
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 60% at 50% 0%, oklch(from var(--primary) calc(l - 0.1) c h / 0.20), transparent 70%)",
+        }}
+      />
+      <PatternPlaceholder />
+
+      <div className="container mx-auto relative z-10">
         <div className="flex flex-col items-center gap-6 py-4 lg:py-8">
           <Badge
             variant="outline"
@@ -69,7 +79,7 @@ export const FAQSection = ({ className }: Faq10Props) => {
         </div>
       </div>
 
-      <div className="container mx-auto">
+      <div className="container mx-auto relative z-10">
         <div className="mx-auto max-w-3xl pt-8 pb-4 md:pb-8 lg:pt-[3.75rem] lg:pb-[50px]">
           <Accordion type="single" collapsible className="space-y-4">
             {DATA.map((item, index) => (
