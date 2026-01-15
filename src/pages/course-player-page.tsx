@@ -429,17 +429,7 @@ export const CoursePlayerPage = () => {
     const currentModule = modules.find(m => m.id === moduleId);
     if (!currentModule) return;
 
-    const actualDuration = videoDuration > 0 ? videoDuration : currentModule.duration_minutes * 60;
-    const requiredWatchTime = Math.floor(actualDuration * 0.9);
     const currentWatchTime = watchTimeRef.current;
-
-    if (currentWatchTime < requiredWatchTime) {
-      const remainingMinutes = Math.ceil((requiredWatchTime - currentWatchTime) / 60);
-      toast.error("❌ Nedostatečný čas sledování", {
-        description: `Musíte sledovat alespoň 90% videa. Zbývá přibližně ${remainingMinutes} min.`
-      });
-      return;
-    }
 
     try {
       await saveWatchTime();
@@ -723,16 +713,6 @@ export const CoursePlayerPage = () => {
                   <div className="flex items-center justify-between text-xs">
                     <span className="text-muted-foreground">
                       Sledováno: {formatTime(actualWatchTime)} / {formatTime(totalSeconds)}
-                    </span>
-                    <span className={`font-medium ${
-                      actualWatchTime >= totalSeconds * 0.9
-                        ? 'text-green-600'
-                        : 'text-amber-600'
-                    }`}>
-                      {actualWatchTime >= totalSeconds * 0.9
-                        ? '✓ Splněno'
-                        : `Požadováno: 90% (${formatTime(Math.floor(totalSeconds * 0.9))})`
-                      }
                     </span>
                   </div>
                 </div>
