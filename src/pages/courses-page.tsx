@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Progress } from '@/components/ui/progress'
-import { RiBookOpenLine, RiLockLine, RiCheckLine, RiPlayCircleLine, RiTimeLine, RiVideoLine } from '@remixicon/react'
+import { RiBookOpenLine, RiLockLine, RiCheckLine, RiPlayCircleLine, RiTimeLine, RiVideoLine, RiSparklingLine, RiRefreshLine } from '@remixicon/react'
 import { supabase } from '@/lib/supabase'
 import { useEffect, useState, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
@@ -46,12 +46,20 @@ export default function CoursesPage() {
   const [previewModules, setPreviewModules] = useState<CourseModule[]>([])
   const [loading, setLoading] = useState(true)
   const [newlyUnlocked, setNewlyUnlocked] = useState<string[]>([])
+  const [aiTips, setAiTips] = useState<string[]>([])
+  const [loadingTips, setLoadingTips] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const isInView = useInView(containerRef, { once: false, amount: 0.2 })
 
   useEffect(() => {
     loadCoursesData()
   }, [user])
+
+  useEffect(() => {
+    if (user && enrollments.length > 0) {
+      fetchAiTips()
+    }
+  }, [user, enrollments.length])
 
   useEffect(() => {
     const checkNewlyUnlocked = () => {
@@ -118,6 +126,35 @@ export default function CoursesPage() {
       console.error('Error loading courses data:', error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const fetchAiTips = async () => {
+    if (!user) return
+
+    setLoadingTips(true)
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/learning-tips`,
+        {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${session?.access_token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+
+      if (response.ok) {
+        const data = await response.json()
+        setAiTips(data.tips || [])
+      }
+    } catch (error) {
+      console.error('Error fetching AI tips:', error)
+    } finally {
+      setLoadingTips(false)
     }
   }
 
@@ -203,6 +240,67 @@ export default function CoursesPage() {
           Absolvujte kurzy v pořadí a odemkněte pokročilé techniky. Každý kurz musí být dokončen před přechodem k dalšímu.
         </p>
       </motion.div>
+
+      {user && aiTips.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="max-w-4xl mx-auto"
+        >
+          <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-background">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-primary/10">
+                    <RiSparklingLine className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-xl">AI Asistent pro Učení</CardTitle>
+                    <CardDescription>Personalizované tipy na základě vašeho pokroku</CardDescription>
+                  </div>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={fetchAiTips}
+                  disabled={loadingTips}
+                >
+                  <RiRefreshLine className={`h-4 w-4 ${loadingTips ? 'animate-spin' : ''}`} />
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {aiTips.map((tip, index) => {
+                  const [emoji, ...textParts] = tip.split(' ')
+                  const text = textParts.join(' ')
+                  const [title, ...descParts] = text.split(':')
+                  const description = descParts.join(':')
+
+                  return (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.1 }}
+                      className="flex items-start gap-3 p-3 rounded-lg bg-background/50 border border-primary/10 hover:border-primary/30 transition-colors"
+                    >
+                      <span className="text-2xl flex-shrink-0">{emoji}</span>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm">
+                          <span className="font-semibold">{title}</span>
+                          {description && <span className="text-muted-foreground">:{description}</span>}
+                        </p>
+                      </div>
+                    </motion.div>
+                  )
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
 
       <div className="relative max-w-4xl mx-auto">
         <svg className="absolute left-8 top-0 w-1 h-full hidden md:block" style={{ zIndex: 0 }}>
