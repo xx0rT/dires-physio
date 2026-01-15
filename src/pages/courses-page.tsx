@@ -6,9 +6,10 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Progress } from '@/components/ui/progress'
 import { RiBookOpenLine, RiLockLine, RiCheckLine, RiPlayCircleLine, RiTimeLine, RiVideoLine } from '@remixicon/react'
 import { supabase } from '@/lib/supabase'
-import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
+import { useEffect, useState, useRef } from 'react'
+import { motion, useInView } from 'framer-motion'
 import { Link, useNavigate } from 'react-router-dom'
+import confetti from 'canvas-confetti'
 
 interface Course {
   id: string
@@ -44,10 +45,40 @@ export default function CoursesPage() {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null)
   const [previewModules, setPreviewModules] = useState<CourseModule[]>([])
   const [loading, setLoading] = useState(true)
+  const [newlyUnlocked, setNewlyUnlocked] = useState<string[]>([])
+  const containerRef = useRef<HTMLDivElement>(null)
+  const isInView = useInView(containerRef, { once: false, amount: 0.2 })
 
   useEffect(() => {
     loadCoursesData()
   }, [user])
+
+  useEffect(() => {
+    const checkNewlyUnlocked = () => {
+      const unlockedCourses = courses
+        .filter((_, index) => isCourseUnlocked(index))
+        .map(c => c.id)
+
+      const previouslyLocked = courses.filter(c => !newlyUnlocked.includes(c.id)).map(c => c.id)
+      const justUnlocked = unlockedCourses.filter(id => previouslyLocked.includes(id) && !newlyUnlocked.includes(id))
+
+      if (justUnlocked.length > 0) {
+        setNewlyUnlocked(prev => [...prev, ...justUnlocked])
+        justUnlocked.forEach(() => {
+          confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#7033ff', '#4f46e5', '#6366f1']
+          })
+        })
+      }
+    }
+
+    if (courses.length > 0 && enrollments.length > 0) {
+      checkNewlyUnlocked()
+    }
+  }, [enrollments, courses])
 
   const loadCoursesData = async () => {
     try {
@@ -126,6 +157,16 @@ export default function CoursesPage() {
         })
 
       if (!error) {
+        const courseIndex = courses.findIndex(c => c.id === courseId)
+        if (courseIndex > 0) {
+          confetti({
+            particleCount: 150,
+            spread: 100,
+            origin: { y: 0.5 },
+            colors: ['#7033ff', '#4f46e5', '#6366f1', '#a855f7'],
+            ticks: 300
+          })
+        }
         loadCoursesData()
       }
     } catch (error) {
@@ -148,7 +189,7 @@ export default function CoursesPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-16 space-y-12">
+    <div className="container mx-auto px-4 py-16 space-y-12" ref={containerRef}>
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -163,36 +204,89 @@ export default function CoursesPage() {
         </p>
       </motion.div>
 
-      <div className="relative">
-        <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-purple-500 to-primary opacity-30 hidden md:block" />
+      <div className="relative max-w-4xl mx-auto">
+        <svg className="absolute left-8 top-0 w-1 h-full hidden md:block" style={{ zIndex: 0 }}>
+          <defs>
+            <linearGradient id="lineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#7033ff" stopOpacity="0.3" />
+              <stop offset="50%" stopColor="#a855f7" stopOpacity="0.5" />
+              <stop offset="100%" stopColor="#7033ff" stopOpacity="0.3" />
+            </linearGradient>
+          </defs>
+          <line
+            x1="50%"
+            y1="0"
+            x2="50%"
+            y2="100%"
+            stroke="url(#lineGradient)"
+            strokeWidth="2"
+          />
+        </svg>
 
-        <div className="space-y-12">
-          {courses.map((course, index) => {
-            const isUnlocked = isCourseUnlocked(index)
-            const isEnrolled = isCourseEnrolled(course.id)
-            const progress = getCourseProgress(course.id)
-            const modules = courseModules[course.id] || []
-            const totalDuration = modules.reduce((sum, m) => sum + m.duration_minutes, 0)
+        {courses.map((course, index) => {
+          const isUnlocked = isCourseUnlocked(index)
+          const previousCourse = index > 0 ? courses[index - 1] : null
+          const previousProgress = previousCourse ? getCourseProgress(previousCourse.id) : 100
+          const isEnrolled = isCourseEnrolled(course.id)
+          const progress = getCourseProgress(course.id)
+          const modules = courseModules[course.id] || []
+          const totalDuration = modules.reduce((sum, m) => sum + m.duration_minutes, 0)
 
-            return (
+          return (
+            <div key={course.id} className="relative">
+              {index > 0 && (
+                <svg className="absolute left-8 -top-12 w-1 h-12 hidden md:block" style={{ zIndex: 0 }}>
+                  <defs>
+                    <linearGradient id={`progressGradient${index}`} x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stopColor="#10b981" stopOpacity={previousProgress === 100 ? "1" : "0.3"} />
+                      <stop offset="100%" stopColor="#7033ff" stopOpacity={previousProgress === 100 ? "1" : "0.3"} />
+                    </linearGradient>
+                  </defs>
+                  <motion.line
+                    x1="50%"
+                    y1="0"
+                    x2="50%"
+                    y2="100%"
+                    stroke={`url(#progressGradient${index})`}
+                    strokeWidth="3"
+                    initial={{ pathLength: 0 }}
+                    animate={{ pathLength: isInView ? previousProgress / 100 : 0 }}
+                    transition={{ duration: 1.5, delay: index * 0.2, ease: "easeInOut" }}
+                  />
+                </svg>
+              )}
+
               <motion.div
-                key={course.id}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="relative"
+                transition={{ duration: 0.5, delay: index * 0.15 }}
+                className="relative mb-12"
               >
-                <div className="absolute left-0 top-8 w-16 h-16 rounded-full bg-background border-4 border-primary/50 flex items-center justify-center z-10 hidden md:flex">
+                <motion.div
+                  className="absolute left-0 top-8 w-16 h-16 rounded-full bg-background flex items-center justify-center z-20 hidden md:flex shadow-lg"
+                  style={{
+                    border: `4px solid ${!isUnlocked ? '#6b7280' : progress === 100 ? '#10b981' : '#7033ff'}`
+                  }}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.5, delay: index * 0.15 + 0.2, type: "spring" }}
+                >
                   {!isUnlocked ? (
                     <RiLockLine className="h-6 w-6 text-muted-foreground" />
                   ) : progress === 100 ? (
-                    <RiCheckLine className="h-6 w-6 text-green-600" />
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
+                    >
+                      <RiCheckLine className="h-6 w-6 text-green-600" />
+                    </motion.div>
                   ) : (
                     <RiBookOpenLine className="h-6 w-6 text-primary" />
                   )}
-                </div>
+                </motion.div>
 
-                <Card className={`md:ml-24 ${!isUnlocked ? 'opacity-60' : ''} hover:shadow-lg transition-shadow`}>
+                <Card className={`md:ml-24 ${!isUnlocked ? 'opacity-60 grayscale' : ''} hover:shadow-xl transition-all duration-300 border-2 ${progress === 100 ? 'border-green-500/30' : isEnrolled ? 'border-primary/30' : ''}`}>
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div className="space-y-2 flex-1">
@@ -328,9 +422,9 @@ export default function CoursesPage() {
                   </CardContent>
                 </Card>
               </motion.div>
-            )
-          })}
-        </div>
+            </div>
+          )
+        })}
       </div>
 
       {!user && (

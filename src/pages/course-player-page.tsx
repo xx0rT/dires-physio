@@ -72,6 +72,8 @@ export const CoursePlayerPage = () => {
   const watchTimeRef = useRef(0);
   const lastSavedTimeRef = useRef(0);
   const saveIntervalRef = useRef<any>(null);
+  const lastUpdateTimeRef = useRef(Date.now());
+  const isPlayingRef = useRef(false);
 
   useEffect(() => {
     if (user && courseId) {
@@ -152,6 +154,8 @@ export const CoursePlayerPage = () => {
     setVideoProgress(0);
     setWatchedTime(0);
     setVideoDuration(0);
+    lastUpdateTimeRef.current = Date.now();
+    isPlayingRef.current = false;
 
     if (progressIntervalRef.current) {
       clearInterval(progressIntervalRef.current);
@@ -240,10 +244,18 @@ export const CoursePlayerPage = () => {
                       if (isMountedRef.current) {
                         setWatchedTime(currentTime);
 
-                        if (playerState === 1) {
+                        const now = Date.now();
+                        const timeDiff = (now - lastUpdateTimeRef.current) / 1000;
+
+                        if (playerState === 1 && timeDiff >= 0.9 && timeDiff <= 1.5) {
                           watchTimeRef.current += 1;
                           setActualWatchTime(watchTimeRef.current);
+                          isPlayingRef.current = true;
+                        } else if (playerState !== 1) {
+                          isPlayingRef.current = false;
                         }
+
+                        lastUpdateTimeRef.current = now;
 
                         if (duration > 0) {
                           const progress = Math.min((currentTime / duration) * 100, 100);
@@ -251,7 +263,7 @@ export const CoursePlayerPage = () => {
                         }
                       }
                     } catch (e) {
-
+                      console.error("Error in progress interval:", e);
                     }
                   }, 1000);
 

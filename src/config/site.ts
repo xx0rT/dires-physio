@@ -1,4 +1,4 @@
-const site_url = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+const site_url = import.meta.env.VITE_APP_URL || "http://localhost:3000";
 
 export const site = {
   name: "Dires",
@@ -7,7 +7,7 @@ export const site = {
   ogImage: `${site_url}/og.jpg`,
   logo: "/logo.svg",
   mailSupport: "info@dires.cz",
-  mailFrom: process.env.MAIL_FROM || "noreply@dires.cz",
+  mailFrom: import.meta.env.VITE_MAIL_FROM || "noreply@dires.cz",
   links: {
     twitter: "https://twitter.com/dires",
     github: "https://github.com/dires",
