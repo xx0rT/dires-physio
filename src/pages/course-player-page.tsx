@@ -66,6 +66,7 @@ export const CoursePlayerPage = () => {
   const videoRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<any>(null);
   const progressIntervalRef = useRef<any>(null);
+  const isMountedRef = useRef(true);
 
   useEffect(() => {
     if (user && courseId) {
@@ -87,6 +88,7 @@ export const CoursePlayerPage = () => {
   }, []);
 
   useEffect(() => {
+    isMountedRef.current = true;
     setVideoProgress(0);
     setWatchedTime(0);
     setVideoDuration(0);
@@ -96,63 +98,100 @@ export const CoursePlayerPage = () => {
       progressIntervalRef.current = null;
     }
 
-    if (playerRef.current) {
-      try {
-        playerRef.current.destroy();
-      } catch (e) {
-        console.warn('Error destroying player:', e);
-      }
-      playerRef.current = null;
-    }
+    const cleanupPlayer = async () => {
+      if (playerRef.current) {
+        try {
+          const iframe = playerRef.current.getIframe();
+          if (iframe && iframe.parentNode) {
+            playerRef.current.destroy();
+          }
+        } catch (e) {
 
-    const initializePlayer = () => {
+        }
+        playerRef.current = null;
+      }
+    };
+
+    const initializePlayer = async () => {
+      if (!isMountedRef.current) return;
+
+      await cleanupPlayer();
+
       const currentVideoUrl = modules[currentModuleIndex]?.video_url;
-      if (!currentVideoUrl) return;
+      if (!currentVideoUrl || !isMountedRef.current) return;
 
       const videoIdMatch = currentVideoUrl.match(/embed\/([^?]+)/);
       const videoId = videoIdMatch ? videoIdMatch[1] : null;
 
-      if (videoId && (window as any).YT && (window as any).YT.Player && videoRef.current) {
+      if (videoId && (window as any).YT && (window as any).YT.Player && videoRef.current && isMountedRef.current) {
         const containerElement = videoRef.current;
-        containerElement.innerHTML = '';
 
-        playerRef.current = new (window as any).YT.Player(containerElement, {
-          videoId: videoId,
-          playerVars: {
-            enablejsapi: 1,
-            origin: window.location.origin
-          },
-          events: {
-            onReady: () => {
-              if (playerRef.current) {
-                const duration = Math.floor(playerRef.current.getDuration());
-                setVideoDuration(duration);
+        while (containerElement.firstChild) {
+          containerElement.removeChild(containerElement.firstChild);
+        }
 
-                progressIntervalRef.current = setInterval(() => {
-                  if (playerRef.current && playerRef.current.getCurrentTime) {
-                    const currentTime = Math.floor(playerRef.current.getCurrentTime());
-                    const duration = playerRef.current.getDuration();
+        const playerDiv = document.createElement('div');
+        containerElement.appendChild(playerDiv);
 
-                    setWatchedTime(currentTime);
-
-                    if (duration > 0) {
-                      const progress = Math.min((currentTime / duration) * 100, 100);
-                      setVideoProgress(progress);
-                    }
-                  }
-                }, 1000);
-              }
+        try {
+          playerRef.current = new (window as any).YT.Player(playerDiv, {
+            videoId: videoId,
+            playerVars: {
+              enablejsapi: 1,
+              origin: window.location.origin
             },
-            onStateChange: (event: any) => {
-              if (event.data === (window as any).YT.PlayerState.ENDED) {
-                if (progressIntervalRef.current) {
-                  clearInterval(progressIntervalRef.current);
-                  progressIntervalRef.current = null;
+            events: {
+              onReady: () => {
+                if (!isMountedRef.current || !playerRef.current) return;
+
+                try {
+                  const duration = Math.floor(playerRef.current.getDuration());
+                  if (isMountedRef.current) {
+                    setVideoDuration(duration);
+                  }
+
+                  progressIntervalRef.current = setInterval(() => {
+                    if (!isMountedRef.current || !playerRef.current || !playerRef.current.getCurrentTime) {
+                      if (progressIntervalRef.current) {
+                        clearInterval(progressIntervalRef.current);
+                        progressIntervalRef.current = null;
+                      }
+                      return;
+                    }
+
+                    try {
+                      const currentTime = Math.floor(playerRef.current.getCurrentTime());
+                      const duration = playerRef.current.getDuration();
+
+                      if (isMountedRef.current) {
+                        setWatchedTime(currentTime);
+
+                        if (duration > 0) {
+                          const progress = Math.min((currentTime / duration) * 100, 100);
+                          setVideoProgress(progress);
+                        }
+                      }
+                    } catch (e) {
+
+                    }
+                  }, 1000);
+                } catch (e) {
+
+                }
+              },
+              onStateChange: (event: any) => {
+                if (event.data === (window as any).YT.PlayerState.ENDED) {
+                  if (progressIntervalRef.current) {
+                    clearInterval(progressIntervalRef.current);
+                    progressIntervalRef.current = null;
+                  }
                 }
               }
             }
-          }
-        });
+          });
+        } catch (e) {
+          console.error('Error creating player:', e);
+        }
       }
     };
 
@@ -162,21 +201,33 @@ export const CoursePlayerPage = () => {
       } else {
         (window as any).onYouTubeIframeAPIReady = initializePlayer;
       }
-    }, 100);
+    }, 150);
 
     return () => {
+      isMountedRef.current = false;
       clearTimeout(timeoutId);
+
       if (progressIntervalRef.current) {
         clearInterval(progressIntervalRef.current);
         progressIntervalRef.current = null;
       }
+
       if (playerRef.current) {
         try {
-          playerRef.current.destroy();
+          const iframe = playerRef.current.getIframe();
+          if (iframe && iframe.parentNode) {
+            playerRef.current.destroy();
+          }
         } catch (e) {
-          console.warn('Error destroying player on cleanup:', e);
+
         }
         playerRef.current = null;
+      }
+
+      if (videoRef.current) {
+        while (videoRef.current.firstChild) {
+          videoRef.current.removeChild(videoRef.current.firstChild);
+        }
       }
     };
   }, [currentModuleIndex, modules]);
@@ -502,7 +553,6 @@ export const CoursePlayerPage = () => {
               <Card className="overflow-hidden">
                 <div className="relative aspect-video w-full bg-muted">
                   <div
-                    key={currentModule.id}
                     ref={videoRef}
                     className="absolute inset-0 w-full h-full"
                   />
