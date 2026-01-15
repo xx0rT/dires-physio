@@ -60,9 +60,12 @@ export const CoursePlayerPage = () => {
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [videoProgress, setVideoProgress] = useState(0);
   const [watchedTime, setWatchedTime] = useState(0);
+  const [videoDuration, setVideoDuration] = useState(0);
   const [isHeaderMinimized, setIsHeaderMinimized] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const videoRef = useRef<HTMLIFrameElement>(null);
+  const videoRef = useRef<HTMLDivElement>(null);
+  const playerRef = useRef<any>(null);
+  const progressIntervalRef = useRef<any>(null);
 
   useEffect(() => {
     if (user && courseId) {
@@ -71,22 +74,94 @@ export const CoursePlayerPage = () => {
   }, [user, courseId]);
 
   useEffect(() => {
+    const loadYouTubeAPI = () => {
+      if (!(window as any).YT) {
+        const tag = document.createElement('script');
+        tag.src = 'https://www.youtube.com/iframe_api';
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
+      }
+    };
+
+    loadYouTubeAPI();
+  }, []);
+
+  useEffect(() => {
     setVideoProgress(0);
     setWatchedTime(0);
+    setVideoDuration(0);
 
-    const interval = setInterval(() => {
-      setWatchedTime(prev => {
-        const newTime = prev + 1;
-        if (modules[currentModuleIndex]) {
-          const totalSeconds = modules[currentModuleIndex].duration_minutes * 60;
-          const progress = Math.min((newTime / totalSeconds) * 100, 100);
-          setVideoProgress(progress);
+    if (progressIntervalRef.current) {
+      clearInterval(progressIntervalRef.current);
+    }
+
+    const initializePlayer = () => {
+      const currentVideoUrl = modules[currentModuleIndex]?.video_url;
+      if (!currentVideoUrl) return;
+
+      const videoIdMatch = currentVideoUrl.match(/embed\/([^?]+)/);
+      const videoId = videoIdMatch ? videoIdMatch[1] : null;
+
+      if (videoId && (window as any).YT && (window as any).YT.Player) {
+        if (playerRef.current) {
+          playerRef.current.destroy();
         }
-        return newTime;
-      });
-    }, 1000);
 
-    return () => clearInterval(interval);
+        setTimeout(() => {
+          if (videoRef.current) {
+            playerRef.current = new (window as any).YT.Player(videoRef.current, {
+              videoId: videoId,
+              playerVars: {
+                enablejsapi: 1,
+                origin: window.location.origin
+              },
+              events: {
+                onReady: () => {
+                  const duration = Math.floor(playerRef.current.getDuration());
+                  setVideoDuration(duration);
+
+                  progressIntervalRef.current = setInterval(() => {
+                    if (playerRef.current && playerRef.current.getCurrentTime) {
+                      const currentTime = Math.floor(playerRef.current.getCurrentTime());
+                      const duration = playerRef.current.getDuration();
+
+                      setWatchedTime(currentTime);
+
+                      if (duration > 0) {
+                        const progress = Math.min((currentTime / duration) * 100, 100);
+                        setVideoProgress(progress);
+                      }
+                    }
+                  }, 1000);
+                },
+                onStateChange: (event: any) => {
+                  if (event.data === (window as any).YT.PlayerState.ENDED) {
+                    if (progressIntervalRef.current) {
+                      clearInterval(progressIntervalRef.current);
+                    }
+                  }
+                }
+              }
+            });
+          }
+        }, 100);
+      }
+    };
+
+    if ((window as any).YT && (window as any).YT.Player) {
+      initializePlayer();
+    } else {
+      (window as any).onYouTubeIframeAPIReady = initializePlayer;
+    }
+
+    return () => {
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+      }
+      if (playerRef.current && playerRef.current.destroy) {
+        playerRef.current.destroy();
+      }
+    };
   }, [currentModuleIndex, modules]);
 
   useEffect(() => {
@@ -334,7 +409,7 @@ export const CoursePlayerPage = () => {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const totalSeconds = currentModule.duration_minutes * 60;
+  const totalSeconds = videoDuration > 0 ? videoDuration : currentModule.duration_minutes * 60;
   const remainingSeconds = Math.max(0, totalSeconds - watchedTime);
 
   return (
@@ -409,14 +484,10 @@ export const CoursePlayerPage = () => {
             {currentModule.video_url && (
               <Card className="overflow-hidden">
                 <div className="relative aspect-video w-full bg-muted">
-                  <iframe
+                  <div
                     key={currentModule.id}
                     ref={videoRef}
-                    src={currentModule.video_url}
-                    title={currentModule.title}
                     className="absolute inset-0 w-full h-full"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
                   />
                 </div>
                 <div className="p-4 border-t bg-muted/50">
