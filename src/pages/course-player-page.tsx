@@ -10,7 +10,6 @@ import {
   PlayCircle,
   BookOpen,
   ArrowRight,
-  Trophy,
   Target
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
@@ -58,11 +57,6 @@ export const CoursePlayerPage = () => {
   const [completedModules, setCompletedModules] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const [isEnrolled, setIsEnrolled] = useState(false);
-  const [videoProgress, setVideoProgress] = useState(0);
-  const [watchedTime, setWatchedTime] = useState(0);
-  const [videoDuration, setVideoDuration] = useState(0);
-  const [isHeaderMinimized, setIsHeaderMinimized] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
   const videoRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<any>(null);
   const progressIntervalRef = useRef<any>(null);
@@ -89,9 +83,6 @@ export const CoursePlayerPage = () => {
 
   useEffect(() => {
     isMountedRef.current = true;
-    setVideoProgress(0);
-    setWatchedTime(0);
-    setVideoDuration(0);
 
     if (progressIntervalRef.current) {
       clearInterval(progressIntervalRef.current);
@@ -143,41 +134,6 @@ export const CoursePlayerPage = () => {
             events: {
               onReady: () => {
                 if (!isMountedRef.current || !playerRef.current) return;
-
-                try {
-                  const duration = Math.floor(playerRef.current.getDuration());
-                  if (isMountedRef.current) {
-                    setVideoDuration(duration);
-                  }
-
-                  progressIntervalRef.current = setInterval(() => {
-                    if (!isMountedRef.current || !playerRef.current || !playerRef.current.getCurrentTime) {
-                      if (progressIntervalRef.current) {
-                        clearInterval(progressIntervalRef.current);
-                        progressIntervalRef.current = null;
-                      }
-                      return;
-                    }
-
-                    try {
-                      const currentTime = Math.floor(playerRef.current.getCurrentTime());
-                      const duration = playerRef.current.getDuration();
-
-                      if (isMountedRef.current) {
-                        setWatchedTime(currentTime);
-
-                        if (duration > 0) {
-                          const progress = Math.min((currentTime / duration) * 100, 100);
-                          setVideoProgress(progress);
-                        }
-                      }
-                    } catch (e) {
-
-                    }
-                  }, 1000);
-                } catch (e) {
-
-                }
               },
               onStateChange: (event: any) => {
                 if (event.data === (window as any).YT.PlayerState.ENDED) {
@@ -231,25 +187,6 @@ export const CoursePlayerPage = () => {
       }
     };
   }, [currentModuleIndex, modules]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      if (currentScrollY < 100) {
-        setIsHeaderMinimized(false);
-      } else if (currentScrollY > lastScrollY) {
-        setIsHeaderMinimized(true);
-      } else if (currentScrollY < lastScrollY - 30) {
-        setIsHeaderMinimized(false);
-      }
-
-      setLastScrollY(currentScrollY);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
 
   const loadCourseData = async () => {
     try {
@@ -471,20 +408,11 @@ export const CoursePlayerPage = () => {
   const allModulesCompleted = completedModules.size === modules.length;
   const nextModule = !isLastModule ? modules[currentModuleIndex + 1] : null;
 
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
-
-  const totalSeconds = videoDuration > 0 ? videoDuration : currentModule.duration_minutes * 60;
-  const remainingSeconds = Math.max(0, totalSeconds - watchedTime);
-
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-        <div className="container max-w-7xl mx-auto py-4 px-4">
-          <div className="flex items-center justify-between mb-3">
+        <div className="px-4 py-3">
+          <div className="flex items-center justify-between">
             <Breadcrumb className="w-fit rounded-lg border px-3 py-2">
               <BreadcrumbList>
                 <BreadcrumbItem>
@@ -507,78 +435,34 @@ export const CoursePlayerPage = () => {
               </BreadcrumbList>
             </Breadcrumb>
 
-            <div className="text-right">
-              <p className="text-sm text-muted-foreground mb-1">Celkový pokrok</p>
-              <div className="flex items-center gap-2">
-                <Progress value={courseProgress} className="h-2 w-32" />
-                <span className="text-sm font-medium">{Math.round(courseProgress)}%</span>
-              </div>
-            </div>
-          </div>
-
-          <div
-            className={`overflow-hidden transition-all duration-300 ease-in-out ${
-              isHeaderMinimized ? 'max-h-0 opacity-0' : 'max-h-20 opacity-100'
-            }`}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <Badge variant="outline" className="gap-1">
-                    <Target className="h-3 w-3" />
-                    Kurz {course.order_index + 1}
-                  </Badge>
-                  <Badge variant="outline">
-                    Modul {currentModuleIndex + 1} z {modules.length}
-                  </Badge>
-                  {courseProgress === 100 && (
-                    <Badge className="bg-green-500/20 text-green-600 border-green-500/30 gap-1">
-                      <Trophy className="h-3 w-3" />
-                      Kurz dokončen
-                    </Badge>
-                  )}
+            <div className="flex items-center gap-4">
+              <div className="text-right">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-muted-foreground">Pokrok:</span>
+                  <Progress value={courseProgress} className="h-2 w-24" />
+                  <span className="text-sm font-medium">{Math.round(courseProgress)}%</span>
                 </div>
-                <h1 className="text-2xl font-bold">{currentModule.title}</h1>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="container max-w-7xl mx-auto py-8 px-4">
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {currentModule.video_url && (
+          <div className="relative w-full bg-black flex-shrink-0" style={{ height: 'calc(100vh - 64px)' }}>
+            <div
+              ref={videoRef}
+              className="absolute inset-0 w-full h-full"
+            />
+          </div>
+        )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-6">
-            {currentModule.video_url && (
-              <Card className="overflow-hidden">
-                <div className="relative aspect-video w-full bg-muted">
-                  <div
-                    ref={videoRef}
-                    className="absolute inset-0 w-full h-full"
-                  />
-                </div>
-                <div className="p-4 border-t bg-muted/50">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2 text-sm">
-                      <PlayCircle className="h-4 w-4 text-primary" />
-                      <span className="font-medium">Průběh videa</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-sm">
-                      <span className="text-muted-foreground">
-                        Sledováno: {formatTime(watchedTime)}
-                      </span>
-                      <span className="text-muted-foreground">•</span>
-                      <span className="text-muted-foreground">
-                        Zbývá: {formatTime(remainingSeconds)}
-                      </span>
-                    </div>
-                  </div>
-                  <Progress value={videoProgress} className="h-2" />
-                </div>
-              </Card>
-            )}
-
-            <Card>
+        <div className="overflow-y-auto bg-background">
+          <div className="container max-w-7xl mx-auto py-8 px-4">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2 space-y-6">
+                <Card>
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div className="space-y-1">
@@ -686,9 +570,9 @@ export const CoursePlayerPage = () => {
                 </Button>
               )}
             </div>
-          </div>
+              </div>
 
-          <div className="space-y-6">
+              <div className="space-y-6">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -807,6 +691,8 @@ export const CoursePlayerPage = () => {
                 </div>
               </CardContent>
             </Card>
+              </div>
+            </div>
           </div>
         </div>
       </div>
