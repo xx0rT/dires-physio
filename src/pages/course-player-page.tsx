@@ -74,6 +74,12 @@ export const CoursePlayerPage = () => {
   const saveIntervalRef = useRef<any>(null);
   const lastUpdateTimeRef = useRef(Date.now());
   const isPlayingRef = useRef(false);
+  const hasInitializedRef = useRef(false);
+  const completedModulesRef = useRef<Set<string>>(new Set());
+
+  useEffect(() => {
+    completedModulesRef.current = completedModules;
+  }, [completedModules]);
 
   useEffect(() => {
     if (user && courseId) {
@@ -95,20 +101,22 @@ export const CoursePlayerPage = () => {
   }, []);
 
   const saveWatchTime = async () => {
-    if (!user || !modules[currentModuleIndex]) return;
+    if (!user || !modules[currentModuleIndex] || !playerRef.current) return;
 
     const moduleId = modules[currentModuleIndex].id;
     const currentWatchTime = watchTimeRef.current;
 
     if (currentWatchTime > lastSavedTimeRef.current) {
       try {
+        const currentVideoPosition = Math.floor(playerRef.current.getCurrentTime ? playerRef.current.getCurrentTime() : 0);
+
         await supabase.from("user_module_progress").upsert({
           user_id: user.id,
           module_id: moduleId,
           course_id: courseId,
           watch_time_seconds: Math.floor(currentWatchTime),
-          last_watched_position: Math.floor(watchedTime),
-          is_completed: completedModules.has(moduleId),
+          last_watched_position: currentVideoPosition,
+          is_completed: completedModulesRef.current.has(moduleId),
         }, {
           onConflict: 'user_id,module_id'
         });
@@ -156,6 +164,7 @@ export const CoursePlayerPage = () => {
     setVideoDuration(0);
     lastUpdateTimeRef.current = Date.now();
     isPlayingRef.current = false;
+    hasInitializedRef.current = false;
 
     if (progressIntervalRef.current) {
       clearInterval(progressIntervalRef.current);
@@ -223,8 +232,9 @@ export const CoursePlayerPage = () => {
                     setVideoDuration(duration);
                   }
 
-                  if (lastPosition > 0 && lastPosition < duration - 10) {
+                  if (!hasInitializedRef.current && lastPosition > 0 && lastPosition < duration - 10) {
                     playerRef.current.seekTo(lastPosition, true);
+                    hasInitializedRef.current = true;
                   }
 
                   progressIntervalRef.current = setInterval(() => {
@@ -337,7 +347,7 @@ export const CoursePlayerPage = () => {
         }
       }
     };
-  }, [currentModuleIndex, modules, user, courseId, watchedTime, completedModules]);
+  }, [currentModuleIndex, modules, user, courseId]);
 
   useEffect(() => {
     const handleScroll = () => {
