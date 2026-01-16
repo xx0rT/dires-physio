@@ -631,7 +631,7 @@ export const CoursePlayerPage = () => {
           });
       }
 
-      window.location.href = `/courses/${nextCourseId}`;
+      window.location.href = `/course/${nextCourseId}`;
     } catch (error) {
       console.error("Error continuing to next course:", error);
       toast.error("Chyba při přechodu na další kurz");
