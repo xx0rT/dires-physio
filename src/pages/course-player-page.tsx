@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { useParams, Navigate, Link } from "react-router-dom";
+import { useParams, Navigate, Link, useNavigate } from "react-router-dom";
 import {
   CheckCircle2,
   Loader2,
@@ -53,6 +53,7 @@ interface CourseModule {
 export const CoursePlayerPage = () => {
   const { courseId } = useParams<{ courseId: string }>();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [course, setCourse] = useState<Course | null>(null);
   const [modules, setModules] = useState<CourseModule[]>([]);
   const [currentModuleIndex, setCurrentModuleIndex] = useState(0);
@@ -597,7 +598,7 @@ export const CoursePlayerPage = () => {
         }
 
         setTimeout(() => {
-          window.location.href = `/course/${nextCourse.id}`;
+          navigate(`/course/${nextCourse.id}`);
         }, 2000);
       } else {
         toast.success("🏆 Kurz úspěšně dokončen!", {
@@ -606,7 +607,7 @@ export const CoursePlayerPage = () => {
         });
 
         setTimeout(() => {
-          window.location.href = "/courses";
+          navigate("/courses");
         }, 2000);
       }
     } catch (error) {
@@ -659,7 +660,7 @@ export const CoursePlayerPage = () => {
         });
       }
 
-      window.location.href = `/course/${nextCourseId}`;
+      navigate(`/course/${nextCourseId}`);
     } catch (error) {
       console.error("Error continuing to next course:", error);
       toast.error("Chyba při přechodu na další kurz");
