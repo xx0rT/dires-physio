@@ -20,6 +20,7 @@ import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { toast } from "sonner";
+import confetti from "canvas-confetti";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -566,7 +567,9 @@ export const CoursePlayerPage = () => {
           .eq("course_id", nextCourse.id)
           .maybeSingle();
 
-        if (!existingEnrollment) {
+        const isNewCourse = !existingEnrollment;
+
+        if (isNewCourse) {
           await supabase
             .from("user_course_enrollments")
             .insert({
@@ -574,22 +577,38 @@ export const CoursePlayerPage = () => {
               course_id: nextCourse.id,
               progress_percentage: 0,
             });
+
+          confetti({
+            particleCount: 150,
+            spread: 100,
+            origin: { y: 0.5 },
+            colors: ['#10b981', '#3b82f6', '#8b5cf6', '#f59e0b'],
+          });
+
+          toast.success("🎉 Kurz úspěšně dokončen!", {
+            description: `Odemkli jste další kurz: ${nextCourse.title}`,
+            duration: 5000,
+          });
+        } else {
+          toast.success("🎉 Kurz úspěšně dokončen!", {
+            description: `Přechod na další kurz: ${nextCourse.title}`,
+            duration: 3000,
+          });
         }
 
-        toast.success("🎉 Kurz úspěšně dokončen!", {
-          description: `Odemkli jste další kurz: ${nextCourse.title}`,
-          duration: 5000,
-        });
+        setTimeout(() => {
+          window.location.href = `/course/${nextCourse.id}`;
+        }, 2000);
       } else {
         toast.success("🏆 Kurz úspěšně dokončen!", {
           description: "Gratulujeme! Dokončili jste všechny dostupné kurzy!",
           duration: 5000,
         });
-      }
 
-      setTimeout(() => {
-        window.location.href = "/courses";
-      }, 2000);
+        setTimeout(() => {
+          window.location.href = "/courses";
+        }, 2000);
+      }
     } catch (error) {
       console.error("Error unlocking next course:", error);
       toast.error("❌ Chyba při odemykání dalšího kurzu", {
@@ -621,7 +640,9 @@ export const CoursePlayerPage = () => {
         .eq("course_id", nextCourseId)
         .maybeSingle();
 
-      if (!existingEnrollment) {
+      const isNewCourse = !existingEnrollment;
+
+      if (isNewCourse) {
         await supabase
           .from("user_course_enrollments")
           .insert({
@@ -629,6 +650,13 @@ export const CoursePlayerPage = () => {
             course_id: nextCourseId,
             progress_percentage: 0,
           });
+
+        confetti({
+          particleCount: 150,
+          spread: 100,
+          origin: { y: 0.5 },
+          colors: ['#10b981', '#3b82f6', '#8b5cf6', '#f59e0b'],
+        });
       }
 
       window.location.href = `/course/${nextCourseId}`;
