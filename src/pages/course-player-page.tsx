@@ -561,6 +561,8 @@ export const CoursePlayerPage = () => {
         .maybeSingle();
 
       if (nextCourse) {
+        setNextCourseId(nextCourse.id);
+
         const { data: existingEnrollment } = await supabase
           .from("user_course_enrollments")
           .select("id")
@@ -601,6 +603,8 @@ export const CoursePlayerPage = () => {
           navigate(`/course/${nextCourse.id}`);
         }, 2000);
       } else {
+        setNextCourseId(null);
+
         toast.success("🏆 Kurz úspěšně dokončen!", {
           description: "Gratulujeme! Dokončili jste všechny dostupné kurzy!",
           duration: 5000,
@@ -631,14 +635,27 @@ export const CoursePlayerPage = () => {
   };
 
   const continueToNextCourse = async () => {
-    if (!nextCourseId || !user) return;
+    if (!nextCourseId || !user || !course) return;
 
     try {
+      const { data: nextCourseData } = await supabase
+        .from("courses")
+        .select("id, title")
+        .eq("id", nextCourseId)
+        .eq("is_published", true)
+        .maybeSingle();
+
+      if (!nextCourseData) {
+        toast.error("Další kurz nebyl nalezen");
+        navigate("/courses");
+        return;
+      }
+
       const { data: existingEnrollment } = await supabase
         .from("user_course_enrollments")
         .select("id")
         .eq("user_id", user.id)
-        .eq("course_id", nextCourseId)
+        .eq("course_id", nextCourseData.id)
         .maybeSingle();
 
       const isNewCourse = !existingEnrollment;
@@ -648,7 +665,7 @@ export const CoursePlayerPage = () => {
           .from("user_course_enrollments")
           .insert({
             user_id: user.id,
-            course_id: nextCourseId,
+            course_id: nextCourseData.id,
             progress_percentage: 0,
           });
 
@@ -658,12 +675,17 @@ export const CoursePlayerPage = () => {
           origin: { y: 0.5 },
           colors: ['#10b981', '#3b82f6', '#8b5cf6', '#f59e0b'],
         });
+
+        toast.success("🎉 Odemknut další kurz!", {
+          description: nextCourseData.title,
+        });
       }
 
-      navigate(`/course/${nextCourseId}`);
+      navigate(`/course/${nextCourseData.id}`);
     } catch (error) {
       console.error("Error continuing to next course:", error);
       toast.error("Chyba při přechodu na další kurz");
+      navigate("/courses");
     }
   };
 
@@ -706,6 +728,18 @@ export const CoursePlayerPage = () => {
   }
 
   const currentModule = modules[currentModuleIndex];
+
+  if (!currentModule) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-background">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
+          <p className="text-muted-foreground">Načítání modulu...</p>
+        </div>
+      </div>
+    );
+  }
+
   const isCurrentModuleCompleted = completedModules.has(currentModule.id);
   const courseProgress = (completedModules.size / modules.length) * 100;
   const isLastModule = currentModuleIndex === modules.length - 1;

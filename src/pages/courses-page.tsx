@@ -136,6 +136,11 @@ export default function CoursesPage() {
     try {
       const { data: { session } } = await supabase.auth.getSession()
 
+      if (!session?.access_token) {
+        setLoadingTips(false)
+        return
+      }
+
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/learning-tips`,
         {
@@ -150,6 +155,8 @@ export default function CoursesPage() {
       if (response.ok) {
         const data = await response.json()
         setAiTips(data.tips || [])
+      } else if (response.status === 401) {
+        console.log('Authentication required for AI tips')
       }
     } catch (error) {
       console.error('Error fetching AI tips:', error)
