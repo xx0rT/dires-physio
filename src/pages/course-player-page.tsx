@@ -1,17 +1,20 @@
-import { useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams, Navigate, Link, useNavigate } from "react-router-dom";
 import {
   CheckCircle2,
+  Loader2,
   ChevronLeft,
   ChevronRight,
   Home,
   BookOpen,
 } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { toast } from "sonner";
+import confetti from "canvas-confetti";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -20,52 +23,195 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { getMockCourseById, getMockModulesByCourseId } from "@/data/mock-data";
+import { getMockCourses, getMockCourseById, getMockModulesByCourseId, type Course, type CourseModule } from "@/data/mock-data";
 
 export const CoursePlayerPage = () => {
   const { courseId } = useParams<{ courseId: string }>();
-  const course = courseId ? getMockCourseById(courseId) : null;
-  const modules = courseId ? getMockModulesByCourseId(courseId) : [];
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [course, setCourse] = useState<Course | null>(null);
+  const [modules, setModules] = useState<CourseModule[]>([]);
   const [currentModuleIndex, setCurrentModuleIndex] = useState(0);
   const [completedModules, setCompletedModules] = useState<Set<string>>(new Set());
+  const [loading, setLoading] = useState(true);
+  const [isEnrolled, setIsEnrolled] = useState(false);
 
-  if (!course || modules.length === 0) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-background">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold mb-2">Kurz nenalezen</h1>
-          <p className="text-muted-foreground">
-            Tento kurz neexistuje nebo neobsahuje žádné moduly.
-          </p>
-          <Link to="/courses">
-            <Button className="mt-4">
-              <Home className="h-4 w-4 mr-2" />
-              Zpět na kurzy
-            </Button>
-          </Link>
-        </div>
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (!user || !courseId) {
+      setLoading(false);
+      return;
+    }
 
-  const currentModule = modules[currentModuleIndex];
-  const isCurrentModuleCompleted = completedModules.has(currentModule.id);
-  const progressPercentage = (completedModules.size / modules.length) * 100;
+    loadCourseData();
+  }, [courseId, user]);
 
-  const markModuleComplete = () => {
-    if (completedModules.has(currentModule.id)) return;
+  const loadCourseData = () => {
+    if (!courseId || !user) return;
 
-    setCompletedModules(prev => new Set([...prev, currentModule.id]));
-    toast.success("✅ Modul dokončen!");
+    const courseData = getMockCourseById(courseId);
+    if (!courseData) {
+      setLoading(false);
+      return;
+    }
+
+    setCourse(courseData);
+
+    const modulesData = getMockModulesByCourseId(courseId);
+    setModules(modulesData);
+
+    const storedEnrollments = localStorage.getItem(`enrollments_${user.id}`);
+    if (storedEnrollments) {
+      const enrollments = JSON.parse(storedEnrollments);
+      const enrollment = enrollments.find((e: any) => e.course_id === courseId);
+      setIsEnrolled(!!enrollment);
+    }
+
+    const storedProgress = localStorage.getItem(`progress_${user.id}_${courseId}`);
+    if (storedProgress) {
+      const progressData = JSON.parse(storedProgress);
+      const completed = new Set<string>(
+        progressData
+          .filter((p: any) => p.is_completed)
+          .map((p: any) => p.module_id as string)
+      );
+      setCompletedModules(completed);
+
+      if (modulesData && completed.size === modulesData.length && completed.size > 0) {
+        updateEnrollment(courseId, 100, new Date().toISOString());
+      } else if (modulesData && modulesData.length > 0) {
+        const progressPercentage = (completed.size / modulesData.length) * 100;
+        updateEnrollment(courseId, progressPercentage, null);
+      }
+    }
+
+    setLoading(false);
+  };
+
+  const updateEnrollment = (courseId: string, progressPercentage: number, completedAt: string | null) => {
+    if (!user) return;
+
+    const storedEnrollments = localStorage.getItem(`enrollments_${user.id}`);
+    if (storedEnrollments) {
+      const enrollments = JSON.parse(storedEnrollments);
+      const enrollmentIndex = enrollments.findIndex((e: any) => e.course_id === courseId);
+
+      if (enrollmentIndex >= 0) {
+        enrollments[enrollmentIndex].progress_percentage = progressPercentage;
+        if (completedAt) {
+          enrollments[enrollmentIndex].completed_at = completedAt;
+        }
+        localStorage.setItem(`enrollments_${user.id}`, JSON.stringify(enrollments));
+      }
+    }
+  };
+
+  const markModuleComplete = (moduleId: string) => {
+    if (!user || completedModules.has(moduleId) || !courseId) return;
+
+    const currentModule = modules.find(m => m.id === moduleId);
+    if (!currentModule) return;
+
+    const storedProgress = localStorage.getItem(`progress_${user.id}_${courseId}`) || '[]';
+    const progressData = JSON.parse(storedProgress);
+
+    const moduleProgress = {
+      user_id: user.id,
+      module_id: moduleId,
+      course_id: courseId,
+      is_completed: true,
+      completed_at: new Date().toISOString(),
+    };
+
+    const existingIndex = progressData.findIndex((p: any) => p.module_id === moduleId);
+    if (existingIndex >= 0) {
+      progressData[existingIndex] = moduleProgress;
+    } else {
+      progressData.push(moduleProgress);
+    }
+
+    localStorage.setItem(`progress_${user.id}_${courseId}`, JSON.stringify(progressData));
+    setCompletedModules(prev => new Set([...prev, moduleId]));
+
+    const totalModules = modules.length;
+    const completedCount = completedModules.size + 1;
+    const progressPercentage = (completedCount / totalModules) * 100;
+
+    updateEnrollment(courseId, progressPercentage, null);
+
+    toast.success("✅ Modul dokončen!", {
+      description: currentModuleIndex < modules.length - 1
+        ? "Přechod na další modul..."
+        : "🎉 Gratulujeme! Dokončili jste kurz!"
+    });
 
     if (currentModuleIndex < modules.length - 1) {
       setTimeout(() => {
         goToNextModule();
       }, 1500);
     } else {
+      setTimeout(() => {
+        unlockNextCourse();
+      }, 2000);
+    }
+  };
+
+  const unlockNextCourse = () => {
+    if (!user || !course || !courseId) return;
+
+    updateEnrollment(courseId, 100, new Date().toISOString());
+
+    const allCourses = getMockCourses();
+    const currentIndex = allCourses.findIndex(c => c.id === courseId);
+
+    if (currentIndex >= 0 && currentIndex < allCourses.length - 1) {
+      const nextCourse = allCourses[currentIndex + 1];
+
+      const storedEnrollments = localStorage.getItem(`enrollments_${user.id}`);
+      if (storedEnrollments) {
+        const enrollments = JSON.parse(storedEnrollments);
+        const existingEnrollment = enrollments.find((e: any) => e.course_id === nextCourse.id);
+
+        if (!existingEnrollment) {
+          const newEnrollment = {
+            id: `enrollment-${Date.now()}`,
+            course_id: nextCourse.id,
+            progress_percentage: 0,
+            completed_at: null
+          };
+          enrollments.push(newEnrollment);
+          localStorage.setItem(`enrollments_${user.id}`, JSON.stringify(enrollments));
+
+          confetti({
+            particleCount: 150,
+            spread: 100,
+            origin: { y: 0.5 },
+            colors: ['#10b981', '#3b82f6', '#8b5cf6', '#f59e0b'],
+          });
+
+          toast.success("🎉 Kurz úspěšně dokončen!", {
+            description: `Odemkli jste další kurz: ${nextCourse.title}`,
+            duration: 5000,
+          });
+        } else {
+          toast.success("🎉 Kurz úspěšně dokončen!", {
+            description: `Přechod na další kurz: ${nextCourse.title}`,
+            duration: 3000,
+          });
+        }
+
+        setTimeout(() => {
+          navigate(`/course/${nextCourse.id}`);
+        }, 2000);
+      }
+    } else {
       toast.success("🏆 Kurz úspěšně dokončen!", {
-        description: "Gratulujeme! Dokončili jste tento kurz!"
+        description: "Gratulujeme! Dokončili jste všechny dostupné kurzy!",
+        duration: 5000,
       });
+
+      setTimeout(() => {
+        navigate("/courses");
+      }, 2000);
     }
   };
 
@@ -80,6 +226,68 @@ export const CoursePlayerPage = () => {
       setCurrentModuleIndex(currentModuleIndex - 1);
     }
   };
+
+  if (!user) {
+    return <Navigate to="/auth/sign-in" replace />;
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-background">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (!course || !isEnrolled) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-background">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-2">Kurz nenalezen</h1>
+          <p className="text-muted-foreground">
+            Tento kurz neexistuje nebo k němu nemáte přístup.
+          </p>
+          <Link to="/courses">
+            <Button className="mt-4">
+              <Home className="h-4 w-4 mr-2" />
+              Zpět na kurzy
+            </Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (modules.length === 0) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-background">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-2">Žádné moduly</h1>
+          <p className="text-muted-foreground">
+            Tento kurz zatím neobsahuje žádné vzdělávací moduly.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const currentModule = modules[currentModuleIndex];
+
+  if (!currentModule) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-background">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-2">Modul nenalezen</h1>
+          <p className="text-muted-foreground">
+            Tento modul neexistuje.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const isCurrentModuleCompleted = completedModules.has(currentModule.id);
+  const progressPercentage = (completedModules.size / modules.length) * 100;
 
   return (
     <div className="min-h-screen bg-background">
@@ -169,7 +377,7 @@ export const CoursePlayerPage = () => {
                   </Button>
 
                   {!isCurrentModuleCompleted ? (
-                    <Button onClick={markModuleComplete} variant="default">
+                    <Button onClick={() => markModuleComplete(currentModule.id)} variant="default">
                       <CheckCircle2 className="h-4 w-4 mr-2" />
                       Označit jako dokončené
                     </Button>
