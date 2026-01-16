@@ -58,6 +58,7 @@ export const CoursePlayerPage = () => {
   const [completedModules, setCompletedModules] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const [isEnrolled, setIsEnrolled] = useState(false);
+  const [nextCourseId, setNextCourseId] = useState<string | null>(null);
   const [videoProgress, setVideoProgress] = useState(0);
   const [watchedTime, setWatchedTime] = useState(0);
   const [videoDuration, setVideoDuration] = useState(0);
@@ -436,6 +437,7 @@ export const CoursePlayerPage = () => {
             .maybeSingle();
 
           if (nextCourse) {
+            setNextCourseId(nextCourse.id);
             const { data: existingEnrollment } = await supabase
               .from("user_course_enrollments")
               .select("id")
@@ -453,6 +455,19 @@ export const CoursePlayerPage = () => {
                 });
             }
           }
+        }
+
+        const { data: nextCourseCheck } = await supabase
+          .from("courses")
+          .select("id")
+          .eq("is_published", true)
+          .gt("order_index", courseData.order_index)
+          .order("order_index", { ascending: true })
+          .limit(1)
+          .maybeSingle();
+
+        if (nextCourseCheck) {
+          setNextCourseId(nextCourseCheck.id);
         }
       }
     } catch (error) {
@@ -592,6 +607,34 @@ export const CoursePlayerPage = () => {
   const goToPreviousModule = () => {
     if (currentModuleIndex > 0) {
       setCurrentModuleIndex(currentModuleIndex - 1);
+    }
+  };
+
+  const continueToNextCourse = async () => {
+    if (!nextCourseId || !user) return;
+
+    try {
+      const { data: existingEnrollment } = await supabase
+        .from("user_course_enrollments")
+        .select("id")
+        .eq("user_id", user.id)
+        .eq("course_id", nextCourseId)
+        .maybeSingle();
+
+      if (!existingEnrollment) {
+        await supabase
+          .from("user_course_enrollments")
+          .insert({
+            user_id: user.id,
+            course_id: nextCourseId,
+            progress_percentage: 0,
+          });
+      }
+
+      window.location.href = `/courses/${nextCourseId}`;
+    } catch (error) {
+      console.error("Error continuing to next course:", error);
+      toast.error("Chyba při přechodu na další kurz");
     }
   };
 
@@ -848,13 +891,23 @@ export const CoursePlayerPage = () => {
                 <ChevronLeft className="h-4 w-4 mr-2" />
                 Předchozí modul
               </Button>
-              <Button
-                onClick={goToNextModule}
-                disabled={currentModuleIndex === modules.length - 1}
-              >
-                Další modul
-                <ChevronRight className="h-4 w-4 ml-2" />
-              </Button>
+              {isLastModule && courseProgress === 100 && nextCourseId ? (
+                <Button
+                  onClick={continueToNextCourse}
+                  className="bg-gradient-to-r from-primary to-primary/80"
+                >
+                  Přejít na další kurz
+                  <ArrowRight className="h-4 w-4 ml-2" />
+                </Button>
+              ) : (
+                <Button
+                  onClick={goToNextModule}
+                  disabled={currentModuleIndex === modules.length - 1}
+                >
+                  Další modul
+                  <ChevronRight className="h-4 w-4 ml-2" />
+                </Button>
+              )}
             </div>
           </div>
 
