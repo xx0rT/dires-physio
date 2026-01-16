@@ -85,6 +85,20 @@ export const CoursePlayerPage = () => {
   }, [completedModules]);
 
   useEffect(() => {
+    setCurrentModuleIndex(0);
+    setModules([]);
+    setCourse(null);
+    setLoading(true);
+    setCompletedModules(new Set());
+    setNextCourseId(null);
+    setVideoProgress(0);
+    setWatchedTime(0);
+    setVideoDuration(0);
+    setActualWatchTime(0);
+    setLastPosition(0);
+  }, [courseId]);
+
+  useEffect(() => {
     if (user && courseId) {
       loadCourseData();
     }
@@ -418,59 +432,19 @@ export const CoursePlayerPage = () => {
             .map(p => p.module_id)
         );
         setCompletedModules(completed);
+      }
 
-        if (user && modulesData && completed.size === modulesData.length && enrollmentData && !enrollmentData.completed_at) {
-          await supabase
-            .from("user_course_enrollments")
-            .update({
-              completed_at: new Date().toISOString(),
-              progress_percentage: 100
-            })
-            .eq("user_id", user.id)
-            .eq("course_id", courseId);
+      const { data: nextCourseCheck } = await supabase
+        .from("courses")
+        .select("id")
+        .eq("is_published", true)
+        .gt("order_index", courseData.order_index)
+        .order("order_index", { ascending: true })
+        .limit(1)
+        .maybeSingle();
 
-          const { data: nextCourse } = await supabase
-            .from("courses")
-            .select("id, title, order_index")
-            .eq("is_published", true)
-            .gt("order_index", courseData.order_index)
-            .order("order_index", { ascending: true })
-            .limit(1)
-            .maybeSingle();
-
-          if (nextCourse) {
-            setNextCourseId(nextCourse.id);
-            const { data: existingEnrollment } = await supabase
-              .from("user_course_enrollments")
-              .select("id")
-              .eq("user_id", user.id)
-              .eq("course_id", nextCourse.id)
-              .maybeSingle();
-
-            if (!existingEnrollment) {
-              await supabase
-                .from("user_course_enrollments")
-                .insert({
-                  user_id: user.id,
-                  course_id: nextCourse.id,
-                  progress_percentage: 0,
-                });
-            }
-          }
-        }
-
-        const { data: nextCourseCheck } = await supabase
-          .from("courses")
-          .select("id")
-          .eq("is_published", true)
-          .gt("order_index", courseData.order_index)
-          .order("order_index", { ascending: true })
-          .limit(1)
-          .maybeSingle();
-
-        if (nextCourseCheck) {
-          setNextCourseId(nextCourseCheck.id);
-        }
+      if (nextCourseCheck) {
+        setNextCourseId(nextCourseCheck.id);
       }
     } catch (error) {
       console.error("Error loading course data:", error);
