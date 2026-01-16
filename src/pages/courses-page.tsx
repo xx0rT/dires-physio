@@ -285,44 +285,47 @@ export default function CoursesPage() {
                   )}
                 </motion.div>
 
-                <Card className={`md:ml-24 ${!isUnlocked ? 'opacity-60 grayscale' : ''} hover:shadow-xl transition-all duration-300 border-2 ${progress === 100 ? 'border-green-500/30' : isEnrolled ? 'border-primary/30' : ''}`}>
-                  <CardHeader>
+                <Card className={`md:ml-24 ${!isUnlocked ? 'opacity-60 grayscale' : ''} group relative overflow-hidden transition-all duration-500 border-2 ${progress === 100 ? 'border-green-500/30 hover:border-green-500/50' : isEnrolled ? 'border-primary/30 hover:border-primary/50' : 'hover:border-primary/30'} hover:shadow-2xl hover:scale-[1.02] hover:-translate-y-1`}>
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                  <CardHeader className="relative z-10">
                     <div className="flex items-start justify-between">
                       <div className="space-y-2 flex-1">
-                        <div className="flex items-center gap-2">
-                          <CardTitle className="text-2xl">{course.title}</CardTitle>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <CardTitle className="text-2xl group-hover:text-primary transition-colors">{course.title}</CardTitle>
                           {!isUnlocked && (
-                            <Badge variant="secondary">
-                              <RiLockLine className="h-3 w-3 mr-1" />
+                            <Badge variant="secondary" className="gap-1">
+                              <RiLockLine className="h-3 w-3" />
                               Zamčeno
                             </Badge>
                           )}
                           {isEnrolled && progress === 100 && (
-                            <Badge variant="default" className="bg-green-600">
-                              <RiCheckLine className="h-3 w-3 mr-1" />
+                            <Badge variant="default" className="bg-green-600 gap-1">
+                              <RiCheckLine className="h-3 w-3" />
                               Dokončeno
                             </Badge>
                           )}
                           {isEnrolled && progress > 0 && progress < 100 && (
-                            <Badge variant="default">
+                            <Badge variant="default" className="gap-1">
+                              <div className="h-2 w-2 rounded-full bg-white animate-pulse" />
                               V průběhu
                             </Badge>
                           )}
                         </div>
-                        <CardDescription className="text-base">
+                        <CardDescription className="text-base leading-relaxed">
                           {course.description}
                         </CardDescription>
                       </div>
                     </div>
                   </CardHeader>
 
-                  <CardContent className="space-y-4">
+                  <CardContent className="space-y-4 relative z-10">
                     <div className="flex items-center gap-6 text-sm text-muted-foreground">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 group-hover:text-primary transition-colors">
                         <RiVideoLine className="h-4 w-4" />
                         <span>{modules.length} videí</span>
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 group-hover:text-primary transition-colors">
                         <RiTimeLine className="h-4 w-4" />
                         <span>{totalDuration} minut</span>
                       </div>
@@ -343,50 +346,113 @@ export default function CoursesPage() {
                         <>
                           <Dialog>
                             <DialogTrigger asChild>
-                              <Button variant="outline" onClick={() => handlePreview(course)}>
-                                <RiPlayCircleLine className="mr-2 h-4 w-4" />
+                              <Button variant="outline" onClick={() => handlePreview(course)} className="group/btn">
+                                <RiPlayCircleLine className="mr-2 h-4 w-4 group-hover/btn:scale-110 transition-transform" />
                                 Náhled Obsahu
                               </Button>
                             </DialogTrigger>
-                            <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
-                              <DialogHeader>
-                                <DialogTitle>{selectedCourse?.title}</DialogTitle>
-                                <DialogDescription>
-                                  Prozkoumejte obsah kurzu před zápisem
-                                </DialogDescription>
-                              </DialogHeader>
-                              <div className="space-y-4 mt-4">
-                                <div className="space-y-2">
-                                  <h4 className="font-semibold">Co se naučíte:</h4>
-                                  <p className="text-sm text-muted-foreground">
-                                    {selectedCourse?.description}
-                                  </p>
-                                </div>
-                                <div className="space-y-2">
-                                  <h4 className="font-semibold">Obsah kurzu ({previewModules.length} videí):</h4>
-                                  <div className="space-y-2">
-                                    {previewModules.map((module, idx) => (
-                                      <div
-                                        key={module.id}
-                                        className="flex items-start gap-3 p-3 rounded-lg border"
-                                      >
-                                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                                          <span className="text-sm font-semibold">{idx + 1}</span>
-                                        </div>
-                                        <div className="flex-1">
-                                          <p className="text-sm font-medium">{module.title}</p>
-                                          <p className="text-xs text-muted-foreground mt-1">
-                                            {module.description}
-                                          </p>
-                                          <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
-                                            <RiTimeLine className="h-3 w-3" />
-                                            <span>{module.duration_minutes} minut</span>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    ))}
+                            <DialogContent className="max-w-3xl max-h-[85vh] overflow-hidden">
+                              <DialogHeader className="border-b pb-4">
+                                <div className="flex items-start gap-4">
+                                  <div className="p-3 rounded-lg bg-gradient-to-br from-primary/20 to-primary/10">
+                                    <RiBookOpenLine className="h-6 w-6 text-primary" />
+                                  </div>
+                                  <div className="flex-1">
+                                    <DialogTitle className="text-2xl mb-2">{selectedCourse?.title}</DialogTitle>
+                                    <DialogDescription className="text-base">
+                                      Prozkoumejte detailní obsah kurzu před zápisem
+                                    </DialogDescription>
                                   </div>
                                 </div>
+                              </DialogHeader>
+
+                              <div className="overflow-y-auto max-h-[calc(85vh-180px)] pr-2 space-y-6 mt-4">
+                                <motion.div
+                                  initial={{ opacity: 0, y: 20 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{ duration: 0.3 }}
+                                  className="space-y-3"
+                                >
+                                  <div className="flex items-center gap-2">
+                                    <div className="h-1 w-1 rounded-full bg-primary" />
+                                    <h4 className="font-semibold text-lg">Co se naučíte</h4>
+                                  </div>
+                                  <p className="text-sm text-muted-foreground leading-relaxed pl-3 border-l-2 border-primary/20">
+                                    {selectedCourse?.description}
+                                  </p>
+                                </motion.div>
+
+                                <motion.div
+                                  initial={{ opacity: 0, y: 20 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{ duration: 0.3, delay: 0.1 }}
+                                  className="space-y-3"
+                                >
+                                  <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                      <div className="h-1 w-1 rounded-full bg-primary" />
+                                      <h4 className="font-semibold text-lg">Obsah kurzu</h4>
+                                    </div>
+                                    <Badge variant="outline" className="gap-1">
+                                      <RiVideoLine className="h-3 w-3" />
+                                      {previewModules.length} videí
+                                    </Badge>
+                                  </div>
+
+                                  <div className="space-y-3">
+                                    {previewModules.map((module, idx) => (
+                                      <motion.div
+                                        key={module.id}
+                                        initial={{ opacity: 0, x: -20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{ duration: 0.3, delay: 0.1 + idx * 0.05 }}
+                                        className="group/module flex items-start gap-4 p-4 rounded-lg border border-border hover:border-primary/30 hover:bg-primary/5 transition-all duration-300 hover:shadow-md"
+                                      >
+                                        <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center group-hover/module:scale-110 transition-transform">
+                                          <span className="text-sm font-bold text-primary">{idx + 1}</span>
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                          <p className="text-sm font-semibold mb-1 group-hover/module:text-primary transition-colors">
+                                            {module.title}
+                                          </p>
+                                          <p className="text-xs text-muted-foreground leading-relaxed mb-2">
+                                            {module.description}
+                                          </p>
+                                          <div className="flex items-center gap-3">
+                                            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                                              <RiTimeLine className="h-3.5 w-3.5" />
+                                              <span>{module.duration_minutes} min</span>
+                                            </div>
+                                            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                                              <RiPlayCircleLine className="h-3.5 w-3.5" />
+                                              <span>Video lekce</span>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </motion.div>
+                                    ))}
+                                  </div>
+                                </motion.div>
+
+                                <motion.div
+                                  initial={{ opacity: 0, y: 20 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{ duration: 0.3, delay: 0.2 }}
+                                  className="p-4 rounded-lg bg-gradient-to-br from-primary/5 to-transparent border border-primary/20"
+                                >
+                                  <div className="flex items-start gap-3">
+                                    <RiCheckLine className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                                    <div className="space-y-1">
+                                      <p className="text-sm font-medium">Zahrnuje přístup k:</p>
+                                      <ul className="text-xs text-muted-foreground space-y-1 list-disc list-inside">
+                                        <li>Video lekce na vyžádání</li>
+                                        <li>Doplňkové studijní materiály</li>
+                                        <li>AI asistent pro dotazy</li>
+                                        <li>Certifikát po dokončení</li>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                </motion.div>
                               </div>
                             </DialogContent>
                           </Dialog>
