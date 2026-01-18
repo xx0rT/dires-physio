@@ -89,18 +89,14 @@ const Pricing20 = ({ className }: Pricing20Props) => {
 
     try {
       const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-checkout-session`;
-      const headers: HeadersInit = {
-        'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY,
-        'Content-Type': 'application/json',
-      };
-
-      if (session?.access_token) {
-        headers['Authorization'] = `Bearer ${session.access_token}`;
-      }
+      const authToken = session?.access_token || import.meta.env.VITE_SUPABASE_ANON_KEY;
 
       const response = await fetch(apiUrl, {
         method: 'POST',
-        headers,
+        headers: {
+          'Authorization': `Bearer ${authToken}`,
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           planType: plan.planType,
         }),
