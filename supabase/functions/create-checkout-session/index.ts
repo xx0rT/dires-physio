@@ -162,11 +162,14 @@ Deno.serve(async (req: Request) => {
         }),
       });
 
+      const origin = req.headers.get("origin") || req.headers.get("referer")?.split("?")[0].replace(/\/$/, "") || "https://your-domain.com";
+      const baseUrl = origin.startsWith("http") ? origin : `https://${origin}`;
+
       const sessionData = {
         sessionId: `trial_${Date.now()}`,
         planType: "free_trial",
         amount: 0,
-        url: `${req.headers.get("origin")}/order-confirmation`,
+        url: `${baseUrl}/order-confirmation`,
       };
 
       return new Response(JSON.stringify(sessionData), {
@@ -190,8 +193,12 @@ Deno.serve(async (req: Request) => {
 
     formData.append("line_items[0][quantity]", "1");
     formData.append("mode", selectedPlan.recurring ? "subscription" : "payment");
-    formData.append("success_url", `${req.headers.get("origin")}/order-confirmation?session_id={CHECKOUT_SESSION_ID}`);
-    formData.append("cancel_url", `${req.headers.get("origin")}/checkout`);
+
+    const origin = req.headers.get("origin") || req.headers.get("referer")?.split("?")[0].replace(/\/$/, "") || "https://your-domain.com";
+    const baseUrl = origin.startsWith("http") ? origin : `https://${origin}`;
+
+    formData.append("success_url", `${baseUrl}/order-confirmation?session_id={CHECKOUT_SESSION_ID}`);
+    formData.append("cancel_url", `${baseUrl}/checkout`);
 
     if (user) {
       formData.append("client_reference_id", user.id);

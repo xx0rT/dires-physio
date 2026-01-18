@@ -111,6 +111,7 @@ Deno.serve(async (req: Request) => {
 
     try {
       const resendApiKey = Deno.env.get("RESEND_API_KEY");
+      const fromEmail = Deno.env.get("RESEND_FROM_EMAIL") || "onboarding@resend.dev";
 
       if (resendApiKey) {
         const resendResponse = await fetch("https://api.resend.com/emails", {
@@ -120,7 +121,7 @@ Deno.serve(async (req: Request) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            from: "noreply@yourdomain.com",
+            from: fromEmail,
             to: email,
             subject: "Ověřte svůj email",
             html: emailHtml,
@@ -130,6 +131,12 @@ Deno.serve(async (req: Request) => {
         if (!resendResponse.ok) {
           const error = await resendResponse.text();
           console.error("Resend API error:", error);
+          console.log("=== VERIFICATION CODE (email failed) ===");
+          console.log(`Email: ${email}`);
+          console.log(`Code: ${code}`);
+          console.log("=======================================");
+        } else {
+          console.log(`Verification email sent successfully to ${email}`);
         }
       } else {
         console.log("=== VERIFICATION CODE ===");
