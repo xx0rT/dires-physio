@@ -8,6 +8,7 @@ import {
   Rocket,
 } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { cn } from "@/lib/utils";
 
@@ -70,6 +71,23 @@ interface Pricing20Props {
 
 const Pricing20 = ({ className }: Pricing20Props) => {
   const [isMonthly] = useState(true);
+  const navigate = useNavigate();
+
+  const handleGetStarted = (plan: typeof pricingPlans[0]) => {
+    const orderData = {
+      companyName: "Fyzioterapie Kurzy",
+      items: [
+        {
+          id: plan.name.toLowerCase().replace(/\s+/g, "-"),
+          name: `${plan.name} (${isMonthly ? "Monthly" : "Yearly"})`,
+          price: isMonthly ? plan.price.monthly : plan.price.yearly,
+        },
+      ],
+      currency: "USD",
+    };
+
+    navigate("/checkout", { state: { order: orderData } });
+  };
 
   return (
     <section className={cn("py-32", className)}>
@@ -147,6 +165,7 @@ const Pricing20 = ({ className }: Pricing20Props) => {
               <Button
                 variant={index === 1 ? "default" : "secondary"}
                 className="mt-12"
+                onClick={() => handleGetStarted(plan)}
               >
                 Get started
               </Button>

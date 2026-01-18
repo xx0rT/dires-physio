@@ -59,4 +59,27 @@ const FieldLabel = React.forwardRef<
 ))
 FieldLabel.displayName = "FieldLabel"
 
-export { Field, FieldLabel, FieldLegend, FieldSet }
+interface FieldErrorProps extends React.HTMLAttributes<HTMLParagraphElement> {
+  errors?: Array<{ message?: string } | undefined>
+}
+
+const FieldError = React.forwardRef<HTMLParagraphElement, FieldErrorProps>(
+  ({ className, errors, ...props }, ref) => {
+    const errorMessage = errors?.[0]?.message
+
+    if (!errorMessage) return null
+
+    return (
+      <p
+        ref={ref}
+        className={cn("text-sm text-destructive", className)}
+        {...props}
+      >
+        {errorMessage}
+      </p>
+    )
+  }
+)
+FieldError.displayName = "FieldError"
+
+export { Field, FieldLabel, FieldLegend, FieldSet, FieldError }
