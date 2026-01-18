@@ -48,7 +48,7 @@ const DEFAULT_ORDER: OrderSummary = {
 const CheckoutPage = ({ className }: CheckoutPageProps) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useAuth();
+  const { user, session } = useAuth();
   const orderData = (location.state as { order?: OrderSummary })?.order || DEFAULT_ORDER;
 
   const [clientSecret, setClientSecret] = useState<string | null>(null);
@@ -69,12 +69,12 @@ const CheckoutPage = ({ className }: CheckoutPageProps) => {
   };
 
   const validatePromoCode = async (code: string) => {
-    if (!code || !orderData.planType) return;
+    if (!code || !orderData.planType || !session) return;
 
     try {
       const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/validate-promo-code`;
       const headers = {
-        'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+        'Authorization': `Bearer ${session.access_token}`,
         'Content-Type': 'application/json',
       };
 
@@ -113,7 +113,7 @@ const CheckoutPage = ({ className }: CheckoutPageProps) => {
   };
 
   const createPaymentIntent = async () => {
-    if (!user) {
+    if (!user || !session) {
       toast.error("Please sign in to continue");
       navigate("/sign-in");
       return;
@@ -124,7 +124,7 @@ const CheckoutPage = ({ className }: CheckoutPageProps) => {
       try {
         const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-payment-intent`;
         const headers = {
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          'Authorization': `Bearer ${session.access_token}`,
           'Content-Type': 'application/json',
         };
 
@@ -155,7 +155,7 @@ const CheckoutPage = ({ className }: CheckoutPageProps) => {
     try {
       const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-payment-intent`;
       const headers = {
-        'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+        'Authorization': `Bearer ${session.access_token}`,
         'Content-Type': 'application/json',
       };
 
