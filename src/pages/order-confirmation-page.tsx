@@ -121,19 +121,19 @@ const OrderConfirmationPage = ({ className }: OrderConfirmationPageProps) => {
       { label: string; className: string }
     > = {
       confirmed: {
-        label: "Order Confirmed",
+        label: "Objednávka potvrzena",
         className: "bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/10",
       },
       processing: {
-        label: "Processing",
+        label: "Zpracovává se",
         className: "bg-amber-500/10 text-amber-600 hover:bg-amber-500/10",
       },
       shipped: {
-        label: "Shipped",
+        label: "Odesláno",
         className: "bg-blue-500/10 text-blue-600 hover:bg-blue-500/10",
       },
       delivered: {
-        label: "Delivered",
+        label: "Doručeno",
         className: "bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/10",
       },
     };
@@ -143,17 +143,17 @@ const OrderConfirmationPage = ({ className }: OrderConfirmationPageProps) => {
   const statusBadge = getStatusBadge(orderData.status);
 
   return (
-    <section className={cn("py-16 md:py-24", className)}>
-      <div className="container max-w-4xl">
+    <section className={cn("min-h-screen flex items-center justify-center py-16 md:py-24", className)}>
+      <div className="container max-w-4xl mx-auto">
         <div className="mb-10 text-center">
           <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-emerald-500/10">
             <CheckCircle className="size-8 text-emerald-600" />
           </div>
           <h1 className="mb-2 text-2xl font-bold tracking-tight md:text-3xl">
-            Thank you for your order!
+            Děkujeme za vaši objednávku!
           </h1>
           <p className="text-muted-foreground">
-            A confirmation email has been sent to{" "}
+            Potvrzující e-mail byl odeslán na{" "}
             <span className="font-medium text-foreground">{orderData.email}</span>
           </p>
         </div>
@@ -162,7 +162,7 @@ const OrderConfirmationPage = ({ className }: OrderConfirmationPageProps) => {
           <CardContent className="flex flex-wrap items-center justify-between gap-4 p-4 md:p-6">
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
               <div>
-                <p className="text-sm text-muted-foreground">Order Number</p>
+                <p className="text-sm text-muted-foreground">Číslo objednávky</p>
                 <p className="font-semibold">{orderData.orderNumber}</p>
               </div>
               <Separator
@@ -170,7 +170,7 @@ const OrderConfirmationPage = ({ className }: OrderConfirmationPageProps) => {
                 className="hidden h-10 md:block"
               />
               <div>
-                <p className="text-sm text-muted-foreground">Order Date</p>
+                <p className="text-sm text-muted-foreground">Datum objednávky</p>
                 <p className="font-medium">{orderData.orderDate}</p>
               </div>
             </div>
@@ -184,7 +184,7 @@ const OrderConfirmationPage = ({ className }: OrderConfirmationPageProps) => {
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center gap-2 text-lg">
                   <Package className="size-5" />
-                  Items Ordered
+                  Objednané položky
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -216,7 +216,7 @@ const OrderConfirmationPage = ({ className }: OrderConfirmationPageProps) => {
                           </p>
                         )}
                         <p className="mt-1 text-sm text-muted-foreground">
-                          Qty: {item.quantity}
+                          Množství: {item.quantity}
                         </p>
                       </div>
                       <div className="text-right">
@@ -242,30 +242,30 @@ const OrderConfirmationPage = ({ className }: OrderConfirmationPageProps) => {
               <CardContent className="p-6">
                 <div className="space-y-3">
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Subtotal</span>
+                    <span className="text-muted-foreground">Mezisoučet</span>
                     <span>{formatPrice(orderData.subtotal)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Shipping</span>
+                    <span className="text-muted-foreground">Doprava</span>
                     <span>
                       {orderData.shipping === 0
-                        ? "Free"
+                        ? "Zdarma"
                         : formatPrice(orderData.shipping)}
                     </span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Tax</span>
+                    <span className="text-muted-foreground">Daň</span>
                     <span>{formatPrice(orderData.tax)}</span>
                   </div>
                   {orderData.discount && orderData.discount > 0 && (
                     <div className="flex justify-between text-sm text-emerald-600">
-                      <span>Discount</span>
+                      <span>Sleva</span>
                       <span>-{formatPrice(orderData.discount)}</span>
                     </div>
                   )}
                   <Separator />
                   <div className="flex justify-between text-lg font-semibold">
-                    <span>Total Paid</span>
+                    <span>Celkem zaplaceno</span>
                     <span>{formatPrice(orderData.total)}</span>
                   </div>
                 </div>
@@ -278,7 +278,7 @@ const OrderConfirmationPage = ({ className }: OrderConfirmationPageProps) => {
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center gap-2 text-lg">
                   <MapPin className="size-5" />
-                  Shipping Address
+                  Dodací adresa
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -303,7 +303,7 @@ const OrderConfirmationPage = ({ className }: OrderConfirmationPageProps) => {
                       {orderData.shippingMethod}
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      Estimated delivery: {orderData.estimatedDelivery}
+                      Odhadované doručení: {orderData.estimatedDelivery}
                     </p>
                   </div>
                 </div>
@@ -314,7 +314,7 @@ const OrderConfirmationPage = ({ className }: OrderConfirmationPageProps) => {
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center gap-2 text-lg">
                   <CreditCard className="size-5" />
-                  Payment Method
+                  Platební metoda
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -327,11 +327,11 @@ const OrderConfirmationPage = ({ className }: OrderConfirmationPageProps) => {
                     />
                     <div>
                       <p className="text-sm font-medium">
-                        {orderData.paymentMethod.cardBrand} ending in{" "}
+                        {orderData.paymentMethod.cardBrand} končící na{" "}
                         {orderData.paymentMethod.lastFour}
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        Payment completed
+                        Platba dokončena
                       </p>
                     </div>
                   </div>
@@ -360,15 +360,15 @@ const OrderConfirmationPage = ({ className }: OrderConfirmationPageProps) => {
               <CardContent className="space-y-3 p-4">
                 <Button className="w-full" variant="default">
                   <Package className="mr-2 size-4" />
-                  Track Order
+                  Sledovat objednávku
                 </Button>
                 <Button className="w-full" variant="outline">
                   <Download className="mr-2 size-4" />
-                  Download Receipt
+                  Stáhnout účtenku
                 </Button>
                 <Button className="w-full" variant="ghost">
                   <Printer className="mr-2 size-4" />
-                  Print Order
+                  Vytisknout objednávku
                 </Button>
               </CardContent>
             </Card>
@@ -377,14 +377,14 @@ const OrderConfirmationPage = ({ className }: OrderConfirmationPageProps) => {
 
         <div className="mt-10 text-center">
           <p className="mb-4 text-muted-foreground">
-            Have a question about your order?
+            Máte dotaz ohledně vaší objednávky?
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Button variant="outline">
-              Contact Support
+              Kontaktovat podporu
             </Button>
             <Button onClick={() => navigate("/")}>
-              Continue Shopping
+              Pokračovat v nákupu
             </Button>
           </div>
         </div>

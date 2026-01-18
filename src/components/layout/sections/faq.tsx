@@ -13,34 +13,34 @@ import { PatternPlaceholder } from "@/components/shadcnblocks/pattern-placeholde
 
 const DATA = [
   {
-    question: "Is there a free version?",
+    question: "Existuje bezplatná verze?",
     answer:
-      "Yes! We offer a Free Plan with essential features. You can upgrade anytime for advanced tools and integrations.",
+      "Ano! Nabízíme bezplatný plán se základními funkcemi. Kdykoli můžete upgradovat na pokročilé nástroje a integrace.",
   },
   {
-    question: "What apps can I integrate?",
+    question: "Jaké aplikace mohu integrovat?",
     answer:
-      "Our platform supports integration with various popular apps and services. The specific integrations available depend on your plan level.",
+      "Naše platforma podporuje integraci s různými populárními aplikacemi a službami. Konkrétní dostupné integrace závisí na úrovni vašeho plánu.",
   },
   {
-    question: "How does the AI work?",
+    question: "Jak funguje AI?",
     answer:
-      "Our AI technology uses advanced machine learning algorithms to analyze and process your data, providing intelligent insights and automation capabilities.",
+      "Naše AI technologie využívá pokročilé algoritmy strojového učení k analýze a zpracování vašich dat, poskytující inteligentní poznatky a automatizační schopnosti.",
   },
   {
-    question: "Can I use this with a team?",
+    question: "Mohu to používat s týmem?",
     answer:
-      "Absolutely! Our platform is designed for both individual and team use. You can easily collaborate and share resources with team members.",
+      "Rozhodně! Naše platforma je navržena jak pro individuální, tak pro týmové použití. Můžete snadno spolupracovat a sdílet zdroje s členy týmu.",
   },
   {
-    question: "Is my data safe?",
+    question: "Jsou moje data v bezpečí?",
     answer:
-      "We take data security seriously. All data is encrypted and stored securely following industry best practices and compliance standards.",
+      "Bereme bezpečnost dat vážně. Všechna data jsou šifrována a bezpečně uložena podle osvědčených postupů a standardů dodržování předpisů v oboru.",
   },
   {
-    question: "How do I manage my subscription?",
+    question: "Jak spravuji své předplatné?",
     answer:
-      "You can manage your subscription easily through your account dashboard, where you can upgrade, downgrade, or modify your plan settings.",
+      "Své předplatné můžete snadno spravovat prostřednictvím dashboardu svého účtu, kde můžete upgradovat, downgradovat nebo upravit nastavení plánu.",
   },
 ];
 
@@ -70,11 +70,11 @@ export const FAQSection = ({ className }: Faq10Props) => {
             <span>FAQ</span>
           </Badge>
           <h2 className="text-3xl leading-tight tracking-tight md:text-4xl lg:text-6xl text-center">
-            Everything You Need to Know
+            Vše, co potřebujete vědět
           </h2>
           <p className="max-w-[600px] tracking-[-0.32px] text-muted-foreground text-center">
-            Looking for quick answers? Check out our{" "}
-            <span className="underline">FAQ section</span>.
+            Hledáte rychlé odpovědi? Podívejte se na naši{" "}
+            <span className="underline">sekci FAQ</span>.
           </p>
         </div>
       </div>

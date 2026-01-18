@@ -20,49 +20,49 @@ import { Button } from "@/components/ui/button";
 const pricingPlans = [
   {
     icon: Rocket,
-    name: "Free Trial",
+    name: "Zkušební verze zdarma",
     planType: "free_trial" as const,
     price: 0,
-    duration: "3 days",
+    duration: "3 dny",
     features: [
-      "3-day free trial",
-      "Full access to all features",
-      "Basic task management tools",
-      "Calendar sync with limited integrations",
-      "Access to 1 dashboard for tracking tasks",
-      "Basic support and community access",
+      "3denní zkušební verze zdarma",
+      "Plný přístup ke všem funkcím",
+      "Základní nástroje pro správu úkolů",
+      "Synchronizace kalendáře s omezenými integracemi",
+      "Přístup k 1 dashboardu pro sledování úkolů",
+      "Základní podpora a přístup do komunity",
     ],
   },
   {
     icon: Briefcase,
-    name: "Monthly Plan",
+    name: "Měsíční plán",
     planType: "monthly" as const,
     price: 30,
-    duration: "per month",
+    duration: "měsíčně",
     features: [
-      "All trial features, plus:",
-      "Unlimited task lists",
-      "Advanced calendar sync",
-      "AI-driven insights",
-      "Access to custom dashboards",
-      "Priority email support",
-      "Cancel anytime",
+      "Všechny funkce zkušební verze a navíc:",
+      "Neomezené seznamy úkolů",
+      "Pokročilá synchronizace kalendáře",
+      "Poznatky řízené AI",
+      "Přístup k vlastním dashboardům",
+      "Prioritní e-mailová podpora",
+      "Zrušit kdykoli",
     ],
   },
   {
     icon: Building,
-    name: "Lifetime Access",
+    name: "Doživotní přístup",
     planType: "lifetime" as const,
     price: 200,
-    duration: "one-time",
+    duration: "jednorázově",
     features: [
-      "All monthly features, plus:",
-      "Lifetime access - pay once",
-      "Dedicated account manager",
-      "Custom integrations",
-      "Real-time collaboration",
-      "Role-based permissions",
-      "24/7 priority support",
+      "Všechny měsíční funkce a navíc:",
+      "Doživotní přístup - zaplaťte jednou",
+      "Dedikovaný account manager",
+      "Vlastní integrace",
+      "Spolupráce v reálném čase",
+      "Oprávnění založená na rolích",
+      "Prioritní podpora 24/7",
     ],
   },
 ];
@@ -78,7 +78,7 @@ const Pricing20 = ({ className }: Pricing20Props) => {
 
   const handleGetStarted = async (plan: typeof pricingPlans[0]) => {
     if (!user) {
-      toast.error("Please sign in to continue");
+      toast.error("Pro pokračování se prosím přihlaste");
       navigate("/auth/sign-in");
       return;
     }
@@ -111,7 +111,7 @@ const Pricing20 = ({ className }: Pricing20Props) => {
       }
     } catch (error) {
       console.error('Checkout error:', error);
-      toast.error('Failed to start checkout. Please try again.');
+      toast.error('Nepodařilo se zahájit pokladnu. Zkuste to prosím znovu.');
     } finally {
       setLoadingPlan(null);
     }
@@ -127,13 +127,13 @@ const Pricing20 = ({ className }: Pricing20Props) => {
               className="w-fit gap-1 bg-card px-3 text-sm font-normal tracking-tight shadow-sm"
             >
               <BadgeDollarSign className="size-4" />
-              <span>Spenders Lounge</span>
+              <span>Cenové plány</span>
             </Badge>
             <h2 className="mt-6 text-3xl leading-tight tracking-tight md:text-4xl lg:text-6xl">
-              Pricing for everyone
+              Ceny pro každého
             </h2>
             <p className="mt-4 max-w-[600px] tracking-[-0.32px] text-muted-foreground">
-              Choose the Plan that Fits Your Productivity Need
+              Vyberte si plán, který vyhovuje vašim potřebám produktivity
             </p>
           </div>
         </div>
@@ -172,7 +172,7 @@ const Pricing20 = ({ className }: Pricing20Props) => {
 
               <div className="pt-6">
                 <h4 className="text-muted-foreground-subtle">
-                  Features Included
+                  Zahrnuté funkce
                 </h4>
                 <ul className="mt-4 space-y-4">
                   {plan.features.map((feature, index) => (
@@ -192,7 +192,7 @@ const Pricing20 = ({ className }: Pricing20Props) => {
                 onClick={() => handleGetStarted(plan)}
                 disabled={loadingPlan === plan.planType}
               >
-                {loadingPlan === plan.planType ? "Loading..." : "Get started"}
+                {loadingPlan === plan.planType ? "Načítání..." : "Začít"}
               </Button>
             </div>
           ))}
