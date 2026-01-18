@@ -34,11 +34,15 @@ export default function HomePage() {
         <ServicesSection />
       </div>
 
-      <div className="ml-75px bg-background transition-colors duration-700">
+      <div className="bg-background transition-colors duration-700">
+        <PricingSection />
+      </div>
+
+      <div className="ml-75px bg-muted/70 transition-colors duration-700">
         <Feature283 />
       </div>
 
-      <div className="bg-muted/70 transition-colors duration-700">
+      <div className="bg-background transition-colors duration-700">
         <TestimonialSection />
       </div>
 
@@ -48,10 +52,6 @@ export default function HomePage() {
 
       <div className="bg-background transition-colors duration-700">
         <CommunitySection />
-      </div>
-
-      <div className="bg-muted/70 transition-colors duration-700">
-        <PricingSection />
       </div>
 
       <div className="bg-background transition-colors duration-700">

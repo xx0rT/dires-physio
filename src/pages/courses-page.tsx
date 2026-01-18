@@ -45,8 +45,20 @@ export default function CoursesPage() {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null)
   const [previewModules, setPreviewModules] = useState<CourseModule[]>([])
   const [loading, setLoading] = useState(true)
-  const [newlyUnlocked, setNewlyUnlocked] = useState<string[]>([])
   const containerRef = useRef<HTMLDivElement>(null)
+  const hasShownConfettiRef = useRef<Set<string>>(new Set())
+
+  useEffect(() => {
+    const storedConfettiCourses = localStorage.getItem('confetti-shown-courses')
+    if (storedConfettiCourses) {
+      try {
+        const parsed = JSON.parse(storedConfettiCourses)
+        hasShownConfettiRef.current = new Set(parsed)
+      } catch (e) {
+        console.error('Error parsing confetti storage:', e)
+      }
+    }
+  }, [])
 
   useEffect(() => {
     loadCoursesData()
@@ -58,12 +70,11 @@ export default function CoursesPage() {
         .filter((_, index) => isCourseUnlocked(index))
         .map(c => c.id)
 
-      const previouslyLocked = courses.filter(c => !newlyUnlocked.includes(c.id)).map(c => c.id)
-      const justUnlocked = unlockedCourses.filter(id => previouslyLocked.includes(id) && !newlyUnlocked.includes(id))
+      const justUnlocked = unlockedCourses.filter(id => !hasShownConfettiRef.current.has(id))
 
       if (justUnlocked.length > 0) {
-        setNewlyUnlocked(prev => [...prev, ...justUnlocked])
-        justUnlocked.forEach(() => {
+        justUnlocked.forEach((courseId) => {
+          hasShownConfettiRef.current.add(courseId)
           confetti({
             particleCount: 100,
             spread: 70,
@@ -71,13 +82,15 @@ export default function CoursesPage() {
             colors: ['#7033ff', '#4f46e5', '#6366f1']
           })
         })
+
+        localStorage.setItem('confetti-shown-courses', JSON.stringify(Array.from(hasShownConfettiRef.current)))
       }
     }
 
-    if (courses.length > 0 && enrollments.length > 0) {
+    if (courses.length > 0 && user) {
       checkNewlyUnlocked()
     }
-  }, [enrollments, courses])
+  }, [enrollments, courses, user])
 
   const loadCoursesData = async () => {
     try {
