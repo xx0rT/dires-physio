@@ -7,10 +7,7 @@ import {
   Building,
   Rocket,
 } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
-import { useAuth } from "@/lib/auth-context";
-import { supabase } from "@/lib/supabase";
+import { useNavigate } from "react-router-dom";
 
 import { cn } from "@/lib/utils";
 
@@ -72,49 +69,23 @@ interface Pricing20Props {
 }
 
 const Pricing20 = ({ className }: Pricing20Props) => {
-  const { user } = useAuth();
-  const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
+  const navigate = useNavigate();
 
-  const handleGetStarted = async (plan: typeof pricingPlans[0]) => {
-    if (!user) {
-      toast.error("Please sign in to continue");
-      window.location.href = "/sign-in";
-      return;
-    }
-
-    setLoadingPlan(plan.planType);
-
-    try {
-      const { data: { session: freshSession }, error: sessionError } = await supabase.auth.getSession();
-
-      if (sessionError || !freshSession) {
-        toast.error("Please sign in to continue");
-        window.location.href = "/sign-in";
-        setLoadingPlan(null);
-        return;
-      }
-
-      const { data, error } = await supabase.functions.invoke('create-checkout-session', {
-        body: {
-          planType: plan.planType,
+  const handleGetStarted = (plan: typeof pricingPlans[0]) => {
+    const orderData = {
+      companyName: "Fyzioterapie Kurzy",
+      planType: plan.planType,
+      items: [
+        {
+          id: plan.planType,
+          name: plan.name,
+          price: plan.price,
         },
-      });
+      ],
+      currency: "USD",
+    };
 
-      if (error) {
-        throw error;
-      }
-
-      if (data?.url) {
-        window.location.href = data.url;
-      } else {
-        toast.error("Failed to create checkout session");
-        setLoadingPlan(null);
-      }
-    } catch (error) {
-      console.error('Checkout error:', error);
-      toast.error('Failed to start checkout');
-      setLoadingPlan(null);
-    }
+    navigate("/checkout", { state: { order: orderData } });
   };
 
   return (
@@ -190,9 +161,8 @@ const Pricing20 = ({ className }: Pricing20Props) => {
                 variant={index === 1 ? "default" : "secondary"}
                 className="mt-12"
                 onClick={() => handleGetStarted(plan)}
-                disabled={loadingPlan !== null}
               >
-                {loadingPlan === plan.planType ? "Loading..." : "Get started"}
+                Get started
               </Button>
             </div>
           ))}
