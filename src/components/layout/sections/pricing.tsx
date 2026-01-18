@@ -10,6 +10,7 @@ import {
 import { useState } from "react";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
+import { supabase } from "@/lib/supabase";
 
 import { cn } from "@/lib/utils";
 
@@ -71,11 +72,11 @@ interface Pricing20Props {
 }
 
 const Pricing20 = ({ className }: Pricing20Props) => {
-  const { session, user } = useAuth();
+  const { user } = useAuth();
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
 
   const handleGetStarted = async (plan: typeof pricingPlans[0]) => {
-    if (!user || !session) {
+    if (!user) {
       toast.error("Please sign in to continue");
       window.location.href = "/sign-in";
       return;
@@ -84,30 +85,30 @@ const Pricing20 = ({ className }: Pricing20Props) => {
     setLoadingPlan(plan.planType);
 
     try {
-      const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-checkout-session`;
-      const headers = {
-        'Authorization': `Bearer ${session.access_token}`,
-        'Content-Type': 'application/json',
-      };
+      const { data: { session: freshSession }, error: sessionError } = await supabase.auth.getSession();
 
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({
-          planType: plan.planType,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to create checkout session');
+      if (sessionError || !freshSession) {
+        toast.error("Please sign in to continue");
+        window.location.href = "/sign-in";
+        setLoadingPlan(null);
+        return;
       }
 
-      const data = await response.json();
+      const { data, error } = await supabase.functions.invoke('create-checkout-session', {
+        body: {
+          planType: plan.planType,
+        },
+      });
 
-      if (data.url) {
+      if (error) {
+        throw error;
+      }
+
+      if (data?.url) {
         window.location.href = data.url;
       } else {
         toast.error("Failed to create checkout session");
+        setLoadingPlan(null);
       }
     } catch (error) {
       console.error('Checkout error:', error);
