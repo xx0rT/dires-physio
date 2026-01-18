@@ -97,14 +97,18 @@ export function PhysioChatbot() {
     setIsTyping(true)
 
     try {
-      const authToken = session?.access_token || import.meta.env.VITE_SUPABASE_ANON_KEY
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+        'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY,
+      }
+
+      if (session?.access_token) {
+        headers['Authorization'] = `Bearer ${session.access_token}`
+      }
 
       const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${authToken}`,
-          'Content-Type': 'application/json',
-        },
+        headers,
         body: JSON.stringify({ question: userQuestion })
       })
 
