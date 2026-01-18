@@ -203,16 +203,7 @@ export default function CoursesPage() {
         </p>
       </motion.div>
 
-      {user && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="max-w-4xl mx-auto"
-        >
-          <PhysioChatbot />
-        </motion.div>
-      )}
+      {user && <PhysioChatbot />}
 
       <div className="relative max-w-4xl mx-auto">
         <svg className="absolute left-8 top-0 w-1 h-full hidden md:block" style={{ zIndex: 0 }}>
