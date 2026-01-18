@@ -104,36 +104,26 @@ Deno.serve(async (req: Request) => {
       });
     }
 
-    const lineItems = [
-      {
-        price_data: {
-          currency: "usd",
-          product_data: {
-            name: selectedPlan.name,
-            description: `${selectedPlan.name} subscription`,
-          },
-          unit_amount: finalPrice,
-          ...(selectedPlan.recurring && {
-            recurring: {
-              interval: "month",
-            },
-          }),
-        },
-        quantity: 1,
-      },
-    ];
+    const formData = new URLSearchParams();
+    formData.append("payment_method_types[]", "card");
+    formData.append("line_items[0][price_data][currency]", "usd");
+    formData.append("line_items[0][price_data][product_data][name]", selectedPlan.name);
+    formData.append("line_items[0][price_data][product_data][description]", `${selectedPlan.name} subscription`);
+    formData.append("line_items[0][price_data][unit_amount]", finalPrice.toString());
 
-    const sessionParams: any = {
-      payment_method_types: ["card"],
-      line_items: lineItems,
-      mode: selectedPlan.recurring ? "subscription" : "payment",
-      success_url: `${req.headers.get("origin")}/order-confirmation?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${req.headers.get("origin")}/checkout`,
-      metadata: {
-        planType,
-        promoCode: promoCode || "",
-      },
-    };
+    if (selectedPlan.recurring) {
+      formData.append("line_items[0][price_data][recurring][interval]", "month");
+    }
+
+    formData.append("line_items[0][quantity]", "1");
+    formData.append("mode", selectedPlan.recurring ? "subscription" : "payment");
+    formData.append("success_url", `${req.headers.get("origin")}/order-confirmation?session_id={CHECKOUT_SESSION_ID}`);
+    formData.append("cancel_url", `${req.headers.get("origin")}/checkout`);
+    formData.append("metadata[planType]", planType);
+
+    if (promoCode) {
+      formData.append("metadata[promoCode]", promoCode);
+    }
 
     const stripeResponse = await fetch(
       "https://api.stripe.com/v1/checkout/sessions",
@@ -143,7 +133,7 @@ Deno.serve(async (req: Request) => {
           Authorization: `Bearer ${STRIPE_SECRET_KEY}`,
           "Content-Type": "application/x-www-form-urlencoded",
         },
-        body: new URLSearchParams(sessionParams as any).toString(),
+        body: formData.toString(),
       }
     );
 

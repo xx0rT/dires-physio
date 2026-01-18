@@ -336,25 +336,6 @@ const CheckoutPage = ({ className }: CheckoutPageProps) => {
 
             <div className="p-8 pt-32 lg:p-12 lg:pt-40 xl:p-16 xl:pt-48">
               <div className="mx-auto w-full max-w-md">
-                <Button
-                  type="button"
-                  className="h-auto w-full bg-foreground py-1 text-background hover:bg-foreground/90"
-                >
-                  <img
-                    src="https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/apple-pay-white.svg"
-                    alt="Apple Pay"
-                    className="h-12"
-                  />
-                </Button>
-
-                <div className="my-6 flex items-center gap-4">
-                  <Separator className="flex-1" />
-                  <span className="text-sm text-muted-foreground">
-                    or pay with card
-                  </span>
-                  <Separator className="flex-1" />
-                </div>
-
                 <div className="space-y-6">
                   <EmailField />
 
