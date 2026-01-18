@@ -107,8 +107,50 @@ const CheckoutPage = ({ className }: CheckoutPageProps) => {
   });
 
   const onSubmit = (data: CheckoutFormType) => {
-    console.log("Form submitted:", data);
-    console.log("Order:", orderData);
+    const orderNumber = `ORD-${new Date().getFullYear()}-${Math.floor(Math.random() * 100000)}`;
+    const orderDate = new Date().toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+
+    const confirmationData = {
+      orderNumber,
+      orderDate,
+      status: "confirmed" as const,
+      email: data.email,
+      items: orderData.items.map(item => ({
+        ...item,
+        image: "https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg?auto=compress&cs=tinysrgb&w=400",
+        quantity: 1,
+        details: [
+          { label: "Plan", value: item.name.includes("Basic") ? "Basic" : item.name.includes("Business") ? "Business" : "Enterprise" },
+          { label: "Billing", value: item.name.includes("Monthly") ? "Monthly" : "Annual" },
+        ],
+      })),
+      subtotal: orderData.items.reduce((sum, item) => sum + item.price, 0),
+      shipping: 0,
+      tax: 0,
+      discount: 0,
+      total: orderData.items.reduce((sum, item) => sum + item.price, 0),
+      shippingAddress: {
+        name: data.cardholderName,
+        street: "1234 Main Street",
+        city: "San Francisco",
+        state: "CA",
+        zipCode: "94102",
+        country: data.country,
+      },
+      shippingMethod: "Digital Delivery",
+      estimatedDelivery: "Instant Access",
+      paymentMethod: {
+        type: "card" as const,
+        lastFour: data.cardNumber.slice(-4),
+        cardBrand: "Visa",
+      },
+    };
+
+    navigate("/order-confirmation", { state: { order: confirmationData } });
   };
 
   const subtotal = orderData.items.reduce((sum, item) => sum + item.price, 0);
