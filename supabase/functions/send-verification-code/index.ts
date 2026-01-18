@@ -77,19 +77,6 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    const { error: emailError } = await supabaseAdmin.auth.admin.inviteUserByEmail(
-      email,
-      {
-        data: {
-          verification_code: code,
-        },
-      }
-    );
-
-    if (emailError) {
-      console.error("Email error:", emailError);
-    }
-
     const emailHtml = `
       <!DOCTYPE html>
       <html>
@@ -123,24 +110,39 @@ Deno.serve(async (req: Request) => {
     `;
 
     try {
-      const response = await fetch(`${Deno.env.get("SUPABASE_URL")}/auth/v1/verify`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": Deno.env.get("SUPABASE_ANON_KEY")!,
-        },
-        body: JSON.stringify({
-          type: "signup",
-          email: email,
-          token: code,
-        }),
-      });
+      const resendApiKey = Deno.env.get("RESEND_API_KEY");
 
-      if (!response.ok) {
-        console.warn("Supabase email send failed, but code was saved");
+      if (resendApiKey) {
+        const resendResponse = await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${resendApiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            from: "noreply@yourdomain.com",
+            to: email,
+            subject: "Ověřte svůj email",
+            html: emailHtml,
+          }),
+        });
+
+        if (!resendResponse.ok) {
+          const error = await resendResponse.text();
+          console.error("Resend API error:", error);
+        }
+      } else {
+        console.log("=== VERIFICATION CODE ===");
+        console.log(`Email: ${email}`);
+        console.log(`Code: ${code}`);
+        console.log("========================");
       }
     } catch (e) {
-      console.warn("Could not send via Supabase auth:", e);
+      console.error("Email sending error:", e);
+      console.log("=== VERIFICATION CODE (fallback) ===");
+      console.log(`Email: ${email}`);
+      console.log(`Code: ${code}`);
+      console.log("====================================");
     }
 
     return new Response(
