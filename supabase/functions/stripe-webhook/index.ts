@@ -37,12 +37,37 @@ Deno.serve(async (req: Request) => {
         const { planType, promoCode, userEmail, userName } = session.metadata;
         const customerId = session.customer;
         const subscriptionId = session.subscription;
-        const userId = session.client_reference_id;
+        let userId = session.client_reference_id;
 
-        console.log("Checkout completed:", { userId, planType, customerId, subscriptionId });
+        console.log("🔔 Checkout completed - Full session data:", {
+          userId,
+          planType,
+          customerId,
+          subscriptionId,
+          userEmail,
+          userName,
+          metadata: session.metadata
+        });
+
+        if (!userId && userEmail) {
+          console.log("⚠️ No client_reference_id, attempting to find user by email:", userEmail);
+          try {
+            const { data: { user } } = await supabase.auth.admin.getUserByEmail(userEmail);
+            if (user) {
+              userId = user.id;
+              console.log("✅ Found user ID from email:", userId);
+            }
+          } catch (lookupError) {
+            console.error("❌ Error looking up user by email:", lookupError);
+          }
+        }
 
         if (!userId) {
-          console.error("No user ID in session");
+          console.error("❌ No user ID found - cannot create subscription", {
+            client_reference_id: session.client_reference_id,
+            userEmail,
+            session_id: session.id
+          });
           break;
         }
 
@@ -83,7 +108,7 @@ Deno.serve(async (req: Request) => {
 
         let subscription;
         if (existingSub) {
-          console.log("Updating existing subscription for user:", userId);
+          console.log("🔄 Updating existing subscription for user:", userId);
           const { data, error } = await supabase
             .from("subscriptions")
             .update(subscriptionData)
@@ -92,13 +117,16 @@ Deno.serve(async (req: Request) => {
             .maybeSingle();
 
           if (error) {
-            console.error("Error updating subscription:", error);
+            console.error("❌ Error updating subscription:", error, {
+              userId,
+              subscriptionData
+            });
             throw error;
           }
           subscription = data;
-          console.log("Subscription updated successfully:", subscription);
+          console.log("✅ Subscription updated successfully:", subscription);
         } else {
-          console.log("Creating new subscription for user:", userId);
+          console.log("➕ Creating new subscription for user:", userId);
           const { data, error } = await supabase
             .from("subscriptions")
             .insert({
@@ -109,11 +137,14 @@ Deno.serve(async (req: Request) => {
             .maybeSingle();
 
           if (error) {
-            console.error("Error creating subscription:", error);
+            console.error("❌ Error creating subscription:", error, {
+              userId,
+              subscriptionData
+            });
             throw error;
           }
           subscription = data;
-          console.log("Subscription created successfully:", subscription);
+          console.log("✅ Subscription created successfully:", subscription);
         }
 
         const planNames = {
@@ -124,8 +155,9 @@ Deno.serve(async (req: Request) => {
 
         const amount = session.amount_total / 100;
 
+        console.log("📧 Attempting to send invoice email to:", userEmail);
         try {
-          await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/send-invoice-email`, {
+          const emailResponse = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/send-invoice-email`, {
             method: "POST",
             headers: {
               Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
@@ -142,8 +174,15 @@ Deno.serve(async (req: Request) => {
               orderDate: new Date().toLocaleDateString('cs-CZ'),
             }),
           });
+
+          if (!emailResponse.ok) {
+            const errorText = await emailResponse.text();
+            console.error("❌ Invoice email API returned error:", errorText);
+          } else {
+            console.log("✅ Invoice email sent successfully");
+          }
         } catch (emailError) {
-          console.error("Error sending invoice email:", emailError);
+          console.error("❌ Error sending invoice email (non-fatal):", emailError);
         }
 
         if (promoCode && subscription) {
