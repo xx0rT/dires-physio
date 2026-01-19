@@ -129,15 +129,39 @@ Deno.serve(async (req: Request) => {
       const periodEnd = new Date();
       periodEnd.setDate(periodEnd.getDate() + 3);
 
-      const { error: subError } = await supabase
+      const { data: existingSub } = await supabase
         .from("subscriptions")
-        .insert({
-          user_id: user.id,
-          plan: "free_trial",
-          status: "trialing",
-          current_period_start: new Date().toISOString(),
-          current_period_end: periodEnd.toISOString(),
-        });
+        .select("id")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      let subError;
+      if (existingSub) {
+        const result = await supabase
+          .from("subscriptions")
+          .update({
+            plan: "free_trial",
+            status: "trialing",
+            current_period_start: new Date().toISOString(),
+            current_period_end: periodEnd.toISOString(),
+            stripe_subscription_id: `trial_${Date.now()}`,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("user_id", user.id);
+        subError = result.error;
+      } else {
+        const result = await supabase
+          .from("subscriptions")
+          .insert({
+            user_id: user.id,
+            plan: "free_trial",
+            status: "trialing",
+            current_period_start: new Date().toISOString(),
+            current_period_end: periodEnd.toISOString(),
+            stripe_subscription_id: `trial_${Date.now()}`,
+          });
+        subError = result.error;
+      }
 
       if (subError) {
         console.error("Error creating trial subscription:", subError);

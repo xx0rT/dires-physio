@@ -39,6 +39,8 @@ Deno.serve(async (req: Request) => {
         const subscriptionId = session.subscription;
         const userId = session.client_reference_id;
 
+        console.log("Checkout completed:", { userId, planType, customerId, subscriptionId });
+
         if (!userId) {
           console.error("No user ID in session");
           break;
@@ -54,54 +56,64 @@ Deno.serve(async (req: Request) => {
           periodEnd.setFullYear(periodEnd.getFullYear() + 100);
         }
 
+        const planMapping: Record<string, string> = {
+          "free_trial": "free_trial",
+          "monthly": "pro",
+          "lifetime": "premium"
+        };
+
+        const mappedPlan = planMapping[planType] || planType;
+        const subscriptionStatus = planType === "free_trial" ? "trialing" : "active";
+
         const { data: existingSub } = await supabase
           .from("subscriptions")
           .select("id")
           .eq("user_id", userId)
-          .single();
+          .maybeSingle();
+
+        const subscriptionData = {
+          plan: mappedPlan,
+          status: subscriptionStatus,
+          stripe_customer_id: customerId,
+          stripe_subscription_id: subscriptionId || `one_time_${Date.now()}`,
+          current_period_start: periodStart.toISOString(),
+          current_period_end: periodEnd.toISOString(),
+          updated_at: new Date().toISOString(),
+        };
 
         let subscription;
         if (existingSub) {
+          console.log("Updating existing subscription for user:", userId);
           const { data, error } = await supabase
             .from("subscriptions")
-            .update({
-              plan: planType,
-              status: planType === "free_trial" ? "trialing" : "active",
-              stripe_customer_id: customerId,
-              stripe_subscription_id: subscriptionId,
-              current_period_start: periodStart.toISOString(),
-              current_period_end: periodEnd.toISOString(),
-              updated_at: new Date().toISOString(),
-            })
+            .update(subscriptionData)
             .eq("user_id", userId)
             .select()
-            .single();
+            .maybeSingle();
 
           if (error) {
             console.error("Error updating subscription:", error);
             throw error;
           }
           subscription = data;
+          console.log("Subscription updated successfully:", subscription);
         } else {
+          console.log("Creating new subscription for user:", userId);
           const { data, error } = await supabase
             .from("subscriptions")
             .insert({
               user_id: userId,
-              plan: planType,
-              status: planType === "free_trial" ? "trialing" : "active",
-              stripe_customer_id: customerId,
-              stripe_subscription_id: subscriptionId,
-              current_period_start: periodStart.toISOString(),
-              current_period_end: periodEnd.toISOString(),
+              ...subscriptionData,
             })
             .select()
-            .single();
+            .maybeSingle();
 
           if (error) {
             console.error("Error creating subscription:", error);
             throw error;
           }
           subscription = data;
+          console.log("Subscription created successfully:", subscription);
         }
 
         const planNames = {
