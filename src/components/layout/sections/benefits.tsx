@@ -14,8 +14,7 @@ export const BenefitsSection = () => {
             title=" { Shadcn Blocks }"
             className="items-center justify-center text-center"
           >
-            And the coolest part? This is just the beginning—there&apos;s so
-            much more coming your way
+            Získáš systematické know-how, které používají profesionálové, naučíš se správně vyšetřovat pohybový aparát, rozpoznat skutečné příčiny potíží a zvolit účinnou terapii na míru každému klientovi. Kurz je navržen tak, aby byl srozumitelný i pro úplné začátečníky, ale zároveň přínosný i pro trenéry, maséry a zdravotnické pracovníky, kteří chtějí rozšířit své dovednosti.
           </TextReveal>
         </div>
       </div>
