@@ -1,315 +1,265 @@
-import { Link } from "react-router-dom"
-import { useState } from "react"
-import GithubIcon from "@/components/icons/github-icon"
-import LinkedInIcon from "@/components/icons/linkedin-icon"
-import XIcon from "@/components/icons/x-icon"
-import { Card, CardFooter, CardTitle } from "@/components/ui/card"
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
+"use client";
 
-interface TeamProps {
-    imageUrl: string
-    firstName: string
-    lastName: string
-    positions: string[]
-    socialNetworks: SocialNetworkProps[]
-    bio: string
-    education: string[]
-    specializations: string[]
-    yearsOfExperience: number
+import { motion } from "framer-motion";
+import { memo, useState } from "react";
+
+import { cn } from "@/lib/utils";
+
+interface TeamMember {
+  image: string;
+  name: string;
+  role: string;
+  description: string;
 }
-interface SocialNetworkProps {
-    name: string
-    url: string
+
+interface TeamMemberCardProps {
+  member: TeamMember;
+  highlighted?: boolean;
 }
-export const TeamSection = () => {
-    const [selectedMember, setSelectedMember] = useState<TeamProps | null>(null)
-    const [isDialogOpen, setIsDialogOpen] = useState(false)
 
-    const teamList: TeamProps[] = [
-        {
-            imageUrl:
-                "https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&w=1760&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-            firstName: "Dr. Petr",
-            lastName: "Svoboda",
-            positions: ["Specialista Manuální Terapie", "30 Let Klinické Praxe"],
-            socialNetworks: [
-                {
-                    name: "LinkedIn",
-                    url: "https://www.linkedin.com/company/dires"
-                }
-            ],
-            bio: "Dr. Petr Svoboda je uznávaný odborník v oblasti manuální terapie s více než třemi desetiletími klinické praxe. Jeho přístup kombinuje tradiční české metody s moderními rehabilitačními technikami, čímž poskytuje studentům komplexní vzdělání v této oblasti.",
-            education: [
-                "Lékařská fakulta Univerzity Karlovy, Praha",
-                "Certifikace v Manuální Terapii, Rakousko",
-                "Pokročilá certifikace v Myofasciální Terapii"
-            ],
-            specializations: [
-                "Manuální terapie páteře",
-                "Myofasciální terapie",
-                "Léčba chronické bolesti",
-                "Funkční diagnostika"
-            ],
-            yearsOfExperience: 30
-        },
-        {
-            imageUrl:
-                "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1528&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-            firstName: "Dr. Jana",
-            lastName: "Nováková",
-            positions: ["Expertka na Sportovní Rehabilitaci", "Bývalá Fyzioterapeutka Olympijského Týmu"],
-            socialNetworks: [
-                {
-                    name: "LinkedIn",
-                    url: "https://www.linkedin.com/company/dires"
-                }
-            ],
-            bio: "Dr. Jana Nováková přináší bohaté zkušenosti ze světa špičkového sportu. Jako bývalá fyzioterapeutka olympijského týmu pomáhala atletům dosahovat vrcholných výkonů a nyní předává své znalosti dalším generacím fyzioterapeutů.",
-            education: [
-                "Fakulta tělesné výchovy a sportu, Univerzita Karlova",
-                "Certifikace ve Sportovní Rehabilitaci, USA",
-                "Specializace v Prevenci Sportovních Zranění"
-            ],
-            specializations: [
-                "Sportovní zranění",
-                "Funkční trénink",
-                "Prevence zranění",
-                "Regenerace atletů"
-            ],
-            yearsOfExperience: 18
-        },
-        {
-            imageUrl:
-                "https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1480&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-            firstName: "Dr. Martin",
-            lastName: "Dvořák",
-            positions: ["Neurologická Rehabilitace", "Certifikovaný Instruktor Vojtovy Metody"],
-            socialNetworks: [
-                {
-                    name: "LinkedIn",
-                    url: "https://www.linkedin.com/company/dires"
-                }
-            ],
-            bio: "Dr. Martin Dvořák je předním odborníkem v neurologické rehabilitaci a certifikovaným instruktorem Vojtovy metody. Jeho hluboké porozumění neurologickým poruchám a inovativní přístupy k terapii pomohly stovkám pacientů zlepšit kvalitu života.",
-            education: [
-                "Neurologická klinika, Fakultní nemocnice Motol",
-                "Certifikace Vojtovy Metody, Mnichov",
-                "Bobath Koncept, certifikace"
-            ],
-            specializations: [
-                "Vojtova metoda",
-                "Bobath koncept",
-                "Neurologická rehabilitace",
-                "Léčba mozkové obrny"
-            ],
-            yearsOfExperience: 22
-        },
-        {
-            imageUrl:
-                "https://images.unsplash.com/photo-1573497161161-c3e73707e25c?q=80&w=1587&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-            firstName: "Dr. Eva",
-            lastName: "Horáková",
-            positions: ["Vedoucí Dětské Fyzioterapie", "Specialistka na Vývoj Dítěte"],
-            socialNetworks: [
-                {
-                    name: "LinkedIn",
-                    url: "https://www.linkedin.com/company/dires"
-                }
-            ],
-            bio: "Dr. Eva Horáková je renomovaná specialistka v oblasti dětské fyzioterapie s hlubokým porozuměním vývojových milníků a poruch. Její laskavý přístup a odbornost vytvářejí ideální prostředí pro učení o péči o nejmenší pacienty.",
-            education: [
-                "Pediatrická klinika, Univerzita Karlova",
-                "Certifikace v Dětské Fyzioterapii",
-                "Specializace ve Vývojových Poruchách"
-            ],
-            specializations: [
-                "Dětská fyzioterapie",
-                "Vývojové poruchy",
-                "Senzomotorická stimulace",
-                "Raná intervence"
-            ],
-            yearsOfExperience: 15
-        }
-    ]
-
-    const handleCardClick = (member: TeamProps) => {
-        setSelectedMember(member)
-        setIsDialogOpen(true)
-    }
-    const socialIcon = (socialName: string) => {
-        switch (socialName) {
-            case "LinkedIn":
-                return <LinkedInIcon />
-            case "Github":
-                return <GithubIcon />
-            case "X":
-                return <XIcon />
-        }
-    }
-
+const TeamMemberCard = memo(
+  ({ member, highlighted = false }: TeamMemberCardProps) => {
     return (
-        <section id="team" className="container mx-auto px-4 py-16 sm:py-20">
-            <div className="mb-8 text-center">
-                <h2 className="mb-2 text-center text-lg text-primary tracking-wider">
-                    Tým
-                </h2>
+      <div
+        className={cn(
+          "flex flex-col gap-4 px-2 md:px-5 md:pt-8",
+          highlighted && "md:py-0 md:pb-4",
+        )}
+      >
+        <div
+          className={cn(
+            "flex flex-col gap-2 pt-4 md:flex-row md:items-center",
+            !highlighted && "border-b pb-4 md:border-b-2",
+          )}
+        >
+          <img
+            src={member.image}
+            alt={`${member.name} Profile Picture`}
+            className="size-full rounded border object-cover md:size-12"
+          />
 
-                <h2 className="text-center font-bold text-3xl md:text-4xl">
-                    Naši Odborní Lektoři
-                </h2>
-            </div>
+          <div className="flex flex-col gap-1 tracking-tight">
+            <p className="line-clamp-1">{member.name}</p>
+            <p className="line-clamp-1 text-sm text-muted-foreground">
+              {member.role}
+            </p>
+          </div>
+        </div>
+        {highlighted && (
+          <>
+            <span className="h-0.5 w-full bg-gradient-to-r from-blue-500 via-green-500 to-yellow-500" />
+            <p className="line-clamp-2 text-xs">{member.description}</p>
+          </>
+        )}
+      </div>
+    );
+  },
+);
+TeamMemberCard.displayName = "TeamMemberCard";
 
-            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {teamList.map((member, index) => (
-                    <Card
-                        key={index}
-                        className="group flex h-full flex-col overflow-hidden bg-muted/60 py-0 cursor-pointer transition-all duration-300 hover:shadow-lg hover:shadow-primary/20"
-                        onClick={() => handleCardClick(member)}
-                    >
-                        <div className="relative overflow-hidden">
-                            <img
-                                src={member.imageUrl}
-                                alt={`${member.firstName} ${member.lastName}`}
-                                width={300}
-                                height={300}
-                                className="aspect-square w-full object-cover saturate-0 transition-all duration-300 ease-in-out group-hover:scale-105 group-hover:saturate-100"
-                            />
-                            <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition-all duration-300" />
-                        </div>
-
-                        <div className="flex-1 px-6">
-                            <CardTitle className="mb-2 text-xl">
-                                {member.firstName}
-                                <span className="ml-2 font-semibold text-primary">
-                                    {member.lastName}
-                                </span>
-                            </CardTitle>
-
-                            <div className="space-y-1">
-                                {member.positions.map((position, idx) => (
-                                    <div
-                                        key={idx}
-                                        className="text-muted-foreground text-sm leading-relaxed"
-                                    >
-                                        {position}
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        <CardFooter className="mb-6 flex gap-3">
-                            {member.socialNetworks.map(({ name, url }, idx) => (
-                                <Link
-                                    key={idx}
-                                    to={url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="transition-all duration-200 hover:scale-110 hover:opacity-80"
-                                    aria-label={`Visit ${member.firstName}'s ${name} profile`}
-                                    onClick={(e) => e.stopPropagation()}
-                                >
-                                    {socialIcon(name)}
-                                </Link>
-                            ))}
-                        </CardFooter>
-                    </Card>
-                ))}
-            </div>
-
-            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
-                    {selectedMember && (
-                        <>
-                            <DialogHeader>
-                                <div className="flex items-start gap-6 mb-4">
-                                    <img
-                                        src={selectedMember.imageUrl}
-                                        alt={`${selectedMember.firstName} ${selectedMember.lastName}`}
-                                        className="w-32 h-32 rounded-lg object-cover"
-                                    />
-                                    <div className="flex-1">
-                                        <DialogTitle className="text-3xl mb-2">
-                                            {selectedMember.firstName}{" "}
-                                            <span className="text-primary">
-                                                {selectedMember.lastName}
-                                            </span>
-                                        </DialogTitle>
-                                        <div className="space-y-1">
-                                            {selectedMember.positions.map((position, idx) => (
-                                                <p key={idx} className="text-muted-foreground text-sm">
-                                                    {position}
-                                                </p>
-                                            ))}
-                                        </div>
-                                        <p className="text-sm text-muted-foreground mt-2">
-                                            {selectedMember.yearsOfExperience} let praxe
-                                        </p>
-                                    </div>
-                                </div>
-                                <DialogDescription className="text-base leading-relaxed">
-                                    {selectedMember.bio}
-                                </DialogDescription>
-                            </DialogHeader>
-
-                            <div className="space-y-6 mt-6">
-                                <div>
-                                    <h3 className="font-semibold text-lg mb-3">Vzdělání a Certifikace</h3>
-                                    <ul className="space-y-2">
-                                        {selectedMember.education.map((edu, idx) => (
-                                            <li key={idx} className="flex items-start gap-2 text-sm text-muted-foreground">
-                                                <span className="text-primary mt-1">•</span>
-                                                <span>{edu}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-
-                                <div>
-                                    <h3 className="font-semibold text-lg mb-3">Specializace</h3>
-                                    <div className="flex flex-wrap gap-2">
-                                        {selectedMember.specializations.map((spec, idx) => (
-                                            <span
-                                                key={idx}
-                                                className="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full"
-                                            >
-                                                {spec}
-                                            </span>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                <div className="flex gap-3 pt-4 border-t">
-                                    {selectedMember.socialNetworks.map(({ name, url }, idx) => (
-                                        <Button
-                                            key={idx}
-                                            variant="outline"
-                                            size="sm"
-                                            asChild
-                                        >
-                                            <Link
-                                                to={url}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="flex items-center gap-2"
-                                            >
-                                                {socialIcon(name)}
-                                                <span>{name}</span>
-                                            </Link>
-                                        </Button>
-                                    ))}
-                                </div>
-                            </div>
-                        </>
-                    )}
-                </DialogContent>
-            </Dialog>
-        </section>
-    )
+interface Team11Props {
+  heading?: string;
+  description?: string;
+  members?: TeamMember[];
+  className?: string;
 }
+
+const Team11 = ({
+  className,
+  heading = "Meet Our Tech Team",
+  description = "The innovative minds building the future of technology",
+  members = [
+    {
+      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar1.jpg",
+      name: "Sarah Chen",
+      role: "Chief Technology Officer",
+      description:
+        "Former Google engineer with 12 years in cloud architecture.",
+    },
+    {
+      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar2.jpg",
+      name: "Marcus Rodriguez",
+      role: "Lead Software Engineer",
+      description: "Full-stack developer specializing in React and Node.js.",
+    },
+    {
+      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar3.jpg",
+      name: "Emily Watson",
+      role: "Product Manager",
+      description: "Data-driven product strategist with UX design background.",
+    },
+    {
+      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar4.jpg",
+      name: "David Kim",
+      role: "DevOps Engineer",
+      description:
+        "Infrastructure automation expert making deployments seamless.",
+    },
+    {
+      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar5.jpg",
+      name: "Lisa Thompson",
+      role: "UX/UI Designer",
+      description: "Creative designer passionate about user-centered design.",
+    },
+    {
+      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar6.jpg",
+      name: "Alex Johnson",
+      role: "Data Scientist",
+      description: "Machine learning specialist turning data into insights.",
+    },
+    {
+      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar7.jpg",
+      name: "Maria Garcia",
+      role: "Frontend Developer",
+      description:
+        "React and TypeScript expert creating smooth user experiences.",
+    },
+    {
+      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar8.jpg",
+      name: "James Wilson",
+      role: "Backend Developer",
+      description: "API architect and database optimization specialist.",
+    },
+    {
+      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar9.jpg",
+      name: "Rachel Park",
+      role: "QA Engineer",
+      description: "QA specialist ensuring products meet highest standards.",
+    },
+    {
+      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar10.jpg",
+      name: "Ryan Foster",
+      role: "Mobile Developer",
+      description: "iOS and Android expert creating smooth mobile experiences.",
+    },
+    {
+      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar11.jpg",
+      name: "Alexander Chen",
+      role: "Security Engineer",
+      description: "Cybersecurity expert protecting systems from threats.",
+    },
+    {
+      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar12.jpg",
+      name: "Christian Mueller",
+      role: "Technical Writer",
+      description:
+        "Documentation specialist making technical concepts accessible.",
+    },
+    {
+      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar13.jpg",
+      name: "Sophie Anderson",
+      role: "Marketing Manager",
+      description: "Growth marketing expert driving user acquisition.",
+    },
+    {
+      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar13.jpg",
+      name: "Joseph Gonzalez",
+      role: "Sales Engineer",
+      description:
+        "Technical sales specialist helping clients understand solutions.",
+    },
+    {
+      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar14.jpg",
+      name: "Michelle Dam",
+      role: "Customer Success Manager",
+      description: "Customer advocate ensuring clients achieve their goals.",
+    },
+    {
+      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar15.jpg",
+      name: "Nima Motaghian",
+      role: "Business Analyst",
+      description:
+        "Data analyst translating business requirements into solutions.",
+    },
+    {
+      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar16.jpg",
+      name: "Jessica Liu",
+      role: "HR Manager",
+      description: "People operations specialist building company culture.",
+    },
+    {
+      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar17.jpg",
+      name: "Kevin O'Brien",
+      role: "Finance Manager",
+      description: "Financial planning expert keeping business on track.",
+    },
+    {
+      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar18.jpg",
+      name: "Amanda Torres",
+      role: "Content Strategist",
+      description: "Content marketing expert creating engaging tech stories.",
+    },
+    {
+      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar19.jpg",
+      name: "Robert Kim",
+      role: "Legal Counsel",
+      description: "Technology lawyer navigating regulatory landscapes.",
+    },
+    {
+      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar20.jpg",
+      name: "Jennifer Walsh",
+      role: "Operations Manager",
+      description: "Operations specialist ensuring smooth business functions.",
+    },
+    {
+      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar21.jpg",
+      name: "Daniel Patel",
+      role: "Research Engineer",
+      description: "R&D specialist exploring cutting-edge technologies.",
+    },
+  ],
+}: Team11Props) => {
+  const [hoveredMember, setHoveredMember] = useState<number | null>(null);
+
+  return (
+    <section id="team" className={cn("py-32", className)}>
+      <div className="container">
+        <div className="flex flex-col gap-14">
+          <div className="flex flex-col gap-4 border-b-2 pb-6">
+            <h3 className="text-3xl font-light tracking-tight lg:text-6xl">
+              {heading}
+            </h3>
+            <p className="text-sm tracking-tight text-muted-foreground lg:text-lg">
+              {description}
+            </p>
+          </div>
+          <ul
+            onMouseLeave={() => setHoveredMember(null)}
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+          >
+            {members.map((member, index) => {
+              return (
+                <li
+                  key={`team-11-member-${index}`}
+                  onMouseEnter={() => setHoveredMember(index)}
+                  className="relative"
+                >
+                  <TeamMemberCard member={member} />
+
+                  {hoveredMember === index && (
+                    <motion.div
+                      layoutId="team-11-member-card"
+                      transition={{
+                        layout: {
+                          duration: 0.2,
+                          type: "spring",
+                          bounce: 0.1,
+                        },
+                      }}
+                      className="pointer-events-none absolute inset-0 z-10 hidden h-max rounded-2xl bg-background shadow-lg md:block dark:border"
+                    >
+                      <TeamMemberCard member={member} highlighted />
+                    </motion.div>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export { Team11 };
+export const TeamSection = Team11;
