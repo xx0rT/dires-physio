@@ -11,7 +11,7 @@ export const BenefitsSection = () => {
       <div className="container flex flex-col items-center justify-center">
         <div className="flex max-w-4xl">
           <TextReveal
-            title=" { Shadcn Blocks }"
+            title=" { Dires Fyzio }"
             className="items-center justify-center text-center"
           >
             Získáš systematické know-how, které používají profesionálové, naučíš se správně vyšetřovat pohybový aparát, rozpoznat skutečné příčiny potíží a zvolit účinnou terapii na míru každému klientovi. Kurz je navržen tak, aby byl srozumitelný i pro úplné začátečníky, ale zároveň přínosný i pro trenéry, maséry a zdravotnické pracovníky, kteří chtějí rozšířit své dovednosti.
