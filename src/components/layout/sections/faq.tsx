@@ -1,4 +1,6 @@
-import { MessageCircleQuestion } from "lucide-react";
+"use client";
+
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -8,97 +10,318 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Badge } from "@/components/ui/badge";
-import { PatternPlaceholder } from "@/components/shadcnblocks/pattern-placeholder";
+import { Button } from "@/components/ui/button";
 
-const DATA = [
+type Category = "Support" | "Account" | "Features" | "Security" | "Other";
+
+interface FAQItem {
+  question: string;
+  answer: string;
+  category: Category;
+}
+
+const faqItems: FAQItem[] = [
+  // Support Questions
   {
-    question: "Existuje bezplatná verze?",
+    category: "Support",
+    question: "Is there a free version?",
     answer:
-      "Ano! Nabízíme bezplatný plán se základními funkcemi. Kdykoli můžete upgradovat na pokročilé nástroje a integrace.",
+      "Yes! We offer a generous free plan with just enough features except that one feature you really want! Our strategy is to get your credit card details on file then steadily double our prices against inflation rates.",
   },
   {
-    question: "Jaké aplikace mohu integrovat?",
+    category: "Support",
+    question: "Is support free, or do I need to Perplexity everything?",
     answer:
-      "Naše platforma podporuje integraci s různými populárními aplikacemi a službami. Konkrétní dostupné integrace závisí na úrovni vašeho plánu.",
+      "We pride ourselves on our comprehensive support system. Our chatbot will happily redirect you to our documentation, which will then redirect you back to the chatbot.",
   },
   {
-    question: "Jak funguje AI?",
+    category: "Support",
+    question: "What if I need immediate assistance?",
     answer:
-      "Naše AI technologie využívá pokročilé algoritmy strojového učení k analýze a zpracování vašich dat, poskytující inteligentní poznatky a automatizační schopnosti.",
+      "Our AI support team will get back to you in approximately 3-5 business years.",
+  },
+  // Account Questions
+  {
+    category: "Account",
+    question: "How do I update my account without breaking my laptop?",
+    answer:
+      "Our platform is designed to be extremely user-friendly. Just follow our simple 47-step process, and you should be fine!",
   },
   {
-    question: "Mohu to používat s týmem?",
-    answer:
-      "Rozhodně! Naše platforma je navržena jak pro individuální, tak pro týmové použití. Můžete snadno spolupracovat a sdílet zdroje s členy týmu.",
+    category: "Account",
+    question: "How do I update my account without breaking the universe?",
+    answer: "Just be very careful not to press any buttons too hard.",
   },
   {
-    question: "Jsou moje data v bezpečí?",
+    category: "Account",
+    question: "What happens if I forget my password?",
+    answer: "You'll need to solve three riddles and defeat a dragon.",
+  },
+  // Features Questions
+  {
+    category: "Features",
+    question: "Are you going to be subsumed by AI?",
     answer:
-      "Bereme bezpečnost dat vážně. Všechna data jsou šifrována a bezpečně uložena podle osvědčených postupů a standardů dodržování předpisů v oboru.",
+      "Probably! But until then, we'll keep pretending we're irreplaceable.",
   },
   {
-    question: "Jak spravuji své předplatné?",
+    category: "Features",
+    question: "What makes your platform unique?",
     answer:
-      "Své předplatné můžete snadno spravovat prostřednictvím dashboardu svého účtu, kde můžete upgradovat, downgradovat nebo upravit nastavení plánu.",
+      "We use at least 7 different types of AI, and none of them work together!",
+  },
+  {
+    category: "Features",
+    question: "Do you support integration with other tools?",
+    answer: "We integrate with everything except the tools you actually use.",
+  },
+  // Security Questions
+  {
+    category: "Security",
+    question: "How secure is my data?",
+    answer:
+      'We use military-grade encryption, but our password is "password123".',
+  },
+  {
+    category: "Security",
+    question: "What happens in case of a data breach?",
+    answer:
+      "We'll send you a very apologetic email with a $5 gift card to your local coffee shop.",
+  },
+  {
+    category: "Security",
+    question: "Do you have a backup system?",
+    answer:
+      "Yes, we back up everything to a USB stick that we keep in a very safe place... somewhere.",
+  },
+  // Other Questions
+  {
+    category: "Other",
+    question: "Why is your pricing so complicated?",
+    answer:
+      "Because simple pricing would make it too easy for you to understand what you're paying for.",
+  },
+  {
+    category: "Other",
+    question: "Do you offer refunds?",
+    answer:
+      "Yes, but only if you can prove you're from an alternate dimension.",
+  },
+  {
+    category: "Other",
+    question: "What's your roadmap look like?",
+    answer: "It's more of a road-squiggle, really. We're agile!",
   },
 ];
 
-interface Faq10Props {
+const categories: Category[] = [
+  "Support",
+  "Account",
+  "Features",
+  "Security",
+  "Other",
+];
+
+const TOP_PADDING = 300;
+
+interface Faq12Props {
   className?: string;
 }
 
-export const FAQSection = ({ className }: Faq10Props) => {
-  return (
-    <section className={cn("relative py-32", className)}>
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          background:
-            "radial-gradient(ellipse 80% 60% at 50% 0%, oklch(from var(--primary) calc(l - 0.1) c h / 0.20), transparent 70%)",
-        }}
-      />
-      <PatternPlaceholder />
+const Faq12 = ({ className }: Faq12Props) => {
+  const [activeCategory, setActiveCategory] = useState<Category>("Support");
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const isScrollingRef = useRef(false);
+  const categoryRefs = useRef<Record<Category, HTMLDivElement | null>>({
+    Support: null,
+    Account: null,
+    Features: null,
+    Security: null,
+    Other: null,
+  });
 
-      <div className="container mx-auto relative z-10">
-        <div className="flex flex-col items-center gap-6 py-4 lg:py-8">
-          <Badge
-            variant="outline"
-            className="w-fit gap-1 bg-card px-3 text-sm font-normal tracking-tight shadow-sm"
-          >
-            <MessageCircleQuestion className="size-4" />
-            <span>FAQ</span>
-          </Badge>
-          <h2 className="text-3xl leading-tight tracking-tight md:text-4xl lg:text-6xl text-center">
-            Vše, co potřebujete vědět
-          </h2>
-          <p className="max-w-[600px] tracking-[-0.32px] text-muted-foreground text-center">
-            Hledáte rychlé odpovědi? Podívejte se na naši{" "}
-            <span className="underline">sekci FAQ</span>.
+  const setupObserver = useCallback(() => {
+    observerRef.current?.disconnect();
+
+    let debounceTimeout: NodeJS.Timeout;
+
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        // Skip if we're programmatically scrolling
+        if (isScrollingRef.current) return;
+
+        // Clear any pending timeout
+        if (debounceTimeout) {
+          clearTimeout(debounceTimeout);
+        }
+
+        // Debounce the category update
+        debounceTimeout = setTimeout(() => {
+          const intersectingEntries = entries.filter(
+            (entry) => entry.isIntersecting,
+          );
+
+          // Find the entry that's closest to being 100px from the top
+          const entry = intersectingEntries.reduce(
+            (closest, current) => {
+              const rect = current.boundingClientRect;
+              const distanceFromThreshold = Math.abs(rect.top - TOP_PADDING);
+              const closestDistance = closest
+                ? Math.abs(closest.boundingClientRect.top - TOP_PADDING)
+                : Infinity;
+
+              return distanceFromThreshold < closestDistance
+                ? current
+                : closest;
+            },
+            null as IntersectionObserverEntry | null,
+          );
+
+          if (entry) {
+            const category = entry.target.getAttribute(
+              "data-category",
+            ) as Category;
+            if (category) {
+              setActiveCategory(category);
+            }
+          }
+        }, 150);
+      },
+      {
+        root: null,
+        rootMargin: `-${TOP_PADDING}px 0px -100% 0px`,
+        threshold: [0, 0.25, 0.5, 0.75, 1],
+      },
+    );
+
+    Object.entries(categoryRefs.current).forEach(([category, element]) => {
+      if (element) {
+        element.setAttribute("data-category", category);
+        observerRef.current?.observe(element);
+      }
+    });
+
+    return () => {
+      if (debounceTimeout) {
+        clearTimeout(debounceTimeout);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const cleanup = setupObserver();
+    return () => {
+      cleanup();
+      observerRef.current?.disconnect();
+    };
+  }, [setupObserver]);
+
+  const handleCategoryClick = (category: Category) => {
+    setActiveCategory(category);
+    isScrollingRef.current = true;
+
+    const element = document.getElementById(`faq-${category.toLowerCase()}`);
+    if (element) {
+      element.style.scrollMargin = `${TOP_PADDING}px`;
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+
+      setTimeout(() => {
+        isScrollingRef.current = false;
+      }, 1000);
+    }
+  };
+
+  return (
+    <section
+      className={cn(
+        "min-h-screen bg-[#F2F2F2] py-32 dark:bg-[#24242B]",
+        className,
+      )}
+    >
+      <div className="container max-w-4xl">
+        <div className="text-center">
+          <h1 className="text-center text-4xl font-semibold tracking-tight sm:text-5xl">
+            We've got answers
+          </h1>
+          <p className="mx-auto mt-4 max-w-xl text-center text-balance text-muted-foreground">
+            This really should be an LLM but we're waiting for RAG to truly
+            reach commodity stage before we touch it.
           </p>
         </div>
-      </div>
 
-      <div className="container mx-auto relative z-10">
-        <div className="mx-auto max-w-3xl pt-8 pb-4 md:pb-8 lg:pt-[3.75rem] lg:pb-[50px]">
-          <Accordion type="single" collapsible className="space-y-4">
-            {DATA.map((item, index) => (
-              <AccordionItem
-                key={index}
-                value={`item-${index}`}
-                className="rounded-[7px] border px-6 text-primary data-[state=open]:pb-2"
+        <div className="mt-8 grid max-w-5xl gap-8 md:mt-12 md:grid-cols-[200px_1fr] md:gap-12 lg:mt-16">
+          {/* Sidebar */}
+          <div className="sticky top-24 flex h-fit flex-col gap-4 max-md:hidden">
+            {categories.map((category) => (
+              <Button
+                variant="ghost"
+                key={category}
+                onClick={() => handleCategoryClick(category)}
+                className={`justify-start text-left text-xl transition-colors ${
+                  activeCategory === category
+                    ? "font-semibold"
+                    : "font-normal hover:opacity-75"
+                }`}
               >
-                <AccordionTrigger className="py-5 text-start text-base tracking-[-0.32px]">
-                  {item.question}
-                </AccordionTrigger>
-                <AccordionContent className="text-base tracking-[-0.32px] text-muted-foreground">
-                  {item.answer}
-                </AccordionContent>
-              </AccordionItem>
+                {category}
+              </Button>
             ))}
-          </Accordion>
+          </div>
+
+          {/* FAQ Items by Category */}
+          <div className="space-y-6">
+            {categories.map((category) => {
+              const categoryItems = faqItems.filter(
+                (item) => item.category === category,
+              );
+
+              return (
+                <div
+                  key={category}
+                  id={`faq-${category.toLowerCase()}`}
+                  ref={(el) => {
+                    categoryRefs.current[category] = el;
+                  }}
+                  className={cn(
+                    `rounded-xl`,
+                    activeCategory === category
+                      ? "bg-background"
+                      : "bg-background/40",
+                    "px-6",
+                  )}
+                  style={{
+                    scrollMargin: `${TOP_PADDING}px`,
+                  }}
+                >
+                  <Accordion
+                    type="single"
+                    collapsible
+                    defaultValue={`${categories[0]}-0`}
+                    className="w-full"
+                  >
+                    {categoryItems.map((item, i) => (
+                      <AccordionItem
+                        key={i}
+                        value={`${category}-${i}`}
+                        className="border-b border-muted last:border-0"
+                      >
+                        <AccordionTrigger className="text-base font-medium hover:no-underline">
+                          {item.question}
+                        </AccordionTrigger>
+                        <AccordionContent className="text-base font-medium text-muted-foreground">
+                          {item.answer}
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>
   );
 };
+
+export { Faq12 };
