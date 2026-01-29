@@ -325,3 +325,4 @@ const Faq12 = ({ className }: Faq12Props) => {
 };
 
 export { Faq12 };
+export const FAQSection = Faq12;
