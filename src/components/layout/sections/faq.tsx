@@ -239,17 +239,17 @@ const Faq12 = ({ className }: Faq12Props) => {
       )}
     >
       <div className="container max-w-4xl">
-        <div className="text-center">
-          <h1 className="text-center text-4xl font-semibold tracking-tight sm:text-5xl">
-            We've got answers
-          </h1>
-          <p className="mx-auto mt-4 max-w-xl text-center text-balance text-muted-foreground">
-            This really should be an LLM but we're waiting for RAG to truly
-            reach commodity stage before we touch it.
-          </p>
-        </div>
+        <div className="flex flex-col items-center gap-14">
+          <div className="flex flex-col gap-4 border-b-2 pb-6 text-center max-w-3xl">
+            <h3 className="text-3xl font-light tracking-tight lg:text-6xl">
+              Často kladené otázky
+            </h3>
+            <p className="text-sm tracking-tight text-muted-foreground lg:text-lg">
+              Získáš systematické know-how od českých odborníků
+            </p>
+          </div>
 
-        <div className="mt-8 grid max-w-5xl gap-8 md:mt-12 md:grid-cols-[200px_1fr] md:gap-12 lg:mt-16">
+        <div className="mt-0 grid max-w-5xl gap-8 md:mt-0 md:grid-cols-[200px_1fr] md:gap-12 lg:mt-0">
           {/* Sidebar */}
           <div className="sticky top-24 flex h-fit flex-col gap-4 max-md:hidden">
             {categories.map((category) => (
@@ -318,6 +318,7 @@ const Faq12 = ({ className }: Faq12Props) => {
               );
             })}
           </div>
+        </div>
         </div>
       </div>
     </section>
