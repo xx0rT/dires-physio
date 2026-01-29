@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 
-type Category = "Support" | "Account" | "Features" | "Security" | "Other";
+type Category = "Obecné" | "Cvičení" | "Bolest" | "Terapie" | "Ostatní";
 
 interface FAQItem {
   question: string;
@@ -21,105 +21,109 @@ interface FAQItem {
 }
 
 const faqItems: FAQItem[] = [
-  // Support Questions
+  // Obecné Questions
   {
-    category: "Support",
-    question: "Is there a free version?",
+    category: "Obecné",
+    question: "Jak dlouho trvá průměrná fyzioterapeutická léčba?",
     answer:
-      "Yes! We offer a generous free plan with just enough features except that one feature you really want! Our strategy is to get your credit card details on file then steadily double our prices against inflation rates.",
+      "Délka léčby závisí na druhu zranění a jeho závažnosti. Průměrně trvá léčba 4-8 týdnů s 2-3 návštěvami týdně. Při akutních problémech můžete vidět zlepšení již po prvních sezeních.",
   },
   {
-    category: "Support",
-    question: "Is support free, or do I need to Perplexity everything?",
+    category: "Obecné",
+    question: "Potřebuji doporučení od lékaře?",
     answer:
-      "We pride ourselves on our comprehensive support system. Our chatbot will happily redirect you to our documentation, which will then redirect you back to the chatbot.",
+      "V České republice můžete navštívit fyzioterapeuta i bez doporučení. Pro úhradu zdravotní pojišťovnou je však nutné mít doporučení od praktického lékaře nebo specialisty.",
   },
   {
-    category: "Support",
-    question: "What if I need immediate assistance?",
+    category: "Obecné",
+    question: "Jaký je rozdíl mezi fyzioterapií a rehabilitací?",
     answer:
-      "Our AI support team will get back to you in approximately 3-5 business years.",
+      "Fyzioterapie je součástí rehabilitace. Rehabilitace je širší pojem zahrnující celkový proces uzdravení, zatímco fyzioterapie se zaměřuje konkrétně na pohybové funkce pomocí cvičení, masáží a dalších technik.",
   },
-  // Account Questions
+  // Cvičení Questions
   {
-    category: "Account",
-    question: "How do I update my account without breaking my laptop?",
+    category: "Cvičení",
+    question: "Jak často bych měl cvičit doma?",
     answer:
-      "Our platform is designed to be extremely user-friendly. Just follow our simple 47-step process, and you should be fine!",
+      "Domácí cvičení je klíčové pro úspěšnou rehabilitaci. Doporučujeme cvičit 2-3x denně po 15-20 minut. Váš fyzioterapeut vám sestaví individuální plán přizpůsobený vašemu stavu.",
   },
   {
-    category: "Account",
-    question: "How do I update my account without breaking the universe?",
-    answer: "Just be very careful not to press any buttons too hard.",
-  },
-  {
-    category: "Account",
-    question: "What happens if I forget my password?",
-    answer: "You'll need to solve three riddles and defeat a dragon.",
-  },
-  // Features Questions
-  {
-    category: "Features",
-    question: "Are you going to be subsumed by AI?",
+    category: "Cvičení",
+    question: "Můžu cvičit, když mě to bolí?",
     answer:
-      "Probably! But until then, we'll keep pretending we're irreplaceable.",
+      "Lehká nepříjemnost při cvičení je normální, ale ostrá nebo intenzivní bolest je varováním. Platí pravidlo: cvičení by nemělo zvyšovat bolest více než na 3-4 na škále 0-10. Při silnější bolesti cvičení přerušte a konzultujte s fyzioterapeutem.",
   },
   {
-    category: "Features",
-    question: "What makes your platform unique?",
+    category: "Cvičení",
+    question: "Jak poznám, že cvičím správně?",
     answer:
-      "We use at least 7 different types of AI, and none of them work together!",
+      "Správná technika je zásadní. Měli byste cítit zapojení správných svalů, mít kontrolu nad pohybem a nedocházet k náhradním pohybovým vzorcům. Při pochybnostech vždy požádejte fyzioterapeuta o kontrolu techniky.",
   },
+  // Bolest Questions
   {
-    category: "Features",
-    question: "Do you support integration with other tools?",
-    answer: "We integrate with everything except the tools you actually use.",
-  },
-  // Security Questions
-  {
-    category: "Security",
-    question: "How secure is my data?",
+    category: "Bolest",
+    question: "Je normální, že mě bolí po terapii?",
     answer:
-      'We use military-grade encryption, but our password is "password123".',
+      "Lehká bolest svalů následující den po terapii je normální, podobně jako po cvičení. Měla by ustoupit do 24-48 hodin. Pokud bolest přetrvává nebo se zhoršuje, kontaktujte svého fyzioterapeuta.",
   },
   {
-    category: "Security",
-    question: "What happens in case of a data breach?",
+    category: "Bolest",
+    question: "Jak dlouho trvá, než bolest odezní?",
     answer:
-      "We'll send you a very apologetic email with a $5 gift card to your local coffee shop.",
+      "To závisí na příčině bolesti. Akutní bolest může ustoupit za několik dní až týdnů. Chronická bolest vyžaduje delší léčbu, obvykle několik měsíců. Důležitá je pravidelnost terapie a domácího cvičení.",
   },
   {
-    category: "Security",
-    question: "Do you have a backup system?",
+    category: "Bolest",
+    question: "Pomáhá fyzioterapie při chronické bolesti?",
     answer:
-      "Yes, we back up everything to a USB stick that we keep in a very safe place... somewhere.",
+      "Ano, fyzioterapie je velmi efektivní při léčbě chronické bolesti. Kombinuje aktivní cvičení, manuální techniky a edukaci o bolesti. Cílem je nejen zmírnit bolest, ale také naučit vás, jak s ní lépe fungovat.",
   },
-  // Other Questions
+  // Terapie Questions
   {
-    category: "Other",
-    question: "Why is your pricing so complicated?",
+    category: "Terapie",
+    question: "Co mám vzít s sebou na první návštěvu?",
     answer:
-      "Because simple pricing would make it too easy for you to understand what you're paying for.",
+      "Přineste doporučení od lékaře (pokud ho máte), kartu pojišťovny, pohodlné oblečení vhodné pro cvičení a případně předchozí lékařské zprávy nebo výsledky vyšetření týkající se vašeho problému.",
   },
   {
-    category: "Other",
-    question: "Do you offer refunds?",
+    category: "Terapie",
+    question: "Jak dlouho trvá jedno sezení?",
     answer:
-      "Yes, but only if you can prove you're from an alternate dimension.",
+      "Standardní terapeutické sezení trvá 30-60 minut. První návštěva bývá delší (60-90 minut), protože zahrnuje podrobné vyšetření a vyhodnocení vašeho stavu.",
   },
   {
-    category: "Other",
-    question: "What's your roadmap look like?",
-    answer: "It's more of a road-squiggle, really. We're agile!",
+    category: "Terapie",
+    question: "Mohu si vybrat svého fyzioterapeuta?",
+    answer:
+      "Ano, máte právo si vybrat fyzioterapeuta podle svých preferencí. Doporučujeme vybrat si terapeuta se specializací odpovídající vašemu problému, například sport, neurologie nebo ortopedie.",
+  },
+  // Ostatní Questions
+  {
+    category: "Ostatní",
+    question: "Hradí fyzioterapii zdravotní pojišťovna?",
+    answer:
+      "S doporučením od lékaře hradí zdravotní pojišťovna většinu fyzioterapeutických služeb. Bez doporučení si platíte plnou cenu. Rozsah hrazené péče závisí na vaší pojišťovně.",
+  },
+  {
+    category: "Ostatní",
+    question: "Můžu chodit k fyzioterapeutovi preventivně?",
+    answer:
+      "Určitě! Preventivní fyzioterapie je skvělý způsob, jak předcházet zraněním, zejména u sportovců nebo lidí s fyzicky náročným zaměstnáním. Pomůže vám udržet správné pohybové vzorce a svalovou rovnováhu.",
+  },
+  {
+    category: "Ostatní",
+    question: "Je fyzioterapie vhodná pro seniory?",
+    answer:
+      "Ano, fyzioterapie je vynikající pro seniory. Pomáhá udržovat pohyblivost, sílu a rovnováhu, což snižuje riziko pádů. Cvičení je vždy přizpůsobeno individuálním možnostem a potřebám.",
   },
 ];
 
 const categories: Category[] = [
-  "Support",
-  "Account",
-  "Features",
-  "Security",
-  "Other",
+  "Obecné",
+  "Cvičení",
+  "Bolest",
+  "Terapie",
+  "Ostatní",
 ];
 
 const TOP_PADDING = 300;
@@ -129,15 +133,15 @@ interface Faq12Props {
 }
 
 const Faq12 = ({ className }: Faq12Props) => {
-  const [activeCategory, setActiveCategory] = useState<Category>("Support");
+  const [activeCategory, setActiveCategory] = useState<Category>("Obecné");
   const observerRef = useRef<IntersectionObserver | null>(null);
   const isScrollingRef = useRef(false);
   const categoryRefs = useRef<Record<Category, HTMLDivElement | null>>({
-    Support: null,
-    Account: null,
-    Features: null,
-    Security: null,
-    Other: null,
+    Obecné: null,
+    Cvičení: null,
+    Bolest: null,
+    Terapie: null,
+    Ostatní: null,
   });
 
   const setupObserver = useCallback(() => {
@@ -238,9 +242,9 @@ const Faq12 = ({ className }: Faq12Props) => {
         className,
       )}
     >
-      <div className="container max-w-4xl">
-        <div className="flex flex-col items-center gap-14">
-          <div className="flex flex-col gap-4 border-b-2 pb-6 text-center max-w-3xl">
+      <div className="container max-w-4xl mx-auto">
+        <div className="flex flex-col items-center justify-center gap-14">
+          <div className="flex flex-col gap-4 border-b-2 pb-6 text-center max-w-3xl mx-auto">
             <h3 className="text-3xl font-light tracking-tight lg:text-6xl">
               Často kladené otázky
             </h3>
@@ -249,7 +253,7 @@ const Faq12 = ({ className }: Faq12Props) => {
             </p>
           </div>
 
-        <div className="mt-0 grid max-w-5xl gap-8 md:mt-0 md:grid-cols-[200px_1fr] md:gap-12 lg:mt-0">
+        <div className="mt-0 grid max-w-5xl gap-8 md:mt-0 md:grid-cols-[200px_1fr] md:gap-12 lg:mt-0 mx-auto w-full">
           {/* Sidebar */}
           <div className="sticky top-24 flex h-fit flex-col gap-4 max-md:hidden">
             {categories.map((category) => (
