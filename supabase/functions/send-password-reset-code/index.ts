@@ -24,10 +24,11 @@ async function sendPasswordResetEmail(email: string, code: string): Promise<bool
       return false;
     }
 
+    const fromEmail = Deno.env.get("RESEND_FROM_EMAIL") || "onboarding@resend.dev";
     const resend = new Resend(resendApiKey);
 
     await resend.emails.send({
-      from: "noreply@yourdomain.com",
+      from: fromEmail,
       to: email,
       subject: "Resetování hesla - Ověřovací kód",
       html: `
