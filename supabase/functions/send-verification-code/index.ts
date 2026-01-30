@@ -104,28 +104,28 @@ Deno.serve(async (req: Request) => {
     `;
 
     try {
-      const resendApiKey = Deno.env.get("RESEND_API_KEY");
-      const fromEmail = Deno.env.get("FROM_EMAIL") || "onboarding@resend.dev";
+      const brevoApiKey = Deno.env.get("BREVO_API_KEY");
+      const fromEmail = Deno.env.get("FROM_EMAIL") || "noreply@example.com";
+      const fromName = Deno.env.get("FROM_NAME") || "App";
 
-      if (resendApiKey) {
-        // Use Resend API to send email
-        const response = await fetch("https://api.resend.com/emails", {
+      if (brevoApiKey) {
+        const response = await fetch("https://api.brevo.com/v3/smtp/email", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${resendApiKey}`,
+            "api-key": brevoApiKey,
           },
           body: JSON.stringify({
-            from: fromEmail,
-            to: [email],
+            sender: { email: fromEmail, name: fromName },
+            to: [{ email: email }],
             subject: "Ověřte svůj email",
-            html: emailHtml,
+            htmlContent: emailHtml,
           }),
         });
 
         if (!response.ok) {
           const error = await response.text();
-          console.error("Resend API error:", error);
+          console.error("Brevo API error:", error);
           console.log("=== VERIFICATION CODE (email failed) ===");
           console.log(`Email: ${email}`);
           console.log(`Code: ${code}`);
@@ -147,7 +147,7 @@ Deno.serve(async (req: Request) => {
       console.log("====================================");
     }
 
-    const isDevelopment = !Deno.env.get("RESEND_API_KEY");
+    const isDevelopment = !Deno.env.get("BREVO_API_KEY");
 
     return new Response(
       JSON.stringify({

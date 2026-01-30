@@ -16,11 +16,12 @@ function generateVerificationCode(): string {
 
 async function sendPasswordResetEmail(email: string, code: string): Promise<boolean> {
   try {
-    const resendApiKey = Deno.env.get("RESEND_API_KEY");
-    const fromEmail = Deno.env.get("FROM_EMAIL") || "onboarding@resend.dev";
+    const brevoApiKey = Deno.env.get("BREVO_API_KEY");
+    const fromEmail = Deno.env.get("FROM_EMAIL") || "noreply@example.com";
+    const fromName = Deno.env.get("FROM_NAME") || "App";
 
-    if (!resendApiKey) {
-      console.error("Resend API key not configured");
+    if (!brevoApiKey) {
+      console.error("Brevo API key not configured");
       return false;
     }
 
@@ -62,23 +63,23 @@ async function sendPasswordResetEmail(email: string, code: string): Promise<bool
         </html>
       `;
 
-    const response = await fetch("https://api.resend.com/emails", {
+    const response = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${resendApiKey}`,
+        "api-key": brevoApiKey,
       },
       body: JSON.stringify({
-        from: fromEmail,
-        to: [email],
+        sender: { email: fromEmail, name: fromName },
+        to: [{ email: email }],
         subject: "Resetování hesla - Ověřovací kód",
-        html: emailHtml,
+        htmlContent: emailHtml,
       }),
     });
 
     if (!response.ok) {
       const error = await response.text();
-      console.error("Resend API error:", error);
+      console.error("Brevo API error:", error);
       return false;
     }
 

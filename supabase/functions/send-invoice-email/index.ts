@@ -152,25 +152,26 @@ Deno.serve(async (req: Request) => {
 </html>
     `;
 
-    const resendApiKey = Deno.env.get("RESEND_API_KEY");
-    const fromEmail = Deno.env.get("FROM_EMAIL") || "onboarding@resend.dev";
+    const brevoApiKey = Deno.env.get("BREVO_API_KEY");
+    const fromEmail = Deno.env.get("FROM_EMAIL") || "noreply@example.com";
+    const fromName = Deno.env.get("FROM_NAME") || "App";
 
-    if (!resendApiKey) {
-      throw new Error("Resend API key not configured");
+    if (!brevoApiKey) {
+      throw new Error("Brevo API key not configured");
     }
 
     // Send email to customer
-    const customerResponse = await fetch("https://api.resend.com/emails", {
+    const customerResponse = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${resendApiKey}`,
+        "api-key": brevoApiKey,
       },
       body: JSON.stringify({
-        from: fromEmail,
-        to: [customerEmail],
+        sender: { email: fromEmail, name: fromName },
+        to: [{ email: customerEmail }],
         subject: `Faktura za váš nákup - ${orderNumber}`,
-        html: customerEmailHtml,
+        htmlContent: customerEmailHtml,
       }),
     });
 
@@ -180,17 +181,17 @@ Deno.serve(async (req: Request) => {
     }
 
     // Send notification to owner
-    const ownerResponse = await fetch("https://api.resend.com/emails", {
+    const ownerResponse = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${resendApiKey}`,
+        "api-key": brevoApiKey,
       },
       body: JSON.stringify({
-        from: fromEmail,
-        to: [OWNER_EMAIL],
+        sender: { email: fromEmail, name: fromName },
+        to: [{ email: OWNER_EMAIL }],
         subject: `Nový nákup: ${planName} - ${formatPrice(amount, currency)}`,
-        html: ownerEmailHtml,
+        htmlContent: ownerEmailHtml,
       }),
     });
 
