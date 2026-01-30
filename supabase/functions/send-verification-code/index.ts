@@ -105,7 +105,16 @@ Deno.serve(async (req: Request) => {
 
     try {
       const resendApiKey = Deno.env.get("RESEND_API_KEY");
-      const fromEmail = Deno.env.get("RESEND_FROM_EMAIL") || "onboarding@resend.dev";
+      let fromEmail = (Deno.env.get("RESEND_FROM_EMAIL") || "onboarding@resend.dev").trim();
+
+      // Validate and clean email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const namedEmailRegex = /^.+\s*<[^\s@]+@[^\s@]+\.[^\s@]+>$/;
+
+      if (!emailRegex.test(fromEmail) && !namedEmailRegex.test(fromEmail)) {
+        console.error("Invalid from email format:", fromEmail);
+        fromEmail = "onboarding@resend.dev";
+      }
 
       if (resendApiKey) {
         const resendResponse = await fetch("https://api.resend.com/emails", {
