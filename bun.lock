@@ -2,7 +2,7 @@
   "lockfileVersion": 1,
   "workspaces": {
     "": {
-      "name": "indiesaas",
+      "name": "dires",
       "dependencies": {
         "@better-auth/stripe": "^1.2.12",
         "@daveyplate/better-auth-ui": "^2.0.8",
