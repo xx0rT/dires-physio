@@ -9,7 +9,6 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { toast } from 'sonner'
 import { RiArrowRightLine, RiArrowLeftLine } from '@remixicon/react'
 import { site } from '@/config/site'
-import { supabase } from '@/lib/supabase'
 
 export default function SignUpPage() {
   const { user } = useAuth()
@@ -45,20 +44,26 @@ export default function SignUpPage() {
     setLoading(true)
 
     try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
+      const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-verification-code`
+
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
       })
 
-      if (error) {
-        toast.error(error.message)
+      const data = await response.json()
+
+      if (!response.ok) {
+        toast.error(data.error || 'Něco se pokazilo')
         return
       }
 
-      if (data.user) {
-        toast.success('Účet byl úspěšně vytvořen! Přihlašuji...')
-        navigate('/dashboard')
-      }
+      toast.success('Ověřovací kód byl odeslán na váš email!')
+      navigate(`/auth/verify-email?email=${encodeURIComponent(email)}`)
     } catch (error: any) {
       console.error('Error:', error)
       toast.error(error.message || 'Něco se pokazilo')
