@@ -105,7 +105,7 @@ Deno.serve(async (req: Request) => {
 
     try {
       const resendApiKey = Deno.env.get("RESEND_API_KEY");
-      const fromEmail = Deno.env.get("RESEND_FROM_EMAIL") || "onboarding@resend.dev";
+      const fromEmail = Deno.env.get("RESEND_FROM_EMAIL") || "Ověření účtu <onboarding@resend.dev>";
 
       if (resendApiKey) {
         const resendResponse = await fetch("https://api.resend.com/emails", {

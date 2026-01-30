@@ -24,7 +24,7 @@ async function sendPasswordResetEmail(email: string, code: string): Promise<bool
       return false;
     }
 
-    const fromEmail = Deno.env.get("RESEND_FROM_EMAIL") || "onboarding@resend.dev";
+    const fromEmail = Deno.env.get("RESEND_FROM_EMAIL") || "Resetování hesla <onboarding@resend.dev>";
     const resend = new Resend(resendApiKey);
 
     await resend.emails.send({
