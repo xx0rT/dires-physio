@@ -152,39 +152,52 @@ Deno.serve(async (req: Request) => {
 </html>
     `;
 
-    const { SMTPClient } = await import("https://deno.land/x/denomailer@1.6.0/mod.ts");
+    const resendApiKey = Deno.env.get("RESEND_API_KEY");
+    const fromEmail = Deno.env.get("FROM_EMAIL") || "onboarding@resend.dev";
 
-    const client = new SMTPClient({
-      connection: {
-        hostname: smtpHost,
-        port: Number(smtpPort),
-        tls: true,
-        auth: {
-          username: smtpUser,
-          password: smtpPassword,
-        },
+    if (!resendApiKey) {
+      throw new Error("Resend API key not configured");
+    }
+
+    // Send email to customer
+    const customerResponse = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${resendApiKey}`,
       },
-    });
-
-    try {
-      await client.send({
+      body: JSON.stringify({
         from: fromEmail,
-        to: customerEmail,
+        to: [customerEmail],
         subject: `Faktura za váš nákup - ${orderNumber}`,
         html: customerEmailHtml,
-      });
+      }),
+    });
 
-      await client.send({
+    if (!customerResponse.ok) {
+      const error = await customerResponse.text();
+      throw new Error(`Failed to send customer email: ${error}`);
+    }
+
+    // Send notification to owner
+    const ownerResponse = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${resendApiKey}`,
+      },
+      body: JSON.stringify({
         from: fromEmail,
-        to: OWNER_EMAIL,
+        to: [OWNER_EMAIL],
         subject: `Nový nákup: ${planName} - ${formatPrice(amount, currency)}`,
         html: ownerEmailHtml,
-      });
+      }),
+    });
 
-      await client.close();
-    } catch (emailError) {
-      await client.close();
-      throw emailError;
+    if (!ownerResponse.ok) {
+      const error = await ownerResponse.text();
+      console.error(`Failed to send owner notification: ${error}`);
+      // Don't throw here - customer email was sent successfully
     }
 
     return new Response(

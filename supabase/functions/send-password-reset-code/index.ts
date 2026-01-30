@@ -16,30 +16,13 @@ function generateVerificationCode(): string {
 
 async function sendPasswordResetEmail(email: string, code: string): Promise<boolean> {
   try {
-    const smtpHost = Deno.env.get("SMTP_HOST") || "smtp.gmail.com";
-    const smtpPort = Deno.env.get("SMTP_PORT") || "587";
-    const smtpUser = Deno.env.get("SMTP_USER");
-    const smtpPassword = Deno.env.get("SMTP_PASSWORD");
-    const fromEmail = Deno.env.get("SMTP_FROM_EMAIL") || smtpUser;
+    const resendApiKey = Deno.env.get("RESEND_API_KEY");
+    const fromEmail = Deno.env.get("FROM_EMAIL") || "onboarding@resend.dev";
 
-    if (!smtpUser || !smtpPassword || !fromEmail) {
-      console.error("SMTP credentials not configured");
+    if (!resendApiKey) {
+      console.error("Resend API key not configured");
       return false;
     }
-
-    const { SMTPClient } = await import("https://deno.land/x/denomailer@1.6.0/mod.ts");
-
-    const client = new SMTPClient({
-      connection: {
-        hostname: smtpHost,
-        port: Number(smtpPort),
-        tls: true,
-        auth: {
-          username: smtpUser,
-          password: smtpPassword,
-        },
-      },
-    });
 
     const emailHtml = `
         <!DOCTYPE html>
@@ -79,14 +62,26 @@ async function sendPasswordResetEmail(email: string, code: string): Promise<bool
         </html>
       `;
 
-    await client.send({
-      from: fromEmail,
-      to: email,
-      subject: "Resetování hesla - Ověřovací kód",
-      html: emailHtml,
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${resendApiKey}`,
+      },
+      body: JSON.stringify({
+        from: fromEmail,
+        to: [email],
+        subject: "Resetování hesla - Ověřovací kód",
+        html: emailHtml,
+      }),
     });
 
-    await client.close();
+    if (!response.ok) {
+      const error = await response.text();
+      console.error("Resend API error:", error);
+      return false;
+    }
+
     return true;
   } catch (error) {
     console.error("Email send error:", error);
