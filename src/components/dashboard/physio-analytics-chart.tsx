@@ -1,9 +1,11 @@
 import { useState, useMemo } from "react";
 import { format, subDays, startOfDay, addDays, differenceInDays } from "date-fns";
 import { cs } from "date-fns/locale";
-import { Area, AreaChart, Bar, BarChart, Line, LineChart, CartesianGrid, XAxis, YAxis, Pie, PieChart, ComposedChart } from "recharts";
-import { CalendarIcon, TrendingUp, TrendingDown, MoreHorizontal, Download, RefreshCw, Settings, ChevronLeft, ChevronRight as ChevronRightIcon } from "lucide-react";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { CalendarIcon, TrendingUp, BookOpen, Award, Clock, Target, ChevronLeft, ChevronRight as ChevronRightIcon } from "lucide-react";
 import type { DateRange } from "react-day-picker";
+import { useAuth } from "@/lib/auth-context";
+import { mockDatabase, mockCourses, mockModules } from "@/lib/mock-data";
 
 import { cn } from "@/lib/utils";
 
@@ -21,21 +23,14 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-  ChartLegend,
-  ChartLegendContent,
 } from "@/components/ui/chart";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 
 interface PhysioAnalyticsChartProps {
   className?: string;
@@ -52,18 +47,15 @@ const generateDataForRange = (from: Date, to: Date) => {
 
   while (currentDate <= to) {
     const seed = currentDate.getTime() / 86400000;
-    const basePacienti = 15 + Math.sin(seed / 7) * 5;
-    const baseUspesnost = 85 + Math.sin(seed / 7) * 10;
+    const baseProgress = 45 + Math.sin(seed / 7) * 15;
+    const baseMinutes = 60 + Math.sin(seed / 5) * 30;
 
     data.push({
       date: new Date(currentDate),
       dateStr: format(currentDate, "d. MMM", { locale: cs }),
-      pacienti: Math.floor(basePacienti + seededRandom(seed * 1) * 8),
-      terapie: Math.floor((basePacienti + seededRandom(seed * 2) * 8) * 1.2),
-      uspesnost: Math.floor(baseUspesnost + seededRandom(seed * 3) * 5),
-      noviPacienti: Math.floor(seededRandom(seed * 4) * 5) + 1,
-      vracejiciSe: Math.floor(seededRandom(seed * 5) * 10) + 8,
-      hodnoceni: (4.2 + seededRandom(seed * 6) * 0.8).toFixed(1),
+      progress: Math.floor(baseProgress + seededRandom(seed * 1) * 10),
+      minutesStudied: Math.floor(baseMinutes + seededRandom(seed * 2) * 20),
+      lessonsCompleted: Math.floor(seededRandom(seed * 3) * 3) + 1,
     });
 
     currentDate = addDays(currentDate, 1);
@@ -71,49 +63,16 @@ const generateDataForRange = (from: Date, to: Date) => {
   return data;
 };
 
-const hourlyData = Array.from({ length: 24 }, (_, i) => {
-  const seed = i * 1000;
-  return {
-    hour: `${i.toString().padStart(2, "0")}:00`,
-    rezervace: Math.floor(seededRandom(seed) * 8) + (i >= 8 && i <= 18 ? 5 : 0),
-    terapie: Math.floor(seededRandom(seed + 1) * 6) + (i >= 8 && i <= 18 ? 3 : 0),
-  };
-});
-
-const terapieTypeData = [
-  { name: "Masáže", value: 35, fill: "var(--chart-1)" },
-  { name: "Rehabilitace", value: 40, fill: "var(--chart-2)" },
-  { name: "Cvičení", value: 25, fill: "var(--chart-3)" },
-];
-
-const terapieConfig = {
-  Masáže: { label: "Masáže", color: "var(--chart-1)" },
-  Rehabilitace: { label: "Rehabilitace", color: "var(--chart-2)" },
-  Cvičení: { label: "Cvičení", color: "var(--chart-3)" },
-} satisfies ChartConfig;
-
-const mainConfig = {
-  pacienti: { label: "Pacienti", color: "var(--chart-1)" },
-  terapie: { label: "Terapie", color: "var(--chart-2)" },
-  uspesnost: { label: "Úspěšnost (%)", color: "var(--chart-3)" },
-} satisfies ChartConfig;
-
-const pacientConfig = {
-  noviPacienti: { label: "Noví", color: "var(--chart-1)" },
-  vracejiciSe: { label: "Vracející se", color: "var(--chart-2)" },
-} satisfies ChartConfig;
-
-const hourlyConfig = {
-  rezervace: { label: "Rezervace", color: "var(--chart-1)" },
-  terapie: { label: "Terapie", color: "var(--chart-3)" },
+const chartConfig = {
+  progress: { label: "Pokrok (%)", color: "hsl(var(--primary))" },
 } satisfies ChartConfig;
 
 export const PhysioAnalyticsChart = ({ className }: PhysioAnalyticsChartProps) => {
+  const { user } = useAuth();
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
     from: subDays(new Date(), 29),
     to: new Date(),
   });
-  const [chartView, setChartView] = useState<"pacienti" | "terapie" | "uspesnost">("pacienti");
 
   const filteredData = useMemo(() => {
     if (!dateRange?.from) {
@@ -124,18 +83,45 @@ export const PhysioAnalyticsChart = ({ className }: PhysioAnalyticsChartProps) =
     return generateDataForRange(from, to);
   }, [dateRange]);
 
-  const stats = useMemo(() => {
-    const celkemPacienti = filteredData.reduce((sum, item) => sum + item.pacienti, 0);
-    const celkemTerapie = filteredData.reduce((sum, item) => sum + item.terapie, 0);
-    const prumernaUspesnost = filteredData.length > 0
-      ? Math.round(filteredData.reduce((sum, item) => sum + item.uspesnost, 0) / filteredData.length)
+  const { courseDetails, stats } = useMemo(() => {
+    if (!user) {
+      return { courseDetails: [], stats: { totalMinutes: 0, totalLessons: 0, avgProgress: 0 } };
+    }
+
+    const enrollmentsData = mockDatabase.getEnrollments(user.id);
+    const progressData = mockDatabase.getModuleProgress(user.id);
+
+    const courseDetailsData = enrollmentsData.map(enrollment => {
+      const course = mockCourses.find(c => c.id === enrollment.course_id);
+      const courseModules = mockModules.filter(m => m.course_id === enrollment.course_id);
+      const courseProgress = progressData.filter(p => {
+        return courseModules.some(m => m.id === p.module_id);
+      });
+      const completedLessons = courseProgress.filter(p => p.is_completed).length;
+      const totalLessons = courseModules.length;
+
+      return {
+        id: enrollment.id,
+        title: course?.title || 'Unknown Course',
+        progress: enrollment.progress_percentage,
+        completedLessons,
+        totalLessons,
+        isCompleted: enrollment.completed_at !== null,
+        enrolledAt: enrollment.enrolled_at,
+      };
+    });
+
+    const totalMinutes = filteredData.reduce((sum, item) => sum + item.minutesStudied, 0);
+    const totalLessons = filteredData.reduce((sum, item) => sum + item.lessonsCompleted, 0);
+    const avgProgress = enrollmentsData.length > 0
+      ? Math.round(enrollmentsData.reduce((sum, e) => sum + e.progress_percentage, 0) / enrollmentsData.length)
       : 0;
-    const celkemNoviPacienti = filteredData.reduce((sum, item) => sum + item.noviPacienti, 0);
-    const prumerneHodnoceni = filteredData.length > 0
-      ? (filteredData.reduce((sum, item) => sum + parseFloat(item.hodnoceni), 0) / filteredData.length).toFixed(1)
-      : "0.0";
-    return { celkemPacienti, celkemTerapie, prumernaUspesnost, celkemNoviPacienti, prumerneHodnoceni };
-  }, [filteredData]);
+
+    return {
+      courseDetails: courseDetailsData,
+      stats: { totalMinutes, totalLessons, avgProgress }
+    };
+  }, [user, filteredData]);
 
   const daysDiff = dateRange?.from && dateRange?.to
     ? differenceInDays(dateRange.to, dateRange.from) + 1
@@ -154,7 +140,7 @@ export const PhysioAnalyticsChart = ({ className }: PhysioAnalyticsChartProps) =
     <div className={cn("space-y-6", className)}>
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Přehled výkonnosti</h2>
+          <h2 className="text-2xl font-bold tracking-tight">Přehled Studia</h2>
           <p className="text-muted-foreground">
             {daysDiff} {daysDiff === 1 ? "den" : daysDiff < 5 ? "dny" : "dní"}
             {dateRange?.from && ` · ${format(dateRange.from, "d. MMM", { locale: cs })} - ${format(dateRange.to || dateRange.from, "d. MMM yyyy", { locale: cs })}`}
@@ -186,180 +172,165 @@ export const PhysioAnalyticsChart = ({ className }: PhysioAnalyticsChartProps) =
               <ChevronRightIcon className="size-4" />
             </Button>
           </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon">
-                <MoreHorizontal className="size-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem><Download className="mr-2 size-4" /> Exportovat CSV</DropdownMenuItem>
-              <DropdownMenuItem><RefreshCw className="mr-2 size-4" /> Obnovit</DropdownMenuItem>
-              <DropdownMenuItem><Settings className="mr-2 size-4" /> Nastavení</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-        {[
-          { label: "Celkem pacientů", value: stats.celkemPacienti.toLocaleString(), change: 8.2 },
-          { label: "Celkem terapií", value: stats.celkemTerapie.toLocaleString(), change: 12.5 },
-          { label: "Úspěšnost léčby", value: `${stats.prumernaUspesnost}%`, change: 5.3 },
-          { label: "Noví pacienti", value: stats.celkemNoviPacienti.toLocaleString(), change: 15.7 },
-          { label: "Hodnocení", value: stats.prumerneHodnoceni, change: 3.2 },
-        ].map((stat, index) => (
-          <Card key={index}>
-            <CardContent className="pt-6">
-              <p className="text-sm text-muted-foreground">{stat.label}</p>
-              <div className="flex items-baseline justify-between">
-                <p className="text-2xl font-bold">{stat.value}</p>
-                <span className={cn("flex items-center text-sm", stat.change >= 0 ? "text-green-600" : "text-red-600")}>
-                  {stat.change >= 0 ? <TrendingUp className="mr-1 size-3" /> : <TrendingDown className="mr-1 size-3" />}
-                  {stat.change >= 0 ? "+" : ""}{stat.change}%
-                </span>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Váš Pokrok ve Studiu</CardTitle>
+          <CardDescription>Denní aktivita v nastaveném období</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ChartContainer config={chartConfig} className="h-72 w-full">
+            <AreaChart data={filteredData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+              <defs>
+                <linearGradient id="progressGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
+                  <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <XAxis
+                dataKey="dateStr"
+                axisLine={false}
+                tickLine={false}
+                tickMargin={8}
+                fontSize={11}
+                interval="preserveStartEnd"
+              />
+              <YAxis
+                axisLine={false}
+                tickLine={false}
+                tickMargin={8}
+                fontSize={11}
+                domain={[0, 100]}
+              />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <Area
+                type="monotone"
+                dataKey="progress"
+                stroke="hsl(var(--primary))"
+                strokeWidth={2}
+                fill="url(#progressGrad)"
+              />
+            </AreaChart>
+          </ChartContainer>
+        </CardContent>
+      </Card>
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <BookOpen className="size-5 text-primary" />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm text-muted-foreground">Aktivní Kurzy</p>
+                <p className="text-2xl font-bold">{courseDetails.filter(c => !c.isCompleted).length}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-green-500/10">
+                <Award className="size-5 text-green-600" />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm text-muted-foreground">Dokončené Kurzy</p>
+                <p className="text-2xl font-bold">{courseDetails.filter(c => c.isCompleted).length}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-blue-500/10">
+                <Clock className="size-5 text-blue-600" />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm text-muted-foreground">Minut Studia</p>
+                <p className="text-2xl font-bold">{stats.totalMinutes}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-orange-500/10">
+                <Target className="size-5 text-orange-600" />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm text-muted-foreground">Průměrný Pokrok</p>
+                <p className="text-2xl font-bold">{stats.avgProgress}%</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        {courseDetails.map((course) => (
+          <Card key={course.id} className={cn(
+            "transition-all hover:shadow-lg",
+            course.isCompleted && "border-green-500/50 bg-green-50/50 dark:bg-green-950/20"
+          )}>
+            <CardHeader className="pb-3">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex-1">
+                  <CardTitle className="text-base font-semibold">{course.title}</CardTitle>
+                  <CardDescription className="text-xs mt-1">
+                    Zapsáno {format(new Date(course.enrolledAt), "d. MMM yyyy", { locale: cs })}
+                  </CardDescription>
+                </div>
+                {course.isCompleted ? (
+                  <Badge className="bg-green-600 hover:bg-green-700">
+                    <Award className="mr-1 size-3" />
+                    Dokončeno
+                  </Badge>
+                ) : (
+                  <Badge variant="secondary">
+                    <TrendingUp className="mr-1 size-3" />
+                    V průběhu
+                  </Badge>
+                )}
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground">Celkový pokrok</span>
+                  <span className="font-bold text-primary">{Math.round(course.progress)}%</span>
+                </div>
+                <Progress value={course.progress} className="h-2" />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 pt-2">
+                <div className="flex items-center gap-2 text-sm">
+                  <BookOpen className="size-4 text-muted-foreground" />
+                  <div>
+                    <p className="text-xs text-muted-foreground">Lekce</p>
+                    <p className="font-semibold">{course.completedLessons}/{course.totalLessons}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <Target className="size-4 text-muted-foreground" />
+                  <div>
+                    <p className="text-xs text-muted-foreground">Zbývá</p>
+                    <p className="font-semibold">{course.totalLessons - course.completedLessons}</p>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
         ))}
-      </div>
-
-      <div className="grid gap-4 lg:grid-cols-3">
-        <Card className="lg:col-span-2">
-          <Tabs value={chartView} onValueChange={(v) => setChartView(v as typeof chartView)}>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <div>
-              <CardTitle className="text-base">Přehled činnosti</CardTitle>
-              <CardDescription>Pacienti, terapie a úspěšnost</CardDescription>
-            </div>
-              <TabsList className="h-8">
-                <TabsTrigger value="pacienti" className="text-xs">Pacienti</TabsTrigger>
-                <TabsTrigger value="terapie" className="text-xs">Terapie</TabsTrigger>
-                <TabsTrigger value="uspesnost" className="text-xs">Úspěšnost</TabsTrigger>
-              </TabsList>
-          </CardHeader>
-          <CardContent>
-              <TabsContent value="pacienti" className="mt-0">
-            <ChartContainer config={mainConfig} className="h-72 w-full">
-                  <AreaChart data={filteredData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="pacGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="var(--color-pacienti)" stopOpacity={0.3} />
-                    <stop offset="100%" stopColor="var(--color-pacienti)" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="dateStr" axisLine={false} tickLine={false} tickMargin={8} fontSize={11} interval="preserveStartEnd" />
-                <YAxis axisLine={false} tickLine={false} tickMargin={8} fontSize={11} />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <ChartLegend content={<ChartLegendContent />} />
-                    <Area type="monotone" dataKey="pacienti" stroke="var(--color-pacienti)" strokeWidth={2} fill="url(#pacGrad)" />
-                  </AreaChart>
-                </ChartContainer>
-              </TabsContent>
-              <TabsContent value="terapie" className="mt-0">
-                <ChartContainer config={mainConfig} className="h-72 w-full">
-                  <BarChart data={filteredData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                    <XAxis dataKey="dateStr" axisLine={false} tickLine={false} tickMargin={8} fontSize={11} interval="preserveStartEnd" />
-                    <YAxis axisLine={false} tickLine={false} tickMargin={8} fontSize={11} />
-                    <ChartTooltip content={<ChartTooltipContent />} />
-                  <Bar dataKey="terapie" fill="var(--color-terapie)" radius={[4, 4, 0, 0]} />
-                  </BarChart>
-                </ChartContainer>
-              </TabsContent>
-              <TabsContent value="uspesnost" className="mt-0">
-                <ChartContainer config={mainConfig} className="h-72 w-full">
-                  <LineChart data={filteredData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                    <XAxis dataKey="dateStr" axisLine={false} tickLine={false} tickMargin={8} fontSize={11} interval="preserveStartEnd" />
-                    <YAxis axisLine={false} tickLine={false} tickMargin={8} fontSize={11} domain={[0, 100]} />
-                    <ChartTooltip content={<ChartTooltipContent />} />
-                  <Line type="monotone" dataKey="uspesnost" stroke="var(--color-uspesnost)" strokeWidth={2} dot={false} />
-                  </LineChart>
-            </ChartContainer>
-              </TabsContent>
-          </CardContent>
-          </Tabs>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-base">Typy terapií</CardTitle>
-            <CardDescription>Rozdělení podle typu</CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-col items-center gap-4">
-            <ChartContainer config={terapieConfig} className="mx-auto aspect-square h-40">
-                <PieChart>
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent hideLabel nameKey="name" />}
-                />
-                  <Pie
-                    data={terapieTypeData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={50}
-                    outerRadius={70}
-                    paddingAngle={3}
-                    dataKey="value"
-                  nameKey="name"
-                    strokeWidth={0}
-                />
-                </PieChart>
-            </ChartContainer>
-            <div className="w-full space-y-2">
-              {terapieTypeData.map((item, index) => (
-                <div key={index} className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="size-3 rounded-sm" style={{ backgroundColor: item.fill }} />
-                    <span className="text-sm">{item.name}</span>
-                  </div>
-                  <span className="text-sm font-medium">{item.value}%</span>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-base">Typy pacientů</CardTitle>
-            <CardDescription>Noví vs. vracející se</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer config={pacientConfig} className="h-48 w-full">
-              <BarChart data={filteredData.slice(-14)} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="dateStr" axisLine={false} tickLine={false} tickMargin={8} fontSize={10} />
-                <YAxis axisLine={false} tickLine={false} tickMargin={8} fontSize={10} />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <Bar dataKey="noviPacienti" stackId="a" fill="var(--color-noviPacienti)" radius={[0, 0, 0, 0]} />
-                <Bar dataKey="vracejiciSe" stackId="a" fill="var(--color-vracejiciSe)" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ChartContainer>
-          </CardContent>
-        </Card>
-
-        <Card className="lg:col-span-2">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-base">Hodinový přehled</CardTitle>
-            <CardDescription>Rezervace a terapie podle hodiny (dnes)</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer config={hourlyConfig} className="h-48 w-full">
-              <ComposedChart data={hourlyData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="hour" axisLine={false} tickLine={false} tickMargin={8} fontSize={10} interval={2} />
-                <YAxis yAxisId="left" axisLine={false} tickLine={false} tickMargin={8} fontSize={10} />
-                <YAxis yAxisId="right" orientation="right" axisLine={false} tickLine={false} tickMargin={8} fontSize={10} />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <Bar yAxisId="left" dataKey="rezervace" fill="var(--color-rezervace)" radius={[2, 2, 0, 0]} opacity={0.8} />
-                <Line yAxisId="right" type="monotone" dataKey="terapie" stroke="var(--color-terapie)" strokeWidth={2} dot={false} />
-              </ComposedChart>
-            </ChartContainer>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );
