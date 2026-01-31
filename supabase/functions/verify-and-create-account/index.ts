@@ -121,11 +121,37 @@ Deno.serve(async (req: Request) => {
       .delete()
       .eq("email", email);
 
+    const supabaseClient = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_ANON_KEY")!
+    );
+
+    const { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({
+      email,
+      password: verificationData.password_hash,
+    });
+
+    if (signInError) {
+      console.error("Sign in error:", signInError);
+      return new Response(
+        JSON.stringify({
+          success: true,
+          message: "Účet byl úspěšně vytvořen, ale přihlášení selhalo",
+          user: userData.user,
+        }),
+        {
+          status: 200,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
+
     return new Response(
       JSON.stringify({
         success: true,
         message: "Účet byl úspěšně vytvořen",
-        user: userData.user,
+        user: signInData.user,
+        session: signInData.session,
       }),
       {
         status: 200,
