@@ -52,6 +52,11 @@ Deno.serve(async (req: Request) => {
 
     const code = Math.floor(100000 + Math.random() * 900000).toString();
 
+    console.log("=== VERIFICATION CODE GENERATED ===");
+    console.log(`Email: ${email}`);
+    console.log(`Code: ${code}`);
+    console.log("===================================");
+
     const { error: insertError } = await supabaseAdmin
       .from("email_verification_codes")
       .insert({
