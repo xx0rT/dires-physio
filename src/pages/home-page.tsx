@@ -66,9 +66,9 @@ export default function HomePage() {
           }}
           className={`${bg} ${className || ''} transition-all duration-700`}
           style={{
-            opacity: activeSectionIndex === index ? 1 : 0.15,
+            opacity: activeSectionIndex === index ? 1 : 0,
             transform: activeSectionIndex === index ? 'scale(1)' : 'scale(0.95)',
-            filter: activeSectionIndex === index ? 'blur(0px)' : 'blur(3px)',
+            pointerEvents: activeSectionIndex === index ? 'auto' : 'none',
           }}
         >
           <Component />
