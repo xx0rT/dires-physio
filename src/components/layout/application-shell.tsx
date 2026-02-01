@@ -250,7 +250,7 @@ function SidebarRail({
                     className={cn(
                       "relative flex size-11 items-center justify-center rounded-lg outline-none transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-black/50 dark:focus-visible:ring-white/50",
                       isActive
-                        ? "bg-white text-neutral-900 dark:bg-black dark:text-neutral-100"
+                        ? "bg-white text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100"
                         : "text-neutral-600 hover:bg-black/5 active:bg-black/10 dark:text-neutral-400 dark:hover:bg-white/5 dark:active:bg-white/10"
                     )}
                   >
