@@ -220,7 +220,7 @@ function SidebarRail({
   onModuleChange,
 }: SidebarRailProps) {
   return (
-    <div className="flex h-full w-16 flex-col items-center justify-between bg-neutral-50 dark:bg-neutral-950/50">
+    <div className="flex h-full w-16 flex-col items-center justify-between bg-neutral-100 dark:bg-[#1a1a1a] border-r border-neutral-200 dark:border-neutral-800">
       <div className="flex flex-col items-center gap-3 p-2">
         <div className="pb-1 pt-2">
           <a
@@ -251,8 +251,8 @@ function SidebarRail({
                     className={cn(
                       "relative flex size-11 items-center justify-center rounded-lg outline-none transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-blue-500/50",
                       isActive
-                        ? "bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md"
-                        : "text-neutral-600 dark:text-neutral-400 hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15"
+                        ? "bg-blue-600 dark:bg-blue-600 text-white shadow-sm"
+                        : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-800 active:bg-neutral-300 dark:active:bg-neutral-700"
                     )}
                   >
                     <Icon className="size-5" />
@@ -268,7 +268,7 @@ function SidebarRail({
       </div>
 
       <div className="flex flex-col items-center gap-3 py-3">
-        <SidebarTrigger className="size-11 text-neutral-600 dark:text-neutral-400 hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15" />
+        <SidebarTrigger className="size-11 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-800 active:bg-neutral-300 dark:active:bg-neutral-700" />
 
         <Tooltip>
           <TooltipTrigger asChild>
@@ -293,12 +293,12 @@ function UserMenu() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button
-          className="flex size-11 items-center justify-center rounded-lg hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15 focus-visible:ring-2 focus-visible:ring-blue-500/50"
+          className="flex size-11 items-center justify-center rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-800 active:bg-neutral-300 dark:active:bg-neutral-700 focus-visible:ring-2 focus-visible:ring-blue-500/50"
           aria-label="Účet"
         >
-          <Avatar className="size-7 ring-2 ring-blue-500/20">
+          <Avatar className="size-7">
             <AvatarImage src={user?.user_metadata?.avatar_url} alt={user?.email || ""} />
-            <AvatarFallback className="text-xs bg-gradient-to-br from-blue-500 to-blue-600 text-white">
+            <AvatarFallback className="text-xs bg-blue-600 text-white">
               {getInitials(user?.email?.split('@')[0] || "User")}
             </AvatarFallback>
           </Avatar>
@@ -336,8 +336,8 @@ function OrganizationSwitcher() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="flex min-w-0 flex-1 items-center gap-2 rounded-lg px-2 py-1.5 text-left hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
-          <div className="flex size-6 items-center justify-center rounded bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700">
+        <button className="flex min-w-0 flex-1 items-center gap-2 rounded-lg px-2 py-1.5 text-left hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors">
+          <div className="flex size-6 items-center justify-center rounded bg-blue-600 dark:bg-blue-600">
             <BookOpen className="size-3.5 text-white" />
           </div>
           <span className="flex-1 truncate text-sm font-medium text-neutral-900 dark:text-neutral-100">
@@ -377,7 +377,7 @@ function NotificationBell() {
     <Button
       variant="ghost"
       size="icon"
-      className="ml-auto size-8 text-neutral-600 dark:text-neutral-400 hover:bg-black/5 dark:hover:bg-white/10"
+      className="ml-auto size-8 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800"
       aria-label="Oznámení"
     >
       <Bell className="size-4" />
@@ -391,7 +391,7 @@ function NewActionButton() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className="w-full justify-start gap-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 dark:from-blue-500 dark:to-blue-600 dark:hover:from-blue-600 dark:hover:to-blue-700 shadow-sm">
+        <Button className="w-full justify-start gap-2 bg-neutral-900 dark:bg-neutral-800 text-white hover:bg-neutral-800 dark:hover:bg-neutral-700 shadow-sm">
           <Plus className="size-4" />
           Začít Studium
         </Button>
@@ -458,7 +458,7 @@ function SidebarPanel({ module, utilities }: SidebarPanelProps) {
 
   return (
     <div
-      className="relative flex h-screen flex-col overflow-hidden rounded-l-xl bg-neutral-100 dark:bg-neutral-900/50 backdrop-blur-sm"
+      className="relative flex h-screen flex-col overflow-hidden rounded-l-xl bg-white dark:bg-[#1f1f1f] border-r border-neutral-200 dark:border-neutral-800"
       style={{ width: `${SIDEBAR_PANEL_WIDTH}px` }}
     >
       <div
@@ -507,15 +507,15 @@ function SidebarPanel({ module, utilities }: SidebarPanelProps) {
                 className="group/setup"
               >
                 <div
-                  className={cn("rounded-lg p-2", setupOpen && "bg-neutral-200/50 dark:bg-neutral-800/50")}
+                  className={cn("rounded-lg p-2", setupOpen && "bg-neutral-100 dark:bg-neutral-800/50")}
                 >
                   <CollapsibleTrigger
                     className={cn(
                       "flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors",
                       setupOpen && "hidden",
                       isSetupActive
-                        ? "bg-blue-100/50 dark:bg-blue-900/50 font-medium text-blue-600 dark:text-blue-400"
-                        : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200/50 dark:hover:bg-neutral-800/50"
+                        ? "bg-blue-50 dark:bg-blue-950/50 font-medium text-blue-600 dark:text-blue-400"
+                        : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                     )}
                   >
                     <Settings
@@ -639,17 +639,17 @@ function NavItem({ item, isActive }: { item: NavItemConfig; isActive: boolean })
       target={isExternal ? "_blank" : undefined}
       rel={isExternal ? "noopener noreferrer" : undefined}
       className={cn(
-        "group flex h-8 items-center justify-between rounded-lg p-2 text-sm leading-none transition-[background-color,color,font-weight] duration-75",
+        "group flex h-8 items-center justify-between rounded-lg px-2 py-1.5 text-sm leading-none transition-colors duration-75",
         isActive
-          ? "bg-blue-100/50 dark:bg-blue-900/50 font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-100/80 dark:hover:bg-blue-900/70 active:bg-blue-100 dark:active:bg-blue-900"
-          : "text-neutral-700 dark:text-neutral-300 hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15"
+          ? "bg-blue-50 dark:bg-blue-950/50 font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-950/70"
+          : "text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800"
       )}
     >
       <span className="flex min-w-0 items-center gap-2.5">
         <Icon
           className={cn(
             "size-4 shrink-0",
-            isActive ? "text-blue-600 dark:text-blue-400" : "text-neutral-600 dark:text-neutral-400"
+            isActive ? "text-blue-600 dark:text-blue-400" : "text-neutral-500 dark:text-neutral-400"
           )}
         />
         <span className="truncate">{item.label}</span>
@@ -698,21 +698,21 @@ function ContentArea({ children }: ContentAreaProps) {
   const showCornerFills = isPanelOpen;
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col bg-neutral-200 dark:bg-neutral-900 md:py-2 md:pr-2">
+    <div className="flex min-h-0 flex-1 flex-col bg-neutral-100 dark:bg-[#141414] md:py-2 md:pr-2">
       <div className="relative flex min-h-0 flex-1 flex-col">
         <div
           className={cn(
-            "absolute -left-2 top-0 z-0 hidden h-3 w-5 bg-neutral-100 dark:bg-neutral-900/50 transition-opacity duration-300 md:block",
+            "absolute -left-2 top-0 z-0 hidden h-3 w-5 bg-white dark:bg-[#1f1f1f] transition-opacity duration-300 md:block",
             showCornerFills ? "opacity-100" : "opacity-0"
           )}
         />
         <div
           className={cn(
-            "absolute -left-2 bottom-0 z-0 hidden h-3 w-5 bg-neutral-100 dark:bg-neutral-900/50 transition-opacity duration-300 md:block",
+            "absolute -left-2 bottom-0 z-0 hidden h-3 w-5 bg-white dark:bg-[#1f1f1f] transition-opacity duration-300 md:block",
             showCornerFills ? "opacity-100" : "opacity-0"
           )}
         />
-        <main className="z-10 flex min-h-0 flex-1 flex-col overflow-hidden pb-16 md:rounded-xl md:bg-white dark:md:bg-neutral-950 md:pb-0">
+        <main className="z-10 flex min-h-0 flex-1 flex-col overflow-hidden pb-16 md:rounded-xl md:bg-neutral-50 dark:md:bg-[#1a1a1a] md:pb-0">
           <div className="flex-1 overflow-auto p-6 pb-24 md:pb-6">
             {children}
           </div>
@@ -861,7 +861,7 @@ function MobileNavigation({
         </DrawerContent>
       </Drawer>
 
-      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-neutral-200 dark:border-neutral-800 bg-white/95 dark:bg-neutral-950/95 backdrop-blur-lg md:hidden">
+      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#1a1a1a] backdrop-blur-lg md:hidden">
         <div
           className="grid"
           style={{
@@ -883,7 +883,7 @@ function MobileNavigation({
                   "flex flex-col items-center gap-1 py-3 text-xs transition-colors",
                   isActive
                     ? "text-blue-600 dark:text-blue-400 font-medium"
-                    : "text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100"
+                    : "text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200"
                 )}
                 aria-label={module.label}
               >
@@ -928,17 +928,17 @@ function MobileNavItem({
       target={isExternal ? "_blank" : undefined}
       rel={isExternal ? "noopener noreferrer" : undefined}
       className={cn(
-        "group flex h-8 items-center justify-between rounded-lg p-2 text-sm leading-none transition-[background-color,color,font-weight] duration-75",
+        "group flex h-8 items-center justify-between rounded-lg px-2 py-1.5 text-sm leading-none transition-colors duration-75",
         isActive
-          ? "bg-blue-100/50 dark:bg-blue-900/50 font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-100/80 dark:hover:bg-blue-900/70 active:bg-blue-100 dark:active:bg-blue-900"
-          : "text-neutral-700 dark:text-neutral-300 hover:bg-black/5 dark:hover:bg-white/10 active:bg-black/10 dark:active:bg-white/15"
+          ? "bg-blue-50 dark:bg-blue-950/50 font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-950/70"
+          : "text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800"
       )}
     >
       <span className="flex min-w-0 items-center gap-2.5">
         <Icon
           className={cn(
             "size-4 shrink-0",
-            isActive ? "text-blue-600 dark:text-blue-400" : "text-neutral-600 dark:text-neutral-400"
+            isActive ? "text-blue-600 dark:text-blue-400" : "text-neutral-500 dark:text-neutral-400"
           )}
         />
         <span className="truncate">{item.label}</span>
