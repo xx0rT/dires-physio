@@ -185,7 +185,7 @@ const TestimonialSection = ({ className }: TestimonialSectionProps) => {
 
   return (
     <section className={cn("py-32", className)}>
-      <div className="container flex flex-col items-center">
+      <div className="container mx-auto flex flex-col items-center">
         <div className="my-4 flex justify-center">
           <Badge variant="outline" className="rounded-sm py-2 shadow-md">
             <MessageSquareCode className="mr-2 size-4 text-muted-foreground" />

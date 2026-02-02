@@ -78,7 +78,7 @@ const Feature283 = ({ className }: Feature283Props) => {
 
   return (
     <section className={cn("py-32", className)}>
-      <div className="relative container flex flex-col items-center">
+      <div className="relative container mx-auto">
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4 max-w-7xl mx-auto">
           {/* Column 1 */}
           <div className="grid gap-4">
