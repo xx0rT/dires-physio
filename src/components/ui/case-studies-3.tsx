@@ -29,8 +29,8 @@ const CaseStudies3 = ({
 
   return (
     <section className={cn("py-32", className)}>
-      <div className="container mx-auto flex justify-center">
-        <div className="border border-border max-w-7xl w-full">
+      <div className="container mx-auto flex justify-center px-4 sm:px-6 lg:px-8">
+        <div className="border border-border max-w-6xl w-full">
           <a
             href={featuredCasestudy.link || "#"}
             className="group grid gap-4 overflow-hidden px-6 transition-colors duration-500 ease-out hover:bg-muted/40 lg:grid-cols-2 xl:px-28"
@@ -69,17 +69,16 @@ const CaseStudies3 = ({
               </div>
             </div>
           </a>
-          <div className="flex border-t border-border">
-            <div className="hidden w-28 shrink-0 bg-[radial-gradient(var(--muted-foreground)_1px,transparent_1px)] [background-size:10px_10px] opacity-15 xl:block"></div>
-            <div className="grid lg:grid-cols-2">
+          <div className="flex border-t border-border justify-center">
+            <div className="grid lg:grid-cols-2 max-w-5xl mx-auto w-full">
               {casestudies.map((item, idx) => (
                 <a
                   key={item.company}
                   href={item.link || "#"}
                   className={`group flex flex-col justify-between gap-12 border-border bg-background px-6 py-8 transition-colors duration-500 ease-out hover:bg-muted/40 md:py-16 lg:pb-16 xl:gap-16 ${
                     idx === 0
-                      ? "xl:border-l xl:pl-8"
-                      : "border-t lg:border-t-0 lg:border-l xl:border-r xl:pl-8"
+                      ? ""
+                      : "border-t lg:border-t-0 lg:border-l"
                   }`}
                 >
                   <div className="flex items-center gap-2 text-2xl font-medium">
@@ -105,7 +104,6 @@ const CaseStudies3 = ({
                 </a>
               ))}
             </div>
-            <div className="hidden w-28 shrink-0 bg-[radial-gradient(var(--muted-foreground)_1px,transparent_1px)] [background-size:10px_10px] opacity-15 xl:block"></div>
           </div>
         </div>
       </div>
