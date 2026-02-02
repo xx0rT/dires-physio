@@ -193,12 +193,12 @@ const TestimonialSection = ({ className }: TestimonialSectionProps) => {
           </Badge>
         </div>
 
-        <div className="flex flex-col items-center gap-6 px-4 sm:px-8">
+        <div className="flex flex-col items-center gap-6 px-4 sm:px-8 text-center">
           <h2 className="mb-2 text-center text-3xl font-semibold lg:text-5xl">
             Hear what our customers <br /> are saying
           </h2>
 
-          <div className="mt-4 flex flex-col items-center gap-4 sm:flex-row">
+          <div className="mt-4 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <span>
               Discover how <b>Shadcnblocks</b> is transforming workflows across
               industries.
@@ -206,7 +206,7 @@ const TestimonialSection = ({ className }: TestimonialSectionProps) => {
           </div>
         </div>
 
-        <div className="relative mt-14 w-full max-w-7xl px-4 after:absolute after:inset-x-0 after:-bottom-2 after:h-96 after:bg-linear-to-t after:from-background sm:px-8 md:px-16 lg:px-32">
+        <div className="relative mt-14 w-full max-w-7xl mx-auto px-4 after:absolute after:inset-x-0 after:-bottom-2 after:h-96 after:bg-linear-to-t after:from-background sm:px-8 md:px-16 lg:px-32">
           <div className="columns-1 gap-5 md:columns-2 lg:columns-3">
             {reorderedData.map((testimonial) => (
               <TestimonialCard key={testimonial.id} testimonial={testimonial} />
