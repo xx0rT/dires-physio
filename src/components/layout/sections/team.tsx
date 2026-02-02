@@ -369,42 +369,34 @@ const Team11 = ({
         </div>
       </section>
 
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         {isDialogOpen && (
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogContent
-              className="max-w-2xl max-h-[90vh] overflow-y-auto p-0 overflow-hidden"
-              asChild
-            >
+            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto p-0">
               <motion.div
                 initial={clickedCardRect ? {
-                  width: clickedCardRect.width,
-                  height: clickedCardRect.height,
-                  x: clickedCardRect.left - window.innerWidth / 2 + clickedCardRect.width / 2,
-                  y: clickedCardRect.top - window.innerHeight / 2 + clickedCardRect.height / 2,
-                  opacity: 0.8,
-                  scale: 0.9,
+                  opacity: 0,
+                  scale: 0.8,
+                  y: 20,
                 } : {
                   scale: 0.9,
                   opacity: 0,
                 }}
                 animate={{
-                  width: "auto",
-                  height: "auto",
-                  x: 0,
-                  y: 0,
                   opacity: 1,
                   scale: 1,
+                  y: 0,
                 }}
                 exit={{
                   scale: 0.95,
                   opacity: 0,
+                  y: 10,
                 }}
                 transition={{
                   type: "spring",
-                  damping: 30,
+                  damping: 25,
                   stiffness: 300,
-                  mass: 0.8,
+                  mass: 0.5,
                 }}
               >
                 <DialogHeader className="sr-only">
