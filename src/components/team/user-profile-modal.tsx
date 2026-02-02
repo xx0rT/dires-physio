@@ -188,7 +188,7 @@ const UserProfile6 = ({
           <TabsList className="w-full justify-start">
             <TabsTrigger value="about">O mně</TabsTrigger>
             <TabsTrigger value="experience">Zkušenosti</TabsTrigger>
-            <TabsTrigger value="projects">Projekty</TabsTrigger>
+            <TabsTrigger value="projects">Specializace</TabsTrigger>
           </TabsList>
 
           <TabsContent value="about" className="mt-4">
