@@ -25,65 +25,83 @@ interface DataItem {
 const DATA: DataItem[] = [
   {
     id: "1",
-    name: "Zuzana Hykyšová",
-    username: "3 reviews",
-    date: "3 months ago",
+    name: "John Doe",
+    username: "johndoe",
+    date: "2023-10-05",
     avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-1.webp",
     content:
-      "Honza Kottas helped me again with a problem that had been bothering me for a month and that neither massages nor acupuncture helped. Honza's gentle, sensitive work brought me noticeable relief and improvement, not immediately, but within a few sessions.",
+      "This platform has completely transformed the way I manage my projects. The tools are not only intuitive but also incredibly powerful, allowing me to streamline my workflow like never before. It's a game-changer for productivity!",
   },
   {
     id: "2",
-    name: "Lukáš Lebeda",
-    username: "2 reviews",
-    date: "8 months ago",
+    name: "Jane Smith",
+    username: "janesmith",
+    date: "2023-09-30",
     avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-2.webp",
     content:
-      "I highly recommend Mr. Kottas, with whom I am dealing with a long-term neurological problem. I have been to various physiotherapy exercises/therapy and for the first time I feel that someone really understands the problem and uses the right path and technique. 5/5",
+      "The collaboration features are truly outstanding, allowing my team and I to work together seamlessly no matter where we are, which has made remote work significantly easier. The real-time editing and intuitive sharing options have transformed how we operate, eliminating the headaches of version control and endless email chains.",
   },
   {
     id: "3",
-    name: "Veronika Harapátová",
-    username: "5 reviews · 1 photo",
-    date: "a year ago",
+    name: "Alice Johnson",
+    username: "alicej",
+    date: "2023-09-25",
     avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-3.webp",
-    content: "I didn't believe my 3-year-old daughter could be calm for an hour, but Mr. Kottas exudes such calmness that she enjoyed the entire visit and, even though she felt relieved right away, she would like to go there again, as she found the entire treatment pleasant.",
+    content: "The analytics are a game-changer!",
   },
   {
     id: "4",
-    name: "Hanka Ježková",
-    username: "1 review",
-    date: "a year ago",
+    name: "Bob Brown",
+    username: "bobbrown",
+    date: "2023-09-20",
     avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-4.webp",
     content:
-      "Děkuju za skvělý přístup! Pan Kottas byl úžasný a hned po první návštěvě se mi dost ulevilo. Co ještě oceňuji je dostupnost do Diresu - tramvajová zastávka je kousíček:))",
+      "I love how easy it is to integrate this platform with my existing tools. It has streamlined my workflow significantly, saving me hours every week.",
   },
   {
     id: "5",
-    name: "Žaneta Kárová",
-    username: "Local Guide · 15 reviews",
-    date: "a year ago",
+    name: "Charlie Davis",
+    username: "charlied",
+    date: "2023-09-15",
     avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-5.webp",
     content:
-      "Great personal approach, highly recommend and thank you 🙏",
+      "The design templates are fantastic. They've helped me deliver projects faster without compromising on quality. Highly recommend!",
   },
   {
     id: "6",
-    name: "Milan Harapát",
-    username: "3 reviews",
-    date: "a year ago",
+    name: "Eva Wilson",
+    username: "evawilson",
+    date: "2023-09-10",
     avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-6.webp",
     content:
-      "Excellent service and professional care. Mr. Kottas provided outstanding treatment and I'm very satisfied with the results.",
+      "This platform has made project management so much easier. It's intuitive, efficient, and keeps everyone on the same page.",
   },
   {
     id: "7",
-    name: "Jana Nováková",
-    username: "4 reviews",
-    date: "10 months ago",
+    name: "Frank Miller",
+    username: "frankm",
+    date: "2023-09-05",
     avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-7.webp",
     content:
-      "Professional approach and effective treatment. I can highly recommend Mr. Kottas for neurological rehabilitation. The results speak for themselves.",
+      "The branding tools are amazing. They've helped us maintain consistency across all our campaigns, which has been a huge win for our team.",
+  },
+  {
+    id: "8",
+    name: "Grace Lee",
+    username: "gracelee",
+    date: "2023-08-30",
+    avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-8.webp",
+    content:
+      "The vector editing tools are fantastic. They've made my creative process so much smoother and more enjoyable.",
+  },
+  {
+    id: "9",
+    name: "Henry Garcia",
+    username: "henryg",
+    date: "2023-08-25",
+    avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-4.webp",
+    content:
+      "The animation features are incredible. They've taken my projects to the next level, and I couldn't be happier with the results.",
   },
 ];
 
@@ -171,7 +189,7 @@ const TestimonialSection = ({ className }: TestimonialSectionProps) => {
         <div className="my-4 flex justify-center">
           <Badge variant="outline" className="rounded-sm py-2 shadow-md">
             <MessageSquareCode className="mr-2 size-4 text-muted-foreground" />
-            <span>⭐ 5.0 Rating · 7 Reviews</span>
+            <span>Customer Feedback</span>
           </Badge>
         </div>
 
@@ -182,7 +200,8 @@ const TestimonialSection = ({ className }: TestimonialSectionProps) => {
 
           <div className="mt-4 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <span>
-              Real reviews from patients who experienced professional care with <b>Mr. Kottas</b>.
+              Discover how <b>Shadcnblocks</b> is transforming workflows across
+              industries.
             </span>
           </div>
         </div>
@@ -200,7 +219,7 @@ const TestimonialSection = ({ className }: TestimonialSectionProps) => {
             <span className="flex items-center gap-1">
               <span>See More</span>
               <span className="text-muted/80">-</span>
-              <span className="text-muted/80">Reviews</span>
+              <span className="text-muted/80">Feedback</span>
             </span>
             <ChevronRight className="h-4 w-4 text-muted-foreground/80" />
           </Button>
