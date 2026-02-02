@@ -129,7 +129,7 @@ const UserProfile6 = ({
               {user.company && (
                 <span>
                   {' '}
-                  at <span className="font-medium">{user.company}</span>
+                  v <span className="font-medium">{user.company}</span>
                 </span>
               )}
             </p>
@@ -186,9 +186,9 @@ const UserProfile6 = ({
           className="mt-6 w-full"
         >
           <TabsList className="w-full justify-start">
-            <TabsTrigger value="about">About</TabsTrigger>
-            <TabsTrigger value="experience">Experience</TabsTrigger>
-            <TabsTrigger value="projects">Projects</TabsTrigger>
+            <TabsTrigger value="about">O mně</TabsTrigger>
+            <TabsTrigger value="experience">Zkušenosti</TabsTrigger>
+            <TabsTrigger value="projects">Projekty</TabsTrigger>
           </TabsList>
 
           <TabsContent value="about" className="mt-4">

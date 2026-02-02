@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { memo, useState } from "react";
 
 import UserProfile6, { type User } from "@/components/team/user-profile-modal";
@@ -96,44 +96,44 @@ interface Team11Props {
 
 const Team11 = ({
   className,
-  heading = "Meet Our Tech Team",
-  description = "The innovative minds building the future of technology",
+  heading = "Poznejte Náš Technický Tým",
+  description = "Inovativní myšlenky budující budoucnost technologií",
   members = [
     {
       image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar1.jpg",
       name: "Sarah Chen",
-      role: "Chief Technology Officer",
+      role: "Technická Ředitelka",
       description:
-        "Former Google engineer with 12 years in cloud architecture.",
+        "Bývalá inženýrka Google s 12 lety zkušeností v cloudové architektuře.",
       company: "TechCorp",
       location: "San Francisco, CA",
-      bio: "Passionate about cloud architecture and distributed systems.",
+      bio: "Vášnivá cloudová architektura a distribuované systémy.",
       socialLinks: {
         twitter: "https://twitter.com",
         linkedin: "https://linkedin.com",
         github: "https://github.com",
       },
       about:
-        "With over 12 years of experience in cloud architecture, I've led teams at Google and now serve as CTO. My focus is on building scalable, resilient systems that power modern applications.",
+        "S více než 12 lety zkušeností v cloudové architektuře jsem vedla týmy v Google a nyní sloužím jako CTO. Zaměřuji se na budování škálovatelných, odolných systémů, které pohánějí moderní aplikace.",
       experience: [
         {
-          title: "Chief Technology Officer",
+          title: "Technická Ředitelka",
           company: "TechCorp",
-          period: "2021 - Present",
+          period: "2021 - Současnost",
           description:
-            "Leading technical strategy and engineering teams.",
+            "Vedení technické strategie a inženýrských týmů.",
         },
         {
-          title: "Senior Engineer",
+          title: "Senior Inženýrka",
           company: "Google",
           period: "2015 - 2021",
-          description: "Cloud infrastructure and architecture.",
+          description: "Cloudová infrastruktura a architektura.",
         },
       ],
       projects: [
         {
-          name: "Cloud Platform",
-          description: "Scalable infrastructure for enterprise clients.",
+          name: "Cloudová Platforma",
+          description: "Škálovatelná infrastruktura pro podnikové klienty.",
           tech: ["Kubernetes", "AWS", "Terraform"],
         },
       ],
@@ -141,30 +141,30 @@ const Team11 = ({
     {
       image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar2.jpg",
       name: "Marcus Rodriguez",
-      role: "Lead Software Engineer",
-      description: "Full-stack developer specializing in React and Node.js.",
+      role: "Vedoucí Softwarový Inženýr",
+      description: "Full-stack vývojář specializující se na React a Node.js.",
       company: "TechCorp",
       location: "Austin, TX",
-      bio: "Building elegant solutions with modern web technologies.",
+      bio: "Vytváření elegantních řešení s moderními webovými technologiemi.",
       socialLinks: {
         twitter: "https://twitter.com",
         linkedin: "https://linkedin.com",
         github: "https://github.com",
       },
       about:
-        "Full-stack engineer with a passion for creating seamless user experiences. I specialize in React, Node.js, and modern web development practices.",
+        "Full-stack inženýr s vášní pro vytváření bezproblémových uživatelských zkušeností. Specializuji se na React, Node.js a moderní postupy vývoje webu.",
       experience: [
         {
-          title: "Lead Software Engineer",
+          title: "Vedoucí Softwarový Inženýr",
           company: "TechCorp",
-          period: "2020 - Present",
-          description: "Leading frontend development initiatives.",
+          period: "2020 - Současnost",
+          description: "Vedení frontendových vývojových iniciativ.",
         },
       ],
       projects: [
         {
-          name: "Web Application",
-          description: "Modern SaaS platform serving 100k+ users.",
+          name: "Webová Aplikace",
+          description: "Moderní SaaS platforma obsluhující 100k+ uživatelů.",
           tech: ["React", "Node.js", "PostgreSQL"],
         },
       ],
@@ -172,59 +172,59 @@ const Team11 = ({
     {
       image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar3.jpg",
       name: "Emily Watson",
-      role: "Product Manager",
-      description: "Data-driven product strategist with UX design background.",
+      role: "Produktová Manažerka",
+      description: "Datově řízená produktová stratégka se zkušenostmi v UX designu.",
       company: "TechCorp",
       location: "New York, NY",
-      bio: "Bridging the gap between user needs and technical solutions.",
+      bio: "Propojování potřeb uživatelů a technických řešení.",
       socialLinks: {
         linkedin: "https://linkedin.com",
       },
       about:
-        "Product manager focused on creating data-driven product strategies. With a background in UX design, I bring a user-centric approach to product development.",
+        "Produktová manažerka zaměřená na vytváření datově řízených produktových strategií. Se zkušenostmi v UX designu přináším uživatelsky orientovaný přístup k vývoji produktů.",
       experience: [
         {
-          title: "Product Manager",
+          title: "Produktová Manažerka",
           company: "TechCorp",
-          period: "2019 - Present",
-          description: "Leading product strategy and roadmap.",
+          period: "2019 - Současnost",
+          description: "Vedení produktové strategie a plánu.",
         },
       ],
       projects: [
         {
-          name: "Product Analytics",
-          description: "Dashboard for tracking user engagement metrics.",
-          tech: ["Analytics", "Data Visualization"],
+          name: "Produktová Analytika",
+          description: "Dashboard pro sledování metrik zapojení uživatelů.",
+          tech: ["Analytika", "Vizualizace Dat"],
         },
       ],
     },
     {
       image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar4.jpg",
       name: "David Kim",
-      role: "DevOps Engineer",
+      role: "DevOps Inženýr",
       description:
-        "Infrastructure automation expert making deployments seamless.",
+        "Expert na automatizaci infrastruktury, který zjednodušuje nasazování.",
       company: "TechCorp",
       location: "Seattle, WA",
-      bio: "Automating everything to make developers' lives easier.",
+      bio: "Automatizace všeho pro usnadnění života vývojářů.",
       socialLinks: {
         twitter: "https://twitter.com",
         github: "https://github.com",
       },
       about:
-        "DevOps engineer specializing in CI/CD pipelines and infrastructure automation. I'm passionate about making deployments fast, reliable, and stress-free.",
+        "DevOps inženýr specializující se na CI/CD pipelines a automatizaci infrastruktury. Jsem vášnivý, aby bylo nasazování rychlé, spolehlivé a bezstresové.",
       experience: [
         {
-          title: "DevOps Engineer",
+          title: "DevOps Inženýr",
           company: "TechCorp",
-          period: "2018 - Present",
-          description: "Building and maintaining deployment infrastructure.",
+          period: "2018 - Současnost",
+          description: "Budování a údržba infrastruktury nasazování.",
         },
       ],
       projects: [
         {
           name: "CI/CD Pipeline",
-          description: "Automated deployment system reducing release time by 80%.",
+          description: "Automatizovaný systém nasazování snižující čas vydání o 80%.",
           tech: ["Jenkins", "Docker", "Kubernetes"],
         },
       ],
@@ -232,28 +232,28 @@ const Team11 = ({
     {
       image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar5.jpg",
       name: "Lisa Thompson",
-      role: "UX/UI Designer",
-      description: "Creative designer passionate about user-centered design.",
+      role: "UX/UI Designérka",
+      description: "Kreativní designérka vášnivá pro uživatelsky orientovaný design.",
       company: "TechCorp",
       location: "Portland, OR",
-      bio: "Creating beautiful and intuitive user experiences.",
+      bio: "Vytváření krásných a intuitivních uživatelských zkušeností.",
       socialLinks: {
         linkedin: "https://linkedin.com",
       },
       about:
-        "UX/UI designer with a passion for creating intuitive, beautiful interfaces. I believe great design is invisible and makes complex tasks feel simple.",
+        "UX/UI designérka s vášní pro vytváření intuitivních, krásných rozhraní. Věřím, že skvělý design je neviditelný a dělá složité úkoly jednoduchými.",
       experience: [
         {
-          title: "UX/UI Designer",
+          title: "UX/UI Designérka",
           company: "TechCorp",
-          period: "2017 - Present",
-          description: "Designing user interfaces and experiences.",
+          period: "2017 - Současnost",
+          description: "Navrhování uživatelských rozhraní a zkušeností.",
         },
       ],
       projects: [
         {
-          name: "Design System",
-          description: "Comprehensive design system for consistent UX.",
+          name: "Design Systém",
+          description: "Komplexní design systém pro konzistentní UX.",
           tech: ["Figma", "React", "Storybook"],
         },
       ],
@@ -261,28 +261,28 @@ const Team11 = ({
     {
       image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar5.jpg",
       name: "Lisa Thompson",
-      role: "UX/UI Designer",
-      description: "Creative designer passionate about user-centered design.",
+      role: "UX/UI Designérka",
+      description: "Kreativní designérka vášnivá pro uživatelsky orientovaný design.",
       company: "TechCorp",
       location: "Portland, OR",
-      bio: "Creating beautiful and intuitive user experiences.",
+      bio: "Vytváření krásných a intuitivních uživatelských zkušeností.",
       socialLinks: {
         linkedin: "https://linkedin.com",
       },
       about:
-        "UX/UI designer with a passion for creating intuitive, beautiful interfaces. I believe great design is invisible and makes complex tasks feel simple.",
+        "UX/UI designérka s vášní pro vytváření intuitivních, krásných rozhraní. Věřím, že skvělý design je neviditelný a dělá složité úkoly jednoduchými.",
       experience: [
         {
-          title: "UX/UI Designer",
+          title: "UX/UI Designérka",
           company: "TechCorp",
-          period: "2017 - Present",
-          description: "Designing user interfaces and experiences.",
+          period: "2017 - Současnost",
+          description: "Navrhování uživatelských rozhraní a zkušeností.",
         },
       ],
       projects: [
         {
-          name: "Design System",
-          description: "Comprehensive design system for consistent UX.",
+          name: "Design Systém",
+          description: "Komplexní design systém pro konzistentní UX.",
           tech: ["Figma", "React", "Storybook"],
         },
       ],
@@ -292,8 +292,12 @@ const Team11 = ({
   const [hoveredMember, setHoveredMember] = useState<number | null>(null);
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [clickedCardRect, setClickedCardRect] = useState<DOMRect | null>(null);
 
-  const handleMemberClick = (member: TeamMember) => {
+  const handleMemberClick = (member: TeamMember, event: React.MouseEvent<HTMLDivElement>) => {
+    const card = event.currentTarget;
+    const rect = card.getBoundingClientRect();
+    setClickedCardRect(rect);
     setSelectedMember(member);
     setIsDialogOpen(true);
   };
@@ -335,10 +339,12 @@ const Team11 = ({
                     onMouseEnter={() => setHoveredMember(index)}
                     className="relative"
                   >
-                    <TeamMemberCard
-                      member={member}
-                      onClick={() => handleMemberClick(member)}
-                    />
+                    <div onClick={(e) => handleMemberClick(member, e)}>
+                      <TeamMemberCard
+                        member={member}
+                        onClick={() => {}}
+                      />
+                    </div>
 
                     {hoveredMember === index && (
                       <motion.div
@@ -363,14 +369,53 @@ const Team11 = ({
         </div>
       </section>
 
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto p-0">
-          <DialogHeader className="sr-only">
-            <DialogTitle>{selectedMember?.name}</DialogTitle>
-          </DialogHeader>
-          {selectedMember && <UserProfile6 user={memberToUser(selectedMember)} />}
-        </DialogContent>
-      </Dialog>
+      <AnimatePresence>
+        {isDialogOpen && (
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogContent
+              className="max-w-2xl max-h-[90vh] overflow-y-auto p-0 overflow-hidden"
+              asChild
+            >
+              <motion.div
+                initial={clickedCardRect ? {
+                  width: clickedCardRect.width,
+                  height: clickedCardRect.height,
+                  x: clickedCardRect.left - window.innerWidth / 2 + clickedCardRect.width / 2,
+                  y: clickedCardRect.top - window.innerHeight / 2 + clickedCardRect.height / 2,
+                  opacity: 0.8,
+                  scale: 0.9,
+                } : {
+                  scale: 0.9,
+                  opacity: 0,
+                }}
+                animate={{
+                  width: "auto",
+                  height: "auto",
+                  x: 0,
+                  y: 0,
+                  opacity: 1,
+                  scale: 1,
+                }}
+                exit={{
+                  scale: 0.95,
+                  opacity: 0,
+                }}
+                transition={{
+                  type: "spring",
+                  damping: 30,
+                  stiffness: 300,
+                  mass: 0.8,
+                }}
+              >
+                <DialogHeader className="sr-only">
+                  <DialogTitle>{selectedMember?.name}</DialogTitle>
+                </DialogHeader>
+                {selectedMember && <UserProfile6 user={memberToUser(selectedMember)} />}
+              </motion.div>
+            </DialogContent>
+          </Dialog>
+        )}
+      </AnimatePresence>
     </>
   );
 };
