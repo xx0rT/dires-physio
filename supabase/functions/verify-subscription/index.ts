@@ -56,7 +56,7 @@ Deno.serve(async (req: Request) => {
           hasActivePremium:
             subscription &&
             (subscription.status === 'active' || subscription.status === 'trialing') &&
-            subscription.plan !== 'free' &&
+            subscription.plan_type !== 'free_trial' &&
             subscription.stripe_subscription_id != null
         }),
         {
@@ -143,13 +143,6 @@ Deno.serve(async (req: Request) => {
         periodEnd.setFullYear(periodEnd.getFullYear() + 100);
       }
 
-      const planMapping: Record<string, string> = {
-        "free_trial": "free_trial",
-        "monthly": "pro",
-        "lifetime": "premium"
-      };
-
-      const mappedPlan = planMapping[planType] || planType;
       const subscriptionStatus = planType === "free_trial" ? "trialing" : "active";
 
       const { data: existingSub } = await supabaseClient
@@ -159,7 +152,7 @@ Deno.serve(async (req: Request) => {
         .maybeSingle();
 
       const subscriptionData = {
-        plan: mappedPlan,
+        plan_type: planType,
         status: subscriptionStatus,
         stripe_customer_id: customerId,
         stripe_subscription_id: subscriptionId || `one_time_${Date.now()}`,
@@ -202,6 +195,45 @@ Deno.serve(async (req: Request) => {
         .eq("user_id", userId)
         .maybeSingle();
 
+      const planNames: Record<string, string> = {
+        "free_trial": "Zkušební verze zdarma",
+        "monthly": "Měsíční plán",
+        "lifetime": "Doživotní přístup"
+      };
+
+      const planPrices: Record<string, number> = {
+        "free_trial": 0,
+        "monthly": 299,
+        "lifetime": 2999
+      };
+
+      try {
+        await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/send-invoice-email`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+          },
+          body: JSON.stringify({
+            customerEmail: userEmail || "customer@example.com",
+            customerName: userEmail?.split("@")[0] || "Zákazník",
+            planType: planType,
+            planName: planNames[planType] || planType,
+            amount: planPrices[planType] || 0,
+            currency: "CZK",
+            orderNumber: `ORD-${Date.now()}`,
+            orderDate: new Date().toLocaleDateString('cs-CZ', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            }),
+          }),
+        });
+        console.log("✅ Invoice email sent successfully");
+      } catch (emailError) {
+        console.error("⚠️ Failed to send invoice email:", emailError);
+      }
+
       return new Response(
         JSON.stringify({
           success: true,
@@ -209,7 +241,7 @@ Deno.serve(async (req: Request) => {
           hasActivePremium:
             subscription &&
             (subscription.status === 'active' || subscription.status === 'trialing') &&
-            subscription.plan !== 'free' &&
+            subscription.plan_type !== 'free_trial' &&
             subscription.stripe_subscription_id != null
         }),
         {

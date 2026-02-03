@@ -1,19 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from './auth-context';
 import { supabase } from './supabase';
-
-interface Subscription {
-  id: string;
-  user_id: string;
-  plan: string;
-  status: string;
-  stripe_customer_id?: string;
-  stripe_subscription_id?: string;
-  current_period_start?: string;
-  current_period_end?: string;
-  created_at: string;
-  updated_at: string;
-}
+import type { Subscription } from './subscription';
 
 export function useSubscription() {
   const { user, session } = useAuth();
@@ -76,7 +64,7 @@ export function useSubscription() {
 
   const hasActiveSubscription =
     (subscription?.status === 'active' || subscription?.status === 'trialing') &&
-    subscription?.plan !== 'free' &&
+    subscription?.plan_type !== 'free_trial' &&
     subscription?.stripe_subscription_id != null;
 
   return { subscription, loading, hasActiveSubscription, refetch: fetchSubscription };

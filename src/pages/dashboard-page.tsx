@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
-import { RiBookOpenLine, RiTimeLine, RiTrophyLine, RiArrowRightLine, RiCheckLine, RiBillLine, RiUserLine, RiRefreshLine } from '@remixicon/react'
+import { RiBookOpenLine, RiTimeLine, RiTrophyLine, RiArrowRightLine, RiCheckLine, RiBillLine, RiUserLine } from '@remixicon/react'
 import { mockCourses, mockDatabase } from '@/lib/mock-data'
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
@@ -12,6 +12,7 @@ import { useSubscription } from '@/lib/use-subscription'
 import { toast } from 'sonner'
 import { PhysioAnalyticsChart } from '@/components/dashboard/physio-analytics-chart'
 import { PhysioTodoList } from '@/components/dashboard/physio-todo-list'
+import { SubscriptionTimerCard } from '@/components/dashboard/subscription-timer-card'
 
 interface Course {
   id: string
@@ -155,37 +156,14 @@ export default function DashboardPage() {
             Vítejte zpět na vaší vzdělávací platformě. Pokračujte ve svém učení.
           </p>
         </div>
-        {subscription && (
-          <Card className="px-4 py-3 min-w-[240px]">
-            <div className="flex items-center gap-3">
-              <div className="flex-1">
-                <p className="text-xs text-muted-foreground mb-1">Status předplatného</p>
-                <div className="flex items-center gap-2">
-                  <p className="font-semibold capitalize">{subscription.plan}</p>
-                  {hasActiveSubscription ? (
-                    <Badge className="bg-yellow-500/10 border-yellow-500/50 text-yellow-700 dark:text-yellow-400">
-                      Premium
-                    </Badge>
-                  ) : (
-                    <Badge variant="outline">Free</Badge>
-                  )}
-                </div>
-                {subscription.stripe_subscription_id && (
-                  <p className="text-xs text-muted-foreground mt-1">ID: {subscription.stripe_subscription_id.slice(-8)}</p>
-                )}
-              </div>
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={handleRefreshSubscription}
-                disabled={refreshing}
-                title="Aktualizovat předplatné"
-              >
-                <RiRefreshLine className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
-              </Button>
-            </div>
-          </Card>
-        )}
+        <div className="min-w-[320px]">
+          <SubscriptionTimerCard
+            subscription={subscription}
+            hasActiveSubscription={hasActiveSubscription}
+            onRefresh={handleRefreshSubscription}
+            refreshing={refreshing}
+          />
+        </div>
       </motion.div>
 
       <motion.div

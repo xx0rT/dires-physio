@@ -142,6 +142,25 @@ export function SubscriptionCard({ userId }: SubscriptionCardProps) {
             </div>
           )}
 
+          {subscription.plan_type === "monthly" && trialDays > 0 && (
+            <div className="rounded-lg bg-green-500/10 p-4 border border-green-500/20">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-medium text-green-600">
+                  Zbývající čas předplatného
+                </p>
+                <Badge variant="outline" className="bg-green-500/10 text-green-600 border-green-500/20">
+                  Aktivní
+                </Badge>
+              </div>
+              <p className="mt-2 text-2xl font-bold text-green-600">
+                {trialDays} {trialDays === 1 ? 'den' : trialDays < 5 ? 'dny' : 'dní'}
+              </p>
+              <p className="mt-1 text-xs text-green-600/80">
+                Vaše předplatné se automaticky obnoví {subscription.current_period_end ? new Date(subscription.current_period_end).toLocaleDateString('cs-CZ') : 'N/A'}
+              </p>
+            </div>
+          )}
+
           {subscription.plan_type !== "lifetime" && subscription.current_period_end && (
             <div className="flex items-center gap-2 text-sm text-muted-foreground rounded-lg bg-muted p-3">
               <Calendar className="size-4" />

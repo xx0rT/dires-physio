@@ -247,10 +247,9 @@ export default function CoursesPage() {
                   <p className="text-sm text-muted-foreground">
                     <strong className="text-foreground">Aktuální stav:</strong>{' '}
                     {subscription.status === 'cancelled' && 'Vaše předplatné bylo zrušeno'}
-                    {subscription.status === 'inactive' && 'Vaše předplatné není aktivní'}
                     {subscription.status === 'expired' && 'Vaše předplatné vypršelo'}
-                    {!['cancelled', 'inactive', 'expired'].includes(subscription.status) &&
-                      `Status: ${subscription.status}`}
+                    {subscription.status === 'trialing' && 'Zkušební období'}
+                    {subscription.status === 'active' && 'Aktivní'}
                   </p>
                 </div>
               )}
