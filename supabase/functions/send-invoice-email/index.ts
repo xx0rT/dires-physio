@@ -26,16 +26,7 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
-    const smtpHost = Deno.env.get("SMTP_HOST") || "smtp.gmail.com";
-    const smtpPort = Deno.env.get("SMTP_PORT") || "587";
-    const smtpUser = Deno.env.get("SMTP_USER");
-    const smtpPassword = Deno.env.get("SMTP_PASSWORD");
-    const fromEmail = Deno.env.get("SMTP_FROM_EMAIL") || smtpUser;
     const OWNER_EMAIL = "txrxo.troxx@gmail.com";
-
-    if (!smtpUser || !smtpPassword || !fromEmail) {
-      throw new Error("SMTP credentials are not configured");
-    }
 
     const {
       customerEmail,
