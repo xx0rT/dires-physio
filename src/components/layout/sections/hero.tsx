@@ -157,7 +157,7 @@ export const HeroSection = () => {
                 <div className="group relative m-auto max-w-7xl px-6" data-aos="fade-up">
                     <div className="flex flex-col items-center md:flex-row gap-4">
                         <div className="md:max-w-44 md:border-r md:pr-6">
-                            <p className="text-end">Trusted by the best teams</p>
+                            <p className="text-end">Spolupracujeme také s</p>
                         </div>
                         <div className="relative py-6 md:w-[calc(100%-11rem)]">
                             <InfiniteSlider
