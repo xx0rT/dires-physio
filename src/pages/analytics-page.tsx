@@ -7,94 +7,94 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 const treatmentPlans = [
   {
     id: 1,
-    name: 'Post-Surgery Knee Rehabilitation',
+    name: 'Pooperační rehabilitace kolene',
     patient: 'Sarah Johnson',
-    type: 'Orthopedic',
-    duration: '12 weeks',
+    type: 'Ortopedická',
+    duration: '12 týdnů',
     progress: 75,
     sessionsCompleted: 9,
     totalSessions: 12,
     status: 'active',
     startDate: '2024-11-15',
     exercises: [
-      { name: 'Leg Extensions', sets: 3, reps: 15, completed: true },
-      { name: 'Hamstring Curls', sets: 3, reps: 12, completed: true },
-      { name: 'Wall Squats', sets: 2, reps: 10, completed: false },
-      { name: 'Balance Exercises', sets: 3, reps: 10, completed: false }
+      { name: 'Extenze nohou', sets: 3, reps: 15, completed: true },
+      { name: 'Hamstringové rotace', sets: 3, reps: 12, completed: true },
+      { name: 'Dřepy u zdi', sets: 2, reps: 10, completed: false },
+      { name: 'Balanční cvičení', sets: 3, reps: 10, completed: false }
     ]
   },
   {
     id: 2,
-    name: 'Lower Back Pain Management',
+    name: 'Léčba bolesti dolní části zad',
     patient: 'Emma Davis',
-    type: 'Pain Management',
-    duration: '8 weeks',
+    type: 'Léčba bolesti',
+    duration: '8 týdnů',
     progress: 60,
     sessionsCompleted: 5,
     totalSessions: 8,
     status: 'active',
     startDate: '2024-12-01',
     exercises: [
-      { name: 'Pelvic Tilts', sets: 3, reps: 12, completed: true },
-      { name: 'Cat-Cow Stretch', sets: 2, reps: 10, completed: true },
-      { name: 'Bridge Exercise', sets: 3, reps: 15, completed: true },
-      { name: 'Bird Dog', sets: 3, reps: 10, completed: false }
+      { name: 'Pánvové náklon', sets: 3, reps: 12, completed: true },
+      { name: 'Kočka-kráva protažení', sets: 2, reps: 10, completed: true },
+      { name: 'Můstek', sets: 3, reps: 15, completed: true },
+      { name: 'Ptačí pes', sets: 3, reps: 10, completed: false }
     ]
   },
   {
     id: 3,
-    name: 'Shoulder Mobility Enhancement',
+    name: 'Zlepšení pohyblivosti ramen',
     patient: 'Michael Chen',
-    type: 'Mobility',
-    duration: '10 weeks',
+    type: 'Pohyblivost',
+    duration: '10 týdnů',
     progress: 45,
     sessionsCompleted: 4,
     totalSessions: 10,
     status: 'active',
     startDate: '2024-12-10',
     exercises: [
-      { name: 'Arm Circles', sets: 2, reps: 20, completed: true },
-      { name: 'Shoulder Blade Squeeze', sets: 3, reps: 12, completed: true },
-      { name: 'Wall Walks', sets: 2, reps: 10, completed: false },
-      { name: 'Resistance Band Pulls', sets: 3, reps: 15, completed: false }
+      { name: 'Krouhy pažemi', sets: 2, reps: 20, completed: true },
+      { name: 'Stažení lopatek', sets: 3, reps: 12, completed: true },
+      { name: 'Chůze po zdi', sets: 2, reps: 10, completed: false },
+      { name: 'Tahání odporové gumy', sets: 3, reps: 15, completed: false }
     ]
   },
   {
     id: 4,
-    name: 'Neck Pain Relief Program',
+    name: 'Program úlevy od bolesti krku',
     patient: 'Lisa Anderson',
-    type: 'Pain Management',
-    duration: '6 weeks',
+    type: 'Léčba bolesti',
+    duration: '6 týdnů',
     progress: 30,
     sessionsCompleted: 2,
     totalSessions: 6,
     status: 'active',
     startDate: '2024-12-20',
     exercises: [
-      { name: 'Neck Rotations', sets: 2, reps: 10, completed: true },
-      { name: 'Chin Tucks', sets: 3, reps: 15, completed: false },
-      { name: 'Shoulder Shrugs', sets: 3, reps: 12, completed: false },
-      { name: 'Neck Side Bends', sets: 2, reps: 10, completed: false }
+      { name: 'Rotace krku', sets: 2, reps: 10, completed: true },
+      { name: 'Vtažení brady', sets: 3, reps: 15, completed: false },
+      { name: 'Pokrčení ramen', sets: 3, reps: 12, completed: false },
+      { name: 'Boční ohyby krku', sets: 2, reps: 10, completed: false }
     ]
   }
 ]
 
 const exerciseLibrary = [
   {
-    category: 'Strength',
-    exercises: ['Leg Extensions', 'Hamstring Curls', 'Bicep Curls', 'Tricep Extensions', 'Chest Press']
+    category: 'Síla',
+    exercises: ['Extenze nohou', 'Hamstringové rotace', 'Bicepsové zdvihy', 'Tricepsové natažení', 'Tlak na hrudník']
   },
   {
-    category: 'Flexibility',
-    exercises: ['Cat-Cow Stretch', 'Hamstring Stretch', 'Hip Flexor Stretch', 'Shoulder Stretch']
+    category: 'Flexibilita',
+    exercises: ['Kočka-kráva protažení', 'Hamstringové natažení', 'Protažení kyčelního flexoru', 'Protažení ramen']
   },
   {
-    category: 'Balance',
-    exercises: ['Single Leg Stand', 'Heel-to-Toe Walk', 'Balance Board', 'Tandem Stance']
+    category: 'Rovnováha',
+    exercises: ['Stoj na jedné noze', 'Chůze pata-špička', 'Balanční deska', 'Tandemový postoj']
   },
   {
-    category: 'Cardio',
-    exercises: ['Walking', 'Cycling', 'Swimming', 'Elliptical']
+    category: 'Kardio',
+    exercises: ['Chůze', 'Cyklistika', 'Plavání', 'Eliptický trenažér']
   }
 ]
 
@@ -103,69 +103,69 @@ export default function AnalyticsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Treatment Plans</h1>
-          <p className="text-muted-foreground">Manage treatment plans and exercise programs for your patients.</p>
+          <h1 className="text-3xl font-bold">Terapeutické plány</h1>
+          <p className="text-muted-foreground">Spravujte terapeutické plány a cvičební programy pro vaše pacienty.</p>
         </div>
         <Button>
           <RiAddLine className="mr-2 h-4 w-4" />
-          Create Treatment Plan
+          Vytvořit terapeutický plán
         </Button>
       </div>
 
       <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Plans</CardTitle>
+            <CardTitle className="text-sm font-medium">Aktivní plány</CardTitle>
             <RiHeartPulseLine className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{treatmentPlans.filter(p => p.status === 'active').length}</div>
-            <p className="text-xs text-muted-foreground">Across {treatmentPlans.length} patients</p>
+            <p className="text-xs text-muted-foreground">U {treatmentPlans.length} pacientů</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Avg Progress</CardTitle>
+            <CardTitle className="text-sm font-medium">Průměrný pokrok</CardTitle>
             <RiCheckLine className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
               {Math.round(treatmentPlans.reduce((acc, plan) => acc + plan.progress, 0) / treatmentPlans.length)}%
             </div>
-            <p className="text-xs text-green-600 dark:text-green-400">On track</p>
+            <p className="text-xs text-green-600 dark:text-green-400">Dle plánu</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Sessions</CardTitle>
+            <CardTitle className="text-sm font-medium">Celkem sezení</CardTitle>
             <RiTimeLine className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
               {treatmentPlans.reduce((acc, plan) => acc + plan.sessionsCompleted, 0)}
             </div>
-            <p className="text-xs text-muted-foreground">Completed this month</p>
+            <p className="text-xs text-muted-foreground">Dokončeno tento měsíc</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Success Rate</CardTitle>
+            <CardTitle className="text-sm font-medium">Úspěšnost</CardTitle>
             <RiCheckLine className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">94%</div>
-            <p className="text-xs text-green-600 dark:text-green-400">Goals achieved</p>
+            <p className="text-xs text-green-600 dark:text-green-400">Dosažených cílů</p>
           </CardContent>
         </Card>
       </div>
 
       <Tabs defaultValue="active" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="active">Active Plans</TabsTrigger>
-          <TabsTrigger value="library">Exercise Library</TabsTrigger>
+          <TabsTrigger value="active">Aktivní plány</TabsTrigger>
+          <TabsTrigger value="library">Knihovna cviků</TabsTrigger>
         </TabsList>
 
         <TabsContent value="active" className="space-y-4">
@@ -179,7 +179,7 @@ export default function AnalyticsPage() {
                         <CardTitle className="text-xl">{plan.name}</CardTitle>
                         <Badge>{plan.type}</Badge>
                         <Badge variant={plan.status === 'active' ? 'default' : 'secondary'}>
-                          {plan.status}
+                          {plan.status === 'active' ? 'aktivní' : plan.status}
                         </Badge>
                       </div>
                       <CardDescription className="flex items-center gap-4 mt-2">
@@ -191,18 +191,18 @@ export default function AnalyticsPage() {
                           <RiTimeLine className="h-4 w-4" />
                           {plan.duration}
                         </span>
-                        <span>Started: {new Date(plan.startDate).toLocaleDateString()}</span>
+                        <span>Začátek: {new Date(plan.startDate).toLocaleDateString()}</span>
                       </CardDescription>
                     </div>
                     <Button variant="outline" size="sm">
-                      Edit Plan
+                      Upravit plán
                     </Button>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">Overall Progress</span>
+                      <span className="text-muted-foreground">Celkový pokrok</span>
                       <span className="font-semibold">{plan.progress}%</span>
                     </div>
                     <div className="w-full bg-secondary h-2 rounded-full overflow-hidden">
@@ -212,14 +212,14 @@ export default function AnalyticsPage() {
                       />
                     </div>
                     <div className="flex items-center justify-between text-xs text-muted-foreground">
-                      <span>Sessions: {plan.sessionsCompleted} / {plan.totalSessions}</span>
-                      <span>{plan.totalSessions - plan.sessionsCompleted} remaining</span>
+                      <span>Sezení: {plan.sessionsCompleted} / {plan.totalSessions}</span>
+                      <span>Zbývá {plan.totalSessions - plan.sessionsCompleted}</span>
                     </div>
                   </div>
 
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <h4 className="text-sm font-semibold">Exercises</h4>
+                      <h4 className="text-sm font-semibold">Cvičení</h4>
                       <Button variant="ghost" size="sm">
                         <RiArrowRightLine className="h-4 w-4" />
                       </Button>
@@ -247,8 +247,8 @@ export default function AnalyticsPage() {
                             </span>
                           </div>
                           <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                            <span>{exercise.sets} sets</span>
-                            <span>{exercise.reps} reps</span>
+                            <span>{exercise.sets} sérií</span>
+                            <span>{exercise.reps} opakování</span>
                           </div>
                         </div>
                       ))}
@@ -263,8 +263,8 @@ export default function AnalyticsPage() {
         <TabsContent value="library" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Exercise Library</CardTitle>
-              <CardDescription>Browse and add exercises to treatment plans</CardDescription>
+              <CardTitle>Knihovna cviků</CardTitle>
+              <CardDescription>Procházejte a přidávejte cvičení do terapeutických plánů</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid gap-6">
@@ -272,7 +272,7 @@ export default function AnalyticsPage() {
                   <div key={index} className="space-y-3">
                     <div className="flex items-center justify-between">
                       <h3 className="text-lg font-semibold">{category.category}</h3>
-                      <Badge variant="outline">{category.exercises.length} exercises</Badge>
+                      <Badge variant="outline">{category.exercises.length} cviků</Badge>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
                       {category.exercises.map((exercise, exIndex) => (
