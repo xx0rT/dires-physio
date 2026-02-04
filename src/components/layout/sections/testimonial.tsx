@@ -5,6 +5,7 @@ import {
   MessageSquareCode,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 
 import { cn } from "@/lib/utils";
 
@@ -214,13 +215,15 @@ const TestimonialSection = ({ className }: TestimonialSectionProps) => {
         </div>
 
         <div className="flex justify-center">
-          <Button className="mt-4 gap-2 rounded-lg px-5 py-3 text-sm shadow-sm transition-colors hover:bg-primary/90 focus:outline-none disabled:pointer-events-none disabled:opacity-50">
-            <span className="flex items-center gap-1">
-              <span>Zobrazit více</span>
-              <span className="text-muted/80">-</span>
-              <span className="text-muted/80">Referencí</span>
-            </span>
-            <ChevronRight className="h-4 w-4 text-muted-foreground/80" />
+          <Button asChild className="mt-4 gap-2 rounded-lg px-5 py-3 text-sm shadow-sm transition-colors hover:bg-primary/90 focus:outline-none disabled:pointer-events-none disabled:opacity-50">
+            <Link to="/references">
+              <span className="flex items-center gap-1">
+                <span>Zobrazit více</span>
+                <span className="text-muted/80">-</span>
+                <span className="text-muted/80">Referencí</span>
+              </span>
+              <ChevronRight className="h-4 w-4 text-muted-foreground/80" />
+            </Link>
           </Button>
         </div>
       </div>

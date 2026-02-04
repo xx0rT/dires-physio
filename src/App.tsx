@@ -10,6 +10,7 @@ import ShopPage from './pages/shop-page'
 import CartPage from './pages/cart-page'
 import ProductDetailPage from './pages/product-detail-page'
 import OrderConfirmationPage from './pages/order-confirmation-page'
+import ReferencesPage from './pages/references-page'
 import DashboardPage from './pages/dashboard-page'
 import AnalyticsPage from './pages/analytics-page'
 import ApiPage from './pages/api-page'
@@ -36,6 +37,7 @@ export default function App() {
             <Route path="shop" element={<ShopPage />} />
             <Route path="product/:productId" element={<ProductDetailPage />} />
             <Route path="cart" element={<CartPage />} />
+            <Route path="references" element={<ReferencesPage />} />
           </Route>
           <Route path="/order-confirmation" element={<OrderConfirmationPage />} />
           <Route path="/auth/sign-in" element={<SignInPage />} />
