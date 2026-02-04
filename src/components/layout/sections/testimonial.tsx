@@ -30,7 +30,7 @@ const DATA: DataItem[] = [
     date: "2023-10-05",
     avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-1.webp",
     content:
-      "This platform has completely transformed the way I manage my projects. The tools are not only intuitive but also incredibly powerful, allowing me to streamline my workflow like never before. It's a game-changer for productivity!",
+      "For about 3/4 of a year I suffered from back pain in the lumbar region with gradual deadening of the left buttock and leg. This pain was able to stop me, as if someone was pulling the trigger until I could no longer go any further and I had to find a relief position in a squat. I underwent an MRI (prolapses of 2-6mm in 6 places), a neurological examination including EMG, a CT scan, a consultation with a neurosurgeon with the possibility of surgery which I refused, rehabilitation, exercise, ... the condition did not improve, although I still believed that I had to be able to help myself. Finally, I was recommended to Dires Fyzio by Martin Šťastný and began to discover new possibilities for exercise and perception of my body. The pain subsided rapidly and I believe that it will disappear completely. You need to persevere and believe that our bodies are sufficiently equipped to help themselves, we just need to give them a little space and time to find new possibilities sometimes.",
   },
   {
     id: "2",
