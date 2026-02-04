@@ -176,9 +176,9 @@ const MOCK_REVIEWS_3 = [
 const ReferencesPage = () => {
   return (
     <div className="min-h-screen w-full">
-      <div className="mx-auto flex w-full flex-col items-center justify-center">
+      <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-center">
         <Reviews23 reviews={MOCK_REVIEWS_23} className="w-full" />
-        <Reviews3 reviews={MOCK_REVIEWS_3} title="Reference pacientů" className="w-full" />
+        <Reviews3 reviews={MOCK_REVIEWS_3} title="Reference pacientů" className="w-full mx-auto" />
       </div>
     </div>
   );
