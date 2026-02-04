@@ -13,6 +13,7 @@ import { toast } from 'sonner'
 import { PhysioAnalyticsChart } from '@/components/dashboard/physio-analytics-chart'
 import { PhysioTodoList } from '@/components/dashboard/physio-todo-list'
 import { SubscriptionTimerCard } from '@/components/dashboard/subscription-timer-card'
+import { OrderHistory } from '@/components/dashboard/order-history'
 
 interface Course {
   id: string
@@ -406,6 +407,14 @@ export default function DashboardPage() {
           </Card>
         </motion.div>
       </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.7 }}
+      >
+        <OrderHistory className="py-8" />
+      </motion.div>
     </div>
   )
 }
