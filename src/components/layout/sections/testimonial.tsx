@@ -185,7 +185,7 @@ const TestimonialSection = ({ className }: TestimonialSectionProps) => {
   }, [columnCount]);
 
   return (
-    <section className={cn("py-32", className)}>
+    <section id="testimonials" className={cn("py-32", className)}>
       <div className="container mx-auto flex flex-col items-center">
         <div className="my-4 flex justify-center">
           <Badge variant="outline" className="rounded-sm py-2 shadow-md">

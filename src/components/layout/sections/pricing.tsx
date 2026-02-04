@@ -141,7 +141,7 @@ const Pricing20 = ({ className }: Pricing20Props) => {
   }, [location.state, user, session, handleGetStarted]);
 
   return (
-    <section className={cn("py-32", className)}>
+    <section id="pricing" className={cn("py-32", className)}>
       <div className="border-y">
         <div className="container mx-auto flex flex-col gap-6 border-x py-4 max-lg:border-x lg:py-8">
           <div className="flex flex-col items-center text-center">

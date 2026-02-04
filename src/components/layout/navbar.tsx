@@ -46,15 +46,15 @@ const routeList: RouteProps[] = [
         label: "Obchod"
     },
     {
-        href: "#testimonials",
+        href: "/#testimonials",
         label: "Reference"
     },
     {
-        href: "#pricing",
+        href: "/#pricing",
         label: "Ceník"
     },
     {
-        href: "#contact",
+        href: "/#contact",
         label: "Kontakt"
     }
 ]
@@ -64,85 +64,85 @@ const menuContent = {
         {
             title: "Kurzy Manuální Terapie",
             description: "Ovládněte tradiční české techniky manuální terapie.",
-            href: "#features"
+            href: "/#features"
         },
         {
             title: "Sportovní Rehabilitace",
             description: "Specializované kurzy pro léčbu sportovních zranění.",
-            href: "#services"
+            href: "/#services"
         },
         {
             title: "Neurologická Rehabilitace",
             description: "Pokročilé techniky Vojtovy a Bobathovy metody.",
-            href: "#services"
+            href: "/#services"
         }
     ],
     features: [
         {
             title: "Certifikované Vzdělávání",
             description: "Všechny kurzy jsou mezinárodně uznávané.",
-            href: "#features"
+            href: "/#features"
         },
         {
             title: "Praktická Výuka",
             description: "Rozsáhlé praktické lekce pod odborným dohledem.",
-            href: "#features"
+            href: "/#features"
         },
         {
             title: "Online Materiály",
             description: "Celoživotní přístup ke studijním materiálům.",
-            href: "#features"
+            href: "/#features"
         }
     ],
     testimonials: [
         {
             title: "Příběhy Absolventů",
             description: "Přečtěte si, jak naši studenti dosáhli úspěchu.",
-            href: "#testimonials"
+            href: "/#testimonials"
         },
         {
             title: "Případové Studie",
             description: "Detailní analýzy reálných implementací.",
-            href: "#testimonials"
+            href: "/#testimonials"
         },
         {
             title: "Hodnocení",
             description: "Zjistěte, co o nás říkají naši studenti.",
-            href: "#testimonials"
+            href: "/#testimonials"
         }
     ],
     pricing: [
         {
             title: "Základní Kurz",
             description: "Ideální pro začátečníky a malé týmy.",
-            href: "#pricing"
+            href: "/#pricing"
         },
         {
             title: "Profesionální",
             description: "Pokročilé techniky pro rostoucí praxi.",
-            href: "#pricing"
+            href: "/#pricing"
         },
         {
             title: "Mistrovský",
             description: "Individuální řešení pro zkušené odborníky.",
-            href: "#pricing"
+            href: "/#pricing"
         }
     ],
     contact: [
         {
             title: "Kontaktujte Nás",
             description: "Ozvěte se našemu týmu s jakýmikoli dotazy.",
-            href: "#contact"
+            href: "/#contact"
         },
         {
             title: "Informace o Kurzech",
             description: "Promluvte si s námi o vašich potřebách.",
-            href: "#contact"
+            href: "/#contact"
         },
         {
             title: "Podpora",
             description: "Získejte pomoc od našeho týmu podpory.",
-            href: "#contact"
+            href: "/#contact"
         }
     ]
 }
