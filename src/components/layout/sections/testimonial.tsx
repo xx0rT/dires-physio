@@ -30,7 +30,7 @@ const DATA: DataItem[] = [
     date: "2023-10-05",
     avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-1.webp",
     content:
-      "For about 3/4 of a year I suffered from back pain in the lumbar region with gradual deadening of the left buttock and leg. This pain was able to stop me, as if someone was pulling the trigger until I could no longer go any further and I had to find a relief position in a squat. I underwent an MRI (prolapses of 2-6mm in 6 places), a neurological examination including EMG, a CT scan, a consultation with a neurosurgeon with the possibility of surgery which I refused, rehabilitation, exercise, ... the condition did not improve, although I still believed that I had to be able to help myself. Finally, I was recommended to Dires Fyzio by Martin Šťastný and began to discover new possibilities for exercise and perception of my body. The pain subsided rapidly and I believe that it will disappear completely. You need to persevere and believe that our bodies are sufficiently equipped to help themselves, we just need to give them a little space and time to find new possibilities sometimes.",
+      "Přibližně 3/4 roku jsem trpěl bolestí zad v bederní oblasti s postupným odumíráním levé hýždě a nohy. Tato bolest byla schopná mě zastavit, jako by někdo přitahoval kohoutky až už nešlo jít dál a musel jsem hledat úlevovou pozici ve dřepu. Absolvoval jsem magnetickou rezonanci (výhřezy 2-6mm na 6i místech), neurologické vyšetření včetně EMG, CT obstřik, konzultaci na neurochirurgii s možností operace jenž jsem odmítl, rehabilitace, cvičení, … stav se nelepšil, ačkoliv jsem stále věřil, že si musím být schopen pomoci sám. Nakonec jsem se dostal na doporučení do Dires Fyzio k Martinovi Šťastnému a začal objevovat nové možnosti cvičení a vnímání svého těla. Bolest rapidně ustoupila a věřím, že zmizí úplně. Je potřeba vytrvat a věřit, že naše těla jsou dostatečně vybavena k tomu aby si pomohla, jen jim musíme občas dát trochu prostoru a času najít nové možnosti.",
   },
   {
     id: "2",
@@ -39,7 +39,7 @@ const DATA: DataItem[] = [
     date: "2023-09-30",
     avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-2.webp",
     content:
-      "Honza Kottas helped me again with a problem that had been bothering me for a month and that neither massages nor acupuncture helped. Honza's gentle, sensitive work brought me noticeable relief and improvement, not immediately, but within a few hours I found out that it no longer hurts, my back doesn't pull, my hand doesn't tingle, my chest doesn't burn. I consider Honza a shaman, a healer. He has never helped me with problems that I would otherwise have gone to a neurologist with, with whom I have had a very bad experience. So I am truly happy that I know Honza and I warmly recommend him to everyone.",
+      "Honza Kottas mi opět pomohl od problému,  který mě měsíc trápil a se kterým mi nepomohly ani masáže, ani akupunktura. Honzova jemná, citlivá práce mi přinesla znatelnou úlevu a zlepšení ne úplně okamžitě, ale za pár hodin jsem zjistila, že už mě to nebolí, netáhne v zádech, nebrní v ruce, nepálí na hrudi. Honzu považuji za šamana, léčitele. Ještě se nestalo, aby mi nepomohl od problémů, se kterými bych šla jinak k neurologovi, se kterým mám naopak velmi špatnou zkušenost. Takže jsem skutečně šťastná, že Honzu znám a vřele ho každému doporučuji.",
   },
   {
     id: "3",
@@ -47,7 +47,7 @@ const DATA: DataItem[] = [
     username: "alicej",
     date: "2023-09-25",
     avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-3.webp",
-    content: "The analytics are a game-changer!",
+    content: "Velice doporučuji pana Kottase, se kterým řeším dlouhodobý neurologický problém. Docházel jsem na různá fyzio cvičení/terapie a poprvé cítím, že problému někdo opravdu rozumí a používá správnou cestu a techniku. 5/5",
   },
   {
     id: "4",
