@@ -65,7 +65,7 @@ const DATA: DataItem[] = [
     date: "2023-09-15",
     avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-5.webp",
     content:
-      "The design templates are fantastic. They've helped me deliver projects faster without compromising on quality. Highly recommend!",
+      "Děkuju za skvělý přístup ! Pan Kottas byl úžasný a hned po první návštěvě se mi dost ulevilo. Co ještě oceňuji je dostupnost do Diresu - tramvajová zastávka je kousíček:))",
   },
   {
     id: "6",
