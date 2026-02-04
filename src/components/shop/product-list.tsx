@@ -77,151 +77,127 @@ const PRODUCTS_LIST: ProductList = [
     },
     products: [
       {
-        name: "Kožená pohovka",
+        name: "Posilovací guma - set 3 ks",
         price: {
-          regular: 21900,
-          sale: 19490,
+          regular: 890,
+          sale: 749,
           currency: "CZK",
         },
         link: "#",
         stockStatusCode: "IN_STOCK",
         image: {
-          src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/furniture/pexels-kseniachernaya-11112729-3.jpg",
-          srcset:
-            "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/furniture/pexels-kseniachernaya-11112729-3.jpg 1920w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/furniture/pexels-kseniachernaya-11112729-2.jpg 1280w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/furniture/pexels-kseniachernaya-11112729-1.jpg 640w",
-          alt: "",
-          sizes:
-            "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
+          src: "https://images.pexels.com/photos/4056535/pexels-photo-4056535.jpeg?auto=compress&cs=tinysrgb&w=800",
+          alt: "Posilovací gumy",
+          sizes: "(min-width: 800px) 800px, 100vw",
         },
       },
       {
-        name: "Keramický hrnek",
+        name: "Masážní míček",
         price: {
-          regular: 146,
+          regular: 450,
           currency: "CZK",
         },
         link: "#",
         stockStatusCode: "IN_STOCK",
         image: {
-          src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-20710970-15362198-3.jpg",
-          srcset:
-            "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-20710970-15362198-3.jpg 1920w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-20710970-15362198-2.jpg 1280w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-20710970-15362198-1.jpg 640w",
-          alt: "",
-          sizes:
-            "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
+          src: "https://images.pexels.com/photos/3768593/pexels-photo-3768593.jpeg?auto=compress&cs=tinysrgb&w=800",
+          alt: "Masážní míček",
+          sizes: "(min-width: 800px) 800px, 100vw",
         },
       },
       {
-        name: "Čajová konvice",
+        name: "Balanční podložka",
         price: {
-          regular: 2240,
+          regular: 1250,
           currency: "CZK",
         },
         link: "#",
         stockStatusCode: "OUT_OF_STOCK",
         image: {
-          src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-nicola-barts-7937498-3.jpg",
-          srcset:
-            "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-nicola-barts-7937498-3.jpg 1920w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-nicola-barts-7937498-2.jpg 1280w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-nicola-barts-7937498-1.jpg 640w",
-          alt: "",
-          sizes:
-            "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
+          src: "https://images.pexels.com/photos/4397840/pexels-photo-4397840.jpeg?auto=compress&cs=tinysrgb&w=800",
+          alt: "Balanční podložka",
+          sizes: "(min-width: 800px) 800px, 100vw",
         },
       },
       {
-        name: "Vonné svíčky",
+        name: "Terapeutický válec",
         price: {
-          regular: 1220,
+          regular: 680,
           currency: "CZK",
         },
         link: "#",
         stockStatusCode: "IN_STOCK",
         image: {
-          src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-sueda-gln-327513956-20081033-3.jpg",
-          srcset:
-            "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-sueda-gln-327513956-20081033-3.jpg 1920w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-sueda-gln-327513956-20081033-2.jpg 1280w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-sueda-gln-327513956-20081033-1.jpg 640w",
-          alt: "",
-          sizes:
-            "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
+          src: "https://images.pexels.com/photos/4498606/pexels-photo-4498606.jpeg?auto=compress&cs=tinysrgb&w=800",
+          alt: "Terapeutický válec",
+          sizes: "(min-width: 800px) 800px, 100vw",
         },
       },
       {
-        name: "Dřevěný rámeček 13x18 cm",
+        name: "Cvičební podložka Premium",
         price: {
-          regular: 487,
+          regular: 950,
           currency: "CZK",
         },
         link: "#",
         stockStatusCode: "IN_STOCK",
         image: {
-          src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-karolina-grabowska-4207785-3.jpg",
-          srcset:
-            "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-karolina-grabowska-4207785-3.jpg 1920w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-karolina-grabowska-4207785-2.jpg 1280w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-karolina-grabowska-4207785-1.jpg 640w",
-          alt: "",
-          sizes:
-            "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
+          src: "https://images.pexels.com/photos/3822906/pexels-photo-3822906.jpeg?auto=compress&cs=tinysrgb&w=800",
+          alt: "Cvičební podložka",
+          sizes: "(min-width: 800px) 800px, 100vw",
         },
       },
       {
-        name: "Kulová lampa",
+        name: "Rehabilitační míč 65cm",
         price: {
-          regular: 4850,
+          regular: 1480,
           currency: "CZK",
         },
         link: "#",
         stockStatusCode: "IN_STOCK",
         image: {
-          src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-karolina-grabowska-6825308-3.jpg",
-          srcset:
-            "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-karolina-grabowska-6825308-3.jpg 1920w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-karolina-grabowska-6825308-2.jpg 1280w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-karolina-grabowska-6825308-1.jpg 640w",
-          alt: "",
-          sizes:
-            "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
+          src: "https://images.pexels.com/photos/3984340/pexels-photo-3984340.jpeg?auto=compress&cs=tinysrgb&w=800",
+          alt: "Rehabilitační míč",
+          sizes: "(min-width: 800px) 800px, 100vw",
         },
       },
       {
-        name: "Kožená židle",
+        name: "Akupresurní podložka",
         price: {
-          regular: 21900,
-          sale: 19490,
+          regular: 1890,
+          sale: 1490,
           currency: "CZK",
         },
         link: "#",
         badges: [
           {
-            text: "Best Choice!",
+            text: "Nejprodávanější!",
             color: "oklch(54.6% 0.245 262.881)",
           },
           {
-            text: "Sale",
+            text: "Sleva",
             color: "oklch(57.7% 0.245 27.325)",
           },
         ],
         stockStatusCode: "IN_STOCK",
         image: {
-          src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/furniture/pexels-mathilde-14792096-3.jpg",
-          srcset:
-            "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/furniture/pexels-mathilde-14792096-3.jpg 1920w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/furniture/pexels-mathilde-14792096-2.jpg 1280w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/furniture/pexels-mathilde-14792096-1.jpg 640w",
-          alt: "",
-          sizes:
-            "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
+          src: "https://images.pexels.com/photos/3768131/pexels-photo-3768131.jpeg?auto=compress&cs=tinysrgb&w=800",
+          alt: "Akupresurní podložka",
+          sizes: "(min-width: 800px) 800px, 100vw",
         },
       },
       {
-        name: "Keramický šálek",
+        name: "Masážní tyč na trigger pointy",
         price: {
-          regular: 463,
+          regular: 780,
           currency: "CZK",
         },
         link: "#",
         stockStatusCode: "OUT_OF_STOCK",
         image: {
-          src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/cafeconcetto-bWlbcvFMUh4-unsplash-3.jpg",
-          srcset:
-            "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/cafeconcetto-bWlbcvFMUh4-unsplash-3.jpg 1920w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/cafeconcetto-bWlbcvFMUh4-unsplash-2.jpg 1280w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/cafeconcetto-bWlbcvFMUh4-unsplash-1.jpg 640w",
-          alt: "",
-          sizes:
-            "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
+          src: "https://images.pexels.com/photos/4498606/pexels-photo-4498606.jpeg?auto=compress&cs=tinysrgb&w=800",
+          alt: "Masážní tyč",
+          sizes: "(min-width: 800px) 800px, 100vw",
         },
       },
     ],
@@ -240,147 +216,123 @@ const PRODUCTS_LIST: ProductList = [
     },
     products: [
       {
-        name: "Jídelní židle",
+        name: "Kinesio tape 5m",
         price: {
-          regular: 7290,
-          sale: 4850,
+          regular: 320,
+          sale: 249,
           currency: "CZK",
         },
         link: "#",
         stockStatusCode: "OUT_OF_STOCK",
         image: {
-          src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/furniture/pexels-cottonbro-6626409-3.jpg",
-          srcset:
-            "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/furniture/pexels-cottonbro-6626409-3.jpg 1920w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/furniture/pexels-cottonbro-6626409-2.jpg 1280w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/furniture/pexels-cottonbro-6626409-1.jpg 640w",
-          alt: "",
-          sizes:
-            "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
+          src: "https://images.pexels.com/photos/3768131/pexels-photo-3768131.jpeg?auto=compress&cs=tinysrgb&w=800",
+          alt: "Kinesio tape",
+          sizes: "(min-width: 800px) 800px, 100vw",
         },
       },
       {
-        name: "Nástěnné hodiny",
+        name: "Posilovač předloktí",
         price: {
-          regular: 3880,
+          regular: 580,
           currency: "CZK",
         },
         link: "#",
         stockStatusCode: "IN_STOCK",
         image: {
-          src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-cottonbro-5185169-3.jpg",
-          srcset:
-            "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-cottonbro-5185169-3.jpg 1920w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-cottonbro-5185169-2.jpg 1280w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-cottonbro-5185169-1.jpg 640w",
-          alt: "",
-          sizes:
-            "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
+          src: "https://images.pexels.com/photos/4056535/pexels-photo-4056535.jpeg?auto=compress&cs=tinysrgb&w=800",
+          alt: "Posilovač předloktí",
+          sizes: "(min-width: 800px) 800px, 100vw",
         },
       },
       {
-        name: "Keramický talíř",
+        name: "Masážní pistole",
         price: {
-          regular: 2410,
-          sale: 2170,
+          regular: 4200,
+          sale: 3690,
           currency: "CZK",
         },
         link: "#",
         stockStatusCode: "IN_STOCK",
         badges: [
           {
-            text: "Sale",
+            text: "Sleva",
             color: "oklch(57.7% 0.245 27.325)",
           },
         ],
         image: {
-          src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-micheile-10410297-3.jpg",
-          srcset:
-            "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-micheile-10410297-3.jpg 1920w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-micheile-10410297-2.jpg 1280w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-micheile-10410297-1.jpg 640w",
-          alt: "",
-          sizes:
-            "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
+          src: "https://images.pexels.com/photos/3768593/pexels-photo-3768593.jpeg?auto=compress&cs=tinysrgb&w=800",
+          alt: "Masážní pistole",
+          sizes: "(min-width: 800px) 800px, 100vw",
         },
       },
       {
-        name: "Dřevěná skříňka",
+        name: "Gymnastický míč 75cm",
         price: {
-          regular: 17030,
+          regular: 1650,
           currency: "CZK",
         },
         link: "#",
         stockStatusCode: "IN_STOCK",
         image: {
-          src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/furniture/pexels-kseniachernaya-11112749-3.jpg",
-          srcset:
-            "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/furniture/pexels-kseniachernaya-11112749-3.jpg 1920w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/furniture/pexels-kseniachernaya-11112749-2.jpg 1280w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/furniture/pexels-kseniachernaya-11112749-1.jpg 640w",
-          alt: "",
-          sizes:
-            "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
+          src: "https://images.pexels.com/photos/3984340/pexels-photo-3984340.jpeg?auto=compress&cs=tinysrgb&w=800",
+          alt: "Gymnastický míč",
+          sizes: "(min-width: 800px) 800px, 100vw",
         },
       },
       {
-        name: "Dřevěná židle",
+        name: "Balanční polštář",
         price: {
-          regular: 1195,
+          regular: 890,
           currency: "CZK",
         },
         link: "#",
         stockStatusCode: "IN_STOCK",
         image: {
-          src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/furniture/pexels-kseniachernaya-11112738-3.jpg",
-          srcset:
-            "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/furniture/pexels-kseniachernaya-11112738-3.jpg 1920w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/furniture/pexels-kseniachernaya-11112738-2.jpg 1280w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/furniture/pexels-kseniachernaya-11112738-1.jpg 640w",
-          alt: "",
-          sizes:
-            "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
+          src: "https://images.pexels.com/photos/4397840/pexels-photo-4397840.jpeg?auto=compress&cs=tinysrgb&w=800",
+          alt: "Balanční polštář",
+          sizes: "(min-width: 800px) 800px, 100vw",
         },
       },
       {
-        name: "Keramický šálek",
+        name: "Posilovací tyč 120cm",
         price: {
-          regular: 463,
+          regular: 1250,
           currency: "CZK",
         },
         link: "#",
         stockStatusCode: "IN_STOCK",
         image: {
-          src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-anna-nekrashevich-8533748-3.jpg",
-          srcset:
-            "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-anna-nekrashevich-8533748-3.jpg 1920w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-anna-nekrashevich-8533748-2.jpg 1280w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/pexels-anna-nekrashevich-8533748-1.jpg 640w",
-          alt: "",
-          sizes:
-            "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
+          src: "https://images.pexels.com/photos/4056535/pexels-photo-4056535.jpeg?auto=compress&cs=tinysrgb&w=800",
+          alt: "Posilovací tyč",
+          sizes: "(min-width: 800px) 800px, 100vw",
         },
       },
       {
-        name: "Keramický šálek",
+        name: "Akupresurní míčky set",
         price: {
-          regular: 463,
+          regular: 520,
           currency: "CZK",
         },
         link: "#",
         stockStatusCode: "IN_STOCK",
         image: {
-          src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/cafeconcetto-L2r9L6Llyp4-unsplash-3.jpg",
-          srcset:
-            "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/cafeconcetto-L2r9L6Llyp4-unsplash-3.jpg 1920w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/cafeconcetto-L2r9L6Llyp4-unsplash-2.jpg 1280w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/other/cafeconcetto-L2r9L6Llyp4-unsplash-1.jpg 640w",
-          alt: "",
-          sizes:
-            "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
+          src: "https://images.pexels.com/photos/3768593/pexels-photo-3768593.jpeg?auto=compress&cs=tinysrgb&w=800",
+          alt: "Akupresurní míčky",
+          sizes: "(min-width: 800px) 800px, 100vw",
         },
       },
       {
-        name: "Wooden Chair",
+        name: "Protahovací pás",
         price: {
-          regular: 49.0,
-          currency: "USD",
+          regular: 390,
+          currency: "CZK",
         },
         link: "#",
         stockStatusCode: "IN_STOCK",
         image: {
-          src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/furniture/pexels-karolina-grabowska-7193566-3.jpg",
-          srcset:
-            "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/furniture/pexels-karolina-grabowska-7193566-3.jpg 1920w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/furniture/pexels-karolina-grabowska-7193566-2.jpg 1280w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/furniture/pexels-karolina-grabowska-7193566-1.jpg 640w",
-          alt: "",
-          sizes:
-            "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
+          src: "https://images.pexels.com/photos/4056535/pexels-photo-4056535.jpeg?auto=compress&cs=tinysrgb&w=800",
+          alt: "Protahovací pás",
+          sizes: "(min-width: 800px) 800px, 100vw",
         },
       },
     ],

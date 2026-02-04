@@ -23,17 +23,16 @@ interface CartItem {
 const DEFAULT_ITEMS: CartItem[] = [
   {
     id: "1",
-    name: "Bavlněné tričko",
-    image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/minimalist-tank-top-flatlay.png",
-    price: 850,
-    quantity: 1,
+    name: "Masážní míček pro fyzioterapii",
+    image: "https://images.pexels.com/photos/3768593/pexels-photo-3768593.jpeg?auto=compress&cs=tinysrgb&w=400",
+    price: 450,
+    quantity: 2,
   },
   {
     id: "2",
-    name: "Slim fit kalhoty",
-    image:
-      "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-jay-soundo-2148060180-30624171-2.png",
-    price: 1650,
+    name: "Posilovací guma - set 3 ks",
+    image: "https://images.pexels.com/photos/4056535/pexels-photo-4056535.jpeg?auto=compress&cs=tinysrgb&w=400",
+    price: 890,
     quantity: 1,
   },
 ];
