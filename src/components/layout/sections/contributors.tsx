@@ -11,67 +11,67 @@ interface Feature283Props {
 const Feature283 = ({ className }: Feature283Props) => {
   const column1Images = [
     {
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/bw1.jpeg",
-      alt: "Gallery Image 1",
+      src: "https://images.pexels.com/photos/6111587/pexels-photo-6111587.jpeg?auto=compress&cs=tinysrgb&w=800",
+      alt: "Physiotherapy Treatment",
       height: "23rem",
     },
     {
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/bw2.jpeg",
-      alt: "Gallery Image 2",
+      src: "https://images.pexels.com/photos/6111391/pexels-photo-6111391.jpeg?auto=compress&cs=tinysrgb&w=800",
+      alt: "Patient Rehabilitation",
       height: "28rem",
     },
     {
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/bw3.jpeg",
-      alt: "Gallery Image 3",
+      src: "https://images.pexels.com/photos/5794059/pexels-photo-5794059.jpeg?auto=compress&cs=tinysrgb&w=800",
+      alt: "Therapeutic Exercise",
       height: "12rem",
     },
   ];
 
   const column2Images = [
     {
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/bw4.jpeg",
-      alt: "Gallery Image 4",
+      src: "https://images.pexels.com/photos/6111368/pexels-photo-6111368.jpeg?auto=compress&cs=tinysrgb&w=800",
+      alt: "Physical Therapy Session",
       height: "13rem",
     },
     {
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/bw5.jpeg",
-      alt: "Gallery Image 5",
+      src: "https://images.pexels.com/photos/6111375/pexels-photo-6111375.jpeg?auto=compress&cs=tinysrgb&w=800",
+      alt: "Back Therapy Treatment",
       height: "32rem",
     },
     {
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/bw6.jpeg",
-      alt: "Gallery Image 6",
+      src: "https://images.pexels.com/photos/6111610/pexels-photo-6111610.jpeg?auto=compress&cs=tinysrgb&w=800",
+      alt: "Rehabilitation Equipment",
       height: "18rem",
     },
   ];
 
   const column3Images = [
     {
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/bw7.jpeg",
-      alt: "Gallery Image 7",
+      src: "https://images.pexels.com/photos/6111617/pexels-photo-6111617.jpeg?auto=compress&cs=tinysrgb&w=800",
+      alt: "Knee Therapy",
       height: "32rem",
     },
     {
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/bw8.jpeg",
-      alt: "Gallery Image 8",
+      src: "https://images.pexels.com/photos/5794064/pexels-photo-5794064.jpeg?auto=compress&cs=tinysrgb&w=800",
+      alt: "Manual Therapy",
       height: "32rem",
     },
   ];
 
   const column4Images = [
     {
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/bw9.jpeg",
-      alt: "Gallery Image 9",
+      src: "https://images.pexels.com/photos/6111483/pexels-photo-6111483.jpeg?auto=compress&cs=tinysrgb&w=800",
+      alt: "Stretching Exercise",
       height: "13rem",
     },
     {
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/bw10.jpeg",
-      alt: "Gallery Image 10",
+      src: "https://images.pexels.com/photos/6111598/pexels-photo-6111598.jpeg?auto=compress&cs=tinysrgb&w=800",
+      alt: "Massage Therapy",
       height: "22.5rem",
     },
     {
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/bw11.jpeg",
-      alt: "Gallery Image 11",
+      src: "https://images.pexels.com/photos/5794063/pexels-photo-5794063.jpeg?auto=compress&cs=tinysrgb&w=800",
+      alt: "Recovery Session",
       height: "22rem",
     },
   ];
