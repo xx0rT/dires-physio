@@ -2,10 +2,12 @@ import { useAuth } from '@/lib/auth-context'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { RiBillLine, RiCheckLine, RiTimeLine, RiBankCardLine } from '@remixicon/react'
 import { mockCourses, mockDatabase } from '@/lib/mock-data'
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import { OrderHistory } from '@/components/dashboard/order-history'
 
 interface Course {
   id: string
@@ -141,126 +143,139 @@ export default function BillingPage() {
         </motion.div>
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.3 }}
-      >
-        <Card>
-          <CardHeader>
-            <CardTitle>Zakoupené Kurzy</CardTitle>
-            <CardDescription>
-              Historie vašich nákupů a plateb
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {enrollments.length > 0 ? (
-              <div className="space-y-4">
-                {enrollments.map((enrollment) => (
-                  <div
-                    key={enrollment.id}
-                    className="flex items-center justify-between p-4 rounded-lg border hover:bg-accent/50 transition-colors"
-                  >
-                    <div className="flex items-center gap-4 flex-1">
-                      <div className="w-12 h-12 rounded-full bg-green-500/10 flex items-center justify-center">
-                        <RiCheckLine className="h-6 w-6 text-green-600" />
-                      </div>
-                      <div className="flex-1 space-y-1">
-                        <div className="flex items-center gap-2">
-                          <h3 className="font-semibold">{enrollment.course.title}</h3>
-                          {enrollment.completed_at && (
-                            <Badge variant="default" className="bg-green-600">
-                              Dokončeno
-                            </Badge>
-                          )}
+      <Tabs defaultValue="courses" className="space-y-6">
+        <TabsList>
+          <TabsTrigger value="courses">Kurzy</TabsTrigger>
+          <TabsTrigger value="orders">Objednávky</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="courses" className="space-y-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            <Card>
+              <CardHeader>
+                <CardTitle>Zakoupené Kurzy</CardTitle>
+                <CardDescription>
+                  Historie vašich nákupů a plateb
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {enrollments.length > 0 ? (
+                  <div className="space-y-4">
+                    {enrollments.map((enrollment) => (
+                      <div
+                        key={enrollment.id}
+                        className="flex items-center justify-between p-4 rounded-lg border hover:bg-accent/50 transition-colors"
+                      >
+                        <div className="flex items-center gap-4 flex-1">
+                          <div className="w-12 h-12 rounded-full bg-green-500/10 flex items-center justify-center">
+                            <RiCheckLine className="h-6 w-6 text-green-600" />
+                          </div>
+                          <div className="flex-1 space-y-1">
+                            <div className="flex items-center gap-2">
+                              <h3 className="font-semibold">{enrollment.course.title}</h3>
+                              {enrollment.completed_at && (
+                                <Badge variant="default" className="bg-green-600">
+                                  Dokončeno
+                                </Badge>
+                              )}
+                            </div>
+                            <p className="text-sm text-muted-foreground">
+                              Zakoupeno: {new Date(enrollment.enrolled_at).toLocaleDateString('cs-CZ')}
+                            </p>
+                          </div>
                         </div>
-                        <p className="text-sm text-muted-foreground">
-                          Zakoupeno: {new Date(enrollment.enrolled_at).toLocaleDateString('cs-CZ')}
-                        </p>
+                        <div className="text-right">
+                          <p className="text-lg font-bold">€{enrollment.course.price}</p>
+                          <p className="text-xs text-muted-foreground">Zaplaceno</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <RiBillLine className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold mb-2">Žádné nákupy</h3>
+                    <p className="text-muted-foreground mb-6">
+                      Ještě jste si nezakoupili žádný kurz
+                    </p>
+                    <Button>Prohlédnout Kurzy</Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
+              <Card>
+                <CardHeader>
+                  <CardTitle>Platební Metody</CardTitle>
+                  <CardDescription>
+                    Spravujte své platební metody
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center justify-between p-4 rounded-lg border">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                        <RiBankCardLine className="h-5 w-5 text-primary" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold">Kreditní Karta</p>
+                        <p className="text-xs text-muted-foreground">Výchozí platební metoda</p>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-lg font-bold">€{enrollment.course.price}</p>
-                      <p className="text-xs text-muted-foreground">Zaplaceno</p>
+                    <Button variant="outline" size="sm">
+                      Přidat Kartu
+                    </Button>
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    Při nákupu kurzu můžete použít kartu nebo bankovní převod
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+            >
+              <Card>
+                <CardHeader>
+                  <CardTitle>Fakturační Údaje</CardTitle>
+                  <CardDescription>
+                    Upravte své fakturační informace
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <div className="text-sm">
+                      <p className="text-muted-foreground">Email pro faktury</p>
+                      <p className="font-medium">{user?.email}</p>
                     </div>
                   </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-12">
-                <RiBillLine className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-semibold mb-2">Žádné nákupy</h3>
-                <p className="text-muted-foreground mb-6">
-                  Ještě jste si nezakoupili žádný kurz
-                </p>
-                <Button>Prohlédnout Kurzy</Button>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </motion.div>
+                  <Button variant="outline" className="w-full">
+                    Upravit Fakturační Údaje
+                  </Button>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </div>
+        </TabsContent>
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-        >
-          <Card>
-            <CardHeader>
-              <CardTitle>Platební Metody</CardTitle>
-              <CardDescription>
-                Spravujte své platební metody
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between p-4 rounded-lg border">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                    <RiBankCardLine className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold">Kreditní Karta</p>
-                    <p className="text-xs text-muted-foreground">Výchozí platební metoda</p>
-                  </div>
-                </div>
-                <Button variant="outline" size="sm">
-                  Přidat Kartu
-                </Button>
-              </div>
-              <div className="text-sm text-muted-foreground">
-                Při nákupu kurzu můžete použít kartu nebo bankovní převod
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-        >
-          <Card>
-            <CardHeader>
-              <CardTitle>Fakturační Údaje</CardTitle>
-              <CardDescription>
-                Upravte své fakturační informace
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <div className="text-sm">
-                  <p className="text-muted-foreground">Email pro faktury</p>
-                  <p className="font-medium">{user?.email}</p>
-                </div>
-              </div>
-              <Button variant="outline" className="w-full">
-                Upravit Fakturační Údaje
-              </Button>
-            </CardContent>
-          </Card>
-        </motion.div>
-      </div>
+        <TabsContent value="orders">
+          <OrderHistory className="py-0" />
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }
