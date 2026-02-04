@@ -33,66 +33,66 @@ const DEFAULT_REVIEWS: Review[] = [
   {
     id: "1",
     rating: 5,
-    title: "Exceeded my expectations",
+    title: "Výborná pomůcka na rehabilitaci",
     content:
-      "I was skeptical at first, but this product really delivered. Quality is outstanding and it arrived faster than expected.",
-    author: { name: "Sarah M.", avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-1.webp" },
-    date: "Dec 10, 2024",
+      "Po operaci kolene jsem potřeboval kvalitní pomůcky na cvičení doma. Posilovací gumy jsou skvělé, různé úrovně odporu a návod s cviky. Už po měsíci vidím velký pokrok.",
+    author: { name: "Jana Nováková", avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-1.webp" },
+    date: "10. prosince 2024",
     verified: true,
     helpful: 42,
   },
   {
     id: "2",
     rating: 5,
-    title: "Best purchase this year",
+    title: "Perfektní pro domácí cvičení",
     content:
-      "Absolutely love it! The attention to detail is remarkable. Customer service was also very helpful.",
-    author: { name: "James R.", avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-2.webp" },
-    date: "Dec 8, 2024",
+      "Jsem fyzioterapeutka a tyto pomůcky doporučuji i svým klientům. Kvalita je opravdu vysoká a cena je férová. Rychlé dodání a skvělá komunikace.",
+    author: { name: "Mgr. Petra Dvořáková", avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-2.webp" },
+    date: "8. prosince 2024",
     verified: true,
     helpful: 38,
   },
   {
     id: "3",
     rating: 4,
-    title: "Great value for money",
+    title: "Skvělý poměr cena/výkon",
     content:
-      "Solid product overall. Does exactly what it's supposed to. Would recommend.",
-    author: { name: "Emily K.", avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-3.webp" },
-    date: "Dec 5, 2024",
+      "Masážní míčky mi pomohly s bolestmi zad. Používám je každý den po práci a cítím se mnohem lépe. Kvalita je dobrá, jen trochu tužší než jsem čekal.",
+    author: { name: "Tomáš Svoboda", avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-3.webp" },
+    date: "5. prosince 2024",
     verified: true,
     helpful: 24,
   },
   {
     id: "4",
     rating: 5,
-    title: "Perfect for everyday use",
+    title: "Pomohlo mi od bolesti",
     content:
-      "Been using this daily for a month. Still looks and works like new. Impressive build quality.",
-    author: { name: "Michael T." },
-    date: "Dec 2, 2024",
+      "Měl jsem dlouhodobé bolesti ramen a akupresurní podložka mi opravdu pomohla. Už po týdnu jsem cítil zlepšení. Určitě doporučuji všem s podobnými problémy.",
+    author: { name: "Martin Procházka" },
+    date: "2. prosince 2024",
     verified: false,
     helpful: 19,
   },
   {
     id: "5",
     rating: 4,
-    title: "Good but room for improvement",
+    title: "Kvalitní pomůcka",
     content:
-      "Nice product. Color was slightly different from photos but overall happy with the purchase.",
-    author: { name: "Lisa P.", avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-5.webp" },
-    date: "Nov 28, 2024",
+      "Balanční podložka je skvělá na posílení hlubokého stabilizačního systému. Používám ji při všech cvicích. Trochu pevnější než jsem očekávala, ale celkově jsem spokojená.",
+    author: { name: "Lucie Marková", avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-5.webp" },
+    date: "28. listopadu 2024",
     verified: true,
     helpful: 12,
   },
   {
     id: "6",
     rating: 3,
-    title: "Decent but expected more",
+    title: "Slušné za tu cenu",
     content:
-      "It's okay for the price. Nothing special but gets the job done. Shipping was quick.",
-    author: { name: "David W." },
-    date: "Nov 25, 2024",
+      "Rehabilitační míč dělá co má. Není to top kvalita, ale pro domácí cvičení to stačí. Rychlé dodání a dobrá cena.",
+    author: { name: "Pavel Černý" },
+    date: "25. listopadu 2024",
     verified: true,
     helpful: 8,
   },
@@ -135,10 +135,10 @@ const Reviews5 = ({ reviews = DEFAULT_REVIEWS, className }: Reviews5Props) => {
   });
 
   const sortLabels: Record<SortOption, string> = {
-    helpful: "Most Helpful",
-    newest: "Newest",
-    highest: "Highest Rated",
-    lowest: "Lowest Rated",
+    helpful: "Nejužitečnější",
+    newest: "Nejnovější",
+    highest: "Nejvyšší hodnocení",
+    lowest: "Nejnižší hodnocení",
   };
 
   return (
@@ -147,7 +147,7 @@ const Reviews5 = ({ reviews = DEFAULT_REVIEWS, className }: Reviews5Props) => {
         <div className="mb-6 flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <h2 className="text-2xl font-semibold tracking-tight">
-              Customer Reviews
+              Hodnocení zákazníků
             </h2>
             <div className="mt-2 flex items-center gap-3">
               <div className="flex items-baseline gap-1">
@@ -183,12 +183,12 @@ const Reviews5 = ({ reviews = DEFAULT_REVIEWS, className }: Reviews5Props) => {
 
         <div className="mb-4 flex items-center justify-between">
           <span className="text-sm text-muted-foreground">
-            {totalReviews} reviews
+            {totalReviews} hodnocení
           </span>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="sm" className="gap-1">
-                Sort: {sortLabels[sortBy]}
+                Seřadit: {sortLabels[sortBy]}
                 <ChevronDown className="size-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -249,7 +249,7 @@ const Reviews5 = ({ reviews = DEFAULT_REVIEWS, className }: Reviews5Props) => {
 
                 {review.helpful !== undefined && review.helpful > 0 && (
                   <p className="text-xs text-muted-foreground">
-                    {review.helpful} people found this helpful
+                    {review.helpful} lidí považuje toto za užitečné
                   </p>
                 )}
               </div>
@@ -258,7 +258,7 @@ const Reviews5 = ({ reviews = DEFAULT_REVIEWS, className }: Reviews5Props) => {
         </div>
 
         <div className="mt-6 text-center">
-          <Button variant="outline">Load More Reviews</Button>
+          <Button variant="outline">Načíst další hodnocení</Button>
         </div>
       </div>
     </section>

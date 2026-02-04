@@ -86,9 +86,10 @@ const PRODUCTS_LIST: ProductList = [
         link: "#",
         stockStatusCode: "IN_STOCK",
         image: {
-          src: "https://images.pexels.com/photos/4056535/pexels-photo-4056535.jpeg?auto=compress&cs=tinysrgb&w=800",
+          src: "https://images.pexels.com/photos/4056535/pexels-photo-4056535.jpeg?auto=compress&cs=tinysrgb&w=1280",
+          srcset: "https://images.pexels.com/photos/4056535/pexels-photo-4056535.jpeg?auto=compress&cs=tinysrgb&w=1920 1920w, https://images.pexels.com/photos/4056535/pexels-photo-4056535.jpeg?auto=compress&cs=tinysrgb&w=1280 1280w, https://images.pexels.com/photos/4056535/pexels-photo-4056535.jpeg?auto=compress&cs=tinysrgb&w=640 640w",
           alt: "Posilovací gumy",
-          sizes: "(min-width: 800px) 800px, 100vw",
+          sizes: "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
         },
       },
       {
@@ -100,9 +101,10 @@ const PRODUCTS_LIST: ProductList = [
         link: "#",
         stockStatusCode: "IN_STOCK",
         image: {
-          src: "https://images.pexels.com/photos/3768593/pexels-photo-3768593.jpeg?auto=compress&cs=tinysrgb&w=800",
+          src: "https://images.pexels.com/photos/3768593/pexels-photo-3768593.jpeg?auto=compress&cs=tinysrgb&w=1280",
+          srcset: "https://images.pexels.com/photos/3768593/pexels-photo-3768593.jpeg?auto=compress&cs=tinysrgb&w=1920 1920w, https://images.pexels.com/photos/3768593/pexels-photo-3768593.jpeg?auto=compress&cs=tinysrgb&w=1280 1280w, https://images.pexels.com/photos/3768593/pexels-photo-3768593.jpeg?auto=compress&cs=tinysrgb&w=640 640w",
           alt: "Masážní míček",
-          sizes: "(min-width: 800px) 800px, 100vw",
+          sizes: "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
         },
       },
       {
@@ -114,9 +116,10 @@ const PRODUCTS_LIST: ProductList = [
         link: "#",
         stockStatusCode: "OUT_OF_STOCK",
         image: {
-          src: "https://images.pexels.com/photos/4397840/pexels-photo-4397840.jpeg?auto=compress&cs=tinysrgb&w=800",
+          src: "https://images.pexels.com/photos/4397840/pexels-photo-4397840.jpeg?auto=compress&cs=tinysrgb&w=1280",
+          srcset: "https://images.pexels.com/photos/4397840/pexels-photo-4397840.jpeg?auto=compress&cs=tinysrgb&w=1920 1920w, https://images.pexels.com/photos/4397840/pexels-photo-4397840.jpeg?auto=compress&cs=tinysrgb&w=1280 1280w, https://images.pexels.com/photos/4397840/pexels-photo-4397840.jpeg?auto=compress&cs=tinysrgb&w=640 640w",
           alt: "Balanční podložka",
-          sizes: "(min-width: 800px) 800px, 100vw",
+          sizes: "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
         },
       },
       {
@@ -128,9 +131,10 @@ const PRODUCTS_LIST: ProductList = [
         link: "#",
         stockStatusCode: "IN_STOCK",
         image: {
-          src: "https://images.pexels.com/photos/4498606/pexels-photo-4498606.jpeg?auto=compress&cs=tinysrgb&w=800",
+          src: "https://images.pexels.com/photos/4498606/pexels-photo-4498606.jpeg?auto=compress&cs=tinysrgb&w=1280",
+          srcset: "https://images.pexels.com/photos/4498606/pexels-photo-4498606.jpeg?auto=compress&cs=tinysrgb&w=1920 1920w, https://images.pexels.com/photos/4498606/pexels-photo-4498606.jpeg?auto=compress&cs=tinysrgb&w=1280 1280w, https://images.pexels.com/photos/4498606/pexels-photo-4498606.jpeg?auto=compress&cs=tinysrgb&w=640 640w",
           alt: "Terapeutický válec",
-          sizes: "(min-width: 800px) 800px, 100vw",
+          sizes: "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
         },
       },
       {
@@ -142,9 +146,10 @@ const PRODUCTS_LIST: ProductList = [
         link: "#",
         stockStatusCode: "IN_STOCK",
         image: {
-          src: "https://images.pexels.com/photos/3822906/pexels-photo-3822906.jpeg?auto=compress&cs=tinysrgb&w=800",
+          src: "https://images.pexels.com/photos/3822906/pexels-photo-3822906.jpeg?auto=compress&cs=tinysrgb&w=1280",
+          srcset: "https://images.pexels.com/photos/3822906/pexels-photo-3822906.jpeg?auto=compress&cs=tinysrgb&w=1920 1920w, https://images.pexels.com/photos/3822906/pexels-photo-3822906.jpeg?auto=compress&cs=tinysrgb&w=1280 1280w, https://images.pexels.com/photos/3822906/pexels-photo-3822906.jpeg?auto=compress&cs=tinysrgb&w=640 640w",
           alt: "Cvičební podložka",
-          sizes: "(min-width: 800px) 800px, 100vw",
+          sizes: "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
         },
       },
       {
@@ -156,9 +161,10 @@ const PRODUCTS_LIST: ProductList = [
         link: "#",
         stockStatusCode: "IN_STOCK",
         image: {
-          src: "https://images.pexels.com/photos/3984340/pexels-photo-3984340.jpeg?auto=compress&cs=tinysrgb&w=800",
+          src: "https://images.pexels.com/photos/3984340/pexels-photo-3984340.jpeg?auto=compress&cs=tinysrgb&w=1280",
+          srcset: "https://images.pexels.com/photos/3984340/pexels-photo-3984340.jpeg?auto=compress&cs=tinysrgb&w=1920 1920w, https://images.pexels.com/photos/3984340/pexels-photo-3984340.jpeg?auto=compress&cs=tinysrgb&w=1280 1280w, https://images.pexels.com/photos/3984340/pexels-photo-3984340.jpeg?auto=compress&cs=tinysrgb&w=640 640w",
           alt: "Rehabilitační míč",
-          sizes: "(min-width: 800px) 800px, 100vw",
+          sizes: "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
         },
       },
       {
@@ -181,9 +187,10 @@ const PRODUCTS_LIST: ProductList = [
         ],
         stockStatusCode: "IN_STOCK",
         image: {
-          src: "https://images.pexels.com/photos/3768131/pexels-photo-3768131.jpeg?auto=compress&cs=tinysrgb&w=800",
+          src: "https://images.pexels.com/photos/3768131/pexels-photo-3768131.jpeg?auto=compress&cs=tinysrgb&w=1280",
+          srcset: "https://images.pexels.com/photos/3768131/pexels-photo-3768131.jpeg?auto=compress&cs=tinysrgb&w=1920 1920w, https://images.pexels.com/photos/3768131/pexels-photo-3768131.jpeg?auto=compress&cs=tinysrgb&w=1280 1280w, https://images.pexels.com/photos/3768131/pexels-photo-3768131.jpeg?auto=compress&cs=tinysrgb&w=640 640w",
           alt: "Akupresurní podložka",
-          sizes: "(min-width: 800px) 800px, 100vw",
+          sizes: "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
         },
       },
       {
@@ -195,9 +202,10 @@ const PRODUCTS_LIST: ProductList = [
         link: "#",
         stockStatusCode: "OUT_OF_STOCK",
         image: {
-          src: "https://images.pexels.com/photos/4498606/pexels-photo-4498606.jpeg?auto=compress&cs=tinysrgb&w=800",
+          src: "https://images.pexels.com/photos/6454128/pexels-photo-6454128.jpeg?auto=compress&cs=tinysrgb&w=1280",
+          srcset: "https://images.pexels.com/photos/6454128/pexels-photo-6454128.jpeg?auto=compress&cs=tinysrgb&w=1920 1920w, https://images.pexels.com/photos/6454128/pexels-photo-6454128.jpeg?auto=compress&cs=tinysrgb&w=1280 1280w, https://images.pexels.com/photos/6454128/pexels-photo-6454128.jpeg?auto=compress&cs=tinysrgb&w=640 640w",
           alt: "Masážní tyč",
-          sizes: "(min-width: 800px) 800px, 100vw",
+          sizes: "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
         },
       },
     ],
@@ -225,9 +233,10 @@ const PRODUCTS_LIST: ProductList = [
         link: "#",
         stockStatusCode: "OUT_OF_STOCK",
         image: {
-          src: "https://images.pexels.com/photos/3768131/pexels-photo-3768131.jpeg?auto=compress&cs=tinysrgb&w=800",
+          src: "https://images.pexels.com/photos/5473188/pexels-photo-5473188.jpeg?auto=compress&cs=tinysrgb&w=1280",
+          srcset: "https://images.pexels.com/photos/5473188/pexels-photo-5473188.jpeg?auto=compress&cs=tinysrgb&w=1920 1920w, https://images.pexels.com/photos/5473188/pexels-photo-5473188.jpeg?auto=compress&cs=tinysrgb&w=1280 1280w, https://images.pexels.com/photos/5473188/pexels-photo-5473188.jpeg?auto=compress&cs=tinysrgb&w=640 640w",
           alt: "Kinesio tape",
-          sizes: "(min-width: 800px) 800px, 100vw",
+          sizes: "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
         },
       },
       {
@@ -239,9 +248,10 @@ const PRODUCTS_LIST: ProductList = [
         link: "#",
         stockStatusCode: "IN_STOCK",
         image: {
-          src: "https://images.pexels.com/photos/4056535/pexels-photo-4056535.jpeg?auto=compress&cs=tinysrgb&w=800",
+          src: "https://images.pexels.com/photos/3838389/pexels-photo-3838389.jpeg?auto=compress&cs=tinysrgb&w=1280",
+          srcset: "https://images.pexels.com/photos/3838389/pexels-photo-3838389.jpeg?auto=compress&cs=tinysrgb&w=1920 1920w, https://images.pexels.com/photos/3838389/pexels-photo-3838389.jpeg?auto=compress&cs=tinysrgb&w=1280 1280w, https://images.pexels.com/photos/3838389/pexels-photo-3838389.jpeg?auto=compress&cs=tinysrgb&w=640 640w",
           alt: "Posilovač předloktí",
-          sizes: "(min-width: 800px) 800px, 100vw",
+          sizes: "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
         },
       },
       {
@@ -260,9 +270,10 @@ const PRODUCTS_LIST: ProductList = [
           },
         ],
         image: {
-          src: "https://images.pexels.com/photos/3768593/pexels-photo-3768593.jpeg?auto=compress&cs=tinysrgb&w=800",
+          src: "https://images.pexels.com/photos/6454128/pexels-photo-6454128.jpeg?auto=compress&cs=tinysrgb&w=1280",
+          srcset: "https://images.pexels.com/photos/6454128/pexels-photo-6454128.jpeg?auto=compress&cs=tinysrgb&w=1920 1920w, https://images.pexels.com/photos/6454128/pexels-photo-6454128.jpeg?auto=compress&cs=tinysrgb&w=1280 1280w, https://images.pexels.com/photos/6454128/pexels-photo-6454128.jpeg?auto=compress&cs=tinysrgb&w=640 640w",
           alt: "Masážní pistole",
-          sizes: "(min-width: 800px) 800px, 100vw",
+          sizes: "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
         },
       },
       {
@@ -274,9 +285,10 @@ const PRODUCTS_LIST: ProductList = [
         link: "#",
         stockStatusCode: "IN_STOCK",
         image: {
-          src: "https://images.pexels.com/photos/3984340/pexels-photo-3984340.jpeg?auto=compress&cs=tinysrgb&w=800",
+          src: "https://images.pexels.com/photos/3984340/pexels-photo-3984340.jpeg?auto=compress&cs=tinysrgb&w=1280",
+          srcset: "https://images.pexels.com/photos/3984340/pexels-photo-3984340.jpeg?auto=compress&cs=tinysrgb&w=1920 1920w, https://images.pexels.com/photos/3984340/pexels-photo-3984340.jpeg?auto=compress&cs=tinysrgb&w=1280 1280w, https://images.pexels.com/photos/3984340/pexels-photo-3984340.jpeg?auto=compress&cs=tinysrgb&w=640 640w",
           alt: "Gymnastický míč",
-          sizes: "(min-width: 800px) 800px, 100vw",
+          sizes: "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
         },
       },
       {
@@ -288,9 +300,10 @@ const PRODUCTS_LIST: ProductList = [
         link: "#",
         stockStatusCode: "IN_STOCK",
         image: {
-          src: "https://images.pexels.com/photos/4397840/pexels-photo-4397840.jpeg?auto=compress&cs=tinysrgb&w=800",
+          src: "https://images.pexels.com/photos/4397840/pexels-photo-4397840.jpeg?auto=compress&cs=tinysrgb&w=1280",
+          srcset: "https://images.pexels.com/photos/4397840/pexels-photo-4397840.jpeg?auto=compress&cs=tinysrgb&w=1920 1920w, https://images.pexels.com/photos/4397840/pexels-photo-4397840.jpeg?auto=compress&cs=tinysrgb&w=1280 1280w, https://images.pexels.com/photos/4397840/pexels-photo-4397840.jpeg?auto=compress&cs=tinysrgb&w=640 640w",
           alt: "Balanční polštář",
-          sizes: "(min-width: 800px) 800px, 100vw",
+          sizes: "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
         },
       },
       {
@@ -302,9 +315,10 @@ const PRODUCTS_LIST: ProductList = [
         link: "#",
         stockStatusCode: "IN_STOCK",
         image: {
-          src: "https://images.pexels.com/photos/4056535/pexels-photo-4056535.jpeg?auto=compress&cs=tinysrgb&w=800",
+          src: "https://images.pexels.com/photos/3822906/pexels-photo-3822906.jpeg?auto=compress&cs=tinysrgb&w=1280",
+          srcset: "https://images.pexels.com/photos/3822906/pexels-photo-3822906.jpeg?auto=compress&cs=tinysrgb&w=1920 1920w, https://images.pexels.com/photos/3822906/pexels-photo-3822906.jpeg?auto=compress&cs=tinysrgb&w=1280 1280w, https://images.pexels.com/photos/3822906/pexels-photo-3822906.jpeg?auto=compress&cs=tinysrgb&w=640 640w",
           alt: "Posilovací tyč",
-          sizes: "(min-width: 800px) 800px, 100vw",
+          sizes: "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
         },
       },
       {
@@ -316,9 +330,10 @@ const PRODUCTS_LIST: ProductList = [
         link: "#",
         stockStatusCode: "IN_STOCK",
         image: {
-          src: "https://images.pexels.com/photos/3768593/pexels-photo-3768593.jpeg?auto=compress&cs=tinysrgb&w=800",
+          src: "https://images.pexels.com/photos/3768593/pexels-photo-3768593.jpeg?auto=compress&cs=tinysrgb&w=1280",
+          srcset: "https://images.pexels.com/photos/3768593/pexels-photo-3768593.jpeg?auto=compress&cs=tinysrgb&w=1920 1920w, https://images.pexels.com/photos/3768593/pexels-photo-3768593.jpeg?auto=compress&cs=tinysrgb&w=1280 1280w, https://images.pexels.com/photos/3768593/pexels-photo-3768593.jpeg?auto=compress&cs=tinysrgb&w=640 640w",
           alt: "Akupresurní míčky",
-          sizes: "(min-width: 800px) 800px, 100vw",
+          sizes: "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
         },
       },
       {
@@ -330,9 +345,10 @@ const PRODUCTS_LIST: ProductList = [
         link: "#",
         stockStatusCode: "IN_STOCK",
         image: {
-          src: "https://images.pexels.com/photos/4056535/pexels-photo-4056535.jpeg?auto=compress&cs=tinysrgb&w=800",
+          src: "https://images.pexels.com/photos/3822906/pexels-photo-3822906.jpeg?auto=compress&cs=tinysrgb&w=1280",
+          srcset: "https://images.pexels.com/photos/3822906/pexels-photo-3822906.jpeg?auto=compress&cs=tinysrgb&w=1920 1920w, https://images.pexels.com/photos/3822906/pexels-photo-3822906.jpeg?auto=compress&cs=tinysrgb&w=1280 1280w, https://images.pexels.com/photos/3822906/pexels-photo-3822906.jpeg?auto=compress&cs=tinysrgb&w=640 640w",
           alt: "Protahovací pás",
-          sizes: "(min-width: 800px) 800px, 100vw",
+          sizes: "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
         },
       },
     ],
