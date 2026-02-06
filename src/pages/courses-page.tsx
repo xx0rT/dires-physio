@@ -12,7 +12,6 @@ import { CoursesHero } from '@/components/courses/courses-hero'
 import { CourseShowcase, type ShowcaseCourse } from '@/components/courses/course-showcase'
 import { CoursesNews } from '@/components/courses/courses-news'
 import { CoursePreviewDialog } from '@/components/courses/course-preview-dialog'
-import type { CourseStatus } from '@/components/courses/course-card'
 
 interface DBPackage {
   id: string
@@ -52,17 +51,25 @@ interface DBLesson {
   order_index: number
 }
 
+const packageImages = [
+  'https://images.pexels.com/photos/4506109/pexels-photo-4506109.jpeg?auto=compress&cs=tinysrgb&w=800',
+  'https://images.pexels.com/photos/5473182/pexels-photo-5473182.jpeg?auto=compress&cs=tinysrgb&w=800',
+  'https://images.pexels.com/photos/4050315/pexels-photo-4050315.jpeg?auto=compress&cs=tinysrgb&w=800',
+  'https://images.pexels.com/photos/4498606/pexels-photo-4498606.jpeg?auto=compress&cs=tinysrgb&w=800',
+  'https://images.pexels.com/photos/7298867/pexels-photo-7298867.jpeg?auto=compress&cs=tinysrgb&w=800',
+]
+
+const avatars = [
+  'https://images.pexels.com/photos/5327585/pexels-photo-5327585.jpeg?auto=compress&cs=tinysrgb&w=100',
+  'https://images.pexels.com/photos/5452201/pexels-photo-5452201.jpeg?auto=compress&cs=tinysrgb&w=100',
+]
+
 const gradients = [
   'from-blue-100 to-cyan-100',
   'from-green-100 to-emerald-100',
   'from-amber-100 to-orange-100',
   'from-rose-100 to-pink-100',
   'from-teal-100 to-green-100',
-]
-
-const avatars = [
-  'https://images.pexels.com/photos/5327585/pexels-photo-5327585.jpeg?auto=compress&cs=tinysrgb&w=100',
-  'https://images.pexels.com/photos/5452201/pexels-photo-5452201.jpeg?auto=compress&cs=tinysrgb&w=100',
 ]
 
 export default function CoursesPage() {
@@ -79,8 +86,9 @@ export default function CoursesPage() {
   const isAuthenticated = !!user
 
   const [previewOpen, setPreviewOpen] = useState(false)
-  const [previewCourse] = useState<DBCourse | null>(null)
-  const [previewLessons] = useState<DBLesson[]>([])
+  const [previewPackage, setPreviewPackage] = useState<{ title: string; description: string; price: number } | null>(null)
+  const [previewLessons, setPreviewLessons] = useState<DBLesson[]>([])
+  const [previewLoading, setPreviewLoading] = useState(false)
 
   const loadData = useCallback(async () => {
     try {
@@ -137,32 +145,6 @@ export default function CoursesPage() {
     return purchases.some(p => p.course_id === courseId)
   }
 
-  const getCourseStatus = (course: DBCourse, packageCourses: DBCourse[]): CourseStatus => {
-    const enrollment = enrollments.find(e => e.course_id === course.id)
-    const purchased = isPurchased(course.id)
-
-    if (enrollment?.completed) return 'completed'
-    if (purchased || enrollment) return 'purchased'
-
-    const sorted = [...packageCourses].sort((a, b) => a.order_index - b.order_index)
-    const courseIdx = sorted.findIndex(c => c.id === course.id)
-
-    if (courseIdx === 0) return 'available'
-
-    const prevCourse = sorted[courseIdx - 1]
-    const prevEnrollment = enrollments.find(e => e.course_id === prevCourse.id)
-
-    if (!prevEnrollment?.completed) return 'locked'
-
-    if (prevEnrollment.completion_date) {
-      const completionDay = new Date(prevEnrollment.completion_date).toDateString()
-      const today = new Date().toDateString()
-      if (completionDay === today) return 'locked_daily'
-    }
-
-    return 'available'
-  }
-
   const handleBuy = async (courseId: string) => {
     if (!user || !session) {
       navigate('/auth/sign-up')
@@ -198,40 +180,82 @@ export default function CoursesPage() {
     }
   }
 
+  const handlePreview = async (packageId: string) => {
+    const pkg = packages.find(p => p.id === packageId)
+    const pkgCourses = courses.filter(c => c.package_id === packageId)
+    if (!pkg) return
+
+    const totalPrice = pkgCourses.reduce((sum, c) => sum + c.price, 0)
+    setPreviewPackage({ title: pkg.title, description: pkg.description, price: totalPrice })
+    setPreviewLoading(true)
+    setPreviewOpen(true)
+
+    try {
+      const courseIds = pkgCourses.map(c => c.id)
+      const { data: lessons } = await supabase
+        .from('course_lessons')
+        .select('id, course_id, title, description, duration, order_index')
+        .in('course_id', courseIds)
+        .order('order_index')
+
+      setPreviewLessons(lessons || [])
+    } catch {
+      setPreviewLessons([])
+    } finally {
+      setPreviewLoading(false)
+    }
+  }
+
   const buildShowcaseCourses = (): ShowcaseCourse[] => {
     return packages.map((pkg, idx) => {
       const pkgCourses = courses.filter(c => c.package_id === pkg.id)
       const totalLessons = pkgCourses.reduce((sum, c) => sum + c.lessons_count, 0)
       const totalDuration = pkgCourses.reduce((sum, c) => sum + c.duration, 0)
+      const totalPrice = pkgCourses.reduce((sum, c) => sum + c.price, 0)
       const allPurchased = pkgCourses.length > 0 && pkgCourses.every(c => isPurchased(c.id))
       const firstAvailable = pkgCourses.find(c => {
-        const status = getCourseStatus(c, pkgCourses)
-        return status === 'available' || status === 'purchased'
+        const purchased = isPurchased(c.id)
+        const enrollment = enrollments.find(e => e.course_id === c.id)
+        return purchased || !!enrollment
       })
+
+      const firstCourseId = pkgCourses.length > 0 ? pkgCourses[0].id : ''
 
       return {
         badge: 'Balicek',
         title: pkg.title,
         description: pkg.description,
         author: {
-          name: 'Fyzioterapie tým',
+          name: 'Fyzioterapie tym',
           title: `${pkgCourses.length} kurzu v balicku`,
           avatar: avatars[idx % avatars.length],
         },
-        image: `https://images.pexels.com/photos/${idx % 2 === 0 ? '4506109' : '5473182'}/pexels-photo-${idx % 2 === 0 ? '4506109' : '5473182'}.jpeg?auto=compress&cs=tinysrgb&w=400`,
+        image: packageImages[idx % packageImages.length],
         lessons: pkgCourses.length,
         videos: totalLessons,
-        duration: `${totalDuration} minut`,
+        duration: `${totalDuration} min`,
         audience: ['Fyzioterapeuti', 'Studenti'],
         gradient: gradients[idx % gradients.length],
+        price: totalPrice,
+        coursesInPackage: pkgCourses.map(c => ({
+          id: c.id,
+          title: c.title,
+          duration: c.duration,
+        })),
+        isPurchased: allPurchased,
         cta: {
-          text: allPurchased
-            ? 'Pokracovat'
-            : firstAvailable
-              ? 'Zobrazit'
-              : 'Koupit',
-          url: firstAvailable ? `/course/${firstAvailable.id}` : '#courses',
+          text: allPurchased ? 'Pokracovat' : 'Zobrazit',
+          url: firstAvailable ? `/course/${firstAvailable.id}` : firstCourseId ? `/course/${firstCourseId}` : '#courses',
         },
+        onPreview: () => handlePreview(pkg.id),
+        onBuy: !allPurchased && isAuthenticated
+          ? () => {
+              const firstUnpurchased = pkgCourses.find(c => !isPurchased(c.id))
+              if (firstUnpurchased) handleBuy(firstUnpurchased.id)
+            }
+          : !allPurchased && !isAuthenticated
+            ? () => navigate('/auth/sign-up')
+            : undefined,
       }
     })
   }
@@ -339,19 +363,13 @@ export default function CoursesPage() {
         <CoursePreviewDialog
           open={previewOpen}
           onOpenChange={setPreviewOpen}
-          courseTitle={previewCourse?.title || ''}
-          courseDescription={previewCourse?.description || ''}
-          coursePrice={previewCourse?.price}
-          isPurchased={previewCourse ? isPurchased(previewCourse.id) : false}
+          courseTitle={previewPackage?.title || ''}
+          courseDescription={previewPackage?.description || ''}
+          coursePrice={previewPackage?.price}
+          isPurchased={false}
           lessons={previewLessons}
-          onBuy={
-            previewCourse && isAuthenticated && !isPurchased(previewCourse.id)
-              ? () => {
-                  setPreviewOpen(false)
-                  handleBuy(previewCourse.id)
-                }
-              : undefined
-          }
+          loading={previewLoading}
+          onBuy={undefined}
         />
       </div>
     </div>
