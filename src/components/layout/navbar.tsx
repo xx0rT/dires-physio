@@ -30,6 +30,8 @@ import { Link } from "react-router-dom";
 
 import { cn } from "@/lib/utils";
 import { site } from "@/config/site";
+import { ModeToggle } from "@/components/layout/mode-toggle";
+import { ShoppingCartButton } from "@/components/shop/shopping-cart-button";
 
 import {
   Accordion,
@@ -372,6 +374,8 @@ const Navbar10 = ({ className }: Navbar10Props) => {
               </NavigationMenuList>
             </div>
             <div className="flex items-center gap-2 justify-self-end">
+              <ModeToggle />
+              <ShoppingCartButton />
               <div className="hidden xl:flex xl:items-center xl:gap-2">
                 <Button variant="ghost" asChild size={isScrolled ? "sm" : "default"}>
                   <Link to="/auth/sign-in">Prihlasit se</Link>
