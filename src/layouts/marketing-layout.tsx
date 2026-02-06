@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
-import { Navbar } from '@/components/layout/navbar'
+import { Navbar10 } from '@/components/layout/navbar'
 import { FooterSection } from '@/components/layout/sections/footer'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
@@ -20,7 +20,7 @@ export default function MarketingLayout() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Navbar />
+      <Navbar10 />
       <main className="flex-1">
         <Outlet />
       </main>
