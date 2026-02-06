@@ -122,7 +122,8 @@ const TestimonialCard = ({ testimonial }: { testimonial: DataItem }) => (
         </p>
       </div>
       <div className="ml-auto hover:cursor-pointer">
-        <img src="https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/x.svg" alt="X logo" className="h-4 w-4" />
+        <img src="
+          public/google__g__logo.svg.webp" alt="X logo" className="h-4 w-4" />
       </div>
     </div>
 
