@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ShieldCheck, Check } from 'lucide-react'
 import { toast } from 'sonner'
 import { useAuth } from '@/lib/auth-context'
@@ -335,32 +335,6 @@ export default function CoursesPage() {
         <div className="mt-16 rounded-3xl bg-muted/40 px-6 py-12 sm:px-10 lg:px-16">
           <CoursesNews />
         </div>
-
-        {!user && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="mt-16"
-          >
-            <Card className="border-primary/20 bg-primary/5">
-              <CardContent className="px-6 py-10 text-center">
-                <h3 className="mb-2 text-2xl font-bold">Pripraveni zacit?</h3>
-                <p className="mx-auto mb-6 max-w-md text-muted-foreground">
-                  Vytvorte si ucet a ziskejte pristup ke kurzum
-                </p>
-                <div className="flex items-center justify-center gap-4">
-                  <Button asChild size="lg">
-                    <Link to="/auth/sign-up">Zacit nyni</Link>
-                  </Button>
-                  <Button asChild variant="outline" size="lg">
-                    <Link to="/auth/sign-in">Jiz mam ucet</Link>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        )}
 
         <CoursePreviewDialog
           open={previewOpen}
