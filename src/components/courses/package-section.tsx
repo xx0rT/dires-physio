@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion'
-import { GraduationCap, Trophy } from 'lucide-react'
-import { CourseCard, type CourseStatus } from './course-card'
+import { GraduationCap, Trophy, ChevronRight } from 'lucide-react'
+import { CourseCard } from './course-card'
+import type { CourseStatus } from './course-card'
+import { Progress } from '@/components/ui/progress'
 
 const iconMap: Record<string, typeof GraduationCap> = {
   'graduation-cap': GraduationCap,
@@ -42,30 +44,34 @@ export function PackageSection({
 }: PackageSectionProps) {
   const IconComponent = iconMap[icon] || GraduationCap
   const completedCount = courses.filter(c => c.status === 'completed').length
+  const progressPercent = courses.length > 0 ? Math.round((completedCount / courses.length) * 100) : 0
 
   return (
     <motion.section
-      initial={{ opacity: 0, y: 32 }}
+      initial={{ opacity: 0, y: 28 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: index * 0.15 }}
-      className="space-y-6"
+      transition={{ duration: 0.5, delay: index * 0.12 }}
     >
-      <div className="flex items-center gap-4">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
-          <IconComponent className="h-6 w-6 text-primary" />
+      <div className="mb-8 flex items-center gap-4">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+          <IconComponent className="h-5 w-5 text-primary" />
         </div>
-        <div className="flex-1">
-          <div className="flex items-center gap-3">
-            <h2 className="text-2xl font-bold">{title}</h2>
-            <span className="text-sm text-muted-foreground">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <h2 className="text-xl font-bold truncate">{title}</h2>
+            <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
+            <span className="text-sm font-medium text-muted-foreground shrink-0">
               {completedCount}/{courses.length}
             </span>
           </div>
-          <p className="text-sm text-muted-foreground">{description}</p>
+          <p className="text-sm text-muted-foreground truncate">{description}</p>
+          {completedCount > 0 && (
+            <Progress value={progressPercent} className="mt-2 h-1.5" />
+          )}
         </div>
       </div>
 
-      <div className="ml-2 space-y-5 border-l-2 border-muted pl-5">
+      <div className="space-y-6">
         {courses
           .sort((a, b) => a.order_index - b.order_index)
           .map((course, courseIndex) => (
@@ -77,7 +83,6 @@ export function PackageSection({
               lessonsCount={course.lessons_count}
               duration={course.duration}
               status={course.status}
-              progress={course.progress}
               index={courseIndex}
               isAuthenticated={isAuthenticated}
               onEnroll={onEnroll}

@@ -44,12 +44,6 @@ interface DBLesson {
   order_index: number
 }
 
-interface DBProgress {
-  course_id: string
-  lesson_id: string
-  completed: boolean
-}
-
 export default function CoursesPage() {
   const { user } = useAuth()
   const navigate = useNavigate()
@@ -57,7 +51,6 @@ export default function CoursesPage() {
   const [packages, setPackages] = useState<DBPackage[]>([])
   const [courses, setCourses] = useState<DBCourse[]>([])
   const [enrollments, setEnrollments] = useState<DBEnrollment[]>([])
-  const [progressData, setProgressData] = useState<DBProgress[]>([])
   const [loading, setLoading] = useState(true)
 
   const [previewOpen, setPreviewOpen] = useState(false)
@@ -87,13 +80,7 @@ export default function CoursesPage() {
           .select('course_id, completed, completion_date')
           .eq('user_id', user.id)
 
-        const { data: prog } = await supabase
-          .from('user_course_progress')
-          .select('course_id, lesson_id, completed')
-          .eq('user_id', user.id)
-
         if (enr) setEnrollments(enr)
-        if (prog) setProgressData(prog)
       }
     } catch (error) {
       console.error('Error loading courses:', error)
@@ -110,15 +97,14 @@ export default function CoursesPage() {
     const enrollment = enrollments.find(e => e.course_id === course.id)
 
     if (enrollment?.completed) return 'completed'
-
     if (enrollment) return 'enrolled'
 
-    const sortedInPackage = packageCourses.sort((a, b) => a.order_index - b.order_index)
-    const courseIdx = sortedInPackage.findIndex(c => c.id === course.id)
+    const sorted = [...packageCourses].sort((a, b) => a.order_index - b.order_index)
+    const courseIdx = sorted.findIndex(c => c.id === course.id)
 
     if (courseIdx === 0) return 'available'
 
-    const prevCourse = sortedInPackage[courseIdx - 1]
+    const prevCourse = sorted[courseIdx - 1]
     const prevEnrollment = enrollments.find(e => e.course_id === prevCourse.id)
 
     if (!prevEnrollment?.completed) return 'locked'
@@ -130,14 +116,6 @@ export default function CoursesPage() {
     }
 
     return 'available'
-  }
-
-  const getCourseProgress = (courseId: string, lessonsCount: number): number => {
-    if (lessonsCount === 0) return 0
-    const completed = progressData.filter(
-      p => p.course_id === courseId && p.completed
-    ).length
-    return Math.round((completed / lessonsCount) * 100)
   }
 
   const handleEnroll = async (courseId: string) => {
@@ -170,16 +148,16 @@ export default function CoursesPage() {
   }
 
   const getPackageCourses = (packageId: string): PackageCourse[] => {
-    const packageCourses = courses.filter(c => c.package_id === packageId)
-    return packageCourses.map(course => ({
+    const pkgCourses = courses.filter(c => c.package_id === packageId)
+    return pkgCourses.map(course => ({
       id: course.id,
       title: course.title,
       description: course.description,
       lessons_count: course.lessons_count,
       duration: course.duration,
       order_index: course.order_index,
-      status: getCourseStatus(course, packageCourses),
-      progress: getCourseProgress(course.id, course.lessons_count),
+      status: getCourseStatus(course, pkgCourses),
+      progress: 0,
     }))
   }
 
