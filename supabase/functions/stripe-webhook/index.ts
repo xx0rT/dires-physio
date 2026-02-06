@@ -34,6 +34,38 @@ Deno.serve(async (req: Request) => {
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object;
+
+        if (session.metadata?.type === "course_purchase") {
+          const { userId: cpUserId, courseId } = session.metadata;
+          if (cpUserId && courseId) {
+            const amountPaid = (session.amount_total || 0) / 100;
+            const { error: purchaseError } = await supabase
+              .from("course_purchases")
+              .insert({
+                user_id: cpUserId,
+                course_id: courseId,
+                stripe_payment_intent_id: session.payment_intent,
+                amount_paid: amountPaid,
+              });
+
+            if (purchaseError) {
+              console.error("Error recording course purchase:", purchaseError);
+            }
+
+            const { error: enrollError } = await supabase
+              .from("course_enrollments")
+              .upsert({
+                user_id: cpUserId,
+                course_id: courseId,
+              }, { onConflict: "user_id,course_id", ignoreDuplicates: true });
+
+            if (enrollError) {
+              console.error("Error creating enrollment:", enrollError);
+            }
+          }
+          break;
+        }
+
         const { planType, promoCode, userEmail, userName } = session.metadata;
         const customerId = session.customer;
         const subscriptionId = session.subscription;

@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion'
-import { BookOpen, Clock, Lock, Play, Check } from 'lucide-react'
+import { BookOpen, Clock, Lock, Play, Check, Eye, ShoppingCart } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 
-export type CourseStatus = 'available' | 'enrolled' | 'completed' | 'locked' | 'locked_daily'
+export type CourseStatus = 'available' | 'purchased' | 'completed' | 'locked' | 'locked_daily'
 
 interface CourseCardProps {
   id: string
@@ -12,10 +12,12 @@ interface CourseCardProps {
   description: string
   lessonsCount: number
   duration: number
+  price: number
   status: CourseStatus
   index: number
   isAuthenticated: boolean
-  onEnroll: (courseId: string) => void
+  buying?: boolean
+  onBuy: (courseId: string) => void
   onPreview: (courseId: string) => void
 }
 
@@ -25,14 +27,17 @@ export function CourseCard({
   description,
   lessonsCount,
   duration,
+  price,
   status,
   index,
   isAuthenticated,
-  onEnroll,
+  buying,
+  onBuy,
   onPreview,
 }: CourseCardProps) {
   const isLocked = status === 'locked' || status === 'locked_daily'
   const isCompleted = status === 'completed'
+  const isPurchased = status === 'purchased'
 
   const iconBg = isCompleted
     ? 'bg-emerald-500'
@@ -41,6 +46,12 @@ export function CourseCard({
       : 'bg-primary'
 
   const Icon = isLocked ? Lock : isCompleted ? Check : BookOpen
+
+  const formattedPrice = new Intl.NumberFormat('cs-CZ', {
+    style: 'currency',
+    currency: 'CZK',
+    minimumFractionDigits: 0,
+  }).format(price)
 
   return (
     <motion.div
@@ -73,19 +84,30 @@ export function CourseCard({
               : 'hover:shadow-md'
         }`}
       >
-        <div className="flex items-start gap-2 mb-2">
-          <h3 className="text-lg font-bold">{title}</h3>
-          {isLocked && (
-            <Badge variant="secondary" className="shrink-0 gap-1 text-[11px] font-normal">
-              <Lock className="h-2.5 w-2.5" />
-              Zamceno
-            </Badge>
-          )}
-          {isCompleted && (
-            <Badge className="shrink-0 gap-1 bg-emerald-500 text-[11px] font-normal hover:bg-emerald-600">
-              <Check className="h-2.5 w-2.5" />
-              Dokonceno
-            </Badge>
+        <div className="flex items-start justify-between gap-3 mb-2">
+          <div className="flex items-start gap-2 flex-1 min-w-0">
+            <h3 className="text-lg font-bold">{title}</h3>
+            {isLocked && (
+              <Badge variant="secondary" className="shrink-0 gap-1 text-[11px] font-normal">
+                <Lock className="h-2.5 w-2.5" />
+                Zamceno
+              </Badge>
+            )}
+            {isCompleted && (
+              <Badge className="shrink-0 gap-1 bg-emerald-500 text-[11px] font-normal hover:bg-emerald-600">
+                <Check className="h-2.5 w-2.5" />
+                Dokonceno
+              </Badge>
+            )}
+            {isPurchased && (
+              <Badge className="shrink-0 gap-1 bg-primary text-[11px] font-normal">
+                <Check className="h-2.5 w-2.5" />
+                Zakoupeno
+              </Badge>
+            )}
+          </div>
+          {!isPurchased && !isCompleted && (
+            <span className="text-lg font-bold text-primary shrink-0">{formattedPrice}</span>
           )}
         </div>
 
@@ -103,44 +125,70 @@ export function CourseCard({
         </div>
 
         <div className="flex items-center gap-3">
-          {(status === 'available' || status === 'enrolled') && (
+          {status === 'available' && (
             <>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => onPreview(id)}
-                className="rounded-full px-5"
+                className="rounded-full px-5 gap-1.5"
               >
-                <Clock className="mr-1.5 h-3.5 w-3.5" />
-                Nahled Obsahu
+                <Eye className="h-3.5 w-3.5" />
+                Nahlednout
               </Button>
-              {status === 'available' && (
-                isAuthenticated ? (
-                  <Button
-                    size="sm"
-                    onClick={() => onEnroll(id)}
-                    className="rounded-full px-5"
-                  >
-                    Prihlasit se k zapisu
-                  </Button>
-                ) : (
-                  <Button size="sm" className="rounded-full px-5" asChild>
-                    <Link to="/auth/sign-up">Prihlasit se k zapisu</Link>
-                  </Button>
-                )
-              )}
-              {status === 'enrolled' && (
-                <Button size="sm" className="rounded-full px-5" asChild>
-                  <Link to={`/course/${id}`}>Pokracovat v kurzu</Link>
+              {isAuthenticated ? (
+                <Button
+                  size="sm"
+                  onClick={() => onBuy(id)}
+                  disabled={buying}
+                  className="rounded-full px-5 gap-1.5"
+                >
+                  <ShoppingCart className="h-3.5 w-3.5" />
+                  {buying ? 'Zpracovani...' : 'Koupit kurz'}
+                </Button>
+              ) : (
+                <Button size="sm" className="rounded-full px-5 gap-1.5" asChild>
+                  <Link to="/auth/sign-up">
+                    <ShoppingCart className="h-3.5 w-3.5" />
+                    Prihlasit se k nakupu
+                  </Link>
                 </Button>
               )}
             </>
           )}
 
+          {isPurchased && (
+            <>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onPreview(id)}
+                className="rounded-full px-5 gap-1.5"
+              >
+                <Eye className="h-3.5 w-3.5" />
+                Nahlednout
+              </Button>
+              <Button size="sm" className="rounded-full px-5" asChild>
+                <Link to={`/course/${id}`}>Zacit kurz</Link>
+              </Button>
+            </>
+          )}
+
           {isCompleted && (
-            <Button variant="outline" size="sm" className="rounded-full px-5" asChild>
-              <Link to={`/course/${id}`}>Prohlednout znovu</Link>
-            </Button>
+            <>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onPreview(id)}
+                className="rounded-full px-5 gap-1.5"
+              >
+                <Eye className="h-3.5 w-3.5" />
+                Nahlednout
+              </Button>
+              <Button variant="outline" size="sm" className="rounded-full px-5" asChild>
+                <Link to={`/course/${id}`}>Prohlednout znovu</Link>
+              </Button>
+            </>
           )}
 
           {status === 'locked' && (

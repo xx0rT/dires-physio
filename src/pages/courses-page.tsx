@@ -1,7 +1,8 @@
 import { useEffect, useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { ShieldCheck, Check } from 'lucide-react'
+import { toast } from 'sonner'
 import { useAuth } from '@/lib/auth-context'
 import { useSubscription } from '@/lib/use-subscription'
 import { supabase } from '@/lib/supabase'
@@ -25,6 +26,7 @@ interface DBCourse {
   description: string
   duration: number
   lessons_count: number
+  price: number
   package_id: string
   order_index: number
 }
@@ -33,6 +35,10 @@ interface DBEnrollment {
   course_id: string
   completed: boolean
   completion_date: string | null
+}
+
+interface DBPurchase {
+  course_id: string
 }
 
 interface DBLesson {
@@ -45,13 +51,16 @@ interface DBLesson {
 }
 
 export default function CoursesPage() {
-  const { user } = useAuth()
+  const { user, session } = useAuth()
   const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams()
   const { subscription, loading: subscriptionLoading, hasActiveSubscription } = useSubscription()
   const [packages, setPackages] = useState<DBPackage[]>([])
   const [courses, setCourses] = useState<DBCourse[]>([])
   const [enrollments, setEnrollments] = useState<DBEnrollment[]>([])
+  const [purchases, setPurchases] = useState<DBPurchase[]>([])
   const [loading, setLoading] = useState(true)
+  const [buyingCourseId, setBuyingCourseId] = useState<string | null>(null)
 
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewCourse, setPreviewCourse] = useState<DBCourse | null>(null)
@@ -66,7 +75,7 @@ export default function CoursesPage() {
 
       const { data: crs } = await supabase
         .from('courses')
-        .select('id, title, description, duration, lessons_count, package_id, order_index')
+        .select('id, title, description, duration, lessons_count, price, package_id, order_index')
         .eq('published', true)
         .not('package_id', 'is', null)
         .order('order_index')
@@ -80,7 +89,13 @@ export default function CoursesPage() {
           .select('course_id, completed, completion_date')
           .eq('user_id', user.id)
 
+        const { data: purch } = await supabase
+          .from('course_purchases')
+          .select('course_id')
+          .eq('user_id', user.id)
+
         if (enr) setEnrollments(enr)
+        if (purch) setPurchases(purch)
       }
     } catch (error) {
       console.error('Error loading courses:', error)
@@ -93,11 +108,25 @@ export default function CoursesPage() {
     loadData()
   }, [loadData])
 
+  useEffect(() => {
+    const purchasedId = searchParams.get('purchased')
+    if (purchasedId && user) {
+      toast.success('Kurz byl uspesne zakoupen!')
+      setSearchParams({}, { replace: true })
+      loadData()
+    }
+  }, [searchParams, user, setSearchParams, loadData])
+
+  const isPurchased = (courseId: string) => {
+    return purchases.some(p => p.course_id === courseId)
+  }
+
   const getCourseStatus = (course: DBCourse, packageCourses: DBCourse[]): CourseStatus => {
     const enrollment = enrollments.find(e => e.course_id === course.id)
+    const purchased = isPurchased(course.id)
 
     if (enrollment?.completed) return 'completed'
-    if (enrollment) return 'enrolled'
+    if (purchased || enrollment) return 'purchased'
 
     const sorted = [...packageCourses].sort((a, b) => a.order_index - b.order_index)
     const courseIdx = sorted.findIndex(c => c.id === course.id)
@@ -118,18 +147,39 @@ export default function CoursesPage() {
     return 'available'
   }
 
-  const handleEnroll = async (courseId: string) => {
-    if (!user) {
+  const handleBuy = async (courseId: string) => {
+    if (!user || !session) {
       navigate('/auth/sign-up')
       return
     }
 
-    const { error } = await supabase.from('course_enrollments').insert({
-      user_id: user.id,
-      course_id: courseId,
-    })
+    setBuyingCourseId(courseId)
+    try {
+      const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/course-checkout`
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ courseId }),
+      })
 
-    if (!error) loadData()
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Chyba pri vytvareni platby')
+      }
+
+      if (data.url) {
+        window.location.href = data.url
+      }
+    } catch (error) {
+      console.error('Checkout error:', error)
+      toast.error(error instanceof Error ? error.message : 'Chyba pri vytvareni platby')
+    } finally {
+      setBuyingCourseId(null)
+    }
   }
 
   const handlePreview = async (courseId: string) => {
@@ -155,9 +205,9 @@ export default function CoursesPage() {
       description: course.description,
       lessons_count: course.lessons_count,
       duration: course.duration,
+      price: course.price,
       order_index: course.order_index,
       status: getCourseStatus(course, pkgCourses),
-      progress: 0,
     }))
   }
 
@@ -198,7 +248,7 @@ export default function CoursesPage() {
                 </h4>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   {[
-                    'Neomezeny pristup ke vsem kurzum',
+                    'Moznost nakupu jednotlivych kurzu',
                     'AI asistent pro dotazy k obsahu kurzu',
                     'Certifikaty po dokonceni jednotlivych kurzu',
                     'Doplnkove studijni materialy ke stazeni',
@@ -259,7 +309,7 @@ export default function CoursesPage() {
           </span>
         </h1>
         <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-          Absolvujte kurzy v poradi a odemknete pokrocile techniky. Po dokonceni kurzu musíte pockat do dalsiho dne.
+          Zakupte si jednotlive kurzy a postupne odemykejte pokrocile techniky. Po dokonceni kurzu musíte pockat do dalsiho dne.
         </p>
       </motion.div>
 
@@ -274,7 +324,8 @@ export default function CoursesPage() {
             courses={getPackageCourses(pkg.id)}
             index={index}
             isAuthenticated={!!user}
-            onEnroll={handleEnroll}
+            buyingCourseId={buyingCourseId}
+            onBuy={handleBuy}
             onPreview={handlePreview}
           />
         ))}
@@ -295,7 +346,7 @@ export default function CoursesPage() {
         >
           <h3 className="mb-4 text-2xl font-bold">Pripraveni zacit?</h3>
           <p className="mx-auto mb-6 max-w-md text-muted-foreground">
-            Vytvorte si ucet a ziskejte pristup ke vsem kurzum s postupnym odemykanim
+            Vytvorte si ucet a ziskejte pristup ke kurzum
           </p>
           <div className="flex items-center justify-center gap-4">
             <Button asChild size="lg">

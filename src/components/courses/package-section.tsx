@@ -15,9 +15,9 @@ export interface PackageCourse {
   description: string
   lessons_count: number
   duration: number
+  price: number
   order_index: number
   status: CourseStatus
-  progress: number
 }
 
 interface PackageSectionProps {
@@ -28,7 +28,8 @@ interface PackageSectionProps {
   courses: PackageCourse[]
   index: number
   isAuthenticated: boolean
-  onEnroll: (courseId: string) => void
+  buyingCourseId: string | null
+  onBuy: (courseId: string) => void
   onPreview: (courseId: string) => void
 }
 
@@ -39,7 +40,8 @@ export function PackageSection({
   courses,
   index,
   isAuthenticated,
-  onEnroll,
+  buyingCourseId,
+  onBuy,
   onPreview,
 }: PackageSectionProps) {
   const IconComponent = iconMap[icon] || GraduationCap
@@ -82,10 +84,12 @@ export function PackageSection({
               description={course.description}
               lessonsCount={course.lessons_count}
               duration={course.duration}
+              price={course.price}
               status={course.status}
               index={courseIndex}
               isAuthenticated={isAuthenticated}
-              onEnroll={onEnroll}
+              buying={buyingCourseId === course.id}
+              onBuy={onBuy}
               onPreview={onPreview}
             />
           ))}
