@@ -299,10 +299,19 @@ const Navbar10 = ({ className }: Navbar10Props) => {
   }, []);
 
   useEffect(() => {
+    let lastY = window.scrollY;
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      const currentY = window.scrollY;
+      if (currentY <= 10) {
+        setIsScrolled(false);
+      } else if (currentY > lastY) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+      lastY = currentY;
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
