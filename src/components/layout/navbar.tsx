@@ -685,7 +685,7 @@ const MobileNavigationMenu = ({ open }: MobileNavigationMenuProps) => {
         <div className="flex-1 overflow-y-auto">
           <div className="container py-8">
             <div className="flex min-h-full flex-col gap-6 pb-8">
-              <Accordion type="multiple" className="w-full">
+              <Accordion type="single" collapsible className="w-full">
                 {NAVIGATION.map((item, index) =>
                   renderMobileMenuItem(item, index),
                 )}
