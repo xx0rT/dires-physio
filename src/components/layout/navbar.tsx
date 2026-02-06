@@ -1,17 +1,17 @@
 import {
-  Activity,
   BookOpen,
-  Brain,
+  Calendar,
   ChevronRight,
-  ClipboardList,
-  Dumbbell,
+  Clock,
   GraduationCap,
   HandHeart,
-  HeartPulse,
+  HelpCircle,
+  Info,
   LayoutGrid,
   MenuIcon,
-  Sparkles,
-  Stethoscope,
+  MessageSquare,
+  Star,
+  Tag,
   Trophy,
   Users,
   X,
@@ -99,62 +99,68 @@ type NavLinkProps = {
 
 const NAVIGATION: MenuItem[] = [
   {
-    title: "Kurzy",
+    title: "Dires",
     id: 1,
-    links: [
+    groupLinks: [
       {
-        label: "Manualni terapie",
-        icon: HandHeart,
-        description:
-          "Tradicni ceske techniky manualni terapie a mekkych tkani",
-        url: "/courses",
-        image:
-          "https://images.pexels.com/photos/5473182/pexels-photo-5473182.jpeg?auto=compress&cs=tinysrgb&w=800",
+        title: "O nas",
+        links: [
+          {
+            label: "Kdo jsme",
+            icon: Info,
+            description: "Poznejte nas tym a nasi vizi",
+            url: "/#benefits",
+          },
+          {
+            label: "Co delame",
+            icon: Zap,
+            description: "Nase sluzby a specializace",
+            url: "/#services",
+          },
+          {
+            label: "Nas tym",
+            icon: Users,
+            description: "Seznamte se s nasimi odborniky",
+            url: "/#team",
+          },
+        ],
       },
       {
-        label: "Sportovni rehabilitace",
-        icon: Dumbbell,
-        description:
-          "Specializovane kurzy pro lecbu sportovnich zraneni a prevenci",
-        url: "/courses",
-        image:
-          "https://images.pexels.com/photos/4498606/pexels-photo-4498606.jpeg?auto=compress&cs=tinysrgb&w=800",
-      },
-      {
-        label: "Neurologicka rehabilitace",
-        icon: Brain,
-        description:
-          "Pokrocile techniky Vojtovy a Bobathovy metody",
-        url: "/courses",
-        image:
-          "https://images.pexels.com/photos/7089401/pexels-photo-7089401.jpeg?auto=compress&cs=tinysrgb&w=800",
-      },
-      {
-        label: "Pediatricka fyzioterapie",
-        icon: HeartPulse,
-        description:
-          "Specialni pristupy k detske rehabilitaci a vyvoji",
-        url: "/courses",
-        image:
-          "https://images.pexels.com/photos/3985163/pexels-photo-3985163.jpeg?auto=compress&cs=tinysrgb&w=800",
-      },
-      {
-        label: "Ergonomie a prevence",
-        icon: ClipboardList,
-        description: "Kurzy zamerenych na prevenci a spravne drzeni tela",
-        url: "/courses",
-        image:
-          "https://images.pexels.com/photos/4506109/pexels-photo-4506109.jpeg?auto=compress&cs=tinysrgb&w=800",
-      },
-      {
-        label: "Lecba bolesti",
-        icon: Activity,
-        description: "Moderni pristupy k managementu chronicke bolesti",
-        url: "/courses",
-        image:
-          "https://images.pexels.com/photos/5473223/pexels-photo-5473223.jpeg?auto=compress&cs=tinysrgb&w=800",
+        title: "Vice",
+        links: [
+          {
+            label: "Reference",
+            icon: Star,
+            description: "Co o nas rikaji nasi klienti",
+            url: "/#testimonials",
+          },
+          {
+            label: "Cenik",
+            icon: Tag,
+            description: "Prehled cen a predplatnych planu",
+            url: "/#pricing",
+          },
+          {
+            label: "Casté dotazy",
+            icon: HelpCircle,
+            description: "Odpovedi na nejcastejsi otazky",
+            url: "/#faq",
+          },
+          {
+            label: "Kontakt",
+            icon: MessageSquare,
+            description: "Napiste nam nebo nas navstivte",
+            url: "/#contact",
+          },
+        ],
       },
     ],
+    imageLink: {
+      url: "/#features",
+      image:
+        "https://images.pexels.com/photos/5473177/pexels-photo-5473177.jpeg?auto=compress&cs=tinysrgb&w=800",
+      label: "Objevte nase funkce",
+    },
   },
   {
     title: "Sluzby",
@@ -162,7 +168,7 @@ const NAVIGATION: MenuItem[] = [
     featuredLinks: [
       {
         label: "Online vzdelavani",
-        icon: Sparkles,
+        icon: BookOpen,
         description: "Pristup ke studijnim materialam kdykoliv a odkudkoliv",
         background:
           "https://images.pexels.com/photos/4506105/pexels-photo-4506105.jpeg?auto=compress&cs=tinysrgb&w=800",
@@ -180,7 +186,7 @@ const NAVIGATION: MenuItem[] = [
     links: [
       {
         label: "Individualni konzultace",
-        icon: Stethoscope,
+        icon: HandHeart,
         description:
           "Osobni poradenstvi s nasimi odborniky pro vas profesni rust",
         url: "/#services",
@@ -208,65 +214,62 @@ const NAVIGATION: MenuItem[] = [
     ],
   },
   {
-    title: "Platforma",
+    title: "Kurzy",
     id: 3,
-    imageLink: {
-      url: "/courses",
-      image:
-        "https://images.pexels.com/photos/5473177/pexels-photo-5473177.jpeg?auto=compress&cs=tinysrgb&w=800",
-      label: "Prozkoumejte nase kurzy",
-    },
     groupLinks: [
       {
-        title: "Pro studenty",
+        title: "Nabidka kurzu",
         links: [
           {
-            label: "Video kurzy",
-            icon: BookOpen,
-            description: "Profesionalne natocene videolekce s odborniky",
+            label: "Vsechny kurzy",
+            icon: LayoutGrid,
+            description: "Kompletni prehled vsech dostupnych kurzu",
             url: "/courses",
           },
           {
-            label: "Praktika",
-            icon: HandHeart,
-            description: "Prakticke lekce pod odbornym dohledem",
+            label: "71denni kurz",
+            icon: Calendar,
+            description: "Intenzivni program na 71 dni pro maximalni vysledky",
             url: "/courses",
           },
           {
-            label: "Zkousky a testy",
-            icon: ClipboardList,
-            description:
-              "Overeni znalosti a ziskani certifikatu",
+            label: "Kratke kurzy",
+            icon: Clock,
+            description: "Kratke specializovane kurzy a workshopy",
             url: "/courses",
           },
         ],
       },
       {
-        title: "Pro odborníky",
+        title: "Informace",
         links: [
           {
-            label: "Pokrocile techniky",
-            icon: Zap,
-            description:
-              "Specializovane kurzy pro zkusene fyzioterapeuty",
+            label: "Cenik kurzu",
+            icon: Tag,
+            description: "Prehled cen a balicku pro vsechny kurzy",
+            url: "/#pricing",
+          },
+          {
+            label: "Certifikace",
+            icon: GraduationCap,
+            description: "Informace o ziskani certifikatu",
             url: "/courses",
           },
           {
-            label: "Konference",
-            icon: Users,
-            description:
-              "Odborne konference a networking s kolegy z oboru",
-            url: "/#contact",
-          },
-          {
-            label: "Novinky z oboru",
-            icon: Sparkles,
-            description: "Aktualni trendy a vyzkum ve fyzioterapii",
-            url: "/#features",
+            label: "Pro pokrocile",
+            icon: Zap,
+            description: "Specializovane kurzy pro zkusene fyzioterapeuty",
+            url: "/courses",
           },
         ],
       },
     ],
+    imageLink: {
+      url: "/courses",
+      image:
+        "https://images.pexels.com/photos/5473182/pexels-photo-5473182.jpeg?auto=compress&cs=tinysrgb&w=800",
+      label: "Prozkoumejte nase kurzy",
+    },
   },
   {
     title: "Kosik",
@@ -435,17 +438,16 @@ const DesktopMenuItem = ({ item, index }: DesktopMenuItemProps) => {
         <NavigationMenuContent className="hidden !rounded-xl !border-0 !p-0 xl:block">
           <div className="w-dvw animate-[fade-in-slide-down_0.35s_cubic-bezier(0.33,1,0.68,1)_forwards] px-8 pt-6 pb-12">
             <div className="container">
-              {item.id === 1 && <DropdownMenu1 links={item.links} />}
+              {(item.id === 1 || item.id === 3) && (
+                <DropdownMenu3
+                  groupLinks={item.groupLinks}
+                  imageLink={item.imageLink}
+                />
+              )}
               {item.id === 2 && (
                 <DropdownMenu2
                   featuredLinks={item.featuredLinks}
                   links={item.links}
-                />
-              )}
-              {item.id === 3 && (
-                <DropdownMenu3
-                  groupLinks={item.groupLinks}
-                  imageLink={item.imageLink}
                 />
               )}
             </div>
@@ -464,81 +466,6 @@ const DesktopMenuItem = ({ item, index }: DesktopMenuItemProps) => {
         {item.title}
       </NavigationMenuLink>
     </NavigationMenuItem>
-  );
-};
-
-const DropdownMenu1 = ({ links }: { links?: MenuLink[] }) => {
-  const linksRef = useRef<HTMLAnchorElement[]>([]);
-  const imageRefs = useRef<HTMLDivElement[]>([]);
-
-  const updateImageClasses = (activeIndex: number) => {
-    imageRefs.current.forEach((img, i) => {
-      if (!img) return;
-      const isActive = i === activeIndex;
-      img.classList.toggle("opacity-100", isActive);
-      img.classList.toggle("translate-y-0", isActive);
-      img.classList.toggle("opacity-0", !isActive);
-      img.classList.toggle("translate-y-20", !isActive);
-      img.classList.toggle("z-10", isActive);
-    });
-  };
-
-  const handleMouseEnter =
-    (index: number) => (event: React.MouseEvent<HTMLAnchorElement>) => {
-      linksRef.current.forEach((link) => {
-        if (link && link !== event.currentTarget) {
-          link.classList.add("opacity-50");
-        }
-      });
-      updateImageClasses(index);
-    };
-
-  const handleMouseLeave = () => {
-    linksRef.current.forEach((link) => {
-      link?.classList.remove("opacity-50");
-    });
-    updateImageClasses(0);
-  };
-
-  if (!links) return null;
-
-  return (
-    <div className="grid grid-cols-2 gap-8">
-      <ul className="grid grid-cols-2 gap-8">
-        {links.map((link, index) => (
-          <NavLink
-            key={`default-nav-link-${index}`}
-            link={link}
-            onMouseEnter={handleMouseEnter(index)}
-            onMouseLeave={handleMouseLeave}
-            ref={(el) => {
-              if (el) linksRef.current[index] = el;
-            }}
-          />
-        ))}
-      </ul>
-      <div className="relative !h-[16rem] w-full overflow-hidden rounded-lg bg-muted">
-        {links.map((link, index) => (
-          <div
-            key={`default-nav-link-img-${index}`}
-            ref={(el) => {
-              if (el) imageRefs.current[index] = el;
-            }}
-            className={`will-change-opacity absolute top-14 left-14 aspect-video w-[43.75rem] overflow-hidden rounded-tl-md border-t border-l transition-all duration-600 ease-in-out will-change-transform ${
-              index === 0
-                ? "z-10 translate-y-0 opacity-100"
-                : "pointer-events-none z-0 translate-y-20 opacity-0"
-            }`}
-          >
-            <img
-              src={link.image}
-              alt={link.label}
-              className="size-full object-cover object-left-top"
-            />
-          </div>
-        ))}
-      </div>
-    </div>
   );
 };
 
