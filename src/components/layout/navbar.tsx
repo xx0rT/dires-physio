@@ -18,6 +18,7 @@ import {
   Zap,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   forwardRef,
   Fragment,
@@ -52,7 +53,6 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { Separator } from "@/components/ui/separator";
-import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 
 interface MenuLink {
   label?: string;
@@ -398,11 +398,29 @@ const Navbar10 = ({ className }: Navbar10Props) => {
                   size="icon"
                   onClick={handleMobileMenu}
                 >
-                  {open ? (
-                    <X className="size-5.5 stroke-foreground" />
-                  ) : (
-                    <MenuIcon className="size-5.5 stroke-foreground" />
-                  )}
+                  <AnimatePresence mode="wait" initial={false}>
+                    {open ? (
+                      <motion.div
+                        key="close"
+                        initial={{ opacity: 0, rotate: -90, scale: 0.8 }}
+                        animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                        exit={{ opacity: 0, rotate: 90, scale: 0.8 }}
+                        transition={{ duration: 0.15 }}
+                      >
+                        <X className="size-5.5 stroke-foreground" />
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key="menu"
+                        initial={{ opacity: 0, rotate: 90, scale: 0.8 }}
+                        animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                        exit={{ opacity: 0, rotate: -90, scale: 0.8 }}
+                        transition={{ duration: 0.15 }}
+                      >
+                        <MenuIcon className="size-5.5 stroke-foreground" />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </Button>
               </div>
             </div>
@@ -669,118 +687,141 @@ const NavLink = forwardRef<HTMLAnchorElement, NavLinkProps>(
   },
 );
 
-const MobileNavigationMenu = ({ open }: MobileNavigationMenuProps) => {
-  return (
-    <Sheet open={open}>
-      <SheetContent
-        aria-describedby={undefined}
-        side="top"
-        className="inset-0 z-998 flex h-dvh w-full flex-col overflow-hidden bg-background pt-20 [&>button]:hidden"
-      >
-        <div className="absolute -m-px h-px w-px overflow-hidden border-0 mask-clip-border p-0 text-nowrap whitespace-nowrap">
-          <SheetTitle className="text-primary">
-            Mobilni navigace
-          </SheetTitle>
-        </div>
-        <div className="flex-1 overflow-y-auto">
-          <div className="container py-8">
-            <div className="flex min-h-full flex-col gap-6 pb-8">
-              <Accordion type="single" collapsible className="w-full">
-                {NAVIGATION.map((item, index) =>
-                  renderMobileMenuItem(item, index),
-                )}
-              </Accordion>
+const mobileMenuVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1 },
+  exit: { opacity: 0 },
+};
 
-              <div className="flex flex-col gap-2">
-                <Button variant="outline" asChild>
-                  <Link to="/auth/sign-in">Prihlasit se</Link>
-                </Button>
-                <Button asChild>
-                  <Link to="/auth/sign-up">Zacit</Link>
-                </Button>
+const MobileNavigationMenu = ({ open }: MobileNavigationMenuProps) => {
+  const menuItems = NAVIGATION.filter(
+    (item) => item.id !== 100 && item.id !== 101,
+  );
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          variants={mobileMenuVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          transition={{ duration: 0.3, ease: [0.33, 1, 0.68, 1] }}
+          className="fixed inset-0 z-998 flex h-dvh w-full flex-col overflow-hidden bg-background pt-20"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Mobilni navigace"
+        >
+          <div className="pointer-events-none absolute -top-20 -right-20 h-72 w-72 rounded-full bg-primary/8 blur-[80px]" />
+          <div className="pointer-events-none absolute -bottom-16 -left-16 h-64 w-64 rounded-full bg-primary/5 blur-[70px]" />
+
+          <div className="relative flex-1 overflow-y-auto">
+            <div className="container py-6">
+              <div className="flex flex-col gap-3 pb-8">
+                <Accordion type="single" collapsible className="w-full space-y-2">
+                  {menuItems.map((item, index) => (
+                    <motion.div
+                      key={item.title}
+                      initial={{ opacity: 0, y: 16 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{
+                        duration: 0.4,
+                        delay: 0.05 + index * 0.07,
+                        ease: [0.33, 1, 0.68, 1],
+                      }}
+                    >
+                      <AccordionItem
+                        value={`nav-${index}`}
+                        className="my-0 overflow-hidden rounded-xl border-border/40 bg-muted/30 px-1 backdrop-blur-sm transition-colors data-[state=open]:border-primary/15 data-[state=open]:bg-muted/50"
+                      >
+                        <AccordionTrigger className="px-3 text-[15px] font-medium text-foreground/80 hover:text-foreground hover:no-underline data-[state=open]:text-foreground">
+                          {item.title}
+                        </AccordionTrigger>
+                        <AccordionContent className="px-1 pb-1">
+                          <div className="flex flex-col gap-0.5">
+                            {item.featuredLinks?.map((link, i) => (
+                              <MobileNavLink key={`featured-${i}`} link={link} />
+                            ))}
+                            {item.links?.map((link, i) => (
+                              <MobileNavLink key={`link-${i}`} link={link} />
+                            ))}
+                            {item.groupLinks?.map((group, gi) => (
+                              <div key={`group-${gi}`} className={cn(gi > 0 && "mt-3")}>
+                                <div className="mb-1 px-3 text-[11px] font-medium uppercase tracking-wider text-muted-foreground/60">
+                                  {group.title}
+                                </div>
+                                <div className="flex flex-col gap-0.5">
+                                  {group.links.map((link, li) => (
+                                    <MobileNavLink key={`glink-${gi}-${li}`} link={link} />
+                                  ))}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    </motion.div>
+                  ))}
+                </Accordion>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.3, ease: [0.33, 1, 0.68, 1] }}
+                  className="mt-2 flex items-center gap-3"
+                >
+                  <ShoppingCartButton />
+                  <ModeToggle />
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.38, ease: [0.33, 1, 0.68, 1] }}
+                  className="flex flex-col gap-3 pt-2"
+                >
+                  <Button variant="outline" size="lg" className="h-12 rounded-xl border-border/50" asChild>
+                    <Link to="/auth/sign-in">Prihlasit se</Link>
+                  </Button>
+                  <Button size="lg" className="h-12 rounded-xl" asChild>
+                    <Link to="/auth/sign-up">
+                      Zacit
+                      <ChevronRight className="ml-1 size-4" />
+                    </Link>
+                  </Button>
+                </motion.div>
               </div>
             </div>
           </div>
-        </div>
-      </SheetContent>
-    </Sheet>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 
-const renderMobileMenuItem = (item: MenuItem, index: number) => {
-  if (item.id === 100) {
-    return (
-      <div key={item.title} className="flex h-[2.5rem] items-center">
-        <ShoppingCartButton />
-      </div>
-    );
-  }
-
-  if (item.id === 101) {
-    return (
-      <div key={item.title} className="flex h-[2.5rem] items-center">
-        <ModeToggle />
-      </div>
-    );
-  }
-
-  if (item.links || item.featuredLinks || item.groupLinks) {
-    return (
-      <AccordionItem
-        key={item.title}
-        value={`nav-${index}`}
-        className="border-b-0"
-      >
-        <AccordionTrigger className="h-[2.5rem] items-center text-base font-normal text-foreground hover:no-underline">
-          {item.title}
-        </AccordionTrigger>
-        <AccordionContent className="flex flex-col gap-6 p-2">
-          {item.featuredLinks && (
-            <div className="flex flex-col gap-2 p-2">
-              {item.featuredLinks.map((link, i) => (
-                <NavLink key={`featured-nav-link-${i}`} link={link} />
-              ))}
-            </div>
-          )}
-
-          {item.links && (
-            <div className="flex flex-col gap-2 p-2">
-              {item.links.map((link, i) => (
-                <NavLink key={`default-nav-link-${i}`} link={link} />
-              ))}
-            </div>
-          )}
-
-          {item.groupLinks && (
-            <div className="flex flex-col gap-2 p-2">
-              {item.groupLinks.map((group, i1) => (
-                <div className="mb-8 last:mb-0" key={`group-link-${i1}`}>
-                  <div className="mb-4 text-xs text-muted-foreground">
-                    {group.title}
-                  </div>
-                  <ul className="flex flex-col gap-2">
-                    {group.links.map((link, i2) => (
-                      <li key={`group-link-${i1}-${i2}`}>
-                        <NavLink link={link} />
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          )}
-        </AccordionContent>
-      </AccordionItem>
-    );
-  }
-
+const MobileNavLink = ({ link }: { link: MenuLink }) => {
   return (
     <a
-      key={item.title}
-      href={item.url}
-      className="flex h-[2.5rem] items-center rounded-md text-left text-base leading-[3.75] font-normal text-foreground ring-ring/10 outline-ring/50 transition-all focus-visible:ring-4 focus-visible:outline-1 nth-last-1:border-0"
+      href={link.url}
+      className="group flex w-full items-start gap-3 rounded-lg px-3 py-2.5 transition-all duration-200 hover:bg-primary/5"
     >
-      {item.title}
+      {link.icon && (
+        <div className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-border/40 bg-background/80 shadow-sm transition-all duration-200 group-hover:border-primary/25 group-hover:shadow-md">
+          <link.icon className="size-3.5 text-muted-foreground transition-colors duration-200 group-hover:text-primary" />
+        </div>
+      )}
+      <div className="flex flex-col gap-0.5 pt-0.5">
+        {link.label && (
+          <span className="text-sm font-medium leading-tight text-foreground/90 transition-colors group-hover:text-foreground">
+            {link.label}
+          </span>
+        )}
+        {link.description && (
+          <span className="text-xs leading-relaxed text-muted-foreground/70">
+            {link.description}
+          </span>
+        )}
+      </div>
     </a>
   );
 };
