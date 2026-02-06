@@ -1,23 +1,23 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  ArrowRight,
   BookOpen,
   ChevronDown,
   ChevronUp,
   Clock,
   Eye,
   Film,
+  Grid2x2,
+  Grid3x3,
+  LayoutList,
   Play,
   ShoppingCart,
   Star,
-  Users,
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import { cn } from '@/lib/utils'
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 
@@ -53,6 +53,8 @@ interface CourseShowcaseProps {
   className?: string
 }
 
+type GridSize = 2 | 3 | 4
+
 function formatPrice(price: number) {
   return new Intl.NumberFormat('cs-CZ', {
     style: 'currency',
@@ -61,19 +63,16 @@ function formatPrice(price: number) {
   }).format(price)
 }
 
-function CourseShowcaseCard({ course, index }: { course: ShowcaseCourse; index: number }) {
+function CourseShowcaseCard({ course }: { course: ShowcaseCourse }) {
   const [hovered, setHovered] = useState(false)
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: index * 0.12 }}
+    <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="group relative overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:border-primary/30 hover:shadow-lg"
+      className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:border-primary/30 hover:shadow-lg"
     >
-      <div className="relative aspect-[16/9] overflow-hidden">
+      <div className="relative aspect-[16/9] shrink-0 overflow-hidden">
         <img
           src={course.image}
           alt={course.title}
@@ -129,160 +128,120 @@ function CourseShowcaseCard({ course, index }: { course: ShowcaseCourse; index: 
 
         <div className="absolute bottom-4 left-4 right-4">
           <div className="flex items-end justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-md">
-                <Film className="h-3.5 w-3.5" />
-                {course.videos} videi
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 rounded-full bg-white/15 px-2.5 py-1 text-xs font-medium text-white backdrop-blur-md">
+                <Film className="h-3 w-3" />
+                {course.videos}
               </div>
-              <div className="flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-md">
-                <Clock className="h-3.5 w-3.5" />
+              <div className="flex items-center gap-1.5 rounded-full bg-white/15 px-2.5 py-1 text-xs font-medium text-white backdrop-blur-md">
+                <Clock className="h-3 w-3" />
                 {course.duration}
               </div>
             </div>
             {!course.isPurchased && course.price > 0 && (
-              <div className="text-right">
-                {course.originalPrice && course.originalPrice > course.price && (
-                  <span className="block text-xs text-white/60 line-through">
-                    {formatPrice(course.originalPrice)}
-                  </span>
-                )}
-                <span className="text-lg font-bold text-white">
-                  {formatPrice(course.price)}
-                </span>
-              </div>
+              <span className="text-lg font-bold text-white">
+                {formatPrice(course.price)}
+              </span>
             )}
           </div>
         </div>
       </div>
 
-      <div className="p-5">
-        <div className="mb-3 flex items-center gap-2">
-          <div className="flex items-center gap-1">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <Star
-                key={star}
-                className="h-3.5 w-3.5 fill-amber-400 text-amber-400"
-              />
-            ))}
-          </div>
-          <span className="text-xs text-muted-foreground">5.0</span>
+      <div className="flex flex-1 flex-col p-5">
+        <div className="mb-2 flex items-center gap-1">
+          {[1, 2, 3, 4, 5].map((star) => (
+            <Star
+              key={star}
+              className="h-3 w-3 fill-amber-400 text-amber-400"
+            />
+          ))}
+          <span className="ml-1 text-xs text-muted-foreground">5.0</span>
         </div>
 
-        <h3 className="mb-2 text-xl font-bold leading-tight">{course.title}</h3>
-        <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+        <h3 className="mb-1 text-lg font-bold leading-tight">{course.title}</h3>
+        <p className="mb-4 line-clamp-2 text-sm text-muted-foreground">
           {course.description}
         </p>
 
-        {course.coursesInPackage.length > 0 && (
-          <div className="mb-4 space-y-1.5">
-            {course.coursesInPackage.slice(0, 3).map((c) => (
-              <div
-                key={c.id}
-                className="flex items-center gap-2 rounded-lg bg-muted/50 px-3 py-2 text-sm"
-              >
-                <Play className="h-3 w-3 shrink-0 text-primary" fill="currentColor" />
-                <span className="flex-1 truncate">{c.title}</span>
-                <span className="shrink-0 text-xs text-muted-foreground">{c.duration} min</span>
-              </div>
-            ))}
-            {course.coursesInPackage.length > 3 && (
-              <p className="pl-3 text-xs text-muted-foreground">
-                + {course.coursesInPackage.length - 3} dalsich videi
-              </p>
-            )}
-          </div>
-        )}
-
-        <div className="mb-4 flex items-center gap-4 text-xs text-muted-foreground">
-          <span className="flex items-center gap-1.5">
-            <BookOpen className="h-3.5 w-3.5" />
-            {course.lessons} lekci
-          </span>
-          <span className="flex items-center gap-1.5">
-            <Users className="h-3.5 w-3.5" />
-            {course.audience.join(', ')}
-          </span>
-        </div>
-
-        <div className="flex items-center justify-between border-t border-border pt-4">
-          <div className="flex items-center gap-2.5">
-            <Avatar className="h-8 w-8 border">
-              <AvatarImage src={course.author.avatar} />
-              <AvatarFallback>{course.author.name.charAt(0)}</AvatarFallback>
-            </Avatar>
-            <div>
-              <p className="text-xs font-medium">{course.author.name}</p>
-              <p className="text-[11px] text-muted-foreground">{course.author.title}</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            {course.onPreview && (
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-8 gap-1.5 rounded-lg px-3 text-xs"
-                onClick={(e) => {
-                  e.preventDefault()
-                  course.onPreview?.()
-                }}
-              >
-                <Eye className="h-3.5 w-3.5" />
-                Nahled
-              </Button>
-            )}
-            {course.isPurchased ? (
-              <Button
-                size="sm"
-                className="h-8 gap-1.5 rounded-lg px-4 text-xs"
-                asChild
-              >
-                <Link to={course.cta.url}>
-                  <Play className="h-3.5 w-3.5" fill="currentColor" />
-                  Pokracovat
-                </Link>
-              </Button>
-            ) : course.onBuy ? (
-              <Button
-                size="sm"
-                className="h-8 gap-1.5 rounded-lg px-4 text-xs"
-                onClick={(e) => {
-                  e.preventDefault()
-                  course.onBuy?.()
-                }}
-              >
-                <ShoppingCart className="h-3.5 w-3.5" />
-                Koupit
-              </Button>
-            ) : (
-              <Button
-                size="sm"
-                className="h-8 gap-1.5 rounded-lg px-4 text-xs"
-                asChild
-              >
-                <Link to={course.cta.url}>
-                  {course.cta.text}
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
-              </Button>
-            )}
-          </div>
+        <div className="mt-auto flex items-center gap-2 border-t border-border pt-4">
+          {course.onPreview && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-9 gap-1.5 rounded-lg px-3 text-xs"
+              onClick={(e) => {
+                e.preventDefault()
+                course.onPreview?.()
+              }}
+            >
+              <Eye className="h-3.5 w-3.5" />
+              Nahled
+            </Button>
+          )}
+          <div className="flex-1" />
+          {course.isPurchased ? (
+            <Button
+              size="sm"
+              className="h-9 gap-1.5 rounded-lg px-4 text-xs"
+              asChild
+            >
+              <Link to={course.cta.url}>
+                <Play className="h-3.5 w-3.5" fill="currentColor" />
+                Pokracovat
+              </Link>
+            </Button>
+          ) : course.onBuy ? (
+            <Button
+              size="sm"
+              className="h-9 gap-1.5 rounded-lg px-4 text-xs"
+              onClick={(e) => {
+                e.preventDefault()
+                course.onBuy?.()
+              }}
+            >
+              <ShoppingCart className="h-3.5 w-3.5" />
+              Koupit
+            </Button>
+          ) : (
+            <Button
+              size="sm"
+              className="h-9 gap-1.5 rounded-lg px-4 text-xs"
+              asChild
+            >
+              <Link to={course.cta.url}>
+                {course.cta.text}
+              </Link>
+            </Button>
+          )}
         </div>
       </div>
-    </motion.div>
+    </div>
   )
 }
+
+const GRID_OPTIONS: { value: GridSize; icon: typeof Grid2x2; label: string }[] = [
+  { value: 2, icon: Grid2x2, label: '2 sloupce' },
+  { value: 3, icon: Grid3x3, label: '3 sloupce' },
+  { value: 4, icon: LayoutList, label: '4 sloupce' },
+]
 
 const INITIAL_VISIBLE = 3
 
 const CourseShowcase = ({ className, courses }: CourseShowcaseProps) => {
   const [expanded, setExpanded] = useState(false)
+  const [gridSize, setGridSize] = useState<GridSize>(3)
   const hasMore = courses.length > INITIAL_VISIBLE
   const visibleCourses = expanded ? courses : courses.slice(0, INITIAL_VISIBLE)
 
+  const gridClass = {
+    2: 'grid-cols-1 md:grid-cols-2',
+    3: 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3',
+    4: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
+  }[gridSize]
+
   return (
     <section className={cn('py-4', className)}>
-      <div className="mb-10 flex items-end justify-between">
+      <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <Badge variant="outline" className="mb-3 gap-1.5 text-xs uppercase">
             <BookOpen className="h-3 w-3" />
@@ -295,15 +254,36 @@ const CourseShowcase = ({ className, courses }: CourseShowcaseProps) => {
             Kazdy balicek obsahuje sadu videi. Zakupte jednorazove a ziskejte pristup ke vsem videim.
           </p>
         </div>
-        <div className="hidden items-center gap-2 text-sm text-muted-foreground md:flex">
-          <span className="flex items-center gap-1">
+        <div className="flex items-center gap-3">
+          <span className="hidden items-center gap-1 text-sm text-muted-foreground md:flex">
             <Film className="h-4 w-4 text-primary" />
-            {courses.reduce((sum, c) => sum + c.videos, 0)} videi celkem
+            {courses.reduce((sum, c) => sum + c.videos, 0)} videi
           </span>
+          <div className="flex items-center rounded-lg border border-border p-0.5">
+            {GRID_OPTIONS.map((option) => {
+              const Icon = option.icon
+              return (
+                <button
+                  type="button"
+                  key={option.value}
+                  onClick={() => setGridSize(option.value)}
+                  className={cn(
+                    'rounded-md p-1.5 transition-colors',
+                    gridSize === option.value
+                      ? 'bg-primary text-primary-foreground'
+                      : 'text-muted-foreground hover:text-foreground'
+                  )}
+                  title={option.label}
+                >
+                  <Icon className="h-4 w-4" />
+                </button>
+              )
+            })}
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+      <div className={cn('grid gap-6', gridClass)}>
         <AnimatePresence mode="popLayout">
           {visibleCourses.map((course, idx) => (
             <motion.div
@@ -312,8 +292,9 @@ const CourseShowcase = ({ className, courses }: CourseShowcaseProps) => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.3, delay: idx >= INITIAL_VISIBLE ? (idx - INITIAL_VISIBLE) * 0.08 : 0 }}
+              className="h-full"
             >
-              <CourseShowcaseCard course={course} index={idx} />
+              <CourseShowcaseCard course={course} />
             </motion.div>
           ))}
         </AnimatePresence>
