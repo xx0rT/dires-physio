@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
-import { BookOpen, Clock, Play } from 'lucide-react'
+import { Package, Clock, Play, Film, ShoppingCart } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -22,7 +23,10 @@ interface CoursePreviewDialogProps {
   onOpenChange: (open: boolean) => void
   courseTitle: string
   courseDescription: string
+  coursePrice?: number
+  isPurchased?: boolean
   lessons: Lesson[]
+  onBuy?: () => void
 }
 
 export function CoursePreviewDialog({
@@ -30,36 +34,63 @@ export function CoursePreviewDialog({
   onOpenChange,
   courseTitle,
   courseDescription,
+  coursePrice,
+  isPurchased,
   lessons,
+  onBuy,
 }: CoursePreviewDialogProps) {
   const totalDuration = lessons.reduce((sum, l) => sum + l.duration, 0)
+
+  const formattedPrice = coursePrice
+    ? new Intl.NumberFormat('cs-CZ', {
+        style: 'currency',
+        currency: 'CZK',
+        minimumFractionDigits: 0,
+      }).format(coursePrice)
+    : null
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[85vh] overflow-hidden">
         <DialogHeader className="border-b pb-4">
           <div className="flex items-start gap-4">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-              <BookOpen className="h-5 w-5 text-primary" />
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+              <Package className="h-5 w-5 text-primary" />
             </div>
             <div className="flex-1">
               <DialogTitle className="text-xl">{courseTitle}</DialogTitle>
               <DialogDescription className="mt-1">{courseDescription}</DialogDescription>
-              <div className="mt-2 flex items-center gap-3 text-xs text-muted-foreground">
-                <span className="flex items-center gap-1">
-                  <Play className="h-3 w-3" />
-                  {lessons.length} videi
-                </span>
-                <span className="flex items-center gap-1">
+              <div className="mt-3 flex items-center gap-3 flex-wrap">
+                <Badge variant="outline" className="gap-1 text-xs">
+                  <Film className="h-3 w-3" />
+                  {lessons.length} videi v balicku
+                </Badge>
+                <Badge variant="outline" className="gap-1 text-xs">
                   <Clock className="h-3 w-3" />
-                  {totalDuration} minut
-                </span>
+                  {totalDuration} min celkem
+                </Badge>
+                {formattedPrice && !isPurchased && (
+                  <Badge className="gap-1 text-xs bg-primary">
+                    {formattedPrice}
+                  </Badge>
+                )}
+                {isPurchased && (
+                  <Badge className="gap-1 text-xs bg-emerald-500">
+                    Zakoupeno
+                  </Badge>
+                )}
               </div>
             </div>
           </div>
         </DialogHeader>
 
-        <div className="overflow-y-auto max-h-[calc(85vh-160px)] pr-1 space-y-3 mt-2">
+        <div className="mt-2 mb-1">
+          <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+            Videa obsazena v balicku
+          </h4>
+        </div>
+
+        <div className="overflow-y-auto max-h-[calc(85vh-240px)] pr-1 space-y-2">
           {lessons
             .sort((a, b) => a.order_index - b.order_index)
             .map((lesson, idx) => (
@@ -68,24 +99,35 @@ export function CoursePreviewDialog({
                 initial={{ opacity: 0, x: -12 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.3, delay: idx * 0.06 }}
-                className="flex items-start gap-3 rounded-lg border p-3 transition-colors hover:bg-muted/50"
+                className="flex items-center gap-3 rounded-xl border p-3 transition-colors hover:bg-muted/50"
               >
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10">
-                  <span className="text-xs font-bold text-primary">{idx + 1}</span>
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                  <Play className="h-3.5 w-3.5 text-primary" fill="currentColor" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium">{lesson.title}</p>
-                  <p className="mt-0.5 text-xs text-muted-foreground">{lesson.description}</p>
-                  <div className="mt-1.5 flex items-center gap-2">
-                    <Badge variant="outline" className="text-[10px] gap-1 px-1.5 py-0">
-                      <Clock className="h-2.5 w-2.5" />
-                      {lesson.duration} min
-                    </Badge>
-                  </div>
+                  <p className="text-sm font-medium leading-tight">{lesson.title}</p>
+                  {lesson.description && (
+                    <p className="mt-0.5 text-xs text-muted-foreground line-clamp-1">
+                      {lesson.description}
+                    </p>
+                  )}
                 </div>
+                <Badge variant="outline" className="shrink-0 text-[10px] gap-1 px-2 py-0.5">
+                  <Clock className="h-2.5 w-2.5" />
+                  {lesson.duration} min
+                </Badge>
               </motion.div>
             ))}
         </div>
+
+        {onBuy && !isPurchased && (
+          <div className="border-t pt-4 mt-2">
+            <Button onClick={onBuy} className="w-full gap-2" size="lg">
+              <ShoppingCart className="h-4 w-4" />
+              Koupit balicek {formattedPrice && `za ${formattedPrice}`}
+            </Button>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   )

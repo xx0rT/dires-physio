@@ -61,6 +61,7 @@ export default function CoursesPage() {
   const [purchases, setPurchases] = useState<DBPurchase[]>([])
   const [loading, setLoading] = useState(true)
   const [buyingCourseId, setBuyingCourseId] = useState<string | null>(null)
+  const isAuthenticated = !!user
 
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewCourse, setPreviewCourse] = useState<DBCourse | null>(null)
@@ -303,13 +304,13 @@ export default function CoursesPage() {
         className="space-y-4 text-center"
       >
         <h1 className="text-4xl font-bold md:text-5xl">
-          Roadmapa{' '}
+          Video{' '}
           <span className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-            Kurzu
+            Balicky
           </span>
         </h1>
         <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-          Zakupte si jednotlive kurzy a postupne odemykejte pokrocile techniky. Po dokonceni kurzu musíte pockat do dalsiho dne.
+          Kazdy balicek obsahuje sadu videi. Zakupte si balicek jednorázove a ziskejte pristup ke vsem videim uvnitr.
         </p>
       </motion.div>
 
@@ -364,7 +365,17 @@ export default function CoursesPage() {
         onOpenChange={setPreviewOpen}
         courseTitle={previewCourse?.title || ''}
         courseDescription={previewCourse?.description || ''}
+        coursePrice={previewCourse?.price}
+        isPurchased={previewCourse ? isPurchased(previewCourse.id) : false}
         lessons={previewLessons}
+        onBuy={
+          previewCourse && isAuthenticated && !isPurchased(previewCourse.id)
+            ? () => {
+                setPreviewOpen(false)
+                handleBuy(previewCourse.id)
+              }
+            : undefined
+        }
       />
     </div>
   )
