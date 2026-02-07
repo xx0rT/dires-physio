@@ -113,13 +113,6 @@ Deno.serve(async (req: Request) => {
           periodEnd.setFullYear(periodEnd.getFullYear() + 100);
         }
 
-        const planMapping: Record<string, string> = {
-          "free_trial": "free_trial",
-          "monthly": "pro",
-          "lifetime": "premium"
-        };
-
-        const mappedPlan = planMapping[planType] || planType;
         const subscriptionStatus = planType === "free_trial" ? "trialing" : "active";
 
         const { data: existingSub } = await supabase
@@ -129,7 +122,7 @@ Deno.serve(async (req: Request) => {
           .maybeSingle();
 
         const subscriptionData = {
-          plan: mappedPlan,
+          plan_type: planType,
           status: subscriptionStatus,
           stripe_customer_id: customerId,
           stripe_subscription_id: subscriptionId || `one_time_${Date.now()}`,

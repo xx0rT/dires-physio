@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   BookOpen,
@@ -230,14 +230,50 @@ const CourseShowcase = ({ className, courses }: CourseShowcaseProps) => {
   const [expanded, setExpanded] = useState(false)
   const [gridSize, setGridSize] = useState<GridSize>(3)
   const hasMore = courses.length > INITIAL_VISIBLE
+  const toggleRef = useRef<HTMLDivElement>(null)
   const gridClass = {
     2: 'grid-cols-1 md:grid-cols-2',
     3: 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3',
     4: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
   }[gridSize]
 
+  const getScrollParent = (el: HTMLElement): HTMLElement | null => {
+    let parent = el.parentElement
+    while (parent) {
+      const style = getComputedStyle(parent)
+      if (style.overflowY === 'auto' || style.overflowY === 'scroll') return parent
+      parent = parent.parentElement
+    }
+    return null
+  }
+
+  const handleToggle = useCallback(() => {
+    const el = toggleRef.current
+    if (!el) {
+      setExpanded(v => !v)
+      return
+    }
+
+    const scrollParent = getScrollParent(el)
+    const rect = el.getBoundingClientRect()
+
+    setExpanded(v => !v)
+
+    requestAnimationFrame(() => {
+      const newRect = el.getBoundingClientRect()
+      const delta = newRect.top - rect.top
+      if (Math.abs(delta) > 1) {
+        if (scrollParent) {
+          scrollParent.scrollTop += delta
+        } else {
+          window.scrollBy(0, delta)
+        }
+      }
+    })
+  }, [])
+
   return (
-    <section className={cn('py-4', className)}>
+    <section className={cn('py-4', className)} style={{ overflowAnchor: 'none' }}>
       <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <Badge variant="outline" className="mb-3 gap-1.5 text-xs uppercase">
@@ -348,11 +384,11 @@ const CourseShowcase = ({ className, courses }: CourseShowcaseProps) => {
       </AnimatePresence>
 
       {hasMore && (
-        <div className="mt-8 flex justify-center">
+        <div ref={toggleRef} className="mt-8 flex justify-center">
           <Button
             variant="outline"
             size="lg"
-            onClick={() => setExpanded(!expanded)}
+            onClick={handleToggle}
             className="gap-2"
           >
             {expanded ? 'Zobrazit mene' : `Zobrazit vse (${courses.length - INITIAL_VISIBLE} dalsich)`}

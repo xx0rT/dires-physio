@@ -4,53 +4,63 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { RiBillLine, RiCheckLine, RiTimeLine, RiBankCardLine } from '@remixicon/react'
-import { mockCourses, mockDatabase } from '@/lib/mock-data'
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { OrderHistory } from '@/components/dashboard/order-history'
+import { supabase } from '@/lib/supabase'
 
-interface Course {
-  id: string
-  title: string
-  description: string
-  price: number
-}
-
-interface Enrollment {
+interface Purchase {
   id: string
   course_id: string
-  enrolled_at: string
-  completed_at: string | null
-  course: Course
+  amount_paid: number
+  purchased_at: string
+  stripe_payment_intent_id: string | null
+  course_title: string
+  completed: boolean
 }
 
 export default function BillingPage() {
   const { user } = useAuth()
-  const [enrollments, setEnrollments] = useState<Enrollment[]>([])
+  const [purchases, setPurchases] = useState<Purchase[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    loadBillingData()
+    if (user) loadBillingData()
   }, [user])
 
   const loadBillingData = async () => {
     if (!user) return
 
     try {
-      const enrollmentsData = mockDatabase.getEnrollments(user.id)
-        .sort((a, b) => new Date(b.enrolled_at).getTime() - new Date(a.enrolled_at).getTime())
+      const { data: purchaseRows } = await supabase
+        .from('course_purchases')
+        .select('id, course_id, amount_paid, purchased_at, stripe_payment_intent_id, courses(title)')
+        .eq('user_id', user.id)
+        .order('purchased_at', { ascending: false })
 
-      const enrollmentsWithCourses = enrollmentsData.map(enrollment => {
-        const course = mockCourses.find(c => c.id === enrollment.course_id)
+      const { data: enrollmentRows } = await supabase
+        .from('course_enrollments')
+        .select('course_id, completed')
+        .eq('user_id', user.id)
+
+      const completedMap = new Map(
+        (enrollmentRows || []).map(e => [e.course_id, e.completed])
+      )
+
+      const mapped: Purchase[] = (purchaseRows || []).map((p: Record<string, unknown>) => {
+        const courses = p.courses as { title: string } | null
         return {
-          ...enrollment,
-          course: course || mockCourses[0]
+          id: p.id as string,
+          course_id: p.course_id as string,
+          amount_paid: p.amount_paid as number,
+          purchased_at: p.purchased_at as string,
+          stripe_payment_intent_id: p.stripe_payment_intent_id as string | null,
+          course_title: courses?.title || 'Neznamy kurz',
+          completed: completedMap.get(p.course_id as string) || false,
         }
       })
 
-      if (enrollmentsWithCourses) {
-        setEnrollments(enrollmentsWithCourses as Enrollment[])
-      }
+      setPurchases(mapped)
     } catch (error) {
       console.error('Error loading billing data:', error)
     } finally {
@@ -58,8 +68,8 @@ export default function BillingPage() {
     }
   }
 
-  const totalSpent = enrollments.reduce((sum, e) => sum + e.course.price, 0)
-  const completedCourses = enrollments.filter(e => e.completed_at).length
+  const totalSpent = purchases.reduce((sum, p) => sum + p.amount_paid, 0)
+  const completedCourses = purchases.filter(p => p.completed).length
 
   if (loading) {
     return (
@@ -92,9 +102,9 @@ export default function BillingPage() {
               <RiBillLine className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">€{totalSpent}</div>
+              <div className="text-2xl font-bold">{new Intl.NumberFormat('cs-CZ', { style: 'currency', currency: 'CZK', minimumFractionDigits: 0 }).format(totalSpent)}</div>
               <p className="text-xs text-muted-foreground">
-                {enrollments.length} zakoupených kurzů
+                {purchases.length} zakoupených kurzů
               </p>
             </CardContent>
           </Card>
@@ -115,7 +125,7 @@ export default function BillingPage() {
             <CardContent>
               <div className="text-2xl font-bold">{completedCourses}</div>
               <p className="text-xs text-muted-foreground">
-                z {enrollments.length} kurzů
+                z {purchases.length} kurzů
               </p>
             </CardContent>
           </Card>
@@ -134,7 +144,7 @@ export default function BillingPage() {
               <RiTimeLine className="h-4 w-4 text-blue-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{enrollments.length - completedCourses}</div>
+              <div className="text-2xl font-bold">{purchases.length - completedCourses}</div>
               <p className="text-xs text-muted-foreground">
                 probíhajících kurzů
               </p>
@@ -163,11 +173,11 @@ export default function BillingPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                {enrollments.length > 0 ? (
+                {purchases.length > 0 ? (
                   <div className="space-y-4">
-                    {enrollments.map((enrollment) => (
+                    {purchases.map((purchase) => (
                       <div
-                        key={enrollment.id}
+                        key={purchase.id}
                         className="flex items-center justify-between p-4 rounded-lg border hover:bg-accent/50 transition-colors"
                       >
                         <div className="flex items-center gap-4 flex-1">
@@ -176,20 +186,20 @@ export default function BillingPage() {
                           </div>
                           <div className="flex-1 space-y-1">
                             <div className="flex items-center gap-2">
-                              <h3 className="font-semibold">{enrollment.course.title}</h3>
-                              {enrollment.completed_at && (
+                              <h3 className="font-semibold">{purchase.course_title}</h3>
+                              {purchase.completed && (
                                 <Badge variant="default" className="bg-green-600">
-                                  Dokončeno
+                                  Dokonceno
                                 </Badge>
                               )}
                             </div>
                             <p className="text-sm text-muted-foreground">
-                              Zakoupeno: {new Date(enrollment.enrolled_at).toLocaleDateString('cs-CZ')}
+                              Zakoupeno: {new Date(purchase.purchased_at).toLocaleDateString('cs-CZ')}
                             </p>
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="text-lg font-bold">€{enrollment.course.price}</p>
+                          <p className="text-lg font-bold">{new Intl.NumberFormat('cs-CZ', { style: 'currency', currency: 'CZK', minimumFractionDigits: 0 }).format(purchase.amount_paid)}</p>
                           <p className="text-xs text-muted-foreground">Zaplaceno</p>
                         </div>
                       </div>
@@ -198,11 +208,11 @@ export default function BillingPage() {
                 ) : (
                   <div className="text-center py-12">
                     <RiBillLine className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold mb-2">Žádné nákupy</h3>
+                    <h3 className="text-lg font-semibold mb-2">Zadne nakupy</h3>
                     <p className="text-muted-foreground mb-6">
-                      Ještě jste si nezakoupili žádný kurz
+                      Jeste jste si nezakoupili zadny kurz
                     </p>
-                    <Button>Prohlédnout Kurzy</Button>
+                    <Button>Prohlednout Kurzy</Button>
                   </div>
                 )}
               </CardContent>
