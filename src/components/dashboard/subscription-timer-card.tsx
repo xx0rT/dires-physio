@@ -170,30 +170,30 @@ export function SubscriptionTimerCard({
                 {subscription.plan_type === "free_trial" ? "Zkušební verze končí" : "Obnovuje se"}
               </span>
             </div>
-            <div className="grid grid-cols-4 gap-2">
-              <div className="text-center p-2 rounded-lg bg-background/50">
-                <div className="text-xl font-bold tabular-nums">
+            <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
+              <div className="text-center p-1.5 sm:p-2 rounded-lg bg-background/50">
+                <div className="text-lg sm:text-xl font-bold tabular-nums">
                   {timeRemaining.days}
                 </div>
-                <div className="text-xs text-muted-foreground">Dní</div>
+                <div className="text-[10px] sm:text-xs text-muted-foreground">Dní</div>
               </div>
-              <div className="text-center p-2 rounded-lg bg-background/50">
-                <div className="text-xl font-bold tabular-nums">
+              <div className="text-center p-1.5 sm:p-2 rounded-lg bg-background/50">
+                <div className="text-lg sm:text-xl font-bold tabular-nums">
                   {timeRemaining.hours.toString().padStart(2, "0")}
                 </div>
-                <div className="text-xs text-muted-foreground">Hodin</div>
+                <div className="text-[10px] sm:text-xs text-muted-foreground">Hodin</div>
               </div>
-              <div className="text-center p-2 rounded-lg bg-background/50">
-                <div className="text-xl font-bold tabular-nums">
+              <div className="text-center p-1.5 sm:p-2 rounded-lg bg-background/50">
+                <div className="text-lg sm:text-xl font-bold tabular-nums">
                   {timeRemaining.minutes.toString().padStart(2, "0")}
                 </div>
-                <div className="text-xs text-muted-foreground">Minut</div>
+                <div className="text-[10px] sm:text-xs text-muted-foreground">Minut</div>
               </div>
-              <div className="text-center p-2 rounded-lg bg-background/50">
-                <div className="text-xl font-bold tabular-nums">
+              <div className="text-center p-1.5 sm:p-2 rounded-lg bg-background/50">
+                <div className="text-lg sm:text-xl font-bold tabular-nums">
                   {timeRemaining.seconds.toString().padStart(2, "0")}
                 </div>
-                <div className="text-xs text-muted-foreground">Sekund</div>
+                <div className="text-[10px] sm:text-xs text-muted-foreground">Sekund</div>
               </div>
             </div>
             <div className="flex items-center gap-2 text-xs text-muted-foreground pt-1">
