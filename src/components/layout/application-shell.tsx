@@ -669,8 +669,8 @@ function ContentArea({ children }: ContentAreaProps) {
   const showCornerFills = isPanelOpen;
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col bg-neutral-200 md:py-2 md:pr-2 dark:bg-neutral-800">
-      <div className="relative flex min-h-0 flex-1 flex-col">
+    <div className="flex min-h-0 min-w-0 flex-1 flex-col bg-neutral-200 md:py-2 md:pr-2 dark:bg-neutral-800">
+      <div className="relative flex min-h-0 min-w-0 flex-1 flex-col">
         <div
           className={cn(
             "absolute -left-2 top-0 z-0 hidden h-3 w-5 bg-neutral-100 transition-opacity duration-300 md:block dark:bg-neutral-900",
@@ -1033,7 +1033,7 @@ export function ApplicationShell({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
       <div className="flex h-screen flex-col overflow-hidden bg-neutral-200 dark:bg-neutral-800">
-        <div className="flex min-h-0 flex-1 md:grid md:grid-cols-[min-content_minmax(0,1fr)]">
+        <div className="flex min-h-0 min-w-0 flex-1 overflow-hidden md:grid md:grid-cols-[min-content_minmax(0,1fr)]">
           <DubSidebar
             railIcons={navigationData.railIcons}
             activeModule={activeModule}
