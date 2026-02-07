@@ -124,20 +124,20 @@ function SidebarProvider({ defaultOpen = true, children }: SidebarProviderProps)
   );
 }
 
-interface NavItemConfig {
+export interface NavItemConfig {
   id: string;
   label: string;
   icon: LucideIcon;
   path: string;
 }
 
-interface NavSectionConfig {
+export interface NavSectionConfig {
   id: string;
   label?: string;
   items: NavItemConfig[];
 }
 
-interface NavModuleConfig {
+export interface NavModuleConfig {
   id: string;
   label: string;
   icon: LucideIcon;
@@ -145,7 +145,7 @@ interface NavModuleConfig {
   sections: NavSectionConfig[];
 }
 
-interface RailIconConfig {
+export interface RailIconConfig {
   moduleId: string;
   label: string;
   icon: LucideIcon;
@@ -414,6 +414,7 @@ function NewActionButton() {
 interface SidebarPanelProps {
   module: NavModuleConfig;
   utilities: NavItemConfig[];
+  panelHeader?: React.ReactNode;
 }
 
 function isItemActive(pathname: string, itemPath: string): boolean {
@@ -422,7 +423,7 @@ function isItemActive(pathname: string, itemPath: string): boolean {
   return false;
 }
 
-function SidebarPanel({ module, utilities }: SidebarPanelProps) {
+function SidebarPanel({ module, utilities, panelHeader }: SidebarPanelProps) {
   const [setupOpen, setSetupOpen] = React.useState(false);
   const prefersReducedMotion = useReducedMotion();
   const location = useLocation();
@@ -450,14 +451,17 @@ function SidebarPanel({ module, utilities }: SidebarPanelProps) {
         className="relative flex min-h-0 flex-1 animate-in fade-in slide-in-from-right-2 flex-col text-neutral-500 dark:text-neutral-500 duration-200"
       >
         <div className="shrink-0 p-3">
-          <div className="mb-2 flex items-center gap-2">
-            <OrganizationSwitcher />
-            <NotificationBell />
-          </div>
-
-          <div>
-            <NewActionButton />
-          </div>
+          {panelHeader ?? (
+            <>
+              <div className="mb-2 flex items-center gap-2">
+                <OrganizationSwitcher />
+                <NotificationBell />
+              </div>
+              <div>
+                <NewActionButton />
+              </div>
+            </>
+          )}
         </div>
 
         <div className="scrollbar-hide flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto px-3 pb-3">
@@ -712,6 +716,7 @@ interface DubSidebarProps {
   activeModuleId: string;
   utilities: NavItemConfig[];
   onModuleChange: (moduleId: string) => void;
+  panelHeader?: React.ReactNode;
 }
 
 function DubSidebar({
@@ -720,6 +725,7 @@ function DubSidebar({
   activeModuleId,
   utilities,
   onModuleChange,
+  panelHeader,
 }: DubSidebarProps) {
   const { isPanelOpen } = useSidebar();
 
@@ -757,7 +763,7 @@ function DubSidebar({
           >
             <Area visible={true} direction="left">
               {activeModule && (
-                <SidebarPanel module={activeModule} utilities={utilities} />
+                <SidebarPanel module={activeModule} utilities={utilities} panelHeader={panelHeader} />
               )}
             </Area>
           </div>
@@ -934,7 +940,13 @@ function MobileNavItem({
   );
 }
 
-const navigationData = {
+export interface NavigationConfig {
+  railIcons: RailIconConfig[];
+  modules: NavModuleConfig[];
+  utilities: NavItemConfig[];
+}
+
+const navigationData: NavigationConfig = {
   railIcons: [
     { moduleId: "home", label: "Domů", icon: Home, defaultPath: "/dashboard" },
     { moduleId: "analytics", label: "Statistiky", icon: BarChart3, defaultPath: "/dashboard/analytics" },
@@ -1010,12 +1022,25 @@ const navigationData = {
   ] as NavItemConfig[],
 };
 
-export function ApplicationShell({ children }: { children: React.ReactNode }) {
+interface ApplicationShellProps {
+  children: React.ReactNode;
+  navigationConfig?: NavigationConfig;
+  resolveActiveModuleId?: (pathname: string) => string;
+  panelHeader?: React.ReactNode;
+}
+
+export function ApplicationShell({
+  children,
+  navigationConfig = navigationData,
+  resolveActiveModuleId: resolveActiveModuleIdProp,
+  panelHeader,
+}: ApplicationShellProps) {
   const [isMobilePanelOpen, setIsMobilePanelOpen] = React.useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
   const getActiveModuleId = () => {
+    if (resolveActiveModuleIdProp) return resolveActiveModuleIdProp(location.pathname);
     const path = location.pathname;
     if (path === "/dashboard") return "home";
     if (path.startsWith("/dashboard/analytics")) return "analytics";
@@ -1031,13 +1056,13 @@ export function ApplicationShell({ children }: { children: React.ReactNode }) {
   }, [location.pathname]);
 
   const activeModule = React.useMemo(
-    () => navigationData.modules.find((m) => m.id === activeModuleId) ?? navigationData.modules[0],
+    () => navigationConfig.modules.find((m) => m.id === activeModuleId) ?? navigationConfig.modules[0],
     [activeModuleId]
   );
 
   const handleModuleChange = (moduleId: string) => {
     setActiveModuleId(moduleId);
-    const module = navigationData.modules.find((m) => m.id === moduleId);
+    const module = navigationConfig.modules.find((m) => m.id === moduleId);
     if (module) {
       navigate(module.defaultPath);
     }
@@ -1048,11 +1073,12 @@ export function ApplicationShell({ children }: { children: React.ReactNode }) {
       <div className="flex h-screen flex-col overflow-hidden bg-neutral-200 dark:bg-neutral-800">
         <div className="flex min-h-0 min-w-0 flex-1 overflow-hidden md:grid md:grid-cols-[min-content_minmax(0,1fr)]">
           <DubSidebar
-            railIcons={navigationData.railIcons}
+            railIcons={navigationConfig.railIcons}
             activeModule={activeModule}
             activeModuleId={activeModuleId}
-            utilities={navigationData.utilities}
+            utilities={navigationConfig.utilities}
             onModuleChange={handleModuleChange}
+            panelHeader={panelHeader}
           />
 
           <ContentArea>
@@ -1063,10 +1089,10 @@ export function ApplicationShell({ children }: { children: React.ReactNode }) {
         <MobileNavigation
           open={isMobilePanelOpen}
           onOpenChange={setIsMobilePanelOpen}
-          railIcons={navigationData.railIcons}
+          railIcons={navigationConfig.railIcons}
           activeModule={activeModule}
           activeModuleId={activeModuleId}
-          utilities={navigationData.utilities}
+          utilities={navigationConfig.utilities}
           onModuleChange={handleModuleChange}
         />
       </div>
