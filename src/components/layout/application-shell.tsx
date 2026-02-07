@@ -223,7 +223,7 @@ function SidebarRail({
       <div className="flex flex-col items-center gap-3 p-2">
         <div className="pb-1 pt-2">
           <a
-            href="/dashboard"
+            href="/"
             className="block rounded-lg px-1 py-4 outline-none transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-black/50 dark:focus-visible:ring-white/50"
           >
             <img
@@ -312,6 +312,7 @@ function UserMenu() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => navigate('/dashboard/settings')}>Nastavení</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate('/')}>Domovská stránka</DropdownMenuItem>
         <DropdownMenuItem onClick={() => navigate('/dashboard/billing')}>Fakturace</DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => navigate('/auth/sign-in')}>Odhlásit se</DropdownMenuItem>
