@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   BookOpen,
   ChevronDown,
-  ChevronUp,
   Clock,
   Eye,
   Film,
@@ -231,8 +230,6 @@ const CourseShowcase = ({ className, courses }: CourseShowcaseProps) => {
   const [expanded, setExpanded] = useState(false)
   const [gridSize, setGridSize] = useState<GridSize>(3)
   const hasMore = courses.length > INITIAL_VISIBLE
-  const visibleCourses = expanded ? courses : courses.slice(0, INITIAL_VISIBLE)
-
   const gridClass = {
     2: 'grid-cols-1 md:grid-cols-2',
     3: 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3',
@@ -284,21 +281,71 @@ const CourseShowcase = ({ className, courses }: CourseShowcaseProps) => {
       </div>
 
       <div className={cn('grid gap-6', gridClass)}>
-        <AnimatePresence mode="popLayout">
-          {visibleCourses.map((course, idx) => (
-            <motion.div
-              key={course.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3, delay: idx >= INITIAL_VISIBLE ? (idx - INITIAL_VISIBLE) * 0.08 : 0 }}
-              className="h-full"
-            >
-              <CourseShowcaseCard course={course} />
-            </motion.div>
-          ))}
-        </AnimatePresence>
+        {courses.slice(0, INITIAL_VISIBLE).map((course) => (
+          <motion.div
+            key={course.title}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="h-full"
+          >
+            <CourseShowcaseCard course={course} />
+          </motion.div>
+        ))}
       </div>
+
+      <AnimatePresence initial={false}>
+        {expanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{
+              height: 'auto',
+              opacity: 1,
+              transition: {
+                height: { type: 'spring', stiffness: 250, damping: 30, mass: 0.8 },
+                opacity: { duration: 0.3, delay: 0.05 },
+              },
+            }}
+            exit={{
+              height: 0,
+              opacity: 0,
+              transition: {
+                height: { type: 'spring', stiffness: 300, damping: 35, mass: 0.8 },
+                opacity: { duration: 0.2 },
+              },
+            }}
+            className="overflow-hidden"
+          >
+            <div className={cn('grid gap-6 pt-6', gridClass)}>
+              {courses.slice(INITIAL_VISIBLE).map((course, idx) => (
+                <motion.div
+                  key={course.title}
+                  initial={{ opacity: 0, y: 40, scale: 0.92 }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    transition: {
+                      duration: 0.45,
+                      delay: idx * 0.1,
+                      ease: [0.25, 0.1, 0.25, 1],
+                    },
+                  }}
+                  exit={{
+                    opacity: 0,
+                    y: 20,
+                    scale: 0.95,
+                    transition: { duration: 0.2, delay: idx * 0.03 },
+                  }}
+                  className="h-full"
+                >
+                  <CourseShowcaseCard course={course} />
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {hasMore && (
         <div className="mt-8 flex justify-center">
@@ -308,17 +355,14 @@ const CourseShowcase = ({ className, courses }: CourseShowcaseProps) => {
             onClick={() => setExpanded(!expanded)}
             className="gap-2"
           >
-            {expanded ? (
-              <>
-                Zobrazit mene
-                <ChevronUp className="h-4 w-4" />
-              </>
-            ) : (
-              <>
-                Zobrazit vse ({courses.length - INITIAL_VISIBLE} dalsich)
-                <ChevronDown className="h-4 w-4" />
-              </>
-            )}
+            {expanded ? 'Zobrazit mene' : `Zobrazit vse (${courses.length - INITIAL_VISIBLE} dalsich)`}
+            <motion.span
+              animate={{ rotate: expanded ? 180 : 0 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+              className="inline-flex"
+            >
+              <ChevronDown className="h-4 w-4" />
+            </motion.span>
           </Button>
         </div>
       )}
