@@ -116,13 +116,13 @@ const NAVIGATION: MenuItem[] = [
             label: "Co delame",
             icon: Zap,
             description: "Nase sluzby a specializace",
-            url: "/#services",
+            url: "/team",
           },
           {
             label: "Nas tym",
             icon: Users,
             description: "Seznamte se s nasimi odborniky",
-            url: "/#team",
+            url: "/team",
           },
         ],
       },
@@ -168,12 +168,12 @@ const NAVIGATION: MenuItem[] = [
     id: 2,
     featuredLinks: [
       {
-        label: "Online vzdelavani",
-        icon: BookOpen,
-        description: "Pristup ke studijnim materialam kdykoliv a odkudkoliv",
+        label: "Nasi odbornici",
+        icon: Users,
+        description: "Seznamte se s nasim tymem a objednejte konzultaci",
         background:
           "https://images.pexels.com/photos/4506105/pexels-photo-4506105.jpeg?auto=compress&cs=tinysrgb&w=800",
-        url: "/#services",
+        url: "/team",
       },
       {
         label: "Certifikace",
@@ -181,7 +181,7 @@ const NAVIGATION: MenuItem[] = [
         description: "Mezinarodne uznavane certifikaty pro fyzioterapeuty",
         background:
           "https://images.pexels.com/photos/7176026/pexels-photo-7176026.jpeg?auto=compress&cs=tinysrgb&w=800",
-        url: "/#services",
+        url: "/courses",
       },
     ],
     links: [
@@ -190,27 +190,27 @@ const NAVIGATION: MenuItem[] = [
         icon: HandHeart,
         description:
           "Osobni poradenstvi s nasimi odborniky pro vas profesni rust",
-        url: "/#services",
+        url: "/team",
       },
       {
         label: "Skupinove workshopy",
-        icon: Users,
+        icon: LayoutGrid,
         description: "Prakticke workshopy v malych skupinach pod odbornym vedenim",
-        url: "/#services",
+        url: "/team",
       },
       {
         label: "Firemni skoleni",
-        icon: LayoutGrid,
-        description:
-          "Skoleni na miru pro kliniky a zdravotnicka zarizeni",
-        url: "/#services",
-      },
-      {
-        label: "Mentoring program",
         icon: Trophy,
         description:
-          "Dlouhodoby mentoring pro zacínajici fyzioterapeuty",
-        url: "/#services",
+          "Skoleni na miru pro kliniky a zdravotnicka zarizeni",
+        url: "/team",
+      },
+      {
+        label: "Online vzdelavani",
+        icon: BookOpen,
+        description:
+          "Pristup ke studijnim materialam kdykoliv a odkudkoliv",
+        url: "/courses",
       },
     ],
   },

@@ -31,6 +31,8 @@ import AdminCoursesPage from './pages/admin/admin-courses-page'
 import AdminInvoicesPage from './pages/admin/admin-invoices-page'
 import AdminSubscriptionsPage from './pages/admin/admin-subscriptions-page'
 import AdminPromoCodesPage from './pages/admin/admin-promo-codes-page'
+import TeamPage from './pages/team-page'
+import TeamMemberPage from './pages/team-member-page'
 
 export default function App() {
   return (
@@ -45,6 +47,8 @@ export default function App() {
             <Route path="product/:productId" element={<ProductDetailPage />} />
             <Route path="cart" element={<CartPage />} />
             <Route path="references" element={<ReferencesPage />} />
+            <Route path="team" element={<TeamPage />} />
+            <Route path="team/:slug" element={<TeamMemberPage />} />
           </Route>
           <Route path="/order-confirmation" element={<OrderConfirmationPage />} />
           <Route path="/auth/sign-in" element={<SignInPage />} />
