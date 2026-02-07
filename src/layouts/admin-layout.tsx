@@ -2,7 +2,9 @@ import { Navigate, Outlet } from 'react-router-dom'
 import {
   BarChart3,
   BookOpen,
+  CreditCard,
   Home,
+  Percent,
   Receipt,
   Settings,
   Shield,
@@ -19,9 +21,11 @@ const adminSections = [
   {
     id: "main",
     items: [
-      { id: "overview", label: "Přehled", icon: BarChart3, path: "/admin" },
-      { id: "users", label: "Uživatelé", icon: Users, path: "/admin/users" },
+      { id: "overview", label: "Prehled", icon: BarChart3, path: "/admin" },
+      { id: "users", label: "Uzivatele", icon: Users, path: "/admin/users" },
       { id: "courses", label: "Kurzy", icon: BookOpen, path: "/admin/courses" },
+      { id: "subscriptions", label: "Predplatne", icon: CreditCard, path: "/admin/subscriptions" },
+      { id: "promo-codes", label: "Promo kody", icon: Percent, path: "/admin/promo-codes" },
       { id: "invoices", label: "Faktury", icon: Receipt, path: "/admin/invoices" },
     ],
   },
@@ -29,26 +33,30 @@ const adminSections = [
 
 const adminNavigationConfig: NavigationConfig = {
   railIcons: [
-    { moduleId: "overview", label: "Přehled", icon: BarChart3, defaultPath: "/admin" },
-    { moduleId: "users", label: "Uživatelé", icon: Users, defaultPath: "/admin/users" },
+    { moduleId: "overview", label: "Prehled", icon: BarChart3, defaultPath: "/admin" },
+    { moduleId: "users", label: "Uzivatele", icon: Users, defaultPath: "/admin/users" },
     { moduleId: "courses", label: "Kurzy", icon: BookOpen, defaultPath: "/admin/courses" },
-    { moduleId: "invoices", label: "Faktury", icon: Receipt, defaultPath: "/admin/invoices" },
+    { moduleId: "subscriptions", label: "Predplatne", icon: CreditCard, defaultPath: "/admin/subscriptions" },
+    { moduleId: "invoices", label: "Platby", icon: Receipt, defaultPath: "/admin/invoices" },
   ],
   modules: [
-    { id: "overview", label: "Přehled", icon: BarChart3, defaultPath: "/admin", sections: adminSections },
-    { id: "users", label: "Uživatelé", icon: Users, defaultPath: "/admin/users", sections: adminSections },
+    { id: "overview", label: "Prehled", icon: BarChart3, defaultPath: "/admin", sections: adminSections },
+    { id: "users", label: "Uzivatele", icon: Users, defaultPath: "/admin/users", sections: adminSections },
     { id: "courses", label: "Kurzy", icon: BookOpen, defaultPath: "/admin/courses", sections: adminSections },
-    { id: "invoices", label: "Faktury", icon: Receipt, defaultPath: "/admin/invoices", sections: adminSections },
+    { id: "subscriptions", label: "Predplatne", icon: CreditCard, defaultPath: "/admin/subscriptions", sections: adminSections },
+    { id: "invoices", label: "Platby", icon: Receipt, defaultPath: "/admin/invoices", sections: adminSections },
   ],
   utilities: [
     { id: "dashboard", label: "Dashboard", icon: Home, path: "/dashboard" },
-    { id: "settings", label: "Nastavení", icon: Settings, path: "/dashboard/settings" },
+    { id: "settings", label: "Nastaveni", icon: Settings, path: "/dashboard/settings" },
   ],
 }
 
 function resolveAdminModuleId(pathname: string): string {
   if (pathname.startsWith("/admin/users")) return "users"
   if (pathname.startsWith("/admin/courses")) return "courses"
+  if (pathname.startsWith("/admin/subscriptions")) return "subscriptions"
+  if (pathname.startsWith("/admin/promo-codes")) return "subscriptions"
   if (pathname.startsWith("/admin/invoices")) return "invoices"
   return "overview"
 }

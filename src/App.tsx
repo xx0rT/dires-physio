@@ -29,6 +29,8 @@ import AdminOverviewPage from './pages/admin/admin-overview-page'
 import AdminUsersPage from './pages/admin/admin-users-page'
 import AdminCoursesPage from './pages/admin/admin-courses-page'
 import AdminInvoicesPage from './pages/admin/admin-invoices-page'
+import AdminSubscriptionsPage from './pages/admin/admin-subscriptions-page'
+import AdminPromoCodesPage from './pages/admin/admin-promo-codes-page'
 
 export default function App() {
   return (
@@ -63,6 +65,8 @@ export default function App() {
             <Route index element={<AdminOverviewPage />} />
             <Route path="users" element={<AdminUsersPage />} />
             <Route path="courses" element={<AdminCoursesPage />} />
+            <Route path="subscriptions" element={<AdminSubscriptionsPage />} />
+            <Route path="promo-codes" element={<AdminPromoCodesPage />} />
             <Route path="invoices" element={<AdminInvoicesPage />} />
           </Route>
         </Routes>

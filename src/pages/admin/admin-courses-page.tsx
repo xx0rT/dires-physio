@@ -1,6 +1,8 @@
 import { useEffect, useState, useCallback } from 'react'
 import {
   BookOpen,
+  Eye,
+  EyeOff,
   Plus,
   Search,
   Trash2,
@@ -152,6 +154,24 @@ export default function AdminCoursesPage() {
     toast.success(enrollment.completed ? 'Oznaceno jako nedokoncene' : 'Oznaceno jako dokoncene')
   }
 
+  const togglePublished = async (course: Course, e: React.MouseEvent) => {
+    e.stopPropagation()
+    const { error } = await supabase
+      .from('courses')
+      .update({ published: !course.published, updated_at: new Date().toISOString() })
+      .eq('id', course.id)
+
+    if (error) {
+      toast.error('Chyba pri aktualizaci kurzu')
+      return
+    }
+
+    toast.success(course.published ? 'Kurz skryt' : 'Kurz publikovan')
+    setCourses((prev) =>
+      prev.map((c) => (c.id === course.id ? { ...c, published: !c.published } : c))
+    )
+  }
+
   const filtered = courses.filter((c) =>
     c.title.toLowerCase().includes(search.toLowerCase()) ||
     c.instructor?.toLowerCase().includes(search.toLowerCase()) ||
@@ -209,9 +229,24 @@ export default function AdminCoursesPage() {
                 <CardTitle className="text-sm font-medium leading-tight">
                   {course.title}
                 </CardTitle>
-                <Badge variant={course.published ? 'default' : 'outline'} className="shrink-0">
-                  {course.published ? 'Aktivni' : 'Skryty'}
-                </Badge>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-6 shrink-0 gap-1 px-2"
+                  onClick={(e) => togglePublished(course, e)}
+                >
+                  {course.published ? (
+                    <>
+                      <Eye className="size-3 text-green-600" />
+                      <span className="text-[10px] text-green-600">Aktivni</span>
+                    </>
+                  ) : (
+                    <>
+                      <EyeOff className="size-3 text-neutral-400" />
+                      <span className="text-[10px] text-neutral-400">Skryty</span>
+                    </>
+                  )}
+                </Button>
               </div>
             </CardHeader>
             <CardContent>
