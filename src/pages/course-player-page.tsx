@@ -14,6 +14,7 @@ import {
   Target
 } from "lucide-react";
 import { mockCourses, mockModules, mockDatabase } from "@/lib/mock-data";
+import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth-context";
 import { useSubscription } from "@/lib/use-subscription";
 import { Badge } from "@/components/ui/badge";
@@ -398,9 +399,23 @@ export const CoursePlayerPage = () => {
 
       if (modulesData) setModules(modulesData);
 
-      const enrollmentData = mockDatabase.getEnrollments(user?.id || '').find(e => e.course_id === courseId);
+      if (user) {
+        const { data: enrollmentData } = await supabase
+          .from('course_enrollments')
+          .select('id')
+          .eq('user_id', user.id)
+          .eq('course_id', courseId)
+          .maybeSingle();
 
-      setIsEnrolled(!!enrollmentData);
+        setIsEnrolled(!!enrollmentData);
+
+        if (!enrollmentData) {
+          const localEnrollment = mockDatabase.getEnrollments(user.id).find(e => e.course_id === courseId);
+          setIsEnrolled(!!localEnrollment);
+        }
+      } else {
+        setIsEnrolled(false);
+      }
 
       const progressData = mockDatabase.getModuleProgress(user?.id || '', courseId);
 

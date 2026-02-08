@@ -6,10 +6,14 @@ import {
   Search,
   Star,
   Truck,
+  GraduationCap,
+  PlayCircle,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { cn } from "@/lib/utils";
+import { supabase } from "@/lib/supabase";
+import { useAuth } from "@/lib/auth-context";
 
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
@@ -17,8 +21,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useNavigate } from "react-router-dom";
 
-type OrderStatus = "processing" | "shipped" | "delivered" | "returned";
+type OrderStatus = "processing" | "shipped" | "delivered" | "returned" | "completed";
 
 interface OrderItem {
   id: string;
@@ -30,6 +35,8 @@ interface OrderItem {
   quantity: number;
   canReturn?: boolean;
   returnByDate?: string;
+  type?: "product" | "course";
+  courseId?: string;
 }
 
 interface Order {
@@ -41,6 +48,7 @@ interface Order {
   items: OrderItem[];
   deliveryDate?: string;
   trackingUrl?: string;
+  type: "product" | "course";
 }
 
 const DEFAULT_ORDERS: Order[] = [
@@ -50,6 +58,7 @@ const DEFAULT_ORDERS: Order[] = [
     orderDate: "12. prosince 2024",
     status: "shipped",
     total: 3199,
+    type: "product",
     deliveryDate: "18-20. prosince",
     trackingUrl: "#",
     items: [
@@ -91,6 +100,7 @@ const DEFAULT_ORDERS: Order[] = [
     orderDate: "5. prosince 2024",
     status: "delivered",
     total: 2248,
+    type: "product",
     deliveryDate: "10. prosince",
     items: [
       {
@@ -124,6 +134,7 @@ const DEFAULT_ORDERS: Order[] = [
     orderDate: "28. listopadu 2024",
     status: "delivered",
     total: 3997,
+    type: "product",
     deliveryDate: "3. prosince",
     items: [
       {
@@ -155,6 +166,7 @@ const DEFAULT_ORDERS: Order[] = [
     orderDate: "15. listopadu 2024",
     status: "returned",
     total: 1149,
+    type: "product",
     items: [
       {
         id: "4a",
@@ -194,19 +206,96 @@ const statusConfig: Record<
     color: "text-muted-foreground",
     dotColor: "bg-muted-foreground",
   },
+  completed: {
+    label: "Dokončeno",
+    color: "text-emerald-600",
+    dotColor: "bg-emerald-500",
+  },
 };
 
 interface OrderHistoryProps {
-  orders?: Order[];
   className?: string;
 }
 
 const OrderHistory = ({
-  orders = DEFAULT_ORDERS,
   className,
 }: OrderHistoryProps) => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [allOrders, setAllOrders] = useState<Order[]>(DEFAULT_ORDERS);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (user) {
+      loadCoursePurchases();
+    } else {
+      setAllOrders(DEFAULT_ORDERS);
+      setLoading(false);
+    }
+  }, [user]);
+
+  const loadCoursePurchases = async () => {
+    if (!user) return;
+
+    try {
+      const { data: purchases } = await supabase
+        .from("course_purchases")
+        .select(`
+          id,
+          amount_paid,
+          purchased_at,
+          course_id,
+          courses (
+            id,
+            title,
+            description,
+            thumbnail_url
+          )
+        `)
+        .eq("user_id", user.id)
+        .order("purchased_at", { ascending: false });
+
+      if (purchases) {
+        const courseOrders: Order[] = purchases.map((purchase: any) => {
+          const course = purchase.courses;
+          return {
+            id: purchase.id,
+            orderNumber: `CRS-${purchase.id.slice(0, 8).toUpperCase()}`,
+            orderDate: new Date(purchase.purchased_at).toLocaleDateString("cs-CZ", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            }),
+            status: "completed" as OrderStatus,
+            total: purchase.amount_paid,
+            type: "course" as const,
+            items: [
+              {
+                id: course.id,
+                name: course.title,
+                image: course.thumbnail_url || "https://images.pexels.com/photos/4506109/pexels-photo-4506109.jpeg?auto=compress&cs=tinysrgb&w=400",
+                price: purchase.amount_paid,
+                size: "Online kurz",
+                color: "Digitální",
+                quantity: 1,
+                type: "course" as const,
+                courseId: course.id,
+              },
+            ],
+          };
+        });
+
+        setAllOrders([...courseOrders, ...DEFAULT_ORDERS]);
+      }
+    } catch (error) {
+      console.error("Error loading course purchases:", error);
+      setAllOrders(DEFAULT_ORDERS);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("cs-CZ", {
@@ -215,11 +304,13 @@ const OrderHistory = ({
     }).format(price);
   };
 
-  const filteredOrders = orders.filter((order) => {
+  const filteredOrders = allOrders.filter((order) => {
     const matchesTab =
       activeTab === "all" ||
       (activeTab === "active" &&
         (order.status === "processing" || order.status === "shipped")) ||
+      (activeTab === "delivered" &&
+        (order.status === "delivered" || order.status === "completed")) ||
       order.status === activeTab;
 
     const matchesSearch =
@@ -232,6 +323,18 @@ const OrderHistory = ({
     return matchesTab && matchesSearch;
   });
 
+  if (loading) {
+    return (
+      <section className={cn("py-16 md:py-24", className)}>
+        <div className="container mx-auto max-w-4xl">
+          <div className="flex items-center justify-center py-16">
+            <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className={cn("py-16 md:py-24", className)}>
       <div className="container mx-auto max-w-4xl">
@@ -240,7 +343,7 @@ const OrderHistory = ({
             Vaše objednávky
           </h1>
           <p className="mt-1 text-muted-foreground">
-            Sledujte, vraťte nebo znovu nakupte produkty
+            Sledujte kurzy, produkty a historii nákupů
           </p>
         </div>
 
@@ -357,7 +460,12 @@ const OrderHistory = ({
                         <div className="flex min-w-0 flex-1 flex-col">
                           <div className="flex items-start justify-between gap-3">
                             <div>
-                              <h3 className="font-medium">{item.name}</h3>
+                              <div className="flex items-center gap-2">
+                                <h3 className="font-medium">{item.name}</h3>
+                                {item.type === "course" && (
+                                  <GraduationCap className="h-4 w-4 text-primary" />
+                                )}
+                              </div>
                               <p className="mt-1 text-sm text-muted-foreground">
                                 {item.color} · {item.size}
                                 {item.quantity > 1 && ` · Ks ${item.quantity}`}
@@ -369,7 +477,17 @@ const OrderHistory = ({
                           </div>
 
                           <div className="mt-auto flex flex-wrap items-center gap-2 pt-3">
-                            {order.status === "delivered" && (
+                            {item.type === "course" && item.courseId && (
+                              <Button
+                                variant="secondary"
+                                size="sm"
+                                onClick={() => navigate(`/course/${item.courseId}`)}
+                              >
+                                <PlayCircle className="mr-1.5 size-3.5" />
+                                Přehrát kurz
+                              </Button>
+                            )}
+                            {order.status === "delivered" && item.type !== "course" && (
                               <>
                                 <Button variant="secondary" size="sm">
                                   <RotateCcw className="mr-1.5 size-3.5" />
