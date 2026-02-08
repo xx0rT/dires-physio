@@ -8,14 +8,18 @@ import {
   HelpCircle,
   Info,
   LayoutGrid,
+  LogOut,
   MenuIcon,
   MessageSquare,
+  Settings,
   Star,
   Tag,
   Trophy,
   Users,
   X,
   Zap,
+  Home,
+  CreditCard,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -33,6 +37,8 @@ import { cn } from "@/lib/utils";
 import { site } from "@/config/site";
 import { ModeToggle } from "@/components/layout/mode-toggle";
 import { ShoppingCartButton } from "@/components/shop/shopping-cart-button";
+import { useAuth } from "@/lib/auth-context";
+import { useSubscription } from "@/lib/use-subscription";
 
 import {
   Accordion,
@@ -41,8 +47,16 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -293,6 +307,8 @@ interface Navbar10Props {
 const Navbar10 = ({ className }: Navbar10Props) => {
   const [open, setOpen] = useState<boolean>(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const { user, signOut } = useAuth();
+  const { hasActiveSubscription } = useSubscription();
 
   useEffect(() => {
     const handleResize = () => {
@@ -381,15 +397,80 @@ const Navbar10 = ({ className }: Navbar10Props) => {
             </div>
             <div className="flex items-center gap-2 justify-self-end">
               <div className="hidden xl:flex xl:items-center xl:gap-2">
-                <Button variant="ghost" asChild size={isScrolled ? "sm" : "default"}>
-                  <Link to="/auth/sign-in">Prihlasit se</Link>
-                </Button>
-                <Button asChild size={isScrolled ? "sm" : "default"}>
-                  <Link to="/auth/sign-up">
-                    Zacit
-                    <ChevronRight />
-                  </Link>
-                </Button>
+                {user ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon" className={cn(isScrolled ? "size-9" : "size-10")}>
+                        <Avatar className={cn(isScrolled ? "size-7" : "size-8")}>
+                          <AvatarFallback className="text-xs font-medium">
+                            {user.email?.charAt(0).toUpperCase() || 'U'}
+                          </AvatarFallback>
+                        </Avatar>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-56">
+                      <div className="flex items-center gap-2 p-2">
+                        <Avatar className="size-8">
+                          <AvatarFallback className="text-xs">
+                            {user.email?.charAt(0).toUpperCase() || 'U'}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex flex-col gap-0.5">
+                          <div className="flex items-center gap-1">
+                            <span className="text-sm font-medium">
+                              {user.email?.split('@')[0] || 'User'}
+                            </span>
+                            {hasActiveSubscription && (
+                              <Badge variant="outline" className="h-4 px-1 text-[10px] bg-yellow-500/10 border-yellow-500/50 text-yellow-700 dark:text-yellow-400">
+                                <Star className="mr-0.5 size-2.5 fill-yellow-500 text-yellow-500" />
+                                Premium
+                              </Badge>
+                            )}
+                          </div>
+                          <span className="text-xs text-muted-foreground truncate">
+                            {user.email}
+                          </span>
+                        </div>
+                      </div>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild>
+                        <Link to="/dashboard">
+                          <Home className="mr-2 size-4" />
+                          Dashboard
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link to="/dashboard/settings">
+                          <Settings className="mr-2 size-4" />
+                          Nastaveni
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link to="/dashboard/billing">
+                          <CreditCard className="mr-2 size-4" />
+                          Fakturace
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={signOut} className="cursor-pointer">
+                        <LogOut className="mr-2 size-4" />
+                        Odhlasit se
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <>
+                    <Button variant="ghost" asChild size={isScrolled ? "sm" : "default"}>
+                      <Link to="/auth/sign-in">Prihlasit se</Link>
+                    </Button>
+                    <Button asChild size={isScrolled ? "sm" : "default"}>
+                      <Link to="/auth/sign-up">
+                        Zacit
+                        <ChevronRight />
+                      </Link>
+                    </Button>
+                  </>
+                )}
               </div>
               <div className="xl:hidden">
                 <Button
@@ -697,6 +778,8 @@ const MobileNavigationMenu = ({ open }: MobileNavigationMenuProps) => {
   const menuItems = NAVIGATION.filter(
     (item) => item.id !== 100 && item.id !== 101,
   );
+  const { user, signOut } = useAuth();
+  const { hasActiveSubscription } = useSubscription();
 
   return (
     <AnimatePresence>
@@ -780,15 +863,68 @@ const MobileNavigationMenu = ({ open }: MobileNavigationMenuProps) => {
                   transition={{ duration: 0.4, delay: 0.38, ease: [0.33, 1, 0.68, 1] }}
                   className="flex flex-col gap-3 pt-2"
                 >
-                  <Button variant="outline" size="lg" className="h-12 rounded-xl border-border/50" asChild>
-                    <Link to="/auth/sign-in">Prihlasit se</Link>
-                  </Button>
-                  <Button size="lg" className="h-12 rounded-xl" asChild>
-                    <Link to="/auth/sign-up">
-                      Zacit
-                      <ChevronRight className="ml-1 size-4" />
-                    </Link>
-                  </Button>
+                  {user ? (
+                    <>
+                      <div className="rounded-xl border border-border/50 bg-muted/30 p-4">
+                        <div className="flex items-center gap-3">
+                          <Avatar className="size-10">
+                            <AvatarFallback className="text-sm font-medium">
+                              {user.email?.charAt(0).toUpperCase() || 'U'}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="flex flex-col gap-1 flex-1 min-w-0">
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-medium truncate">
+                                {user.email?.split('@')[0] || 'User'}
+                              </span>
+                              {hasActiveSubscription && (
+                                <Badge variant="outline" className="h-4 px-1 text-[10px] bg-yellow-500/10 border-yellow-500/50 text-yellow-700 dark:text-yellow-400">
+                                  <Star className="mr-0.5 size-2.5 fill-yellow-500 text-yellow-500" />
+                                  Premium
+                                </Badge>
+                              )}
+                            </div>
+                            <span className="text-xs text-muted-foreground truncate">
+                              {user.email}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <Button variant="outline" size="lg" className="h-12 rounded-xl border-border/50" asChild>
+                        <Link to="/dashboard">
+                          <Home className="mr-2 size-4" />
+                          Dashboard
+                        </Link>
+                      </Button>
+                      <Button variant="outline" size="lg" className="h-12 rounded-xl border-border/50" asChild>
+                        <Link to="/dashboard/settings">
+                          <Settings className="mr-2 size-4" />
+                          Nastaveni
+                        </Link>
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="lg"
+                        className="h-12 rounded-xl border-border/50"
+                        onClick={signOut}
+                      >
+                        <LogOut className="mr-2 size-4" />
+                        Odhlasit se
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button variant="outline" size="lg" className="h-12 rounded-xl border-border/50" asChild>
+                        <Link to="/auth/sign-in">Prihlasit se</Link>
+                      </Button>
+                      <Button size="lg" className="h-12 rounded-xl" asChild>
+                        <Link to="/auth/sign-up">
+                          Zacit
+                          <ChevronRight className="ml-1 size-4" />
+                        </Link>
+                      </Button>
+                    </>
+                  )}
                 </motion.div>
               </div>
             </div>
