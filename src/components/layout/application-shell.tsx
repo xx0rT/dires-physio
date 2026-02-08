@@ -1027,6 +1027,7 @@ interface ApplicationShellProps {
   navigationConfig?: NavigationConfig;
   resolveActiveModuleId?: (pathname: string) => string;
   panelHeader?: React.ReactNode;
+  defaultSidebarOpen?: boolean;
 }
 
 export function ApplicationShell({
@@ -1034,6 +1035,7 @@ export function ApplicationShell({
   navigationConfig = navigationData,
   resolveActiveModuleId: resolveActiveModuleIdProp,
   panelHeader,
+  defaultSidebarOpen = true,
 }: ApplicationShellProps) {
   const [isMobilePanelOpen, setIsMobilePanelOpen] = React.useState(false);
   const location = useLocation();
@@ -1069,7 +1071,7 @@ export function ApplicationShell({
   };
 
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={defaultSidebarOpen}>
       <div className="flex h-screen flex-col overflow-hidden bg-neutral-200 dark:bg-neutral-800">
         <div className="flex min-h-0 min-w-0 flex-1 overflow-hidden md:grid md:grid-cols-[min-content_minmax(0,1fr)]">
           <DubSidebar

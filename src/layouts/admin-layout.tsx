@@ -99,6 +99,7 @@ export default function AdminLayout() {
       navigationConfig={adminNavigationConfig}
       resolveActiveModuleId={resolveAdminModuleId}
       panelHeader={<AdminPanelHeader />}
+      defaultSidebarOpen={false}
     >
       <Outlet />
     </ApplicationShell>
