@@ -2,10 +2,6 @@
 @source "../../node_modules/@daveyplate/better-auth-ui";
 
 
-html {
-  scroll-behavior: smooth;
-}
-
 @layer base {
   * {
     @apply border-border;
