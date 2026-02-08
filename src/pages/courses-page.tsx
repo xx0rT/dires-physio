@@ -144,7 +144,7 @@ export default function CoursesPage() {
   }, [searchParams, user, setSearchParams, loadData])
 
   const isPurchased = (courseId: string) => {
-    return purchases.some(p => p.course_id === courseId)
+    return purchases.some(p => p.course_id === courseId) || enrollments.some(e => e.course_id === courseId)
   }
 
   const handleBuy = async (courseId: string) => {
