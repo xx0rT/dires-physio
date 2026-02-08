@@ -398,66 +398,71 @@ const Navbar10 = ({ className }: Navbar10Props) => {
             <div className="flex items-center gap-2 justify-self-end">
               <div className="hidden xl:flex xl:items-center xl:gap-2">
                 {user ? (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className={cn(isScrolled ? "size-9" : "size-10")}>
-                        <Avatar className={cn(isScrolled ? "size-7" : "size-8")}>
-                          <AvatarFallback className="text-xs font-medium">
-                            {user.email?.charAt(0).toUpperCase() || 'U'}
-                          </AvatarFallback>
-                        </Avatar>
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-56">
-                      <div className="flex items-center gap-2 p-2">
-                        <Avatar className="size-8">
-                          <AvatarFallback className="text-xs">
-                            {user.email?.charAt(0).toUpperCase() || 'U'}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="flex flex-col gap-0.5">
-                          <div className="flex items-center gap-1">
-                            <span className="text-sm font-medium">
-                              {user.email?.split('@')[0] || 'User'}
+                  <>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className={cn(isScrolled ? "size-9" : "size-10")}>
+                          <Avatar className={cn(isScrolled ? "size-7" : "size-8")}>
+                            <AvatarFallback className="text-xs font-medium">
+                              {user.email?.charAt(0).toUpperCase() || 'U'}
+                            </AvatarFallback>
+                          </Avatar>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-56">
+                        <div className="flex items-center gap-2 p-2">
+                          <Avatar className="size-8">
+                            <AvatarFallback className="text-xs">
+                              {user.email?.charAt(0).toUpperCase() || 'U'}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="flex flex-col gap-0.5">
+                            <div className="flex items-center gap-1">
+                              <span className="text-sm font-medium">
+                                {user.email?.split('@')[0] || 'User'}
+                              </span>
+                              {hasActiveSubscription && (
+                                <Badge variant="outline" className="h-4 px-1 text-[10px] bg-yellow-500/10 border-yellow-500/50 text-yellow-700 dark:text-yellow-400">
+                                  <Star className="mr-0.5 size-2.5 fill-yellow-500 text-yellow-500" />
+                                  Premium
+                                </Badge>
+                              )}
+                            </div>
+                            <span className="text-xs text-muted-foreground truncate">
+                              {user.email}
                             </span>
-                            {hasActiveSubscription && (
-                              <Badge variant="outline" className="h-4 px-1 text-[10px] bg-yellow-500/10 border-yellow-500/50 text-yellow-700 dark:text-yellow-400">
-                                <Star className="mr-0.5 size-2.5 fill-yellow-500 text-yellow-500" />
-                                Premium
-                              </Badge>
-                            )}
                           </div>
-                          <span className="text-xs text-muted-foreground truncate">
-                            {user.email}
-                          </span>
                         </div>
-                      </div>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem asChild>
-                        <Link to="/dashboard">
-                          <Home className="mr-2 size-4" />
-                          Dashboard
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link to="/dashboard/settings">
-                          <Settings className="mr-2 size-4" />
-                          Nastaveni
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link to="/dashboard/billing">
-                          <CreditCard className="mr-2 size-4" />
-                          Fakturace
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={signOut} className="cursor-pointer">
-                        <LogOut className="mr-2 size-4" />
-                        Odhlasit se
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem asChild>
+                          <Link to="/dashboard">
+                            <Home className="mr-2 size-4" />
+                            Dashboard
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link to="/dashboard/settings">
+                            <Settings className="mr-2 size-4" />
+                            Nastaveni
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link to="/dashboard/billing">
+                            <CreditCard className="mr-2 size-4" />
+                            Fakturace
+                          </Link>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                    <Button
+                      variant="ghost"
+                      size={isScrolled ? "sm" : "default"}
+                      onClick={signOut}
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950"
+                    >
+                      Logout
+                    </Button>
+                  </>
                 ) : (
                   <>
                     <Button variant="ghost" asChild size={isScrolled ? "sm" : "default"}>
