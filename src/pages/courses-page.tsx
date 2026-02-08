@@ -137,21 +137,25 @@ export default function CoursesPage() {
   useEffect(() => {
     const purchasedId = searchParams.get('purchased')
     if (purchasedId && user) {
-      toast.success('Kurz byl uspesne zakoupen!')
+      toast.success('Kurz byl uspesne zakoupen! Zpracovavame platbu...')
       setSearchParams({}, { replace: true })
       loadData()
 
-      const retryInterval = setInterval(() => {
-        loadData()
-      }, 2000)
+      let attempts = 0
+      const maxAttempts = 30
 
-      const stopRetrying = setTimeout(() => {
-        clearInterval(retryInterval)
-      }, 10000)
+      const retryInterval = setInterval(() => {
+        attempts++
+        loadData()
+
+        if (attempts >= maxAttempts) {
+          clearInterval(retryInterval)
+          toast.info('Pokud kurz jeste neni k dispozici, zkuste obnovit stranku')
+        }
+      }, 2000)
 
       return () => {
         clearInterval(retryInterval)
-        clearTimeout(stopRetrying)
       }
     }
   }, [searchParams, user, setSearchParams, loadData])
