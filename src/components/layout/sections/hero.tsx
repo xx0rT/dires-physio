@@ -90,7 +90,7 @@ export const HeroSection = () => {
                 </div>
 
                 {/* Right side - Preview */}
-                <div className="group relative lg:scale-115" data-aos="fade-left" data-aos-delay="200">
+                <div className="group relative" data-aos="fade-left" data-aos-delay="200">
                     {/* Enhanced animated glow effect */}
                     <div className="absolute inset-0 -z-10">
                         <div className="-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2 h-[75%] w-[85%] animate-pulse bg-gradient-to-r from-primary/30 via-blue-400/30 to-primary/30 blur-3xl" />
@@ -147,8 +147,8 @@ export const HeroSection = () => {
                     </div>
 
                     {/* Decorative elements */}
-                    <div className="-right-8 -bottom-8 absolute -z-10 size-32 rounded-full bg-primary/30 blur-3xl lg:size-40" />
-                    <div className="-top-8 -left-8 absolute -z-10 size-28 rounded-full bg-primary/30 blur-3xl lg:size-36" />
+                    <div className="right-0 bottom-0 absolute -z-10 size-32 rounded-full bg-primary/30 blur-3xl lg:size-40" />
+                    <div className="top-0 left-0 absolute -z-10 size-28 rounded-full bg-primary/30 blur-3xl lg:size-36" />
                 </div>
             </div>
 

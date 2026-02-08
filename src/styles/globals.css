@@ -172,7 +172,8 @@
 }
 
 html,
-body {
+body,
+#root {
   overflow-x: clip;
 }
 
