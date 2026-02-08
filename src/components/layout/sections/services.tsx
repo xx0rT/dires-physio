@@ -33,7 +33,7 @@ const courseStudies = [
 
 export const ServicesSection = () => {
     return (
-        <section id="services" className="w-full py-0 overflow-x-clip">
+        <section id="services" className="w-full py-0 overflow-visible">
             <CaseStudies3
                 featuredCasestudy={featuredCourse}
                 casestudies={courseStudies}

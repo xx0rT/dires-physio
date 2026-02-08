@@ -324,7 +324,7 @@ const Navbar10 = ({ className }: Navbar10Props) => {
   }, []);
 
   useEffect(() => {
-    document.body.style.overflowY = open ? "hidden" : "auto";
+    document.body.style.overflow = open ? "hidden" : "auto";
   }, [open]);
 
   const handleMobileMenu = () => {
