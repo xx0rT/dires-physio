@@ -94,11 +94,28 @@ Deno.serve(async (req: Request) => {
 
     const priceInCents = Math.round(course.price * 100);
 
-    const origin =
-      req.headers.get("origin") ||
-      req.headers.get("referer")?.split("?")[0].replace(/\/$/, "") ||
-      "https://your-domain.com";
-    const baseUrl = origin.startsWith("http") ? origin : `https://${origin}`;
+    const origin = req.headers.get("origin");
+    let baseUrl: string;
+
+    if (origin) {
+      baseUrl = origin;
+    } else {
+      const referer = req.headers.get("referer");
+      if (referer) {
+        try {
+          const refererUrl = new URL(referer);
+          baseUrl = `${refererUrl.protocol}//${refererUrl.host}`;
+        } catch {
+          baseUrl = referer.split("?")[0].split("#")[0].replace(/\/$/, "");
+        }
+      } else {
+        baseUrl = "https://your-domain.com";
+      }
+    }
+
+    if (!baseUrl.startsWith("http")) {
+      baseUrl = `https://${baseUrl}`;
+    }
 
     const formData = new URLSearchParams();
     formData.append("payment_method_types[]", "card");

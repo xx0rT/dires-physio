@@ -140,6 +140,19 @@ export default function CoursesPage() {
       toast.success('Kurz byl uspesne zakoupen!')
       setSearchParams({}, { replace: true })
       loadData()
+
+      const retryInterval = setInterval(() => {
+        loadData()
+      }, 2000)
+
+      const stopRetrying = setTimeout(() => {
+        clearInterval(retryInterval)
+      }, 10000)
+
+      return () => {
+        clearInterval(retryInterval)
+        clearTimeout(stopRetrying)
+      }
     }
   }, [searchParams, user, setSearchParams, loadData])
 
@@ -214,7 +227,9 @@ export default function CoursesPage() {
       const totalLessons = pkgCourses.reduce((sum, c) => sum + c.lessons_count, 0)
       const totalDuration = pkgCourses.reduce((sum, c) => sum + c.duration, 0)
       const totalPrice = pkgCourses.reduce((sum, c) => sum + c.price, 0)
+      const purchasedCourses = pkgCourses.filter(c => isPurchased(c.id))
       const allPurchased = pkgCourses.length > 0 && pkgCourses.every(c => isPurchased(c.id))
+      const somePurchased = purchasedCourses.length > 0 && !allPurchased
       const firstAvailable = pkgCourses.find(c => {
         const purchased = isPurchased(c.id)
         const enrollment = enrollments.find(e => e.course_id === c.id)
@@ -229,7 +244,9 @@ export default function CoursesPage() {
         description: pkg.description,
         author: {
           name: 'Fyzioterapie tym',
-          title: `${pkgCourses.length} kurzu v balicku`,
+          title: somePurchased
+            ? `${purchasedCourses.length}/${pkgCourses.length} kurzu odemceno`
+            : `${pkgCourses.length} kurzu v balicku`,
           avatar: avatars[idx % avatars.length],
         },
         image: packageImages[idx % packageImages.length],
@@ -246,7 +263,7 @@ export default function CoursesPage() {
         })),
         isPurchased: allPurchased,
         cta: {
-          text: allPurchased ? 'Pokracovat' : 'Zobrazit',
+          text: allPurchased ? 'Pokracovat' : somePurchased ? 'Pokracovat' : 'Zobrazit',
           url: firstAvailable ? `/course/${firstAvailable.id}` : firstCourseId ? `/course/${firstCourseId}` : '#courses',
         },
         onPreview: () => handlePreview(pkg.id),

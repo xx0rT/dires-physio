@@ -407,9 +407,16 @@ export const CoursePlayerPage = () => {
           .eq('course_id', courseId)
           .maybeSingle();
 
-        setIsEnrolled(!!enrollmentData);
+        const { data: purchaseData } = await supabase
+          .from('course_purchases')
+          .select('id')
+          .eq('user_id', user.id)
+          .eq('course_id', courseId)
+          .maybeSingle();
 
-        if (!enrollmentData) {
+        setIsEnrolled(!!enrollmentData || !!purchaseData);
+
+        if (!enrollmentData && !purchaseData) {
           const localEnrollment = mockDatabase.getEnrollments(user.id).find(e => e.course_id === courseId);
           setIsEnrolled(!!localEnrollment);
         }
