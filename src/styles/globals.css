@@ -173,12 +173,10 @@
 
 html {
   scroll-behavior: smooth;
-  overflow-x: clip;
 }
 
 body {
   letter-spacing: var(--tracking-normal);
-  overflow-x: clip;
 }
 
 @layer base {
