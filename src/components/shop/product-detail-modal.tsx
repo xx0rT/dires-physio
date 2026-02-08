@@ -342,7 +342,7 @@ const ProductQuickView5 = ({
             "--dialog-max-height": "45rem",
           } as React.CSSProperties
         }
-        className="h-[var(--dialog-height)] w-full max-w-300! border-none p-0 max-md:top-auto max-md:bottom-0 max-md:left-0 max-md:h-[calc(100dvh-100px)] max-md:translate-0! max-md:overflow-auto md:max-h-[var(--dialog-max-height)] md:w-[calc(100%-4rem)]"
+        className="h-[var(--dialog-height)] w-dvw max-w-300! border-none p-0 max-md:top-auto max-md:bottom-0 max-md:left-0 max-md:h-[calc(100dvh-100px)] max-md:translate-0! max-md:overflow-auto md:max-h-[var(--dialog-max-height)] md:w-[calc(100dvw-4rem)]"
       >
         <div className="grid grid-cols-1 gap-5 max-md:p-10 max-sm:px-5 md:h-[var(--dialog-height)] md:max-h-[var(--dialog-max-height)] md:grid-cols-2">
           <div className="hide-scrollbar max-h-[var(--dialog-max-height)] md:h-[var(--dialog-height)] md:overflow-auto md:py-10 md:pl-10">

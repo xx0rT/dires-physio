@@ -462,7 +462,7 @@ const DesktopMenuItem = ({ item, index }: DesktopMenuItemProps) => {
           )}
         </NavigationMenuTrigger>
         <NavigationMenuContent className="hidden !rounded-xl !border-0 !p-0 xl:block">
-          <div className="w-full animate-[fade-in-slide-down_0.35s_cubic-bezier(0.33,1,0.68,1)_forwards] px-8 pt-6 pb-12">
+          <div className="w-dvw animate-[fade-in-slide-down_0.35s_cubic-bezier(0.33,1,0.68,1)_forwards] px-8 pt-6 pb-12">
             <div className="container">
               {(item.id === 1 || item.id === 3) && (
                 <DropdownMenu3
@@ -712,8 +712,8 @@ const MobileNavigationMenu = ({ open }: MobileNavigationMenuProps) => {
           aria-modal="true"
           aria-label="Mobilni navigace"
         >
-          <div className="pointer-events-none absolute top-0 right-0 h-72 w-72 rounded-full bg-primary/8 blur-[80px]" />
-          <div className="pointer-events-none absolute bottom-0 left-0 h-64 w-64 rounded-full bg-primary/5 blur-[70px]" />
+          <div className="pointer-events-none absolute -top-20 -right-20 h-72 w-72 rounded-full bg-primary/8 blur-[80px]" />
+          <div className="pointer-events-none absolute -bottom-16 -left-16 h-64 w-64 rounded-full bg-primary/5 blur-[70px]" />
 
           <div className="relative flex-1 overflow-y-auto">
             <div className="py-6 px-[15px]">
