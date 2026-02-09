@@ -1,5 +1,6 @@
 import { ArrowLeft, ArrowRight, Calendar } from "lucide-react";
 import { useEffect, useState } from "react";
+import Autoplay from "embla-carousel-auto-scroll";
 
 import { cn } from "@/lib/utils";
 
@@ -149,6 +150,13 @@ const Blog21 = ({ className }: Blog21Props) => {
             },
           },
         }}
+        plugins={[
+          Autoplay({
+            speed: 1,
+            stopOnInteraction: false,
+            stopOnMouseEnter: true,
+          }),
+        ]}
         className="w-full"
       >
         <CarouselContent className="mr-[calc(theme(container.padding))] 2xl:ml-[calc(50vw-700px+theme(container.padding)-20px)] 2xl:mr-[calc(50vw-700px+theme(container.padding))] gap-6">
