@@ -122,7 +122,7 @@ export default function CartPage() {
             Vypadá to, že jste ještě nic nepřidali.
           </p>
           <Button asChild>
-            <a href="/shop">Pokračovat v nákupu</a>
+            <a href="/obchod">Pokračovat v nákupu</a>
           </Button>
         </div>
       </section>

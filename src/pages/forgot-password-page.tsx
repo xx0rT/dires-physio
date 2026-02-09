@@ -36,7 +36,7 @@ export default function ForgotPasswordPage() {
       }
 
       toast.success('Ověřovací kód byl odeslán na váš email!')
-      navigate('/auth/reset-password', { state: { email } })
+      navigate('/obnoveni-hesla', { state: { email } })
     } catch (error: any) {
       console.error('Error:', error)
       toast.error(error.message || 'Něco se pokazilo')
@@ -83,7 +83,7 @@ export default function ForgotPasswordPage() {
 
             <div className="mt-6">
               <Link
-                to="/auth/sign-in"
+                to="/prihlaseni"
                 className="flex items-center justify-center text-sm text-primary hover:underline"
               >
                 <RiArrowLeftLine className="mr-2 h-4 w-4" />

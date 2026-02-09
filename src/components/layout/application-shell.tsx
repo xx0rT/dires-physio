@@ -314,9 +314,9 @@ function UserMenu() {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => navigate('/dashboard/settings')}>Nastavení</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate('/prehled/nastaveni')}>Nastavení</DropdownMenuItem>
         <DropdownMenuItem onClick={() => navigate('/')}>Domovská stránka</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => navigate('/dashboard/billing')}>Fakturace</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate('/prehled/fakturace')}>Fakturace</DropdownMenuItem>
         {isAdmin && (
           <>
             <DropdownMenuSeparator />
@@ -327,7 +327,7 @@ function UserMenu() {
           </>
         )}
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => navigate('/auth/sign-in')}>Odhlásit se</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate('/prihlaseni')}>Odhlásit se</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
@@ -419,7 +419,7 @@ interface SidebarPanelProps {
 
 function isItemActive(pathname: string, itemPath: string): boolean {
   if (pathname === itemPath) return true;
-  if (pathname === "/dashboard" && itemPath === "/dashboard") return true;
+  if (pathname === "/prehled" && itemPath === "/prehled") return true;
   return false;
 }
 
@@ -948,24 +948,24 @@ export interface NavigationConfig {
 
 const navigationData: NavigationConfig = {
   railIcons: [
-    { moduleId: "home", label: "Domů", icon: Home, defaultPath: "/dashboard" },
-    { moduleId: "analytics", label: "Statistiky", icon: BarChart3, defaultPath: "/dashboard/analytics" },
-    { moduleId: "integrations", label: "Kurzy", icon: BookOpen, defaultPath: "/dashboard/integrations" },
-    { moduleId: "billing", label: "Platby", icon: CreditCard, defaultPath: "/dashboard/billing" },
+    { moduleId: "home", label: "Domů", icon: Home, defaultPath: "/prehled" },
+    { moduleId: "analytics", label: "Statistiky", icon: BarChart3, defaultPath: "/prehled/analytika" },
+    { moduleId: "integrations", label: "Kurzy", icon: BookOpen, defaultPath: "/prehled/integrace" },
+    { moduleId: "billing", label: "Platby", icon: CreditCard, defaultPath: "/prehled/fakturace" },
   ] as RailIconConfig[],
   modules: [
     {
       id: "home",
       label: "Domů",
       icon: Home,
-      defaultPath: "/dashboard",
+      defaultPath: "/prehled",
       sections: [
         {
           id: "main",
           items: [
-            { id: "overview", label: "Přehled", icon: Home, path: "/dashboard" },
-            { id: "analytics", label: "Pokrok", icon: BarChart3, path: "/dashboard/analytics" },
-            { id: "api", label: "Moje Lekce", icon: BookOpen, path: "/dashboard/api" },
+            { id: "overview", label: "Přehled", icon: Home, path: "/prehled" },
+            { id: "analytics", label: "Pokrok", icon: BarChart3, path: "/prehled/analytika" },
+            { id: "api", label: "Moje Lekce", icon: BookOpen, path: "/prehled/api" },
           ],
         },
       ],
@@ -974,13 +974,13 @@ const navigationData: NavigationConfig = {
       id: "analytics",
       label: "Statistiky",
       icon: BarChart3,
-      defaultPath: "/dashboard/analytics",
+      defaultPath: "/prehled/analytika",
       sections: [
         {
           id: "main",
           items: [
-            { id: "overview", label: "Celkový Pokrok", icon: BarChart3, path: "/dashboard/analytics" },
-            { id: "reports", label: "Výsledky Testů", icon: FileText, path: "/dashboard/analytics" },
+            { id: "overview", label: "Celkový Pokrok", icon: BarChart3, path: "/prehled/analytika" },
+            { id: "reports", label: "Výsledky Testů", icon: FileText, path: "/prehled/analytika" },
           ],
         },
       ],
@@ -989,13 +989,13 @@ const navigationData: NavigationConfig = {
       id: "integrations",
       label: "Kurzy",
       icon: BookOpen,
-      defaultPath: "/dashboard/integrations",
+      defaultPath: "/prehled/integrace",
       sections: [
         {
           id: "main",
           items: [
-            { id: "all-courses", label: "Všechny Kurzy", icon: BookOpen, path: "/dashboard/integrations" },
-            { id: "my-courses", label: "Moje Kurzy", icon: Users, path: "/dashboard/integrations" },
+            { id: "all-courses", label: "Všechny Kurzy", icon: BookOpen, path: "/prehled/integrace" },
+            { id: "my-courses", label: "Moje Kurzy", icon: Users, path: "/prehled/integrace" },
           ],
         },
       ],
@@ -1004,20 +1004,20 @@ const navigationData: NavigationConfig = {
       id: "billing",
       label: "Platby",
       icon: CreditCard,
-      defaultPath: "/dashboard/billing",
+      defaultPath: "/prehled/fakturace",
       sections: [
         {
           id: "main",
           items: [
-            { id: "overview", label: "Předplatné", icon: CreditCard, path: "/dashboard/billing" },
-            { id: "invoices", label: "Faktury", icon: FileText, path: "/dashboard/billing" },
+            { id: "overview", label: "Předplatné", icon: CreditCard, path: "/prehled/fakturace" },
+            { id: "invoices", label: "Faktury", icon: FileText, path: "/prehled/fakturace" },
           ],
         },
       ],
     },
   ] as NavModuleConfig[],
   utilities: [
-    { id: "settings", label: "Nastavení", icon: Settings, path: "/dashboard/settings" },
+    { id: "settings", label: "Nastavení", icon: Settings, path: "/prehled/nastaveni" },
     { id: "help", label: "Pomoc & Podpora", icon: HelpCircle, path: "#" },
   ] as NavItemConfig[],
 };
@@ -1044,10 +1044,10 @@ export function ApplicationShell({
   const getActiveModuleId = () => {
     if (resolveActiveModuleIdProp) return resolveActiveModuleIdProp(location.pathname);
     const path = location.pathname;
-    if (path === "/dashboard") return "home";
-    if (path.startsWith("/dashboard/analytics")) return "analytics";
-    if (path.startsWith("/dashboard/integrations")) return "integrations";
-    if (path.startsWith("/dashboard/billing")) return "billing";
+    if (path === "/prehled") return "home";
+    if (path.startsWith("/prehled/analytika")) return "analytics";
+    if (path.startsWith("/prehled/integrace")) return "integrations";
+    if (path.startsWith("/prehled/fakturace")) return "billing";
     return "home";
   };
 

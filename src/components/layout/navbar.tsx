@@ -131,13 +131,13 @@ const NAVIGATION: MenuItem[] = [
             label: "Co delame",
             icon: Zap,
             description: "Nase sluzby a specializace",
-            url: "/team",
+            url: "/tym",
           },
           {
             label: "Nas tym",
             icon: Users,
             description: "Seznamte se s nasimi odborniky",
-            url: "/team",
+            url: "/tym",
           },
         ],
       },
@@ -188,7 +188,7 @@ const NAVIGATION: MenuItem[] = [
         description: "Seznamte se s nasim tymem a objednejte konzultaci",
         background:
           "https://images.pexels.com/photos/4506105/pexels-photo-4506105.jpeg?auto=compress&cs=tinysrgb&w=800",
-        url: "/team",
+        url: "/tym",
       },
       {
         label: "Certifikace",
@@ -196,7 +196,7 @@ const NAVIGATION: MenuItem[] = [
         description: "Mezinarodne uznavane certifikaty pro fyzioterapeuty",
         background:
           "https://images.pexels.com/photos/7176026/pexels-photo-7176026.jpeg?auto=compress&cs=tinysrgb&w=800",
-        url: "/courses",
+        url: "/kurzy",
       },
     ],
     links: [
@@ -205,33 +205,33 @@ const NAVIGATION: MenuItem[] = [
         icon: HandHeart,
         description:
           "Osobni poradenstvi s nasimi odborniky pro vas profesni rust",
-        url: "/team",
+        url: "/tym",
       },
       {
         label: "Skupinove workshopy",
         icon: LayoutGrid,
         description: "Prakticke workshopy v malych skupinach pod odbornym vedenim",
-        url: "/team",
+        url: "/tym",
       },
       {
         label: "Firemni skoleni",
         icon: Trophy,
         description:
           "Skoleni na miru pro kliniky a zdravotnicka zarizeni",
-        url: "/team",
+        url: "/tym",
       },
       {
         label: "Online vzdelavani",
         icon: BookOpen,
         description:
           "Pristup ke studijnim materialam kdykoliv a odkudkoliv",
-        url: "/courses",
+        url: "/kurzy",
       },
     ],
   },
   {
     title: "Kurzy",
-    url: "/courses",
+    url: "/kurzy",
     id: 3,
     groupLinks: [
       {
@@ -241,19 +241,19 @@ const NAVIGATION: MenuItem[] = [
             label: "Vsechny kurzy",
             icon: LayoutGrid,
             description: "Kompletni prehled vsech dostupnych kurzu",
-            url: "/courses",
+            url: "/kurzy",
           },
           {
             label: "71denni kurz",
             icon: Calendar,
             description: "Intenzivni program na 71 dni pro maximalni vysledky",
-            url: "/courses",
+            url: "/kurzy",
           },
           {
             label: "Kratke kurzy",
             icon: Clock,
             description: "Kratke specializovane kurzy a workshopy",
-            url: "/courses",
+            url: "/kurzy",
           },
         ],
       },
@@ -270,13 +270,13 @@ const NAVIGATION: MenuItem[] = [
             label: "Certifikace",
             icon: GraduationCap,
             description: "Informace o ziskani certifikatu",
-            url: "/courses",
+            url: "/kurzy",
           },
           {
             label: "Pro pokrocile",
             icon: Zap,
             description: "Specializovane kurzy pro zkusene fyzioterapeuty",
-            url: "/courses",
+            url: "/kurzy",
           },
         ],
       },
@@ -290,7 +290,7 @@ const NAVIGATION: MenuItem[] = [
   },
   {
     title: "Kosik",
-    url: "/cart",
+    url: "/kosik",
     id: 100,
   },
   {
@@ -443,7 +443,7 @@ const Navbar10 = ({ className }: Navbar10Props) => {
                       </div>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem asChild>
-                        <Link to="/dashboard">
+                        <Link to="/prehled">
                           <Home className="mr-2 size-4" />
                           Dashboard
                         </Link>
@@ -454,13 +454,13 @@ const Navbar10 = ({ className }: Navbar10Props) => {
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem asChild>
-                        <Link to="/dashboard/settings">
+                        <Link to="/prehled/nastaveni">
                           <Settings className="mr-2 size-4" />
                           Nastaveni
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild>
-                        <Link to="/dashboard/billing">
+                        <Link to="/prehled/fakturace">
                           <CreditCard className="mr-2 size-4" />
                           Fakturace
                         </Link>
@@ -470,10 +470,10 @@ const Navbar10 = ({ className }: Navbar10Props) => {
                 ) : (
                   <>
                     <Button variant="ghost" asChild size={isScrolled ? "sm" : "default"}>
-                      <Link to="/auth/sign-in">Prihlasit se</Link>
+                      <Link to="/prihlaseni">Prihlasit se</Link>
                     </Button>
                     <Button asChild size={isScrolled ? "sm" : "default"}>
-                      <Link to="/auth/sign-up">
+                      <Link to="/registrace">
                         Zacit
                         <ChevronRight />
                       </Link>
@@ -900,13 +900,13 @@ const MobileNavigationMenu = ({ open }: MobileNavigationMenuProps) => {
                         </div>
                       </div>
                       <Button variant="outline" size="lg" className="h-12 rounded-xl border-border/50" asChild>
-                        <Link to="/dashboard">
+                        <Link to="/prehled">
                           <Home className="mr-2 size-4" />
                           Dashboard
                         </Link>
                       </Button>
                       <Button variant="outline" size="lg" className="h-12 rounded-xl border-border/50" asChild>
-                        <Link to="/dashboard/settings">
+                        <Link to="/prehled/nastaveni">
                           <Settings className="mr-2 size-4" />
                           Nastaveni
                         </Link>
@@ -924,10 +924,10 @@ const MobileNavigationMenu = ({ open }: MobileNavigationMenuProps) => {
                   ) : (
                     <>
                       <Button variant="outline" size="lg" className="h-12 rounded-xl border-border/50" asChild>
-                        <Link to="/auth/sign-in">Prihlasit se</Link>
+                        <Link to="/prihlaseni">Prihlasit se</Link>
                       </Button>
                       <Button size="lg" className="h-12 rounded-xl" asChild>
-                        <Link to="/auth/sign-up">
+                        <Link to="/registrace">
                           Zacit
                           <ChevronRight className="ml-1 size-4" />
                         </Link>

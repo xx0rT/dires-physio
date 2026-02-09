@@ -217,7 +217,7 @@ const TestimonialSection = ({ className }: TestimonialSectionProps) => {
 
         <div className="flex justify-center">
           <Button asChild className="mt-4 gap-2 rounded-lg px-5 py-3 text-sm shadow-sm transition-colors hover:bg-primary/90 focus:outline-none disabled:pointer-events-none disabled:opacity-50">
-            <Link to="/references">
+            <Link to="/reference">
               <span className="flex items-center gap-1">
                 <span>Zobrazit více</span>
                 <span className="text-muted/80">-</span>

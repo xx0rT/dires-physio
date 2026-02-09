@@ -101,7 +101,7 @@ export default function TeamMemberPage() {
       <div className="py-20 text-center">
         <h2 className="text-2xl font-bold">Clen tymu nenalezen</h2>
         <Button asChild className="mt-4">
-          <Link to="/team">Zpet na tym</Link>
+          <Link to="/tym">Zpet na tym</Link>
         </Button>
       </div>
     )
@@ -116,7 +116,7 @@ export default function TeamMemberPage() {
           transition={{ duration: 0.4 }}
         >
           <Link
-            to="/team"
+            to="/tym"
             className="mb-8 inline-flex items-center gap-2 text-sm text-neutral-500 transition-colors hover:text-neutral-900 dark:hover:text-neutral-100"
           >
             <ArrowLeft className="size-4" />

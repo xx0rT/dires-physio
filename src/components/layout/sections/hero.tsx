@@ -67,7 +67,7 @@ export const HeroSection = () => {
                             size="lg"
                             className="group/arrow rounded-full"
                         >
-                            <Link to="/auth/sign-up">
+                            <Link to="/registrace">
                                 Začít zdarma
                                 <ArrowRight className="ml-2 size-5 transition-transform group-hover/arrow:translate-x-1" />
                             </Link>

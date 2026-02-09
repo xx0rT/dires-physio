@@ -569,7 +569,7 @@ export const CoursePlayerPage = () => {
         }
 
         setTimeout(() => {
-          navigate(`/course/${nextCourse.id}`);
+          navigate(`/kurz/${nextCourse.id}`);
         }, 2000);
       } else {
         setNextCourseId(null);
@@ -580,7 +580,7 @@ export const CoursePlayerPage = () => {
         });
 
         setTimeout(() => {
-          navigate("/courses");
+          navigate("/kurzy");
         }, 2000);
       }
     } catch (error) {
@@ -611,7 +611,7 @@ export const CoursePlayerPage = () => {
 
       if (!nextCourseData) {
         toast.error("Další kurz nebyl nalezen");
-        navigate("/courses");
+        navigate("/kurzy");
         return;
       }
 
@@ -639,20 +639,20 @@ export const CoursePlayerPage = () => {
         });
       }
 
-      navigate(`/course/${nextCourseData.id}`);
+      navigate(`/kurz/${nextCourseData.id}`);
     } catch (error) {
       console.error("Error continuing to next course:", error);
       toast.error("Chyba při přechodu na další kurz");
-      navigate("/courses");
+      navigate("/kurzy");
     }
   };
 
   if (!user) {
-    return <Navigate to="/auth/sign-in" replace />;
+    return <Navigate to="/prihlaseni" replace />;
   }
 
   if (!hasActiveSubscription && !subscriptionLoading) {
-    return <Navigate to="/courses" replace />;
+    return <Navigate to="/kurzy" replace />;
   }
 
   if (loading || subscriptionLoading) {
@@ -740,7 +740,7 @@ export const CoursePlayerPage = () => {
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
-                    <Link to="/courses">Kurzy</Link>
+                    <Link to="/kurzy">Kurzy</Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />

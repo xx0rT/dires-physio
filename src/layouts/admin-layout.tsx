@@ -47,8 +47,8 @@ const adminNavigationConfig: NavigationConfig = {
     { id: "invoices", label: "Platby", icon: Receipt, defaultPath: "/admin/invoices", sections: adminSections },
   ],
   utilities: [
-    { id: "dashboard", label: "Dashboard", icon: Home, path: "/dashboard" },
-    { id: "settings", label: "Nastaveni", icon: Settings, path: "/dashboard/settings" },
+    { id: "dashboard", label: "Dashboard", icon: Home, path: "/prehled" },
+    { id: "settings", label: "Nastaveni", icon: Settings, path: "/prehled/settings" },
   ],
 }
 
@@ -87,11 +87,11 @@ export default function AdminLayout() {
   }
 
   if (!user) {
-    return <Navigate to="/auth/sign-in" replace />
+    return <Navigate to="/prihlaseni" replace />
   }
 
   if (!isAdmin) {
-    return <Navigate to="/dashboard" replace />
+    return <Navigate to="/prehled" replace />
   }
 
   return (

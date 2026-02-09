@@ -220,7 +220,7 @@ export default function CoursesPage() {
 
   const handleBuy = async (courseId: string) => {
     if (!user || !session) {
-      navigate('/auth/sign-up')
+      navigate('/registrace')
       return
     }
 
@@ -228,7 +228,7 @@ export default function CoursesPage() {
 
     if (sessionError || !freshSession) {
       toast.error('Prosim prihlaste se znovu')
-      navigate('/auth/sign-in')
+      navigate('/prihlaseni')
       return
     }
 
@@ -331,7 +331,7 @@ export default function CoursesPage() {
         isPurchased: allPurchased,
         cta: {
           text: allPurchased ? 'Pokracovat' : somePurchased ? 'Pokracovat' : 'Zobrazit',
-          url: firstAvailable ? `/course/${firstAvailable.id}` : firstCourseId ? `/course/${firstCourseId}` : '#courses',
+          url: firstAvailable ? `/kurz/${firstAvailable.id}` : firstCourseId ? `/kurz/${firstCourseId}` : '#courses',
         },
         onPreview: () => handlePreview(pkg.id),
         onBuy: !allPurchased && isAuthenticated
@@ -340,7 +340,7 @@ export default function CoursesPage() {
               if (firstUnpurchased) handleBuy(firstUnpurchased.id)
             }
           : !allPurchased && !isAuthenticated
-            ? () => navigate('/auth/sign-up')
+            ? () => navigate('/registrace')
             : undefined,
       }
     })
@@ -414,7 +414,7 @@ export default function CoursesPage() {
                   Zobrazit cenove plany
                 </Button>
                 <Button
-                  onClick={() => navigate('/dashboard')}
+                  onClick={() => navigate('/prehled')}
                   variant="outline"
                   className="flex-1"
                   size="lg"

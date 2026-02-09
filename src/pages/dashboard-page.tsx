@@ -229,7 +229,7 @@ export default function DashboardPage() {
                   </CardDescription>
                 </div>
                 <Button asChild variant="outline" size="sm">
-                  <Link to="/dashboard/integrations">
+                  <Link to="/prehled/integrace">
                     Zobrazit vše
                     <RiArrowRightLine className="ml-2 h-4 w-4" />
                   </Link>
@@ -275,7 +275,7 @@ export default function DashboardPage() {
                       </div>
                     </div>
                     <Button size="sm" asChild className="w-full sm:w-auto">
-                      <Link to="/dashboard/integrations">
+                      <Link to="/prehled/integrace">
                         Pokračovat
                       </Link>
                     </Button>
@@ -305,7 +305,7 @@ export default function DashboardPage() {
                   Zapište se do svého prvního kurzu a začněte svou vzdělávací cestu
                 </p>
                 <Button asChild size="lg">
-                  <Link to="/dashboard/integrations">
+                  <Link to="/prehled/integrace">
                     Prohlédnout Kurzy
                   </Link>
                 </Button>
@@ -330,19 +330,19 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent className="space-y-2">
               <Button asChild variant="outline" className="w-full justify-start">
-                <Link to="/dashboard/integrations">
+                <Link to="/prehled/integrace">
                   <RiBookOpenLine className="mr-2 h-4 w-4" />
                   Prohlížet Kurzy
                 </Link>
               </Button>
               <Button asChild variant="outline" className="w-full justify-start">
-                <Link to="/dashboard/billing">
+                <Link to="/prehled/fakturace">
                   <RiBillLine className="mr-2 h-4 w-4" />
                   Platby a Faktury
                 </Link>
               </Button>
               <Button asChild variant="outline" className="w-full justify-start">
-                <Link to="/dashboard/settings">
+                <Link to="/prehled/nastaveni">
                   <RiUserLine className="mr-2 h-4 w-4" />
                   Upravit Profil
                 </Link>

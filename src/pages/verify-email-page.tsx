@@ -46,7 +46,7 @@ export default function VerifyEmailPage() {
 
   useEffect(() => {
     if (!searchParams.get("email")) {
-      navigate("/auth/sign-up")
+      navigate("/registrace")
     }
   }, [searchParams, navigate])
 
@@ -93,7 +93,7 @@ export default function VerifyEmailPage() {
           localStorage.removeItem('pending_plan')
           navigate('/', { state: { scrollTo: 'pricing', selectedPlan: pendingPlan } })
         } else {
-          navigate('/dashboard')
+          navigate('/prehled')
         }
       }, 1500)
     } catch (error) {

@@ -49,7 +49,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.removeItem('pending_plan')
       navigate('/', { state: { scrollTo: 'pricing', selectedPlan: pendingPlan } })
     } else {
-      navigate('/dashboard')
+      navigate('/prehled')
     }
   }
 
@@ -58,7 +58,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       email,
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}/dashboard`,
+        emailRedirectTo: `${window.location.origin}/prehled`,
       }
     })
     if (error) throw error
@@ -72,7 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         localStorage.removeItem('pending_plan')
         navigate('/', { state: { scrollTo: 'pricing', selectedPlan: pendingPlan } })
       } else {
-        navigate('/dashboard')
+        navigate('/prehled')
       }
     }
   }

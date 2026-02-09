@@ -71,7 +71,7 @@ const ShoppingCartButton = ({
 
   const handleViewCart = () => {
     setIsOpen(false);
-    navigate("/cart");
+    navigate("/kosik");
   };
 
   return (

@@ -412,7 +412,7 @@ const ProductCard = ({
 
   return (
     <Card className="group relative block rounded-none border-none bg-background p-0 shadow-none">
-      <Link to="/product/1" className="absolute inset-0 z-10 size-full"></Link>
+      <Link to="/produkt/1" className="absolute inset-0 z-10 size-full"></Link>
       <CardContent className="p-0">
         <div className="relative overflow-hidden">
           <AspectRatio

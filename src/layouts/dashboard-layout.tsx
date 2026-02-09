@@ -14,7 +14,7 @@ export default function DashboardLayout() {
   }
 
   if (!user) {
-    return <Navigate to="/auth/sign-in" replace />
+    return <Navigate to="/prihlaseni" replace />
   }
 
   return (

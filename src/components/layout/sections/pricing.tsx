@@ -84,7 +84,7 @@ const Pricing20 = ({ className }: Pricing20Props) => {
     if (plan.planType === 'free_trial' && (!user || !session)) {
       localStorage.setItem('pending_plan', plan.planType);
       toast.info("Pro zkušební verzi se prosím přihlaste");
-      navigate("/auth/sign-in");
+      navigate("/prihlaseni");
       return;
     }
 
@@ -111,7 +111,7 @@ const Pricing20 = ({ className }: Pricing20Props) => {
         if (data.requiresAuth) {
           localStorage.setItem('pending_plan', plan.planType);
           toast.info("Pro tento plán se prosím přihlaste");
-          navigate("/auth/sign-in");
+          navigate("/prihlaseni");
           return;
         }
         throw new Error(data.error || 'Failed to create checkout session');
@@ -120,7 +120,7 @@ const Pricing20 = ({ className }: Pricing20Props) => {
       if (data.url) {
         window.location.href = data.url;
       } else {
-        navigate('/order-confirmation');
+        navigate('/potvrzeni-objednavky');
       }
     } catch (error) {
       console.error('Checkout error:', error);

@@ -481,7 +481,7 @@ const OrderHistory = ({
                               <Button
                                 variant="secondary"
                                 size="sm"
-                                onClick={() => navigate(`/course/${item.courseId}`)}
+                                onClick={() => navigate(`/kurz/${item.courseId}`)}
                               >
                                 <PlayCircle className="mr-1.5 size-3.5" />
                                 Přehrát kurz

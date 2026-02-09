@@ -80,7 +80,7 @@ export default function ResetPasswordPage() {
       }
 
       toast.success("Heslo bylo úspěšně změněno! Nyní se můžete přihlásit.")
-      navigate('/auth/sign-in')
+      navigate('/prihlaseni')
     } catch (error: any) {
       console.error("Password reset error:", error)
       toast.error(error.message || "Něco se pokazilo. Zkuste to prosím znovu.")
@@ -190,13 +190,13 @@ export default function ResetPasswordPage() {
             </Form>
             <div className="mt-6 space-y-3">
               <Link
-                to="/auth/forgot-password"
+                to="/zapomenute-heslo"
                 className="flex items-center justify-center text-sm text-muted-foreground hover:text-primary hover:underline"
               >
                 Znovu odeslat kód
               </Link>
               <Link
-                to="/auth/sign-in"
+                to="/prihlaseni"
                 className="flex items-center justify-center text-sm text-primary hover:underline"
               >
                 <RiArrowLeftLine className="mr-2 h-4 w-4" />

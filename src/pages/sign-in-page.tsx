@@ -18,7 +18,7 @@ export default function SignInPage() {
   const [loading, setLoading] = useState(false)
 
   if (user) {
-    return <Navigate to="/dashboard" replace />
+    return <Navigate to="/prehled" replace />
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -105,7 +105,7 @@ export default function SignInPage() {
                 <div className="flex items-center justify-between">
                   <Label htmlFor="password">Heslo</Label>
                   <Link
-                    to="/auth/forgot-password"
+                    to="/zapomenute-heslo"
                     className="text-sm text-primary hover:underline"
                   >
                     Zapomenuté heslo?
@@ -180,7 +180,7 @@ export default function SignInPage() {
             <div className="mt-6 space-y-3">
               <p className="text-center text-sm text-muted-foreground">
                 Nemáte ještě účet?{' '}
-                <Link to="/auth/sign-up" className="font-medium text-primary hover:underline">
+                <Link to="/registrace" className="font-medium text-primary hover:underline">
                   Zaregistrujte se
                 </Link>
               </p>

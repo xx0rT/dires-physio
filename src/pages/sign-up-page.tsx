@@ -20,7 +20,7 @@ export default function SignUpPage() {
   const [loading, setLoading] = useState(false)
 
   if (user) {
-    return <Navigate to="/dashboard" replace />
+    return <Navigate to="/prehled" replace />
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -63,7 +63,7 @@ export default function SignUpPage() {
       }
 
       toast.success('Ověřovací kód byl odeslán na váš email!')
-      navigate(`/auth/verify-email?email=${encodeURIComponent(email)}`)
+      navigate(`/overeni-emailu?email=${encodeURIComponent(email)}`)
     } catch (error: any) {
       console.error('Error:', error)
       toast.error(error.message || 'Něco se pokazilo')
@@ -242,7 +242,7 @@ export default function SignUpPage() {
             <div className="mt-6 space-y-3">
               <p className="text-center text-sm text-muted-foreground">
                 Již máte účet?{' '}
-                <Link to="/auth/sign-in" className="font-medium text-primary hover:underline">
+                <Link to="/prihlaseni" className="font-medium text-primary hover:underline">
                   Přihlaste se
                 </Link>
               </p>

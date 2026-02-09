@@ -141,7 +141,7 @@ export function CourseCard({
                       </Button>
                     ) : (
                       <Button size="sm" className="h-7 rounded-lg px-3 text-xs gap-1" asChild>
-                        <Link to="/auth/sign-up">
+                        <Link to="/registrace">
                           <ShoppingCart className="h-3 w-3" />
                           Prihlasit se
                         </Link>
@@ -162,7 +162,7 @@ export function CourseCard({
                       Obsah
                     </Button>
                     <Button size="sm" className="h-7 rounded-lg px-3 text-xs gap-1" asChild>
-                      <Link to={`/course/${id}`}>
+                      <Link to={`/kurz/${id}`}>
                         <Play className="h-3 w-3" fill="currentColor" />
                         Spustit
                       </Link>
@@ -182,7 +182,7 @@ export function CourseCard({
                       Obsah
                     </Button>
                     <Button variant="outline" size="sm" className="h-7 rounded-lg px-3 text-xs gap-1" asChild>
-                      <Link to={`/course/${id}`}>
+                      <Link to={`/kurz/${id}`}>
                         <Play className="h-3 w-3" fill="currentColor" />
                         Znovu
                       </Link>

@@ -95,13 +95,13 @@ export function NavUser() {
             sideOffset={4}
           >
             <DropdownMenuItem asChild className="gap-3 px-1">
-              <Link to="/dashboard">
+              <Link to="/prehled">
                 <RiTimer2Line size={20} className="text-muted-foreground/70" aria-hidden="true" />
                 <span>Přehled</span>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild className="gap-3 px-1">
-              <Link to="/dashboard/settings">
+              <Link to="/prehled/settings">
                 <RiUserLine size={20} className="text-muted-foreground/70" aria-hidden="true" />
                 <span>Nastaveni</span>
               </Link>
@@ -113,7 +113,7 @@ export function NavUser() {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild className="gap-3 px-1">
-              <Link to="/dashboard/billing">
+              <Link to="/prehled/billing">
                 <RiBankCardLine size={20} className="text-muted-foreground/70" aria-hidden="true" />
                 <span>Fakturace</span>
               </Link>
