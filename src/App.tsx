@@ -27,6 +27,8 @@ import { CoursePlayerPage } from './pages/course-player-page'
 import ScrollToTop from './components/layout/scroll-to-top'
 import AdminOverviewPage from './pages/admin/admin-overview-page'
 import AdminUsersPage from './pages/admin/admin-users-page'
+import AdminBlogsPage from './pages/admin/admin-blogs-page'
+import AdminBlogEditorPage from './pages/admin/admin-blog-editor-page'
 import AdminCoursesPage from './pages/admin/admin-courses-page'
 import AdminInvoicesPage from './pages/admin/admin-invoices-page'
 import AdminSubscriptionsPage from './pages/admin/admin-subscriptions-page'
@@ -71,11 +73,13 @@ export default function App() {
           </Route>
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminOverviewPage />} />
-            <Route path="uzivatele" element={<AdminUsersPage />} />
-            <Route path="kurzy" element={<AdminCoursesPage />} />
-            <Route path="predplatne" element={<AdminSubscriptionsPage />} />
-            <Route path="promo-kody" element={<AdminPromoCodesPage />} />
-            <Route path="faktury" element={<AdminInvoicesPage />} />
+            <Route path="users" element={<AdminUsersPage />} />
+            <Route path="blogs" element={<AdminBlogsPage />} />
+            <Route path="blogs/:id" element={<AdminBlogEditorPage />} />
+            <Route path="courses" element={<AdminCoursesPage />} />
+            <Route path="subscriptions" element={<AdminSubscriptionsPage />} />
+            <Route path="promo-codes" element={<AdminPromoCodesPage />} />
+            <Route path="invoices" element={<AdminInvoicesPage />} />
           </Route>
         </Routes>
         <Toaster />
