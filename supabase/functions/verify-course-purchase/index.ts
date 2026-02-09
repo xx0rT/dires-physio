@@ -33,17 +33,14 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    const userResponse = await fetch(
-      `${Deno.env.get("SUPABASE_URL")}/auth/v1/user`,
-      {
-        headers: {
-          Authorization: authHeader,
-          apikey: Deno.env.get("SUPABASE_ANON_KEY") || "",
-        },
-      }
+    const token = authHeader.replace("Bearer ", "");
+    const authClient = createClient(
+      Deno.env.get("SUPABASE_URL") || "",
+      Deno.env.get("SUPABASE_ANON_KEY") || ""
     );
+    const { data: { user }, error: userError } = await authClient.auth.getUser(token);
 
-    if (!userResponse.ok) {
+    if (userError || !user) {
       return new Response(
         JSON.stringify({ error: "Invalid session" }),
         {
@@ -53,7 +50,6 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    const user = await userResponse.json();
     const { sessionId } = await req.json();
 
     if (!sessionId) {
