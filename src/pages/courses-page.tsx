@@ -110,18 +110,21 @@ export default function CoursesPage() {
       if (crs) setCourses(crs)
 
       if (user) {
-        const { data: enr } = await supabase
+        const { data: enr, error: enrError } = await supabase
           .from('course_enrollments')
           .select('course_id, completed, completion_date')
           .eq('user_id', user.id)
 
-        const { data: purch } = await supabase
+        const { data: purch, error: purchError } = await supabase
           .from('course_purchases')
           .select('course_id')
           .eq('user_id', user.id)
 
-        if (enr) setEnrollments(enr)
-        if (purch) setPurchases(purch)
+        if (enrError) console.error('Error loading enrollments:', enrError)
+        if (purchError) console.error('Error loading purchases:', purchError)
+
+        setEnrollments(enr || [])
+        setPurchases(purch || [])
       }
     } catch (error) {
       console.error('Error loading courses:', error)
@@ -137,35 +140,64 @@ export default function CoursesPage() {
   useEffect(() => {
     const purchasedId = searchParams.get('purchased')
     if (purchasedId && user) {
-      toast.success('Kurz byl uspesne zakoupen! Zpracovavame platbu...')
+      toast.success('Kurz byl uspesne zakoupen! Zpracovavame platbu...', {
+        duration: 5000
+      })
       setSearchParams({}, { replace: true })
 
       let attempts = 0
-      const maxAttempts = 40
+      const maxAttempts = 60
       let foundPurchase = false
+      let toastId: string | number | undefined
 
       const checkPurchase = async () => {
         attempts++
-        await loadData()
 
-        const { data: purch } = await supabase
+        const { data: purch, error: purchError } = await supabase
           .from('course_purchases')
           .select('course_id')
           .eq('user_id', user.id)
           .eq('course_id', purchasedId)
           .maybeSingle()
 
-        if (purch) {
+        const { data: enroll, error: enrollError } = await supabase
+          .from('course_enrollments')
+          .select('course_id')
+          .eq('user_id', user.id)
+          .eq('course_id', purchasedId)
+          .maybeSingle()
+
+        if (purchError || enrollError) {
+          console.error('Error checking purchase:', { purchError, enrollError })
+        }
+
+        if (purch || enroll) {
           foundPurchase = true
-          toast.success('Kurz je nyni k dispozici!', {
-            description: 'Muzete zacit studovat'
+
+          await loadData()
+
+          if (toastId) toast.dismiss(toastId)
+
+          toast.success('✅ Kurz je nyni odemceny!', {
+            description: 'Muzete zacit studovat ihned',
+            duration: 5000
           })
+
           clearInterval(retryInterval)
         } else if (attempts >= maxAttempts) {
           clearInterval(retryInterval)
-          toast.info('Pokud kurz jeste neni k dispozici, zkuste obnovit stranku')
+          if (toastId) toast.dismiss(toastId)
+          toast.warning('Zpracovani platby trva dele nez obvykle', {
+            description: 'Zkuste obnovit stranku nebo kontaktujte podporu'
+          })
+        } else if (attempts % 10 === 0) {
+          console.log(`Purchase check attempt ${attempts}/${maxAttempts} for course ${purchasedId}`)
         }
       }
+
+      toastId = toast.loading('Cekame na potvrzeni platby...', {
+        duration: Number.POSITIVE_INFINITY
+      })
 
       checkPurchase()
 
@@ -173,10 +205,11 @@ export default function CoursesPage() {
         if (!foundPurchase) {
           checkPurchase()
         }
-      }, 1500)
+      }, 1000)
 
       return () => {
         clearInterval(retryInterval)
+        if (toastId) toast.dismiss(toastId)
       }
     }
   }, [searchParams, user, setSearchParams, loadData])

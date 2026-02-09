@@ -400,25 +400,30 @@ export const CoursePlayerPage = () => {
       if (modulesData) setModules(modulesData);
 
       if (user) {
-        const { data: enrollmentData } = await supabase
+        const { data: enrollmentData, error: enrollError } = await supabase
           .from('course_enrollments')
           .select('id')
           .eq('user_id', user.id)
           .eq('course_id', courseId)
           .maybeSingle();
 
-        const { data: purchaseData } = await supabase
+        const { data: purchaseData, error: purchError } = await supabase
           .from('course_purchases')
           .select('id')
           .eq('user_id', user.id)
           .eq('course_id', courseId)
           .maybeSingle();
 
-        setIsEnrolled(!!enrollmentData || !!purchaseData);
+        if (enrollError) console.error('Error loading enrollment:', enrollError);
+        if (purchError) console.error('Error loading purchase:', purchError);
 
-        if (!enrollmentData && !purchaseData) {
+        const hasAccess = !!enrollmentData || !!purchaseData;
+
+        if (!hasAccess) {
           const localEnrollment = mockDatabase.getEnrollments(user.id).find(e => e.course_id === courseId);
           setIsEnrolled(!!localEnrollment);
+        } else {
+          setIsEnrolled(true);
         }
       } else {
         setIsEnrolled(false);
