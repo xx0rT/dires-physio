@@ -62,6 +62,49 @@ Deno.serve(async (req: Request) => {
             if (enrollError) {
               console.error("Error creating enrollment:", enrollError);
             }
+
+            const { data: userData } = await supabase.auth.admin.getUserById(cpUserId);
+            const { data: courseData } = await supabase
+              .from("courses")
+              .select("title")
+              .eq("id", courseId)
+              .maybeSingle();
+
+            if (userData && courseData) {
+              const userEmail = userData.user?.email || session.customer_details?.email || "customer@example.com";
+              const userName = userData.user?.user_metadata?.name || session.customer_details?.name || "Customer";
+              const courseTitle = courseData.title;
+
+              console.log("📧 Attempting to send course purchase invoice to:", userEmail);
+              try {
+                const emailResponse = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/send-invoice-email`, {
+                  method: "POST",
+                  headers: {
+                    Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    customerEmail: userEmail,
+                    customerName: userName,
+                    planType: "course",
+                    planName: courseTitle,
+                    amount: amountPaid,
+                    currency: session.currency || "czk",
+                    orderNumber: `ORD-${Date.now()}`,
+                    orderDate: new Date().toLocaleDateString('cs-CZ'),
+                  }),
+                });
+
+                if (!emailResponse.ok) {
+                  const errorText = await emailResponse.text();
+                  console.error("❌ Course purchase invoice email API returned error:", errorText);
+                } else {
+                  console.log("✅ Course purchase invoice email sent successfully");
+                }
+              } catch (emailError) {
+                console.error("❌ Error sending course purchase invoice email (non-fatal):", emailError);
+              }
+            }
           }
           break;
         }
