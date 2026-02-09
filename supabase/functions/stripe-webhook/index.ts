@@ -86,7 +86,7 @@ Deno.serve(async (req: Request) => {
                   body: JSON.stringify({
                     customerEmail: userEmail,
                     customerName: userName,
-                    planType: "course",
+                    planType: "Kurz",
                     planName: courseTitle,
                     amount: amountPaid,
                     currency: session.currency || "czk",
@@ -106,7 +106,15 @@ Deno.serve(async (req: Request) => {
               }
             }
           }
-          break;
+          return new Response(
+            JSON.stringify({ received: true }),
+            {
+              headers: {
+                ...corsHeaders,
+                "Content-Type": "application/json",
+              },
+            }
+          );
         }
 
         const { planType, promoCode, userEmail, userName } = session.metadata;

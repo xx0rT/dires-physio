@@ -1,4 +1,5 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import { jsPDF } from "npm:jspdf@2.5.2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -45,6 +46,57 @@ Deno.serve(async (req: Request) => {
         currency: currency.toUpperCase(),
       }).format(amount);
     };
+
+    const generatePDF = () => {
+      const doc = new jsPDF();
+
+      doc.setFontSize(22);
+      doc.setFont("helvetica", "bold");
+      doc.text("FAKTURA", 105, 20, { align: "center" });
+
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      doc.text("Fyzioterapie Kurzy", 20, 40);
+      doc.text("txrxo.troxx@gmail.com", 20, 46);
+
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "bold");
+      doc.text("Fakturační údaje:", 20, 60);
+
+      doc.setFont("helvetica", "normal");
+      doc.text(`Zákazník: ${customerName}`, 20, 68);
+      doc.text(`Email: ${customerEmail}`, 20, 74);
+
+      doc.line(20, 82, 190, 82);
+
+      doc.setFont("helvetica", "bold");
+      doc.text("Detail objednávky:", 20, 92);
+
+      doc.setFont("helvetica", "normal");
+      doc.text(`Číslo objednávky: ${orderNumber}`, 20, 100);
+      doc.text(`Datum: ${orderDate}`, 20, 106);
+      doc.text(`Typ: ${planType}`, 20, 112);
+      doc.text(`Produkt: ${planName}`, 20, 118);
+
+      doc.line(20, 126, 190, 126);
+
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text(`Celková částka: ${formatPrice(amount, currency)}`, 20, 140);
+
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      doc.text("Děkujeme za váš nákup!", 20, 160);
+      doc.text("Máte-li jakékoliv dotazy, neváhejte nás kontaktovat.", 20, 166);
+
+      doc.setFontSize(8);
+      doc.text(`Vygenerováno: ${new Date().toLocaleString('cs-CZ')}`, 20, 280);
+
+      return doc.output("arraybuffer");
+    };
+
+    const pdfBuffer = generatePDF();
+    const base64PDF = btoa(String.fromCharCode(...new Uint8Array(pdfBuffer)));
 
     const customerEmailHtml = `
 <!DOCTYPE html>
@@ -163,6 +215,10 @@ Deno.serve(async (req: Request) => {
         to: [{ email: customerEmail }],
         subject: `Faktura za váš nákup - ${orderNumber}`,
         htmlContent: customerEmailHtml,
+        attachment: [{
+          content: base64PDF,
+          name: `Faktura-${orderNumber}.pdf`,
+        }],
       }),
     });
 
