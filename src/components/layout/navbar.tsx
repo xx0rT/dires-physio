@@ -289,6 +289,11 @@ const NAVIGATION: MenuItem[] = [
     },
   },
   {
+    title: "Blog",
+    url: "/blog",
+    id: 4,
+  },
+  {
     title: "Kosik",
     url: "/kosik",
     id: 100,

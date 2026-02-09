@@ -33,6 +33,7 @@ import AdminSubscriptionsPage from './pages/admin/admin-subscriptions-page'
 import AdminPromoCodesPage from './pages/admin/admin-promo-codes-page'
 import TeamPage from './pages/team-page'
 import TeamMemberPage from './pages/team-member-page'
+import BlogPage from './pages/blog-page'
 
 export default function App() {
   return (
@@ -49,6 +50,7 @@ export default function App() {
             <Route path="reference" element={<ReferencesPage />} />
             <Route path="tym" element={<TeamPage />} />
             <Route path="tym/:slug" element={<TeamMemberPage />} />
+            <Route path="blog" element={<BlogPage />} />
           </Route>
           <Route path="/potvrzeni-objednavky" element={<OrderConfirmationPage />} />
           <Route path="/prihlaseni" element={<SignInPage />} />
