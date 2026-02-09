@@ -303,8 +303,12 @@ export default function CoursesPage() {
 
       const firstCourseId = pkgCourses.length > 0 ? pkgCourses[0].id : ''
 
+      const remainingPrice = pkgCourses
+        .filter(c => !isPurchased(c.id))
+        .reduce((sum, c) => sum + c.price, 0)
+
       return {
-        badge: 'Balicek',
+        badge: allPurchased ? 'Zakoupeno' : somePurchased ? `${purchasedCourses.length}/${pkgCourses.length} odemceno` : 'Balicek',
         title: pkg.title,
         description: pkg.description,
         author: {
@@ -320,24 +324,24 @@ export default function CoursesPage() {
         duration: `${totalDuration} min`,
         audience: ['Fyzioterapeuti', 'Studenti'],
         gradient: gradients[idx % gradients.length],
-        price: totalPrice,
+        price: somePurchased ? remainingPrice : totalPrice,
         coursesInPackage: pkgCourses.map(c => ({
           id: c.id,
           title: c.title,
           duration: c.duration,
         })),
-        isPurchased: allPurchased,
+        isPurchased: allPurchased || somePurchased,
         cta: {
-          text: allPurchased ? 'Pokracovat' : somePurchased ? 'Pokracovat' : 'Zobrazit',
+          text: allPurchased || somePurchased ? 'Pokracovat' : 'Zobrazit',
           url: firstAvailable ? `/kurz/${firstAvailable.id}` : firstCourseId ? `/kurz/${firstCourseId}` : '#courses',
         },
         onPreview: () => handlePreview(pkg.id),
-        onBuy: !allPurchased && isAuthenticated
+        onBuy: !allPurchased && !somePurchased && isAuthenticated
           ? () => {
               const firstUnpurchased = pkgCourses.find(c => !isPurchased(c.id))
               if (firstUnpurchased) handleBuy(firstUnpurchased.id)
             }
-          : !allPurchased && !isAuthenticated
+          : !allPurchased && !somePurchased && !isAuthenticated
             ? () => navigate('/registrace')
             : undefined,
       }
