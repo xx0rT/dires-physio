@@ -139,78 +139,76 @@ export default function CoursesPage() {
 
   useEffect(() => {
     const purchasedId = searchParams.get('purchased')
+    const stripeSessionId = searchParams.get('session_id')
     if (purchasedId && user) {
-      toast.success('Kurz byl uspesne zakoupen! Zpracovavame platbu...', {
-        duration: 5000
-      })
       setSearchParams({}, { replace: true })
 
-      let attempts = 0
-      const maxAttempts = 60
-      let foundPurchase = false
-      let toastId: string | number | undefined
+      const toastId = toast.loading('Overujeme platbu...')
 
-      const checkPurchase = async () => {
-        attempts++
-
-        const { data: purch, error: purchError } = await supabase
-          .from('course_purchases')
-          .select('course_id')
-          .eq('user_id', user.id)
-          .eq('course_id', purchasedId)
-          .maybeSingle()
-
-        const { data: enroll, error: enrollError } = await supabase
-          .from('course_enrollments')
-          .select('course_id')
-          .eq('user_id', user.id)
-          .eq('course_id', purchasedId)
-          .maybeSingle()
-
-        if (purchError || enrollError) {
-          console.error('Error checking purchase:', { purchError, enrollError })
+      const verifyPurchase = async () => {
+        if (stripeSessionId) {
+          try {
+            const { data: { session: freshSession } } = await supabase.auth.getSession()
+            if (freshSession) {
+              const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/verify-course-purchase`
+              const res = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                  Authorization: `Bearer ${freshSession.access_token}`,
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ sessionId: stripeSessionId }),
+              })
+              const result = await res.json()
+              if (result.verified) {
+                await loadData()
+                toast.dismiss(toastId)
+                toast.success('Kurz je nyni odemceny!', {
+                  description: 'Muzete zacit studovat ihned',
+                  duration: 5000,
+                })
+                return
+              }
+            }
+          } catch (err) {
+            console.error('Verify course purchase error:', err)
+          }
         }
 
-        if (purch || enroll) {
-          foundPurchase = true
+        let attempts = 0
+        const maxAttempts = 30
 
-          await loadData()
+        const checkPurchase = async () => {
+          attempts++
+          const { data: purch } = await supabase
+            .from('course_purchases')
+            .select('course_id')
+            .eq('user_id', user.id)
+            .eq('course_id', purchasedId)
+            .maybeSingle()
 
-          if (toastId) toast.dismiss(toastId)
-
-          toast.success('✅ Kurz je nyni odemceny!', {
-            description: 'Muzete zacit studovat ihned',
-            duration: 5000
-          })
-
-          clearInterval(retryInterval)
-        } else if (attempts >= maxAttempts) {
-          clearInterval(retryInterval)
-          if (toastId) toast.dismiss(toastId)
-          toast.warning('Zpracovani platby trva dele nez obvykle', {
-            description: 'Zkuste obnovit stranku nebo kontaktujte podporu'
-          })
-        } else if (attempts % 10 === 0) {
-          console.log(`Purchase check attempt ${attempts}/${maxAttempts} for course ${purchasedId}`)
+          if (purch) {
+            await loadData()
+            toast.dismiss(toastId)
+            toast.success('Kurz je nyni odemceny!', {
+              description: 'Muzete zacit studovat ihned',
+              duration: 5000,
+            })
+            clearInterval(retryInterval)
+          } else if (attempts >= maxAttempts) {
+            clearInterval(retryInterval)
+            toast.dismiss(toastId)
+            toast.warning('Zpracovani platby trva dele nez obvykle', {
+              description: 'Zkuste obnovit stranku nebo kontaktujte podporu',
+            })
+          }
         }
+
+        const retryInterval = setInterval(checkPurchase, 2000)
+        checkPurchase()
       }
 
-      toastId = toast.loading('Cekame na potvrzeni platby...', {
-        duration: Number.POSITIVE_INFINITY
-      })
-
-      checkPurchase()
-
-      const retryInterval = setInterval(() => {
-        if (!foundPurchase) {
-          checkPurchase()
-        }
-      }, 1000)
-
-      return () => {
-        clearInterval(retryInterval)
-        if (toastId) toast.dismiss(toastId)
-      }
+      verifyPurchase()
     }
   }, [searchParams, user, setSearchParams, loadData])
 
