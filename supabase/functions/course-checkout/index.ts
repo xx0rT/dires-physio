@@ -25,10 +25,6 @@ Deno.serve(async (req: Request) => {
       throw new Error("STRIPE_SECRET_KEY is not configured");
     }
 
-    const supabaseClient = await import("npm:@supabase/supabase-js@2");
-    const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
-    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
-
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
       return new Response(
@@ -40,18 +36,17 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    const supabase = supabaseClient.createClient(supabaseUrl, supabaseServiceKey, {
-      global: {
+    const userResponse = await fetch(
+      `${Deno.env.get("SUPABASE_URL")}/auth/v1/user`,
+      {
         headers: {
           Authorization: authHeader,
+          apikey: Deno.env.get("SUPABASE_ANON_KEY") || "",
         },
-      },
-    });
+      }
+    );
 
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-
-    if (authError || !user) {
-      console.error("Auth error:", authError);
+    if (!userResponse.ok) {
       return new Response(
         JSON.stringify({ error: "Invalid session or expired token" }),
         {
@@ -60,6 +55,13 @@ Deno.serve(async (req: Request) => {
         }
       );
     }
+
+    const user = await userResponse.json();
+
+    const supabaseClient = await import("npm:@supabase/supabase-js@2");
+    const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
+    const supabase = supabaseClient.createClient(supabaseUrl, supabaseServiceKey);
 
     const { courseId }: CourseCheckoutRequest = await req.json();
 
