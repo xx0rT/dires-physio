@@ -139,20 +139,41 @@ export default function CoursesPage() {
     if (purchasedId && user) {
       toast.success('Kurz byl uspesne zakoupen! Zpracovavame platbu...')
       setSearchParams({}, { replace: true })
-      loadData()
 
       let attempts = 0
-      const maxAttempts = 30
+      const maxAttempts = 40
+      let foundPurchase = false
 
-      const retryInterval = setInterval(() => {
+      const checkPurchase = async () => {
         attempts++
-        loadData()
+        await loadData()
 
-        if (attempts >= maxAttempts) {
+        const { data: purch } = await supabase
+          .from('course_purchases')
+          .select('course_id')
+          .eq('user_id', user.id)
+          .eq('course_id', purchasedId)
+          .maybeSingle()
+
+        if (purch) {
+          foundPurchase = true
+          toast.success('Kurz je nyni k dispozici!', {
+            description: 'Muzete zacit studovat'
+          })
+          clearInterval(retryInterval)
+        } else if (attempts >= maxAttempts) {
           clearInterval(retryInterval)
           toast.info('Pokud kurz jeste neni k dispozici, zkuste obnovit stranku')
         }
-      }, 2000)
+      }
+
+      checkPurchase()
+
+      const retryInterval = setInterval(() => {
+        if (!foundPurchase) {
+          checkPurchase()
+        }
+      }, 1500)
 
       return () => {
         clearInterval(retryInterval)
