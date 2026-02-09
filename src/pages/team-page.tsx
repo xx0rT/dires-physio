@@ -87,7 +87,7 @@ export default function TeamPage() {
               transition={{ duration: 0.5, delay: idx * 0.08 }}
             >
               <Link
-                to={`/team/${member.slug}`}
+                to={`/tym/${member.slug}`}
                 className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-neutral-200/60 bg-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1 dark:border-neutral-800 dark:bg-neutral-900"
               >
                 <div className="relative aspect-[4/3] overflow-hidden">
