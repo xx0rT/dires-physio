@@ -47,9 +47,9 @@ const Footer31 = ({ className }: Footer31Props) => {
 
   return (
     <section
-      className={cn("px-4 pb-4 sm:px-6 sm:pb-6 lg:px-8 lg:pb-8", className)}
+      className={cn("mt-24 bg-neutral-900 pt-24", className)}
     >
-      <div className="dark mx-auto max-w-7xl rounded-3xl bg-neutral-900 px-6 pt-24 text-neutral-100 sm:px-10 lg:px-16">
+      <div className="dark mx-auto max-w-7xl px-6 text-neutral-100 sm:px-10 lg:px-16">
         <div className="flex flex-col justify-between gap-12 lg:flex-row">
           <div className="flex flex-col gap-8">
             <p className="relative text-4xl font-medium tracking-tight lg:text-5xl">
@@ -229,34 +229,34 @@ const Footer31 = ({ className }: Footer31Props) => {
           </div>
         </div>
 
-        <div className="relative mt-12 h-20 overflow-hidden sm:h-28 lg:h-36">
-          <motion.div
-            initial={{ y: 40, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-            viewport={{ once: true }}
-            className="absolute inset-x-0 bottom-0 translate-y-[55%]"
+      </div>
+      <div className="relative mt-16 h-28 overflow-hidden sm:h-36 lg:h-48">
+        <motion.div
+          initial={{ y: 50, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
+          viewport={{ once: true }}
+          className="absolute inset-x-0 bottom-0 translate-y-[50%]"
+        >
+          <svg
+            viewBox="0 0 900 200"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-full"
           >
-            <svg
-              viewBox="0 0 900 200"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-full"
+            <text
+              x="50%"
+              y="75%"
+              textAnchor="middle"
+              dominantBaseline="middle"
+              fill="currentColor"
+              className="text-[180px] font-bold tracking-tighter text-neutral-100"
+              style={{ fontFamily: "inherit", opacity: 0.15 }}
             >
-              <text
-                x="50%"
-                y="75%"
-                textAnchor="middle"
-                dominantBaseline="middle"
-                fill="currentColor"
-                className="text-[180px] font-bold tracking-tighter"
-                style={{ fontFamily: "inherit", opacity: 0.08 }}
-              >
-                DIRES
-              </text>
-            </svg>
-          </motion.div>
-        </div>
+              DIRES
+            </text>
+          </svg>
+        </motion.div>
       </div>
     </section>
   );
