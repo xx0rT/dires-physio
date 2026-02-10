@@ -1,13 +1,8 @@
 import { useEffect, useState, useCallback } from 'react'
-import { motion } from 'framer-motion'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { ShieldCheck, Check } from 'lucide-react'
 import { toast } from 'sonner'
 import { useAuth } from '@/lib/auth-context'
-import { useSubscription } from '@/lib/use-subscription'
 import { supabase } from '@/lib/supabase'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { CoursesHero } from '@/components/courses/courses-hero'
 import { CourseShowcase, type ShowcaseCourse } from '@/components/courses/course-showcase'
 import { CoursesNews } from '@/components/courses/courses-news'
@@ -78,7 +73,6 @@ export default function CoursesPage() {
   const { user, session } = useAuth()
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
-  const { subscription, loading: subscriptionLoading, hasActiveSubscription } = useSubscription()
   const [packages, setPackages] = useState<DBPackage[]>([])
   const [courses, setCourses] = useState<DBCourse[]>([])
   const [enrollments, setEnrollments] = useState<DBEnrollment[]>([])
@@ -348,85 +342,10 @@ export default function CoursesPage() {
     })
   }
 
-  if (loading || subscriptionLoading) {
+  if (loading) {
     return (
       <div className="flex min-h-[600px] items-center justify-center">
         <div className="h-10 w-10 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-      </div>
-    )
-  }
-
-  if (user && !hasActiveSubscription) {
-    return (
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="mx-auto max-w-2xl"
-        >
-          <Card className="border-2 border-primary/20 shadow-lg">
-            <CardHeader className="space-y-4 pb-6 text-center">
-              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-primary/10">
-                <ShieldCheck className="h-10 w-10 text-primary" />
-              </div>
-              <div>
-                <CardTitle className="mb-3 text-3xl">Premium pristup vyzadovan</CardTitle>
-                <CardDescription className="text-base">
-                  Pro pristup ke kurzum potrebujete aktivni predplatne
-                </CardDescription>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="rounded-lg border bg-muted/50 p-4">
-                <h4 className="mb-3 flex items-center gap-2 font-semibold">
-                  <Check className="h-5 w-5 text-primary" />
-                  Co ziskate s premium pristupem:
-                </h4>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  {[
-                    'Moznost nakupu jednotlivych kurzu',
-                    'AI asistent pro dotazy k obsahu kurzu',
-                    'Certifikaty po dokonceni jednotlivych kurzu',
-                    'Doplnkove studijni materialy ke stazeni',
-                    'Aktualizace obsahu zdarma',
-                  ].map(item => (
-                    <li key={item} className="flex items-start gap-2">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {subscription && (
-                <div className="rounded-lg border border-yellow-500/20 bg-yellow-500/10 p-4">
-                  <p className="text-sm text-muted-foreground">
-                    <strong className="text-foreground">Aktualni stav:</strong>{' '}
-                    {subscription.status === 'cancelled' && 'Vase predplatne bylo zruseno'}
-                    {subscription.status === 'expired' && 'Vase predplatne vyprselo'}
-                    {subscription.status === 'trialing' && 'Zkusebni obdobi'}
-                    {subscription.status === 'active' && 'Aktivni'}
-                  </p>
-                </div>
-              )}
-
-              <div className="flex flex-col gap-3 pt-2 sm:flex-row">
-                <Button onClick={() => navigate('/#pricing')} className="flex-1" size="lg">
-                  Zobrazit cenove plany
-                </Button>
-                <Button
-                  onClick={() => navigate('/prehled')}
-                  variant="outline"
-                  className="flex-1"
-                  size="lg"
-                >
-                  Zpet na dashboard
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
       </div>
     )
   }
