@@ -14,6 +14,7 @@ import {
   MessageSquare,
   Settings,
   Star,
+  ShoppingBag,
   Tag,
   Trophy,
   Users,
@@ -151,10 +152,10 @@ const NAVIGATION: MenuItem[] = [
             url: "/blog",
           },
           {
-            label: "Reference",
-            icon: Star,
-            description: "Co o nas rikaji nasi klienti",
-            url: "/#testimonials",
+            label: "Obchod",
+            icon: ShoppingBag,
+            description: "Fyzioterapeuticke pomucky a vybaveni",
+            url: "/obchod",
           },
           {
             label: "Cenik",
