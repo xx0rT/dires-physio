@@ -7,6 +7,7 @@ import { CoursesHero } from '@/components/courses/courses-hero'
 import { CourseShowcase, type ShowcaseCourse } from '@/components/courses/course-showcase'
 import { CoursesNews } from '@/components/courses/courses-news'
 import { CoursePreviewDialog } from '@/components/courses/course-preview-dialog'
+import { PhysioChatbot } from '@/components/chatbot/physio-chatbot'
 
 interface DBPackage {
   id: string
@@ -387,6 +388,7 @@ export default function CoursesPage() {
           onBuy={undefined}
         />
       </div>
+      <PhysioChatbot />
     </div>
   )
 }

@@ -12,6 +12,10 @@ import {
   Home,
   BookOpen,
   Trophy,
+  ChevronRight,
+  GraduationCap,
+  Timer,
+  Sparkles,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth-context";
@@ -29,6 +33,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { PhysioChatbot } from "@/components/chatbot/physio-chatbot";
 
 interface Course {
   id: string;
@@ -55,7 +60,7 @@ export default function CoursePartPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  const partIndex = (parseInt(partNumber || "1", 10) - 1);
+  const partIndex = parseInt(partNumber || "1", 10) - 1;
 
   const [course, setCourse] = useState<Course | null>(null);
   const [lessons, setLessons] = useState<CourseLesson[]>([]);
@@ -533,7 +538,10 @@ export default function CoursePartPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-background">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <div className="flex flex-col items-center gap-3">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <p className="text-sm text-muted-foreground">Nacitani lekce...</p>
+        </div>
       </div>
     );
   }
@@ -541,12 +549,15 @@ export default function CoursePartPage() {
   if (!course || !isEnrolled) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-background">
-        <div className="text-center space-y-2">
-          <h1 className="text-2xl font-bold">Kurz nenalezen</h1>
+        <div className="text-center space-y-4 max-w-md px-4">
+          <div className="mx-auto w-16 h-16 rounded-2xl bg-muted flex items-center justify-center">
+            <Lock className="h-8 w-8 text-muted-foreground" />
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight">Kurz nenalezen</h1>
           <p className="text-muted-foreground">
             Tento kurz neexistuje nebo k nemu nemate pristup.
           </p>
-          <Button asChild variant="outline" className="mt-4">
+          <Button asChild variant="outline" className="mt-2">
             <Link to="/kurzy">Zpet na kurzy</Link>
           </Button>
         </div>
@@ -557,10 +568,13 @@ export default function CoursePartPage() {
   if (!currentLesson) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-background">
-        <div className="text-center space-y-2">
-          <h1 className="text-2xl font-bold">Lekce nenalezena</h1>
+        <div className="text-center space-y-4 max-w-md px-4">
+          <div className="mx-auto w-16 h-16 rounded-2xl bg-muted flex items-center justify-center">
+            <BookOpen className="h-8 w-8 text-muted-foreground" />
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight">Lekce nenalezena</h1>
           <p className="text-muted-foreground">Tato cast kurzu neexistuje.</p>
-          <Button asChild variant="outline" className="mt-4">
+          <Button asChild variant="outline" className="mt-2">
             <Link to={`/kurz/${courseId}`}>Zpet na kurz</Link>
           </Button>
         </div>
@@ -572,23 +586,27 @@ export default function CoursePartPage() {
   if (lockStatus !== "available") {
     return (
       <div className="flex items-center justify-center min-h-screen bg-background">
-        <div className="text-center space-y-3">
+        <div className="text-center space-y-4 max-w-md px-4">
           {lockStatus === "daily_locked" ? (
             <>
-              <CalendarClock className="h-12 w-12 text-amber-500 mx-auto" />
-              <h1 className="text-2xl font-bold">Lekce bude dostupna zitra</h1>
+              <div className="mx-auto w-16 h-16 rounded-2xl bg-amber-500/10 flex items-center justify-center">
+                <CalendarClock className="h-8 w-8 text-amber-500" />
+              </div>
+              <h1 className="text-2xl font-bold tracking-tight">Lekce bude dostupna zitra</h1>
               <p className="text-muted-foreground">Kazdy den se odemkne nova lekce.</p>
             </>
           ) : (
             <>
-              <Lock className="h-12 w-12 text-muted-foreground mx-auto" />
-              <h1 className="text-2xl font-bold">Lekce je zamcena</h1>
+              <div className="mx-auto w-16 h-16 rounded-2xl bg-muted flex items-center justify-center">
+                <Lock className="h-8 w-8 text-muted-foreground" />
+              </div>
+              <h1 className="text-2xl font-bold tracking-tight">Lekce je zamcena</h1>
               <p className="text-muted-foreground">
                 Nejdrive dokoncete predchozi lekce.
               </p>
             </>
           )}
-          <Button asChild variant="outline" className="mt-4">
+          <Button asChild variant="outline" className="mt-2">
             <Link to={`/kurz/${courseId}`}>Zpet na kurz</Link>
           </Button>
         </div>
@@ -611,97 +629,111 @@ export default function CoursePartPage() {
   return (
     <div className="min-h-screen bg-background">
       <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-        <div className="container max-w-5xl mx-auto py-4 px-4">
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Link to="/">
-                    <Home className="size-4" />
-                  </Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Link to="/kurzy">Kurzy</Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Link to={`/kurz/${courseId}`}>{course.title}</Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage>Cast {partIndex + 1}</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-        </div>
-      </div>
+        <div className="mx-auto max-w-7xl py-3 px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between gap-4">
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link to="/">
+                      <Home className="size-4" />
+                    </Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link to="/kurzy">Kurzy</Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link to={`/kurz/${courseId}`} className="max-w-[120px] sm:max-w-[200px] truncate inline-block">
+                      {course.title}
+                    </Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>Cast {partIndex + 1}</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
 
-      <div className="container max-w-5xl mx-auto py-8 px-4 space-y-6">
-        <div className="rounded-xl border bg-card overflow-hidden shadow-sm">
-          <div className="bg-black aspect-video">
-            <div
-              ref={videoRef}
-              className="w-full h-full [&>div]:w-full [&>div]:h-full [&_iframe]:w-full [&_iframe]:h-full"
-            />
-          </div>
-
-          <div className="px-5 pt-3 pb-2 bg-muted/30 border-t">
-            <Progress value={videoProgress} className="h-1.5 mb-2" />
-            <div className="flex justify-between text-xs text-muted-foreground">
-              <span>{formatTime(watchedTime)}</span>
-              <span>-{formatTime(remainingSeconds)}</span>
+            <div className="hidden sm:flex items-center gap-3">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <span>{completedLessons.size}/{lessons.length}</span>
+              </div>
+              <Progress value={courseProgress} className="h-1.5 w-20" />
+              <span className="text-xs font-semibold tabular-nums">{Math.round(courseProgress)}%</span>
             </div>
           </div>
         </div>
+      </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] xl:grid-cols-[1fr_360px] gap-6 lg:gap-8">
           <div className="space-y-6">
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <Badge variant="outline" className="text-xs">
+            <div className="rounded-2xl border bg-card overflow-hidden shadow-sm">
+              <div className="bg-black aspect-video relative">
+                <div
+                  ref={videoRef}
+                  className="w-full h-full [&>div]:w-full [&>div]:h-full [&_iframe]:w-full [&_iframe]:h-full"
+                />
+              </div>
+              <div className="px-4 sm:px-5 py-3 bg-muted/30 border-t">
+                <div className="relative h-1.5 rounded-full bg-muted overflow-hidden">
+                  <div
+                    className="absolute inset-y-0 left-0 rounded-full bg-primary transition-all duration-300"
+                    style={{ width: `${videoProgress}%` }}
+                  />
+                </div>
+                <div className="flex justify-between text-xs text-muted-foreground mt-2">
+                  <span className="tabular-nums">{formatTime(watchedTime)}</span>
+                  <span className="tabular-nums">-{formatTime(remainingSeconds)}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge variant="secondary" className="text-xs font-medium gap-1.5 px-2.5 py-1">
+                  <GraduationCap className="h-3 w-3" />
                   Cast {partIndex + 1} z {lessons.length}
                 </Badge>
-                <Badge variant="outline" className="text-xs gap-1">
+                <Badge variant="secondary" className="text-xs font-medium gap-1.5 px-2.5 py-1">
                   <Clock className="h-3 w-3" />
                   {currentLesson.duration} min
                 </Badge>
                 {isCompleted && (
-                  <Badge className="bg-green-500/15 text-green-600 border-green-500/30 text-xs gap-1">
+                  <Badge className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 text-xs font-medium gap-1.5 px-2.5 py-1">
                     <CheckCircle2 className="h-3 w-3" />
                     Dokonceno
                   </Badge>
                 )}
               </div>
-              <h1 className="text-2xl font-bold">{currentLesson.title}</h1>
+
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight leading-tight">
+                {currentLesson.title}
+              </h1>
+
+              {currentLesson.description && (
+                <p className="text-base text-muted-foreground leading-relaxed">
+                  {currentLesson.description}
+                </p>
+              )}
             </div>
 
-            {currentLesson.description && (
-              <div className="rounded-xl border bg-card p-5">
-                <div className="flex items-start gap-3">
-                  <BookOpen className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                  <div>
-                    <h2 className="font-semibold mb-2">O teto lekci</h2>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {currentLesson.description}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-
             {course.description && (
-              <div className="rounded-xl border bg-card p-5">
-                <div className="flex items-start gap-3">
-                  <Trophy className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                  <div>
-                    <h2 className="font-semibold mb-2">O kurzu</h2>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
+              <div className="rounded-2xl border bg-gradient-to-br from-card to-muted/30 p-5 sm:p-6">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <Trophy className="h-5 w-5 text-primary" />
+                  </div>
+                  <div className="space-y-2 min-w-0">
+                    <h2 className="font-semibold text-sm uppercase tracking-wider text-muted-foreground">O kurzu</h2>
+                    <p className="text-sm leading-relaxed">
                       {course.description}
                     </p>
                   </div>
@@ -710,148 +742,170 @@ export default function CoursePartPage() {
             )}
 
             {!isCompleted && (
-              <Button onClick={markModuleComplete} size="lg" className="w-full sm:w-auto">
-                <CheckCircle2 className="h-4 w-4 mr-2" />
-                Oznacit lekci jako dokoncene
-              </Button>
-            )}
-          </div>
-
-          <div className="space-y-4">
-            <div className="rounded-xl border bg-card p-5">
-              <h3 className="font-semibold mb-3 flex items-center gap-2">
-                <PlayCircle className="h-4 w-4 text-primary" />
-                Prehled
-              </h3>
-              <div className="space-y-3">
-                <div>
-                  <p className="text-xs text-muted-foreground mb-1">Pokrok kurzu</p>
-                  <div className="flex items-center gap-2">
-                    <Progress value={courseProgress} className="h-2 flex-1" />
-                    <span className="text-xs font-semibold tabular-nums">
-                      {Math.round(courseProgress)}%
-                    </span>
+              <div className="rounded-2xl border-2 border-dashed border-primary/20 bg-primary/[0.02] p-5 sm:p-6">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <Sparkles className="h-6 w-6 text-primary" />
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {completedLessons.size} z {lessons.length} lekci
-                  </p>
-                </div>
-                <div className="border-t pt-3">
-                  <p className="text-xs text-muted-foreground mb-1">Sledovano v teto lekci</p>
-                  <p className="text-sm font-medium">{formatTime(actualWatchTime)}</p>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold mb-1">Dokoncili jste tuto lekci?</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Oznacte lekci jako dokoncene pro odemknuti dalsiho obsahu.
+                    </p>
+                  </div>
+                  <Button onClick={markModuleComplete} size="lg" className="w-full sm:w-auto flex-shrink-0">
+                    <CheckCircle2 className="h-4 w-4 mr-2" />
+                    Dokoncit lekci
+                  </Button>
                 </div>
               </div>
-            </div>
+            )}
 
-            <div className="rounded-xl border bg-card p-5">
-              <h3 className="font-semibold mb-3">Navigace</h3>
-              <div className="space-y-2">
-                {!isFirstPart && (
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start"
-                    onClick={() => navigate(`/kurz/${courseId}/cast/${partIndex}`)}
-                  >
-                    <ArrowLeft className="h-4 w-4 mr-2" />
-                    Cast {partIndex}: {lessons[partIndex - 1]?.title}
-                  </Button>
-                )}
-
+            <div className="flex items-center gap-3 pt-2">
+              {!isFirstPart && (
                 <Button
                   variant="outline"
-                  className="w-full justify-start"
-                  onClick={() => navigate(`/kurz/${courseId}`)}
+                  className="flex-1 sm:flex-none"
+                  onClick={() => navigate(`/kurz/${courseId}/cast/${partIndex}`)}
                 >
-                  <BookOpen className="h-4 w-4 mr-2" />
-                  Vsechny lekce
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  <span className="truncate">Predchozi lekce</span>
                 </Button>
+              )}
 
-                {!isLastPart && (
-                  <Button
-                    variant={canGoNext ? "default" : "outline"}
-                    className={cn(
-                      "w-full justify-start",
-                      !canGoNext && "opacity-60"
-                    )}
-                    disabled={!canGoNext}
-                    onClick={() =>
-                      canGoNext && navigate(`/kurz/${courseId}/cast/${partIndex + 2}`)
-                    }
-                  >
-                    {nextPartStatus === "daily_locked" ? (
-                      <>
-                        <CalendarClock className="h-4 w-4 mr-2" />
-                        Cast {partIndex + 2} - dostupna zitra
-                      </>
-                    ) : nextPartStatus === "locked" ? (
-                      <>
-                        <Lock className="h-4 w-4 mr-2" />
-                        Cast {partIndex + 2} - zamceno
-                      </>
-                    ) : (
-                      <>
-                        <ArrowRight className="h-4 w-4 mr-2" />
-                        Cast {partIndex + 2}: {lessons[partIndex + 1]?.title}
-                      </>
-                    )}
-                  </Button>
-                )}
-              </div>
+              {!isLastPart && (
+                <Button
+                  variant={canGoNext ? "default" : "outline"}
+                  className={cn("flex-1 sm:flex-none", !canGoNext && "opacity-60")}
+                  disabled={!canGoNext}
+                  onClick={() => canGoNext && navigate(`/kurz/${courseId}/cast/${partIndex + 2}`)}
+                >
+                  {nextPartStatus === "daily_locked" ? (
+                    <>
+                      <CalendarClock className="h-4 w-4 mr-2" />
+                      <span className="truncate">Dostupne zitra</span>
+                    </>
+                  ) : nextPartStatus === "locked" ? (
+                    <>
+                      <Lock className="h-4 w-4 mr-2" />
+                      <span className="truncate">Zamceno</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="truncate">Dalsi lekce</span>
+                      <ArrowRight className="h-4 w-4 ml-2" />
+                    </>
+                  )}
+                </Button>
+              )}
             </div>
+          </div>
 
-            <div className="rounded-xl border bg-card p-5">
-              <h3 className="font-semibold mb-3">Vsechny casti</h3>
-              <div className="space-y-1">
-                {lessons.map((lesson, idx) => {
-                  const status = getLessonLockStatus(idx);
-                  const done = completedLessons.has(lesson.id);
-                  const isCurrent = idx === partIndex;
+          <div className="space-y-4 lg:sticky lg:top-20 lg:self-start">
+            <div className="rounded-2xl border bg-card overflow-hidden">
+              <div className="p-4 sm:p-5 border-b bg-muted/30">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <PlayCircle className="h-4 w-4 text-primary" />
+                  </div>
+                  <h3 className="font-semibold">Pokrok</h3>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-muted-foreground">{completedLessons.size} z {lessons.length} lekci</span>
+                    <span className="font-semibold tabular-nums">{Math.round(courseProgress)}%</span>
+                  </div>
+                  <div className="relative h-2 rounded-full bg-muted overflow-hidden">
+                    <div
+                      className="absolute inset-y-0 left-0 rounded-full bg-primary transition-all duration-500 ease-out"
+                      style={{ width: `${courseProgress}%` }}
+                    />
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 mt-3 text-xs text-muted-foreground">
+                  <Timer className="h-3.5 w-3.5" />
+                  <span>Sledovano: {formatTime(actualWatchTime)}</span>
+                </div>
+              </div>
 
-                  return (
-                    <button
-                      key={lesson.id}
-                      type="button"
-                      onClick={() =>
-                        status === "available" &&
-                        navigate(`/kurz/${courseId}/cast/${idx + 1}`)
-                      }
-                      disabled={status !== "available"}
-                      className={cn(
-                        "w-full flex items-center gap-2.5 p-2 rounded-lg text-left text-sm transition-colors",
-                        isCurrent && "bg-primary/10 text-primary font-medium",
-                        !isCurrent && status === "available" && "hover:bg-muted/50",
-                        status !== "available" && "opacity-40 cursor-not-allowed"
-                      )}
-                    >
-                      <div
+              <div className="p-2">
+                <div className="space-y-0.5">
+                  {lessons.map((lesson, idx) => {
+                    const status = getLessonLockStatus(idx);
+                    const done = completedLessons.has(lesson.id);
+                    const isCurrent = idx === partIndex;
+
+                    return (
+                      <button
+                        key={lesson.id}
+                        type="button"
+                        onClick={() =>
+                          status === "available" &&
+                          navigate(`/kurz/${courseId}/cast/${idx + 1}`)
+                        }
+                        disabled={status !== "available"}
                         className={cn(
-                          "w-6 h-6 rounded-full flex items-center justify-center text-xs flex-shrink-0",
-                          done
-                            ? "bg-green-500 text-white"
-                            : isCurrent
-                              ? "bg-primary text-primary-foreground"
-                              : "bg-muted text-muted-foreground"
+                          "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left text-sm transition-all duration-200",
+                          isCurrent && "bg-primary/10 ring-1 ring-primary/20",
+                          !isCurrent && status === "available" && "hover:bg-muted/60",
+                          status !== "available" && "opacity-40 cursor-not-allowed"
                         )}
                       >
-                        {done ? (
-                          <CheckCircle2 className="h-3.5 w-3.5" />
-                        ) : status === "locked" ? (
-                          <Lock className="h-3 w-3" />
-                        ) : status === "daily_locked" ? (
-                          <CalendarClock className="h-3 w-3" />
-                        ) : (
-                          idx + 1
+                        <div
+                          className={cn(
+                            "w-7 h-7 rounded-lg flex items-center justify-center text-xs font-medium flex-shrink-0 transition-colors",
+                            done
+                              ? "bg-emerald-500 text-white"
+                              : isCurrent
+                                ? "bg-primary text-primary-foreground"
+                                : "bg-muted text-muted-foreground"
+                          )}
+                        >
+                          {done ? (
+                            <CheckCircle2 className="h-3.5 w-3.5" />
+                          ) : status === "locked" ? (
+                            <Lock className="h-3 w-3" />
+                          ) : status === "daily_locked" ? (
+                            <CalendarClock className="h-3 w-3" />
+                          ) : (
+                            idx + 1
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <span className={cn(
+                            "block truncate text-sm",
+                            isCurrent && "font-medium text-primary"
+                          )}>
+                            {lesson.title}
+                          </span>
+                          <span className="text-xs text-muted-foreground">{lesson.duration} min</span>
+                        </div>
+                        {isCurrent && status === "available" && (
+                          <div className="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0 animate-pulse" />
                         )}
-                      </div>
-                      <span className="truncate">{lesson.title}</span>
-                    </button>
-                  );
-                })}
+                        {!isCurrent && status === "available" && (
+                          <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/50 flex-shrink-0" />
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
+
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={() => navigate(`/kurz/${courseId}`)}
+            >
+              <BookOpen className="h-4 w-4 mr-2" />
+              Prehled kurzu
+            </Button>
           </div>
         </div>
       </div>
+
+      <PhysioChatbot />
     </div>
   );
 }
