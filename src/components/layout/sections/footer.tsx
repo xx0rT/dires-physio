@@ -1,316 +1,266 @@
-import React from "react"
-import { Mail } from "lucide-react"
-import XIcon from "@/components/icons/x-icon"
-import GithubIcon from "@/components/icons/github-icon"
-import LinkedInIcon from "@/components/icons/linkedin-icon"
+import { useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import { motion, useInView } from "framer-motion";
+import {
+  ArrowUpRight,
+  Mail,
+  MapPin,
+  Send,
+} from "lucide-react";
 
-import { Link } from "react-router-dom"
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { site } from "@/config/site"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { site } from "@/config/site";
+import XIcon from "@/components/icons/x-icon";
+import LinkedInIcon from "@/components/icons/linkedin-icon";
 
-interface FooterLinkProps {
-    href: string
-    label: string
-    icon?: React.ReactNode
-    external?: boolean
+interface FooterLink {
+  label: string;
+  href: string;
 }
 
-interface FooterSectionProps {
-    title: string
-    links: FooterLinkProps[]
+interface SocialLink {
+  label: string;
+  href: string;
+  icon: React.ReactNode;
 }
 
-const footerSections: FooterSectionProps[] = [
-    {
-        title: "Kurzy",
-        links: [
-            { href: "#features", label: "Manuální Terapie" },
-            { href: "#services", label: "Sportovní Rehabilitace" },
-            { href: "#services", label: "Neurologická Rehabilitace" },
-            { href: "#pricing", label: "Ceník" }
-        ]
-    },
-    {
-        title: "Společnost",
-        links: [
-            { href: "#about", label: "O Nás" },
-            { href: "#testimonials", label: "Reference" },
-            { href: "#contact", label: "Kontakt" }
-        ]
-    },
-    {
-        title: "Zdroje",
-        links: [
-            { href: "#features", label: "Certifikace" },
-            { href: "#features", label: "Studijní Materiály" },
-            { href: "#contact", label: "Podpora" }
-        ]
-    },
-    {
-        title: "Právní",
-        links: [
-            { href: "#privacy", label: "Ochrana Soukromí" },
-            { href: "#terms", label: "Obchodní Podmínky" },
-            { href: "#cookies", label: "Soubory Cookie" }
-        ]
-    }
-]
+const navigationLinks: FooterLink[] = [
+  { label: "Kurzy", href: "/kurzy" },
+  { label: "Obchod", href: "/obchod" },
+  { label: "Blog", href: "/blog" },
+  { label: "O nas", href: "/#benefits" },
+  { label: "Tym", href: "/tym" },
+  { label: "Cenik", href: "/#pricing" },
+];
 
-const socialLinks: FooterLinkProps[] = [
-    {
-        href: site.links.github,
-        label: "GitHub",
-        icon: <GithubIcon className="size-5 fill-foreground" />,
-        external: true
-    },
-    {
-        href: site.links.twitter,
-        label: "Twitter",
-        icon: <XIcon className="size-5 fill-foreground" />,
-        external: true
-    },
-    {
-        href: "https://linkedin.com",
-        label: "LinkedIn",
-        icon: <LinkedInIcon className="size-5 fill-foreground" />,
-        external: true
-    },
-    {
-        href: `mailto:${site.mailSupport}`,
-        label: "Email",
-        icon: <Mail className="size-5" />
-    }
-]
+const legalLinks: FooterLink[] = [
+  { label: "Ochrana soukromi", href: "#privacy" },
+  { label: "Obchodni podminky", href: "#terms" },
+  { label: "Soubory cookie", href: "#cookies" },
+];
 
-export const FooterSection = () => {
-    const [isNearFooter, setIsNearFooter] = React.useState(false)
-    const footerRef = React.useRef<HTMLElement>(null)
+const socialLinks: SocialLink[] = [
+  {
+    label: "Twitter / X",
+    href: site.links.twitter,
+    icon: <XIcon className="size-4 fill-current" />,
+  },
+  {
+    label: "LinkedIn",
+    href: site.links.linkedin,
+    icon: <LinkedInIcon className="size-4 fill-current" />,
+  },
+];
 
-    React.useEffect(() => {
-        const handleScroll = () => {
-            if (!footerRef.current) return
+const MapSection = () => {
+  return (
+    <section className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+      <div className="space-y-4 text-center">
+        <div className="flex items-center justify-center gap-2">
+          <MapPin className="size-5 text-muted-foreground" />
+          <h3 className="text-lg font-semibold">Navstivte nas</h3>
+        </div>
+        <div className="overflow-hidden rounded-2xl border shadow-sm">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1522.394269715919!2d14.403041690252623!3d50.079700516325545!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470b95f56143f73b%3A0xe9fa458148e639c7!2sDires%20fyzio!5e0!3m2!1sen!2scz!4v1770755195968!5m2!1sen!2scz"
+            className="h-[350px] w-full sm:h-[400px] lg:h-[450px]"
+            style={{ border: 0 }}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            title="Dires fyzio location"
+          />
+        </div>
+      </div>
+    </section>
+  );
+};
 
-            const footerTop = footerRef.current.getBoundingClientRect().top
-            const windowHeight = window.innerHeight
+const FooterSection = () => {
+  const ref = useRef<HTMLElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const [email, setEmail] = useState("");
 
-            setIsNearFooter(footerTop < windowHeight * 1.2)
-        }
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Subscribe:", email);
+    setEmail("");
+  };
 
-        window.addEventListener('scroll', handleScroll)
-        handleScroll()
-        return () => window.removeEventListener('scroll', handleScroll)
-    }, [])
+  return (
+    <>
+      <MapSection />
+      <footer ref={ref} id="footer" className="border-t bg-card/50">
+        <div className="mx-auto max-w-7xl px-4 pt-16 pb-8 sm:px-6 lg:px-8">
+          <div className="grid gap-12 lg:grid-cols-12">
+            <motion.div
+              className="lg:col-span-5"
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6 }}
+            >
+              <Link to="/" className="mb-6 inline-flex items-center gap-2.5">
+                <motion.img
+                  src={site.logo}
+                  alt={site.name}
+                  width={36}
+                  height={36}
+                  animate={isInView ? { rotate: [0, -10, 10, -5, 5, 0] } : {}}
+                  transition={{ duration: 0.8, delay: 0.3 }}
+                />
+                <span className="text-2xl font-bold tracking-tight">
+                  {site.name}
+                </span>
+              </Link>
+              <p className="mb-6 max-w-sm text-sm leading-relaxed text-muted-foreground">
+                Profesionalni fyzioterapeuticke kurzy od certifikovanych ceskych
+                odborniku. Komplexni vzdelavani kombinujici teorii, praxi a
+                prakticke zkusenosti.
+              </p>
 
-    return (
-        <footer id="footer" ref={footerRef}>
-            <div className="mx-auto max-w-7xl pt-16 pb-0 lg:pb-12">
-                <div className={`relative overflow-hidden rounded-xl border border-border bg-card/50 shadow-xl backdrop-blur-sm transition-all duration-700 ${
-                    isNearFooter ? 'scale-100 opacity-100' : 'scale-95 opacity-80'
-                }`}>
-                    <div className={`relative transition-all duration-700 ${
-                        isNearFooter ? 'p-8 lg:p-12' : 'p-6 lg:p-10'
-                    }`}>
-                        {/* Main Footer Content */}
-                        <div className="space-y-8 lg:space-y-0">
-                            {/* Desktop Layout: Side by side */}
-                            <div className="hidden gap-12 lg:grid lg:grid-cols-6">
-                                {/* Brand Section */}
-                                <div className="col-span-2">
-                                    <Link
-                                        to="/"
-                                        className="group mb-4 flex gap-2 font-bold"
-                                    >
-                                        <img
-                                                src={site.logo}
-                                                alt={site.name}
-                                                width={30}
-                                                height={30}
-                                            />
-                                        <h3 className="font-bold text-2xl">
-                                            {site.name}
-                                        </h3>
-                                    </Link>
-                                    <p className="mb-6 text-muted-foreground leading-relaxed">
-                                        Profesionální fyzioterapeutické kurzy od certifikovaných českých odborníků.
-                                        Komplexní vzdělávání kombinující teorii, praxi a praktické zkušenosti.
-                                    </p>
+              <div className="mb-8 flex items-center gap-2 text-sm text-muted-foreground">
+                <Mail className="size-4 shrink-0" />
+                <a
+                  href={`mailto:${site.mailSupport}`}
+                  className="transition-colors hover:text-foreground"
+                >
+                  {site.mailSupport}
+                </a>
+              </div>
 
-                                    {/* Social Links */}
-                                    <div className="flex gap-2">
-                                        {socialLinks.map((social) => (
-                                            <Button
-                                                key={social.label}
-                                                asChild
-                                                variant="ghost"
-                                                size="sm"
-                                                className="p-2 hover:bg-accent/50"
-                                            >
-                                                <Link
-                                                    to={social.href}
-                                                    target={
-                                                        social.external
-                                                            ? "_blank"
-                                                            : undefined
-                                                    }
-                                                    rel={
-                                                        social.external
-                                                            ? "noopener noreferrer"
-                                                            : undefined
-                                                    }
-                                                    aria-label={social.label}
-                                                >
-                                                    {social.icon}
-                                                </Link>
-                                            </Button>
-                                        ))}
-                                    </div>
-                                </div>
+              <div className="flex items-center gap-1">
+                <MapPin className="size-4 shrink-0 text-muted-foreground" />
+                <span className="text-sm text-muted-foreground">
+                  Praha, Ceska republika
+                </span>
+              </div>
+            </motion.div>
 
-                                {/* Footer Links Desktop */}
-                                {footerSections.map((section) => (
-                                    <div
-                                        key={section.title}
-                                        className="flex flex-col"
-                                    >
-                                        <h4 className="mb-4 font-semibold text-foreground text-sm uppercase tracking-wide">
-                                            {section.title}
-                                        </h4>
-                                        <ul className="space-y-3">
-                                            {section.links.map((link) => (
-                                                <li key={link.label}>
-                                                    <Link
-                                                        to={link.href}
-                                                        className="text-muted-foreground text-sm underline-offset-4 transition-colors duration-200 hover:text-foreground hover:underline"
-                                                    >
-                                                        {link.label}
-                                                    </Link>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                ))}
-                            </div>
+            <motion.div
+              className="grid grid-cols-2 gap-8 lg:col-span-4"
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.15 }}
+            >
+              <div>
+                <h4 className="mb-4 text-sm font-semibold uppercase tracking-wider">
+                  Navigace
+                </h4>
+                <ul className="space-y-3">
+                  {navigationLinks.map((link) => (
+                    <li key={link.label}>
+                      <Link
+                        to={link.href}
+                        className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
-                            {/* Mobile/Tablet Layout: Stacked */}
-                            <div className="lg:hidden">
-                                {/* Brand Section Mobile */}
-                                <div className="mb-8">
-                                    <Link
-                                        to="/"
-                                        className="group mb-4 flex gap-2 font-bold"
-                                    >
-                                        <div className="relative">
-                                            <img
-                                                src={site.logo}
-                                                alt={site.name}
-                                                width={30}
-                                                height={30}
-                                            />
-                                        </div>
-                                        <h3 className="font-bold text-2xl">
-                                            {site.name}
-                                        </h3>
-                                    </Link>
-                                    <p className="mb-6 max-w-sm text-muted-foreground text-sm leading-relaxed">
-                                        Profesionální fyzioterapeutické kurzy od certifikovaných českých odborníků.
-                                        Komplexní vzdělávání kombinující teorii, praxi a praktické zkušenosti.
-                                    </p>
+              <div>
+                <h4 className="mb-4 text-sm font-semibold uppercase tracking-wider">
+                  Socialni site
+                </h4>
+                <ul className="space-y-3">
+                  {socialLinks.map((social) => (
+                    <li key={social.label}>
+                      <a
+                        href={social.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                      >
+                        {social.icon}
+                        <span>{social.label}</span>
+                        <ArrowUpRight className="size-3.5 opacity-0 transition-opacity group-hover:opacity-100" />
+                      </a>
+                    </li>
+                  ))}
+                </ul>
 
-                                    {/* Social Links Mobile */}
-                                    <div className="flex gap-2">
-                                        {socialLinks.map((social) => (
-                                            <Button
-                                                key={social.label}
-                                                asChild
-                                                variant="ghost"
-                                                size="sm"
-                                                className="p-2 hover:bg-accent/50"
-                                            >
-                                                <Link
-                                                    to={social.href}
-                                                    target={
-                                                        social.external
-                                                            ? "_blank"
-                                                            : undefined
-                                                    }
-                                                    rel={
-                                                        social.external
-                                                            ? "noopener noreferrer"
-                                                            : undefined
-                                                    }
-                                                    aria-label={social.label}
-                                                >
-                                                    {social.icon}
-                                                </Link>
-                                            </Button>
-                                        ))}
-                                    </div>
-                                </div>
+                <h4 className="mb-4 mt-8 text-sm font-semibold uppercase tracking-wider">
+                  Pravni
+                </h4>
+                <ul className="space-y-3">
+                  {legalLinks.map((link) => (
+                    <li key={link.label}>
+                      <Link
+                        to={link.href}
+                        className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </motion.div>
 
-                                {/* Footer Links Mobile - Grid */}
-                                <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
-                                    {footerSections.map((section) => (
-                                        <div
-                                            key={section.title}
-                                            className="flex flex-col"
-                                        >
-                                            <h4 className="mb-4 font-semibold text-foreground text-sm uppercase tracking-wide">
-                                                {section.title}
-                                            </h4>
-                                            <ul className="space-y-3">
-                                                {section.links.map((link) => (
-                                                    <li key={link.label}>
-                                                        <Link
-                                                            to={link.href}
-                                                            className="text-muted-foreground text-sm underline-offset-4 transition-colors duration-200 hover:text-foreground hover:underline"
-                                                        >
-                                                            {link.label}
-                                                        </Link>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
+            <motion.div
+              className="lg:col-span-3"
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.3 }}
+            >
+              <h4 className="mb-2 text-sm font-semibold uppercase tracking-wider">
+                Newsletter
+              </h4>
+              <p className="mb-4 text-sm text-muted-foreground">
+                Prihlaste se k odberu novinek a ziskejte informace o novych
+                kurzech a akcich.
+              </p>
+              <form onSubmit={handleSubscribe} className="flex gap-2">
+                <Input
+                  type="email"
+                  placeholder="vas@email.cz"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="flex-1"
+                  required
+                />
+                <Button type="submit" size="icon" variant="outline">
+                  <Send className="size-4" />
+                </Button>
+              </form>
+            </motion.div>
+          </div>
 
-                        <Separator className="my-8 bg-border/50" />
-
-                        {/* Bottom Section */}
-                        <div className="flex flex-col justify-between gap-4 lg:flex-row">
-                            <div className="flex flex-col items-center gap-4 text-muted-foreground text-sm sm:flex-row">
-                                <p>
-                                    &copy; 2025 {site.name}. Všechna práva vyhrazena.
-                                </p>
-                            </div>
-
-                            <div className="flex flex-col items-center gap-3 lg:flex-row lg:gap-6">
-
-
-                                <div className="flex items-center gap-2 text-muted-foreground text-sm">
-                                    <span>Vytvořeno s láskou od</span>
-                                    <Link
-                                        target="_blank"
-                                        to="https://xx0rt.github.io/Tr0xx/"
-                                        className="flex items-center gap-1 font-semibold hover:text-foreground transition-colors"
-                                    >
-                                        <img
-                                            src="/logos/logo-website-world-wide-web-svg-png-icon-download-10.png"
-                                            alt="Troxx"
-                                            width={16}
-                                            height={16}
-                                            className="inline-block"
-                                        />
-                                        Troxx
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+          <motion.div
+            className="mt-12 flex flex-col items-center justify-between gap-4 border-t pt-8 sm:flex-row"
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : {}}
+            transition={{ duration: 0.6, delay: 0.45 }}
+          >
+            <p className="text-sm text-muted-foreground">
+              &copy; {new Date().getFullYear()} {site.name}. Vsechna prava
+              vyhrazena.
+            </p>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <span>Vytvoreno s laskou od</span>
+              <Link
+                target="_blank"
+                to="https://xx0rt.github.io/Tr0xx/"
+                className="inline-flex items-center gap-1 font-semibold transition-colors hover:text-foreground"
+              >
+                <img
+                  src="/logos/logo-website-world-wide-web-svg-png-icon-download-10.png"
+                  alt="Troxx"
+                  width={16}
+                  height={16}
+                  className="inline-block"
+                />
+                Troxx
+              </Link>
             </div>
-        </footer>
-    )
-}
+          </motion.div>
+        </div>
+      </footer>
+    </>
+  );
+};
+
+export { FooterSection };

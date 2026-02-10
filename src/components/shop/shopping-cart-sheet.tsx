@@ -1,26 +1,24 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import clsx from "clsx";
-import { ChevronUp, ShoppingBag, TicketPercent, X } from "lucide-react";
+import {
+  ArrowRight,
+  Minus,
+  Plus,
+  ShoppingBag,
+  Tag,
+  Trash2,
+  X,
+} from "lucide-react";
 import { Fragment, memo, useCallback, useState } from "react";
 import { useFieldArray, useForm, Controller } from "react-hook-form";
 import z from "zod";
 
 import { Price, PriceValue } from "@/components/shadcnblocks/price";
-import QuantityInput from "@/components/shadcnblocks/quantity-input";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import { Field } from "@/components/ui/field";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 import {
   Sheet,
   SheetClose,
@@ -42,17 +40,7 @@ type CartItemData = {
   name: string;
   image: string;
   price: ProductPrice;
-  details: {
-    label: string;
-    value: string;
-  }[];
-};
-
-type SuggestedProduct = {
-  name: string;
-  image: string;
-  price: ProductPrice;
-  link: string;
+  details: { label: string; value: string }[];
 };
 
 const cartFormSchema = z.object({
@@ -63,6 +51,7 @@ const cartFormSchema = z.object({
       price: z.number(),
     })
     .array(),
+  promoCode: z.string().optional(),
 });
 
 type CartFormType = z.infer<typeof cartFormSchema>;
@@ -124,63 +113,16 @@ const CART_ITEMS: CartItemData[] = [
   },
 ];
 
-const SUGGESTED_PRODUCTS: SuggestedProduct[] = [
-  {
-    name: "White T-shirt",
-    link: "#",
-    image:
-      "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/Tattooed-Streetwear-Look-2.png",
-    price: { regular: 88.0, currency: "USD" },
-  },
-  {
-    name: "Urban Classic Hoodie",
-    link: "#",
-    image:
-      "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/Man-in-White-Hoodie-2.png",
-    price: { regular: 499.0, currency: "USD" },
-  },
-  {
-    name: "Streetline Hoodie",
-    link: "#",
-    image:
-      "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/Young-Man-in-Blue-Hoodie-2.png",
-    price: { regular: 499.0, currency: "USD" },
-  },
-  {
-    name: "Heritage Street Hoodie",
-    link: "#",
-    image:
-      "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/Young-Man-in-Maroon-Hoodie-2.png",
-    price: { regular: 499.0, currency: "USD" },
-  },
-];
-
 interface ShoppingCartSheetProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   cartItems?: CartItemData[];
-  suggestedProducts?: SuggestedProduct[];
-}
-
-interface CartItemRowProps extends CartItemData {
-  index: number;
-  form: ReturnType<typeof useForm<CartFormType>>;
-  onRemoveClick: () => void;
-  onQuantityChange: (newQty: number) => void;
-}
-
-interface CartItemActionsProps {
-  index: number;
-  form: ReturnType<typeof useForm<CartFormType>>;
-  onRemoveClick: () => void;
-  onQuantityChange: (newQty: number) => void;
 }
 
 const ShoppingCartSheet = ({
   open,
   onOpenChange,
   cartItems = CART_ITEMS,
-  suggestedProducts = SUGGESTED_PRODUCTS,
 }: ShoppingCartSheetProps) => {
   const defaultProducts = cartItems.map((item) => ({
     product_id: item.product_id,
@@ -190,7 +132,7 @@ const ShoppingCartSheet = ({
 
   const form = useForm<CartFormType>({
     resolver: zodResolver(cartFormSchema),
-    defaultValues: { products: defaultProducts },
+    defaultValues: { products: defaultProducts, promoCode: "" },
   });
 
   const { fields, remove, update } = useFieldArray({
@@ -199,11 +141,16 @@ const ShoppingCartSheet = ({
   });
 
   const formItems = form.watch("products");
-  const totalPrice = formItems?.reduce(
+  const subtotal = formItems?.reduce(
     (sum, p) => sum + p.price * p.quantity,
     0,
   );
   const itemsCount = formItems?.length ?? 0;
+
+  const [promoApplied, setPromoApplied] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const discount = promoApplied ? 20 : 0;
+  const total = (subtotal ?? 0) - discount;
 
   const onSubmit = (data: CartFormType) => {
     console.log(data);
@@ -217,45 +164,53 @@ const ShoppingCartSheet = ({
   );
 
   const handleQuantityChange = useCallback(
-    (index: number) => (newQty: number) =>
-      update(index, { ...fields[index], quantity: newQty }),
-    [update, fields],
+    (index: number, delta: number) => {
+      const current = fields[index];
+      const newQty = Math.max(1, (formItems?.[index]?.quantity ?? 1) + delta);
+      update(index, { ...current, quantity: newQty });
+    },
+    [update, fields, formItems],
   );
+
+  const handleApplyPromo = () => {
+    const code = form.getValues("promoCode");
+    if (code && code.trim().length > 0) {
+      setPromoApplied(true);
+    }
+  };
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         aria-describedby={undefined}
-        className="w-[90dvw] gap-0 p-0 sm:max-w-[30rem] lg:max-w-[37.5rem] [&>button]:hidden"
+        className="flex w-[92dvw] flex-col gap-0 p-0 sm:max-w-[28rem] lg:max-w-[32rem] [&>button]:hidden"
       >
-        {itemsCount === 0 && (
-          <div className="absolute end-5 top-5">
-            <SheetClose asChild>
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <X className="size-6" />
-              </Button>
-            </SheetClose>
-          </div>
-        )}
-        {itemsCount > 0 && (
+        <SheetHeader className="flex flex-row items-center justify-between gap-4 border-b px-5 py-4">
+          <SheetTitle className="text-lg font-semibold">
+            Shopping Cart
+            {itemsCount > 0 && (
+              <span className="ml-2 text-sm font-normal text-muted-foreground">
+                ({itemsCount} {itemsCount === 1 ? "item" : "items"})
+              </span>
+            )}
+          </SheetTitle>
+          <SheetClose asChild>
+            <Button variant="ghost" size="icon" className="rounded-full">
+              <X className="size-5" />
+            </Button>
+          </SheetClose>
+        </SheetHeader>
+
+        {itemsCount === 0 ? (
+          <EmptyCartState onClose={() => onOpenChange(false)} />
+        ) : (
           <Fragment>
-            <SheetHeader className="flex flex-row items-center justify-between gap-4 bg-black px-3 py-3 md:px-5 lg:px-7">
-              <SheetTitle className="text-lg font-medium text-white">
-                Cart ({itemsCount})
-              </SheetTitle>
-              <SheetClose asChild>
-                <Button
-                  variant="secondary"
-                  size="icon"
-                  className="rounded-full"
-                >
-                  <X className="size-4" />
-                </Button>
-              </SheetClose>
-            </SheetHeader>
-            <form className="contents" onSubmit={form.handleSubmit(onSubmit)}>
-              <div className="h-full overflow-auto px-3 py-4 md:px-5 lg:px-7">
-                <ul className="space-y-5">
+            <form
+              className="flex flex-1 flex-col overflow-hidden"
+              onSubmit={form.handleSubmit(onSubmit)}
+            >
+              <div className="flex-1 overflow-auto px-5 py-4">
+                <ul className="space-y-4">
                   {fields.map((field, index) => {
                     const cartItem = cartItems.find(
                       (p) => p.product_id === field.product_id,
@@ -264,64 +219,103 @@ const ShoppingCartSheet = ({
                     return (
                       <li key={field.id}>
                         <CartItemRow
-                          {...cartItem}
-                          form={form}
-                          onRemoveClick={() => handleRemove(index)()}
-                          onQuantityChange={(newQty: number) =>
-                            handleQuantityChange(index)(newQty)
-                          }
-                          index={index}
+                          item={cartItem}
+                          quantity={formItems?.[index]?.quantity ?? 1}
+                          onRemove={() => handleRemove(index)()}
+                          onIncrement={() => handleQuantityChange(index, 1)}
+                          onDecrement={() => handleQuantityChange(index, -1)}
                         />
+                        {index < fields.length - 1 && (
+                          <Separator className="mt-4" />
+                        )}
                       </li>
                     );
                   })}
                 </ul>
               </div>
-              <SuggestedProducts products={suggestedProducts} />
-              <SheetFooter className="mt-0 block border-t px-3 py-2.5 md:px-5 lg:px-7">
-                <div className="space-y-3.5">
-                  <div className="space-y-1.5">
-                    <div className="flex items-center gap-2">
-                      <TicketPercent className="size-4" />
-                      <p className="text-xs leading-normal font-medium">
-                        FIRST10 (-$20.00)
-                      </p>
+
+              <SheetFooter className="mt-0 block border-t px-5 py-4">
+                <div className="space-y-4">
+                  <div className="flex gap-2">
+                    <div className="relative flex-1">
+                      <Tag className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                      <Controller
+                        control={form.control}
+                        name="promoCode"
+                        render={({ field }) => (
+                          <Input
+                            {...field}
+                            placeholder="Promo code"
+                            className="pl-9"
+                            disabled={promoApplied}
+                          />
+                        )}
+                      />
                     </div>
-                    <div className="flex flex-wrap justify-between gap-2">
-                      <div className="text-sm font-medium">Shipping</div>
-                      <div className="text-sm font-medium">
-                        Spent more <b>$150.00 USD</b>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap justify-between gap-2">
-                    <h3 className="text-base leading-none font-medium">
-                      Total
-                    </h3>
-                    <div className="text-lg leading-none font-medium">
-                      ${totalPrice} USD
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap gap-2.5">
                     <Button
-                      size="lg"
-                      variant="outline"
-                      className="flex-1 rounded-full"
-                      type="submit"
-                    >
-                      Checkout
-                    </Button>
-                    <Button
-                      size="lg"
-                      className="flex-1 rounded-full"
                       type="button"
+                      variant="outline"
+                      onClick={handleApplyPromo}
+                      disabled={promoApplied}
                     >
-                      View Cart
+                      {promoApplied ? "Applied" : "Apply"}
                     </Button>
                   </div>
-                  <small className="leading-normal font-medium text-muted-foreground">
-                    Taxes, discounts and shipping calculated at checkout
-                  </small>
+
+                  {promoApplied && (
+                    <div className="flex items-center justify-between text-sm text-green-600">
+                      <span>Promo discount</span>
+                      <span>-${discount.toFixed(2)}</span>
+                    </div>
+                  )}
+
+                  <Separator />
+
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Subtotal</span>
+                      <span>${subtotal?.toFixed(2)} USD</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Shipping</span>
+                      <span className="text-muted-foreground">
+                        Calculated at checkout
+                      </span>
+                    </div>
+                    <Separator />
+                    <div className="flex justify-between pt-1">
+                      <span className="text-base font-semibold">Total</span>
+                      <span className="text-base font-semibold">
+                        ${total.toFixed(2)} USD
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-2">
+                    <Checkbox
+                      id="terms"
+                      checked={agreedToTerms}
+                      onCheckedChange={(checked) =>
+                        setAgreedToTerms(checked === true)
+                      }
+                    />
+                    <Label
+                      htmlFor="terms"
+                      className="text-xs leading-normal text-muted-foreground"
+                    >
+                      I agree to the terms and conditions and the return policy
+                    </Label>
+                  </div>
+
+                  <Button
+                    size="lg"
+                    className="w-full gap-2"
+                    type="submit"
+                    disabled={!agreedToTerms}
+                  >
+                    Checkout
+                    <ArrowRight className="size-4" />
+                  </Button>
                 </div>
               </SheetFooter>
             </form>
@@ -332,54 +326,79 @@ const ShoppingCartSheet = ({
   );
 };
 
-const CartItemRow = ({
-  image,
-  name,
-  link,
-  details,
-  price,
-  index,
-  form,
-  onRemoveClick,
-  onQuantityChange,
-}: CartItemRowProps) => {
-  const { regular, sale, currency } = price;
-
+const EmptyCartState = ({ onClose }: { onClose: () => void }) => {
   return (
-    <div className="flex gap-4">
-      <div className="w-20 shrink-0 lg:w-28">
-        <a href={link}>
-          <AspectRatio
-            ratio={0.833353128}
-            className="overflow-hidden rounded-md"
-          >
-            <img
-              src={image}
-              alt={name}
-              className="block size-full object-cover object-center"
-            />
-          </AspectRatio>
-        </a>
+    <div className="flex flex-1 flex-col items-center justify-center gap-6 px-8 text-center">
+      <div className="flex size-20 items-center justify-center rounded-full bg-muted">
+        <ShoppingBag className="size-10 text-muted-foreground" />
       </div>
-      <div className="max-sm:space-y-2.5 sm:contents">
-        <div className="flex-1 space-y-2">
-          <h4 className="text-sm font-medium transition-colors hover:text-foreground/80 lg:text-base">
-            <a href={link}>{name}</a>
-          </h4>
-          <ul className="flex flex-wrap gap-3">
-            {details.map((item, i) => (
-              <li key={`product-details-${i}`}>
-                <dl className="text-sm font-medium">
-                  <dt className="inline">{item.label}: </dt>
-                  <dd className="inline text-muted-foreground">{item.value}</dd>
-                </dl>
-              </li>
-            ))}
-          </ul>
-          <div className="pt-1.5">
+      <div className="space-y-2">
+        <h3 className="text-lg font-semibold">Your cart is empty</h3>
+        <p className="text-sm text-muted-foreground">
+          Looks like you haven't added any items yet. Browse our store and find
+          something you love.
+        </p>
+      </div>
+      <Button onClick={onClose} className="gap-2">
+        Continue Shopping
+        <ArrowRight className="size-4" />
+      </Button>
+    </div>
+  );
+};
+
+const CartItemRow = memo(
+  ({
+    item,
+    quantity,
+    onRemove,
+    onIncrement,
+    onDecrement,
+  }: {
+    item: CartItemData;
+    quantity: number;
+    onRemove: () => void;
+    onIncrement: () => void;
+    onDecrement: () => void;
+  }) => {
+    const { regular, sale, currency } = item.price;
+
+    return (
+      <div className="flex gap-4">
+        <div className="w-20 shrink-0">
+          <a href={item.link}>
+            <AspectRatio
+              ratio={3 / 4}
+              className="overflow-hidden rounded-lg bg-muted"
+            >
+              <img
+                src={item.image}
+                alt={item.name}
+                className="block size-full object-cover object-center"
+              />
+            </AspectRatio>
+          </a>
+        </div>
+        <div className="flex flex-1 flex-col justify-between gap-1">
+          <div className="space-y-1">
+            <h4 className="text-sm font-medium leading-tight">
+              <a
+                href={item.link}
+                className="transition-colors hover:text-foreground/80"
+              >
+                {item.name}
+              </a>
+            </h4>
+            <ul className="flex flex-wrap gap-x-3 gap-y-0.5">
+              {item.details.map((detail, i) => (
+                <li key={`detail-${i}`} className="text-xs text-muted-foreground">
+                  {detail.label}: {detail.value}
+                </li>
+              ))}
+            </ul>
             <Price
               onSale={sale != null}
-              className="gap-x-1 text-base font-medium"
+              className="gap-x-1.5 text-sm font-medium"
             >
               <PriceValue price={sale} currency={currency} variant="sale" />
               <PriceValue
@@ -389,174 +408,41 @@ const CartItemRow = ({
               />
             </Price>
           </div>
-        </div>
-        <CartItemActions
-          form={form}
-          onRemoveClick={onRemoveClick}
-          index={index}
-          onQuantityChange={onQuantityChange}
-        />
-      </div>
-    </div>
-  );
-};
-
-const CartItemActions = memo(
-  ({ onRemoveClick, index, form, onQuantityChange }: CartItemActionsProps) => {
-    return (
-      <div className="flex flex-col justify-between gap-4 sm:items-end">
-        <Button
-          variant="link"
-          type="button"
-          className="h-fit w-fit px-0 py-0 text-muted-foreground hover:underline"
-          onClick={onRemoveClick}
-        >
-          Remove
-        </Button>
-        <div>
-          <QuantityField
-            form={form}
-            index={index}
-            onQuantityChange={onQuantityChange}
-          />
-        </div>
-      </div>
-    );
-  },
-  (prev, next) =>
-    prev.onRemoveClick !== next.onRemoveClick &&
-    prev.onQuantityChange !== next.onQuantityChange,
-);
-
-const QuantityField = memo(
-  ({
-    form,
-    index,
-    onQuantityChange,
-  }: {
-    form: ReturnType<typeof useForm<CartFormType>>;
-    index: number;
-    onQuantityChange: (n: number) => void;
-  }) => {
-    return (
-      <Controller
-        control={form.control}
-        name={`products.${index}.quantity`}
-        render={({ field }) => (
-          <Field className="gap-3">
-            <div className="w-full max-w-28">
-              <QuantityInput
-                inputProps={field}
-                onValueChange={(newQty) => {
-                  field.onChange(newQty);
-                  onQuantityChange(newQty);
-                }}
-              />
-            </div>
-          </Field>
-        )}
-      />
-    );
-  },
-);
-
-const ProductCard = ({ image, name, price, link }: SuggestedProduct) => {
-  const { regular, sale, currency } = price;
-
-  return (
-    <Card className="h-full p-0">
-      <CardContent className="flex gap-2.5 p-2.5">
-        <div className="w-20 shrink-0">
-          <a href={link}>
-            <AspectRatio ratio={0.8} className="overflow-hidden rounded-xl">
-              <img
-                src={image}
-                alt={name}
-                className="block size-full object-cover object-center"
-              />
-            </AspectRatio>
-          </a>
-        </div>
-        <div className="flex-1">
-          <div className="space-y-1">
-            <a
-              href={link}
-              className="inline-block text-sm leading-snug font-medium transition-colors duration-300 hover:text-rose-600 md:text-base"
-            >
-              {name}
-            </a>
-            <div className="space-y-2">
-              <Price
-                onSale={sale != null}
-                className="gap-x-1 text-sm font-medium sm:text-base"
+          <div className="flex items-center justify-between">
+            <div className="flex items-center rounded-lg border">
+              <button
+                type="button"
+                onClick={onDecrement}
+                disabled={quantity <= 1}
+                className="flex size-8 items-center justify-center text-muted-foreground transition-colors hover:text-foreground disabled:opacity-40"
               >
-                <PriceValue price={sale} currency={currency} variant="sale" />
-                <PriceValue
-                  price={regular}
-                  currency={currency}
-                  variant="regular"
-                />
-              </Price>
-              <Button size="icon" className="rounded-full">
-                <ShoppingBag className="size-3.5" />
-              </Button>
+                <Minus className="size-3.5" />
+              </button>
+              <span className="flex w-8 items-center justify-center text-sm font-medium">
+                {quantity}
+              </span>
+              <button
+                type="button"
+                onClick={onIncrement}
+                className="flex size-8 items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
+              >
+                <Plus className="size-3.5" />
+              </button>
             </div>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-};
-
-const SuggestedProducts = ({
-  products,
-}: {
-  products: SuggestedProduct[];
-}) => {
-  const [suggestionsOpen, setSuggestionsOpen] = useState(true);
-
-  if (!products) return null;
-
-  return (
-    <Collapsible
-      open={suggestionsOpen}
-      onOpenChange={setSuggestionsOpen}
-      className="border-t"
-    >
-      <CollapsibleTrigger className="flex w-full justify-between px-3 pt-4 pb-3 md:px-5 lg:px-7">
-        <h3 className="text-sm leading-relaxed font-medium uppercase">
-          Suggested for you
-        </h3>
-        <ChevronUp
-          className={clsx(
-            "size-4 stroke-muted-foreground transition-transform duration-300",
-            suggestionsOpen ? "rotate-0" : "rotate-180",
-          )}
-        />
-      </CollapsibleTrigger>
-      <CollapsibleContent className="px-3 pb-4 md:px-5 lg:px-7">
-        <div className="-mx-3 md:-mx-5 lg:-mx-7">
-          <div className="overflow-hidden px-7">
-            <Carousel
-              opts={{ align: "start" }}
-              className="[&>div]:overflow-visible"
+            <Button
+              variant="ghost"
+              size="icon"
+              type="button"
+              className="size-8 text-muted-foreground hover:text-destructive"
+              onClick={onRemove}
             >
-              <CarouselContent>
-                {products.map((product, index) => (
-                  <CarouselItem
-                    className="basis-[75dvw] sm:basis-[24rem]"
-                    key={`product-img-${index}`}
-                  >
-                    <ProductCard {...product} />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-            </Carousel>
+              <Trash2 className="size-4" />
+            </Button>
           </div>
         </div>
-      </CollapsibleContent>
-    </Collapsible>
-  );
-};
+      </div>
+    );
+  },
+);
 
 export { ShoppingCartSheet };
