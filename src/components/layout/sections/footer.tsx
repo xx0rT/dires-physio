@@ -47,7 +47,7 @@ const Footer31 = ({ className }: Footer31Props) => {
 
   return (
     <section
-      className={cn("mt-24 bg-neutral-900 pt-24", className)}
+      className={cn("mx-4 mt-24 rounded-3xl bg-neutral-900 pt-24 sm:mx-6 lg:mx-8", className)}
     >
       <div className="dark mx-auto max-w-7xl px-6 text-neutral-100 sm:px-10 lg:px-16">
         <div className="flex flex-col justify-between gap-12 lg:flex-row">
@@ -230,13 +230,13 @@ const Footer31 = ({ className }: Footer31Props) => {
         </div>
 
       </div>
-      <div className="relative mt-16 h-28 overflow-hidden sm:h-36 lg:h-48">
+      <div className="relative mt-16 h-28 overflow-hidden rounded-b-3xl sm:h-36 lg:h-48">
         <motion.div
           initial={{ y: 50, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
           viewport={{ once: true }}
-          className="absolute inset-x-0 bottom-0 translate-y-[50%]"
+          className="absolute inset-x-0 bottom-0 translate-y-[25%]"
         >
           <svg
             viewBox="0 0 900 200"
