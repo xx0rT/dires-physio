@@ -1,21 +1,30 @@
 import { motion } from "framer-motion";
 import {
   ArrowLeft,
-  ArrowUp,
-  Calendar,
   Clock,
   Eye,
-  Share2,
-  Tag,
+  Facebook,
+  Home,
+  Linkedin,
+  Twitter,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
-import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/lib/supabase";
+import { cn } from "@/lib/utils";
 
 interface BlogPost {
   id: string;
@@ -36,15 +45,18 @@ interface RelatedBlog {
   slug: string;
   excerpt: string;
   featured_image: string;
-  tags: string[];
   published_at: string | null;
   created_at: string;
 }
 
+interface TocHeading {
+  id: string;
+  text: string;
+}
+
 function formatDate(dateStr: string | null) {
   if (!dateStr) return "";
-  const d = new Date(dateStr);
-  return d.toLocaleDateString("cs-CZ", {
+  return new Date(dateStr).toLocaleDateString("cs-CZ", {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -53,8 +65,28 @@ function formatDate(dateStr: string | null) {
 
 function readTimeFromHtml(html: string) {
   const text = html.replace(/<[^>]*>/g, " ");
-  const words = text.split(/\s+/).filter(Boolean).length;
-  return Math.max(2, Math.ceil(words / 200));
+  return Math.max(2, Math.ceil(text.split(/\s+/).filter(Boolean).length / 200));
+}
+
+function slugify(text: string) {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9\u00C0-\u024F]+/gi, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function extractHeadings(html: string): { headings: TocHeading[]; processedHtml: string } {
+  const headings: TocHeading[] = [];
+  const processedHtml = html.replace(
+    /<h2([^>]*)>(.*?)<\/h2>/gi,
+    (_match, attrs, inner) => {
+      const text = inner.replace(/<[^>]*>/g, "").trim();
+      const id = slugify(text);
+      headings.push({ id, text });
+      return `<h2${attrs} id="${id}">${inner}</h2>`;
+    }
+  );
+  return { headings, processedHtml };
 }
 
 export default function BlogPostPage() {
@@ -63,6 +95,8 @@ export default function BlogPostPage() {
   const [related, setRelated] = useState<RelatedBlog[]>([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [activeSection, setActiveSection] = useState<string | null>(null);
+  const sectionRefs = useRef<Record<string, HTMLElement>>({});
 
   useEffect(() => {
     if (!slug) return;
@@ -91,9 +125,7 @@ export default function BlogPostPage() {
 
       const { data: relatedData } = await supabase
         .from("blogs")
-        .select(
-          "id, title, slug, excerpt, featured_image, tags, published_at, created_at"
-        )
+        .select("id, title, slug, excerpt, featured_image, published_at, created_at")
         .eq("status", "published")
         .neq("id", data.id)
         .order("published_at", { ascending: false })
@@ -104,15 +136,57 @@ export default function BlogPostPage() {
     })();
   }, [slug]);
 
+  const { headings, processedHtml } = useMemo(() => {
+    const raw = post?.content?.html ?? "";
+    return extractHeadings(raw);
+  }, [post]);
+
+  const observeRef = useCallback(() => {
+    const ids = Object.keys(sectionRefs.current);
+    if (ids.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        }
+      },
+      { rootMargin: "-80px 0px -60% 0px", threshold: 0 }
+    );
+
+    for (const el of Object.values(sectionRefs.current)) {
+      observer.observe(el);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!processedHtml || headings.length === 0) return;
+
+    const timeout = setTimeout(() => {
+      sectionRefs.current = {};
+      for (const h of headings) {
+        const el = document.getElementById(h.id);
+        if (el) sectionRefs.current[h.id] = el;
+      }
+      observeRef();
+    }, 100);
+
+    return () => clearTimeout(timeout);
+  }, [processedHtml, headings, observeRef]);
+
   if (loading) return <PostSkeleton />;
 
   if (notFound || !post) {
     return (
-      <div className="flex min-h-[60vh] flex-col items-center justify-center px-4 text-center">
+      <div className="flex min-h-[60vh] flex-col items-center justify-center px-4 pt-32 text-center">
         <h1 className="text-2xl font-semibold text-neutral-900 dark:text-white">
           Clanek nenalezen
         </h1>
-        <p className="mt-2 text-neutral-500">
+        <p className="mt-2 text-muted-foreground">
           Tento clanek neexistuje nebo byl odstranen.
         </p>
         <Button asChild variant="outline" className="mt-6">
@@ -125,185 +199,252 @@ export default function BlogPostPage() {
     );
   }
 
-  const htmlContent = post.content?.html ?? "";
-  const readMin = readTimeFromHtml(htmlContent);
+  const readMin = readTimeFromHtml(processedHtml);
+  const shareUrl = typeof window !== "undefined" ? window.location.href : "";
 
   return (
-    <section className="pb-20">
-      {/* Hero banner */}
-      <div className="relative">
-        {post.featured_image && (
-          <div className="h-64 overflow-hidden sm:h-80 lg:h-96">
-            <img
-              src={post.featured_image}
-              alt={post.title}
-              className="size-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-          </div>
-        )}
-        {!post.featured_image && (
-          <div className="h-32 bg-neutral-100 dark:bg-neutral-900" />
-        )}
-      </div>
-
-      <div className="container mx-auto max-w-3xl px-4 sm:px-6">
-        {/* Header info */}
+    <section className="pt-28 pb-20">
+      <div className="container mx-auto max-w-7xl px-4 sm:px-6">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className={post.featured_image ? "-mt-20 relative z-10" : "mt-8"}
+          transition={{ duration: 0.4 }}
         >
-          <Link
-            to="/blog"
-            className="mb-4 inline-flex items-center gap-1.5 text-xs font-medium text-neutral-400 transition-colors hover:text-neutral-600 dark:hover:text-neutral-300"
-          >
-            <ArrowLeft className="size-3" />
-            Zpet na blog
-          </Link>
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link to="/">
+                    <Home className="size-4" />
+                  </Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link to="/blog">Blog</Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage className="line-clamp-1 max-w-[200px]">
+                  {post.title}
+                </BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
 
-          <div className="flex flex-wrap items-center gap-2">
-            {post.tags?.map((tag) => (
-              <Badge
-                key={tag}
-                variant="secondary"
-                className="text-[10px] font-medium"
-              >
-                <Tag className="mr-0.5 size-2.5" />
-                {tag}
-              </Badge>
-            ))}
-          </div>
-
-          <h1
-            className={`mt-3 text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl ${
-              post.featured_image
-                ? "text-white drop-shadow-md"
-                : "text-neutral-900 dark:text-white"
-            }`}
-          >
+          <h1 className="mt-9 mb-7 max-w-3xl text-3xl font-bold tracking-tight md:mb-10 md:text-5xl lg:text-6xl">
             {post.title}
           </h1>
 
-          <p
-            className={`mt-2 text-sm leading-relaxed ${
-              post.featured_image
-                ? "text-neutral-200"
-                : "text-neutral-500 dark:text-neutral-400"
-            }`}
-          >
-            {post.excerpt}
-          </p>
-
-          <div
-            className={`mt-4 flex flex-wrap items-center gap-4 text-xs ${
-              post.featured_image
-                ? "text-neutral-300"
-                : "text-neutral-400"
-            }`}
-          >
-            <span className="flex items-center gap-1">
-              <Calendar className="size-3.5" />
-              {formatDate(post.published_at || post.created_at)}
-            </span>
-            <span className="flex items-center gap-1">
-              <Clock className="size-3.5" />
-              {readMin} min cteni
-            </span>
-            <span className="flex items-center gap-1">
-              <Eye className="size-3.5" />
-              {post.view_count} zobrazeni
+          <div className="flex items-center gap-3 text-sm md:text-base">
+            <Avatar className="size-8 border">
+              <AvatarImage src="https://images.pexels.com/photos/5327585/pexels-photo-5327585.jpeg?auto=compress&cs=tinysrgb&w=80" />
+            </Avatar>
+            <span>
+              <span className="font-medium">Fyzioterapie tym</span>
+              <span className="ml-1 text-muted-foreground">
+                {formatDate(post.published_at || post.created_at)}
+              </span>
             </span>
           </div>
         </motion.div>
 
-        <Separator className="my-8" />
-
-        {/* Article body */}
-        <motion.article
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.15, ease: "easeOut" }}
-          className="prose prose-neutral dark:prose-invert max-w-none prose-headings:font-semibold prose-headings:tracking-tight prose-p:leading-relaxed prose-img:rounded-xl prose-a:text-neutral-900 prose-a:underline-offset-2 dark:prose-a:text-white"
-          dangerouslySetInnerHTML={{ __html: htmlContent }}
-        />
-
-        {/* Actions */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="mt-10 flex items-center justify-between"
-        >
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              navigator.clipboard.writeText(window.location.href);
-            }}
+        <div className="relative mt-12 grid max-w-7xl gap-14 lg:mt-14 lg:grid-cols-12 lg:gap-6">
+          <motion.div
+            className="order-2 lg:order-none lg:col-span-8"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
           >
-            <Share2 className="mr-1.5 size-3.5" />
-            Sdilet
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          >
-            <ArrowUp className="mr-1.5 size-3.5" />
-            Nahoru
-          </Button>
-        </motion.div>
+            {post.featured_image && (
+              <img
+                src={post.featured_image}
+                alt={post.title}
+                className="mt-0 mb-8 aspect-video w-full rounded-lg border object-cover"
+              />
+            )}
 
-        {/* Related posts */}
-        {related.length > 0 && (
-          <>
-            <Separator className="my-10" />
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
-            >
-              <h2 className="text-lg font-semibold tracking-tight text-neutral-900 dark:text-white">
-                Dalsi clanky
-              </h2>
-              <div className="mt-4 grid gap-4 sm:grid-cols-3">
-                {related.map((r) => (
-                  <Link key={r.id} to={`/blog/${r.slug}`}>
-                    <motion.div
-                      className="group overflow-hidden rounded-lg border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900"
-                      whileHover={{ y: -3 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 400,
-                        damping: 25,
-                      }}
+            {post.excerpt && (
+              <p className="mb-8 text-sm leading-relaxed text-muted-foreground">
+                {post.excerpt}
+              </p>
+            )}
+
+            <div className="flex items-center gap-4 mb-8 text-xs text-muted-foreground">
+              <span className="flex items-center gap-1">
+                <Clock className="size-3.5" />
+                {readMin} min cteni
+              </span>
+              <span className="flex items-center gap-1">
+                <Eye className="size-3.5" />
+                {post.view_count} zobrazeni
+              </span>
+              {post.tags?.length > 0 && (
+                <div className="flex items-center gap-1.5">
+                  {post.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium"
                     >
-                      {r.featured_image && (
-                        <div className="aspect-[16/9] overflow-hidden">
-                          <img
-                            src={r.featured_image}
-                            alt={r.title}
-                            className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          />
-                        </div>
-                      )}
-                      <div className="p-3">
-                        <h3 className="line-clamp-2 text-sm font-medium text-neutral-900 transition-colors group-hover:text-neutral-600 dark:text-white dark:group-hover:text-neutral-300">
-                          {r.title}
-                        </h3>
-                        <p className="mt-1 text-[11px] text-neutral-400">
-                          {formatDate(r.published_at || r.created_at)}
-                        </p>
-                      </div>
-                    </motion.div>
-                  </Link>
-                ))}
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <article
+              className="prose prose-neutral dark:prose-invert max-w-none prose-headings:font-semibold prose-headings:tracking-tight prose-p:leading-relaxed prose-img:rounded-xl prose-a:underline-offset-2 prose-blockquote:border-l-primary/50 prose-blockquote:text-muted-foreground"
+              dangerouslySetInnerHTML={{ __html: processedHtml }}
+            />
+
+            {related.length > 0 && (
+              <>
+                <Separator className="my-12" />
+                <div>
+                  <h2 className="text-lg font-semibold tracking-tight">
+                    Dalsi clanky
+                  </h2>
+                  <div className="mt-5 grid gap-5 sm:grid-cols-3">
+                    {related.map((r) => (
+                      <Link key={r.id} to={`/blog/${r.slug}`}>
+                        <motion.div
+                          className="group overflow-hidden rounded-lg border bg-card"
+                          whileHover={{ y: -3 }}
+                          transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                        >
+                          {r.featured_image && (
+                            <div className="aspect-[16/9] overflow-hidden">
+                              <img
+                                src={r.featured_image}
+                                alt={r.title}
+                                className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+                              />
+                            </div>
+                          )}
+                          <div className="p-3">
+                            <h3 className="line-clamp-2 text-sm font-medium transition-colors group-hover:text-muted-foreground">
+                              {r.title}
+                            </h3>
+                            <p className="mt-1 text-[11px] text-muted-foreground">
+                              {formatDate(r.published_at || r.created_at)}
+                            </p>
+                          </div>
+                        </motion.div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+          </motion.div>
+
+          <motion.div
+            className="order-1 flex h-fit flex-col text-sm lg:sticky lg:top-24 lg:order-none lg:col-span-3 lg:col-start-10 lg:text-xs"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+          >
+            {headings.length > 0 && (
+              <div className="order-3 lg:order-none">
+                <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                  Na teto strance
+                </span>
+                <nav className="mt-2 lg:mt-4">
+                  <ul className="space-y-1">
+                    {headings.map((h) => (
+                      <li key={h.id}>
+                        <a
+                          href={`#${h.id}`}
+                          className={cn(
+                            "block py-1 transition-colors duration-200",
+                            activeSection === h.id
+                              ? "text-foreground font-medium"
+                              : "text-muted-foreground hover:text-foreground"
+                          )}
+                        >
+                          {h.text}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
               </div>
-            </motion.div>
-          </>
-        )}
+            )}
+
+            <Separator className="order-2 mt-8 mb-11 lg:hidden" />
+
+            <div className="order-1 flex flex-col gap-2 lg:order-none lg:mt-9">
+              <p className="font-medium text-muted-foreground text-xs">
+                Sdilet clanek:
+              </p>
+              <ul className="flex gap-2">
+                <li>
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    className="group rounded-full size-8"
+                    asChild
+                  >
+                    <a
+                      href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Facebook className="size-3.5 fill-muted-foreground text-muted-foreground transition-colors group-hover:fill-foreground group-hover:text-foreground" />
+                    </a>
+                  </Button>
+                </li>
+                <li>
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    className="group rounded-full size-8"
+                    asChild
+                  >
+                    <a
+                      href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(shareUrl)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Linkedin className="size-3.5 fill-muted-foreground text-muted-foreground transition-colors group-hover:fill-foreground group-hover:text-foreground" />
+                    </a>
+                  </Button>
+                </li>
+                <li>
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    className="group rounded-full size-8"
+                    asChild
+                  >
+                    <a
+                      href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(post.title)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Twitter className="size-3.5 fill-muted-foreground text-muted-foreground transition-colors group-hover:fill-foreground group-hover:text-foreground" />
+                    </a>
+                  </Button>
+                </li>
+              </ul>
+            </div>
+
+            <Separator className="my-6 hidden lg:block" />
+
+            <div className="hidden lg:block">
+              <Link
+                to="/blog"
+                className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+              >
+                <ArrowLeft className="size-3" />
+                Zpet na blog
+              </Link>
+            </div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );
@@ -311,21 +452,32 @@ export default function BlogPostPage() {
 
 function PostSkeleton() {
   return (
-    <div className="pb-20">
-      <Skeleton className="h-80 w-full" />
-      <div className="container mx-auto max-w-3xl space-y-4 px-4 pt-8 sm:px-6">
-        <Skeleton className="h-4 w-20" />
-        <Skeleton className="h-10 w-3/4" />
-        <Skeleton className="h-4 w-full" />
-        <Skeleton className="h-4 w-2/3" />
-        <Separator className="my-8" />
-        <Skeleton className="h-6 w-1/2" />
-        <Skeleton className="h-4 w-full" />
-        <Skeleton className="h-4 w-full" />
-        <Skeleton className="h-4 w-3/4" />
-        <Skeleton className="h-6 w-1/3" />
-        <Skeleton className="h-4 w-full" />
-        <Skeleton className="h-4 w-5/6" />
+    <div className="pt-28 pb-20">
+      <div className="container mx-auto max-w-7xl space-y-4 px-4 sm:px-6">
+        <Skeleton className="h-4 w-48" />
+        <Skeleton className="mt-6 h-12 w-3/4" />
+        <Skeleton className="h-12 w-1/2" />
+        <div className="flex items-center gap-3 pt-2">
+          <Skeleton className="size-8 rounded-full" />
+          <Skeleton className="h-4 w-40" />
+        </div>
+        <div className="grid gap-14 pt-10 lg:grid-cols-12 lg:gap-6">
+          <div className="lg:col-span-8 space-y-4">
+            <Skeleton className="aspect-video w-full rounded-lg" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-5/6" />
+            <Skeleton className="h-6 w-1/2 mt-4" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-3/4" />
+          </div>
+          <div className="lg:col-span-3 lg:col-start-10 space-y-3">
+            <Skeleton className="h-3 w-24" />
+            <Skeleton className="h-3 w-full" />
+            <Skeleton className="h-3 w-4/5" />
+            <Skeleton className="h-3 w-3/5" />
+          </div>
+        </div>
       </div>
     </div>
   );
