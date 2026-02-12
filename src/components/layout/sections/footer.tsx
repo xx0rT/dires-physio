@@ -47,9 +47,9 @@ const Footer31 = ({ className }: Footer31Props) => {
 
   return (
     <section
-      className={cn("mx-4 mt-24 mb-8 rounded-3xl bg-neutral-900 pt-24 sm:mx-6 lg:mx-8", className)}
+      className={cn("mx-4 mt-24 mb-8 rounded-3xl bg-neutral-900 dark:bg-neutral-100 pt-24 sm:mx-6 lg:mx-8", className)}
     >
-      <div className="dark mx-auto max-w-7xl px-6 text-neutral-100 sm:px-10 lg:px-16">
+      <div className="mx-auto max-w-7xl px-6 text-neutral-100 dark:text-neutral-900 sm:px-10 lg:px-16">
         <div className="flex flex-col justify-between gap-12 lg:flex-row">
           <div className="flex flex-col gap-8">
             <p className="relative text-4xl font-medium tracking-tight lg:text-5xl">
@@ -221,7 +221,7 @@ const Footer31 = ({ className }: Footer31Props) => {
                   alt="Troxx"
                   width={16}
                   height={16}
-                  className="inline-block invert"
+                  className="inline-block invert dark:invert-0"
                 />
                 Troxx
               </Link>
@@ -250,7 +250,7 @@ const Footer31 = ({ className }: Footer31Props) => {
               textAnchor="middle"
               dominantBaseline="middle"
               fill="currentColor"
-              className="text-[150px] font-bold tracking-tighter text-neutral-100"
+              className="text-[150px] font-bold tracking-tighter text-neutral-100 dark:text-neutral-900"
               style={{ fontFamily: "inherit", opacity: 0.15 }}
             >
               <a href="#">DIRES.CZ</a>
