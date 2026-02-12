@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, Save, Eye } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth-context";
+import { blocksToHtml } from "@/lib/blocks-to-html";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -131,12 +132,17 @@ const AdminBlogEditorPage = () => {
         .map((tag) => tag.trim())
         .filter((tag) => tag.length > 0);
 
+      const generatedHtml =
+        formData.contentBlocks.length > 0
+          ? blocksToHtml(formData.contentBlocks)
+          : formData.content;
+
       const blogData = {
         title: formData.title,
         slug: formData.slug,
         excerpt: formData.excerpt,
         content: {
-          html: formData.content,
+          html: generatedHtml,
           blocks: formData.contentBlocks,
         },
         featured_image: formData.featured_image,

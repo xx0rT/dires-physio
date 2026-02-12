@@ -296,7 +296,7 @@ export default function BlogPostPage() {
             </div>
 
             <article
-              className="prose prose-neutral dark:prose-invert max-w-none prose-headings:font-semibold prose-headings:tracking-tight prose-p:leading-relaxed prose-img:rounded-xl prose-a:underline-offset-2 prose-blockquote:border-l-primary/50 prose-blockquote:text-muted-foreground"
+              className="blog-content prose prose-neutral dark:prose-invert max-w-none prose-headings:font-semibold prose-headings:tracking-tight prose-p:leading-relaxed prose-img:rounded-xl prose-a:underline-offset-2 prose-blockquote:border-l-primary/50 prose-blockquote:text-muted-foreground"
               dangerouslySetInnerHTML={{ __html: processedHtml }}
             />
 
