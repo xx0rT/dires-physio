@@ -30,19 +30,19 @@ export function TextBlockEditor({ block, onUpdate }: BlockEditorProps) {
   return (
     <div className="space-y-3">
       <div>
-        <Label>Title (Optional)</Label>
+        <Label>Nadpis (volitelný)</Label>
         <Input
           value={block.content.title || ""}
           onChange={(e) => updateField(block, onUpdate, "title", e.target.value)}
-          placeholder="Enter title"
+          placeholder="Zadejte nadpis"
         />
       </div>
       <div>
-        <Label>Content</Label>
+        <Label>Obsah</Label>
         <Textarea
           value={block.content.text || ""}
           onChange={(e) => updateField(block, onUpdate, "text", e.target.value)}
-          placeholder="Enter your content"
+          placeholder="Zadejte obsah textu"
           rows={5}
         />
       </div>
@@ -54,35 +54,35 @@ export function ImageBlockEditor({ block, onUpdate }: BlockEditorProps) {
   return (
     <div className="space-y-3">
       <div>
-        <Label>Image URL</Label>
+        <Label>URL obrázku</Label>
         <Input
           value={block.content.url || ""}
           onChange={(e) => updateField(block, onUpdate, "url", e.target.value)}
-          placeholder="https://example.com/image.jpg"
+          placeholder="https://example.com/obrazek.jpg"
         />
       </div>
       <div>
-        <Label>Alt Text</Label>
+        <Label>Alternativní text</Label>
         <Input
           value={block.content.alt || ""}
           onChange={(e) => updateField(block, onUpdate, "alt", e.target.value)}
-          placeholder="Describe the image"
+          placeholder="Popis obrázku"
         />
       </div>
       <div>
-        <Label>Caption (Optional)</Label>
+        <Label>Popisek (volitelný)</Label>
         <Input
           value={block.content.caption || ""}
           onChange={(e) =>
             updateField(block, onUpdate, "caption", e.target.value)
           }
-          placeholder="Image caption"
+          placeholder="Popisek obrázku"
         />
       </div>
       {block.content.url && (
         <img
           src={block.content.url}
-          alt={block.content.alt || "Preview"}
+          alt={block.content.alt || "Náhled"}
           className="max-h-48 rounded-lg border object-cover"
         />
       )}
@@ -94,7 +94,7 @@ export function VideoBlockEditor({ block, onUpdate }: BlockEditorProps) {
   return (
     <div className="space-y-3">
       <div>
-        <Label>Video URL (YouTube/Vimeo)</Label>
+        <Label>URL videa (YouTube/Vimeo)</Label>
         <Input
           value={block.content.url || ""}
           onChange={(e) => updateField(block, onUpdate, "url", e.target.value)}
@@ -102,13 +102,13 @@ export function VideoBlockEditor({ block, onUpdate }: BlockEditorProps) {
         />
       </div>
       <div>
-        <Label>Caption (Optional)</Label>
+        <Label>Popisek (volitelný)</Label>
         <Input
           value={block.content.caption || ""}
           onChange={(e) =>
             updateField(block, onUpdate, "caption", e.target.value)
           }
-          placeholder="Video caption"
+          placeholder="Popisek videa"
         />
       </div>
     </div>
@@ -119,22 +119,22 @@ export function QuoteBlockEditor({ block, onUpdate }: BlockEditorProps) {
   return (
     <div className="space-y-3">
       <div>
-        <Label>Quote</Label>
+        <Label>Citace</Label>
         <Textarea
           value={block.content.quote || ""}
           onChange={(e) => updateField(block, onUpdate, "quote", e.target.value)}
-          placeholder="Enter quote"
+          placeholder="Zadejte citaci"
           rows={4}
         />
       </div>
       <div>
-        <Label>Author (Optional)</Label>
+        <Label>Autor (volitelný)</Label>
         <Input
           value={block.content.author || ""}
           onChange={(e) =>
             updateField(block, onUpdate, "author", e.target.value)
           }
-          placeholder="Quote author"
+          placeholder="Autor citace"
         />
       </div>
     </div>
@@ -145,21 +145,21 @@ export function CodeBlockEditor({ block, onUpdate }: BlockEditorProps) {
   return (
     <div className="space-y-3">
       <div>
-        <Label>Language</Label>
+        <Label>Jazyk</Label>
         <Input
           value={block.content.language || ""}
           onChange={(e) =>
             updateField(block, onUpdate, "language", e.target.value)
           }
-          placeholder="javascript, python, etc."
+          placeholder="javascript, python, atd."
         />
       </div>
       <div>
-        <Label>Code</Label>
+        <Label>Kód</Label>
         <Textarea
           value={block.content.code || ""}
           onChange={(e) => updateField(block, onUpdate, "code", e.target.value)}
-          placeholder="Enter code"
+          placeholder="Zadejte kód"
           rows={8}
           className="font-mono text-sm"
         />
@@ -172,31 +172,31 @@ export function HeroBlockEditor({ block, onUpdate }: BlockEditorProps) {
   return (
     <div className="space-y-3">
       <div>
-        <Label>Title</Label>
+        <Label>Nadpis</Label>
         <Input
           value={block.content.title || ""}
           onChange={(e) => updateField(block, onUpdate, "title", e.target.value)}
-          placeholder="Hero title"
+          placeholder="Hlavní nadpis"
         />
       </div>
       <div>
-        <Label>Subtitle</Label>
+        <Label>Podnadpis</Label>
         <Input
           value={block.content.subtitle || ""}
           onChange={(e) =>
             updateField(block, onUpdate, "subtitle", e.target.value)
           }
-          placeholder="Hero subtitle"
+          placeholder="Podnadpis sekce"
         />
       </div>
       <div>
-        <Label>Background Image URL</Label>
+        <Label>URL obrázku pozadí</Label>
         <Input
           value={block.content.background || ""}
           onChange={(e) =>
             updateField(block, onUpdate, "background", e.target.value)
           }
-          placeholder="https://example.com/bg.jpg"
+          placeholder="https://example.com/pozadi.jpg"
         />
       </div>
     </div>
@@ -225,7 +225,7 @@ export function TableBlockEditor({ block, onUpdate }: BlockEditorProps) {
     onUpdate(block.id, { ...block.content, rows: JSON.stringify(r) });
 
   const addColumn = () => {
-    setHeaders([...headers, `Column ${headers.length + 1}`]);
+    setHeaders([...headers, `Sloupec ${headers.length + 1}`]);
     setRows(rows.map((r) => [...r, ""]));
   };
 
@@ -258,10 +258,10 @@ export function TableBlockEditor({ block, onUpdate }: BlockEditorProps) {
     <div className="space-y-3">
       <div className="flex items-center gap-2">
         <Button type="button" variant="outline" size="sm" onClick={addColumn}>
-          <Plus className="mr-1 size-3" /> Column
+          <Plus className="mr-1 size-3" /> Sloupec
         </Button>
         <Button type="button" variant="outline" size="sm" onClick={addRow}>
-          <Plus className="mr-1 size-3" /> Row
+          <Plus className="mr-1 size-3" /> Řádek
         </Button>
       </div>
       {headers.length > 0 && (
@@ -328,7 +328,7 @@ export function CalloutBlockEditor({ block, onUpdate }: BlockEditorProps) {
   return (
     <div className="space-y-3">
       <div>
-        <Label>Type</Label>
+        <Label>Typ</Label>
         <Select
           value={block.content.type || "info"}
           onValueChange={(val) => updateField(block, onUpdate, "type", val)}
@@ -338,28 +338,28 @@ export function CalloutBlockEditor({ block, onUpdate }: BlockEditorProps) {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="tip">Tip</SelectItem>
-            <SelectItem value="warning">Warning</SelectItem>
-            <SelectItem value="info">Info</SelectItem>
-            <SelectItem value="error">Error</SelectItem>
+            <SelectItem value="warning">Varování</SelectItem>
+            <SelectItem value="info">Informace</SelectItem>
+            <SelectItem value="error">Chyba</SelectItem>
           </SelectContent>
         </Select>
       </div>
       <div>
-        <Label>Title</Label>
+        <Label>Nadpis</Label>
         <Input
           value={block.content.title || ""}
           onChange={(e) => updateField(block, onUpdate, "title", e.target.value)}
-          placeholder="Callout title"
+          placeholder="Nadpis upozornění"
         />
       </div>
       <div>
-        <Label>Content</Label>
+        <Label>Obsah</Label>
         <Textarea
           value={block.content.content || ""}
           onChange={(e) =>
             updateField(block, onUpdate, "content", e.target.value)
           }
-          placeholder="Callout content"
+          placeholder="Text upozornění"
           rows={3}
         />
       </div>
@@ -404,7 +404,7 @@ export function FaqBlockEditor({ block, onUpdate }: BlockEditorProps) {
       {items.map((item, i) => (
         <div key={i} className="space-y-2 rounded border p-3">
           <div className="flex items-center justify-between">
-            <Label>Question {i + 1}</Label>
+            <Label>Otázka {i + 1}</Label>
             <Button
               type="button"
               variant="ghost"
@@ -417,19 +417,19 @@ export function FaqBlockEditor({ block, onUpdate }: BlockEditorProps) {
           <Input
             value={item.question}
             onChange={(e) => updateItem(i, "question", e.target.value)}
-            placeholder="Enter question"
+            placeholder="Zadejte otázku"
           />
-          <Label>Answer</Label>
+          <Label>Odpověď</Label>
           <Textarea
             value={item.answer}
             onChange={(e) => updateItem(i, "answer", e.target.value)}
-            placeholder="Enter answer"
+            placeholder="Zadejte odpověď"
             rows={2}
           />
         </div>
       ))}
       <Button type="button" variant="outline" size="sm" onClick={addItem}>
-        <Plus className="mr-1 size-3" /> Add Question
+        <Plus className="mr-1 size-3" /> Přidat otázku
       </Button>
     </div>
   );
@@ -475,13 +475,13 @@ export function PollBlockEditor({ block, onUpdate }: BlockEditorProps) {
   return (
     <div className="space-y-3">
       <div>
-        <Label>Question</Label>
+        <Label>Otázka</Label>
         <Input
           value={block.content.question || ""}
           onChange={(e) =>
             updateField(block, onUpdate, "question", e.target.value)
           }
-          placeholder="Poll question"
+          placeholder="Otázka ankety"
         />
       </div>
       {options.map((opt, i) => (
@@ -489,7 +489,7 @@ export function PollBlockEditor({ block, onUpdate }: BlockEditorProps) {
           <Input
             value={opt.label}
             onChange={(e) => updateOption(i, "label", e.target.value)}
-            placeholder="Option label"
+            placeholder="Název možnosti"
             className="flex-1"
           />
           <Input
@@ -512,7 +512,7 @@ export function PollBlockEditor({ block, onUpdate }: BlockEditorProps) {
         </div>
       ))}
       <Button type="button" variant="outline" size="sm" onClick={addOption}>
-        <Plus className="mr-1 size-3" /> Add Option
+        <Plus className="mr-1 size-3" /> Přidat možnost
       </Button>
     </div>
   );
@@ -522,7 +522,7 @@ export function HighlightBlockEditor({ block, onUpdate }: BlockEditorProps) {
   return (
     <div className="space-y-3">
       <div>
-        <Label>Color</Label>
+        <Label>Barva</Label>
         <Select
           value={block.content.color || "blue"}
           onValueChange={(val) => updateField(block, onUpdate, "color", val)}
@@ -531,10 +531,10 @@ export function HighlightBlockEditor({ block, onUpdate }: BlockEditorProps) {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="blue">Blue</SelectItem>
-            <SelectItem value="green">Green</SelectItem>
-            <SelectItem value="yellow">Yellow</SelectItem>
-            <SelectItem value="red">Red</SelectItem>
+            <SelectItem value="blue">Modrá</SelectItem>
+            <SelectItem value="green">Zelená</SelectItem>
+            <SelectItem value="yellow">Žlutá</SelectItem>
+            <SelectItem value="red">Červená</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -543,7 +543,7 @@ export function HighlightBlockEditor({ block, onUpdate }: BlockEditorProps) {
         <Textarea
           value={block.content.text || ""}
           onChange={(e) => updateField(block, onUpdate, "text", e.target.value)}
-          placeholder="Highlighted text content"
+          placeholder="Zvýrazněný text"
           rows={3}
         />
       </div>
@@ -555,7 +555,7 @@ export function SocialBlockEditor({ block, onUpdate }: BlockEditorProps) {
   return (
     <div className="space-y-3">
       <div>
-        <Label>Platform</Label>
+        <Label>Platforma</Label>
         <Select
           value={block.content.platform || "twitter"}
           onValueChange={(val) =>
@@ -582,11 +582,11 @@ export function SocialBlockEditor({ block, onUpdate }: BlockEditorProps) {
         />
       </div>
       <div>
-        <Label>Description</Label>
+        <Label>Popis</Label>
         <Input
           value={block.content.text || ""}
           onChange={(e) => updateField(block, onUpdate, "text", e.target.value)}
-          placeholder="Post description or text"
+          placeholder="Popis příspěvku"
         />
       </div>
     </div>
@@ -597,7 +597,7 @@ export function DividerBlockEditor({ block, onUpdate }: BlockEditorProps) {
   return (
     <div className="space-y-3">
       <div>
-        <Label>Style</Label>
+        <Label>Styl</Label>
         <Select
           value={block.content.style || "line"}
           onValueChange={(val) => updateField(block, onUpdate, "style", val)}
@@ -606,9 +606,9 @@ export function DividerBlockEditor({ block, onUpdate }: BlockEditorProps) {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="line">Simple Line</SelectItem>
-            <SelectItem value="dots">Dots</SelectItem>
-            <SelectItem value="gradient">Gradient</SelectItem>
+            <SelectItem value="line">Jednoduchá čára</SelectItem>
+            <SelectItem value="dots">Tečky</SelectItem>
+            <SelectItem value="gradient">Přechod</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -620,16 +620,16 @@ export function SeoBlockEditor({ block, onUpdate }: BlockEditorProps) {
   return (
     <div className="space-y-3">
       <div>
-        <Label>SEO Title</Label>
+        <Label>SEO titulek</Label>
         <Input
           value={block.content.seoTitle || ""}
           onChange={(e) =>
             updateField(block, onUpdate, "seoTitle", e.target.value)
           }
-          placeholder="Page title for search engines"
+          placeholder="Titulek stránky pro vyhledávače"
         />
         <p className="mt-1 text-xs text-muted-foreground">
-          {(block.content.seoTitle || "").length}/60 characters
+          {(block.content.seoTitle || "").length}/60 znaků
         </p>
       </div>
       <div>
@@ -639,35 +639,35 @@ export function SeoBlockEditor({ block, onUpdate }: BlockEditorProps) {
           onChange={(e) =>
             updateField(block, onUpdate, "seoUrl", e.target.value)
           }
-          placeholder="https://example.com/blog/your-post"
+          placeholder="https://example.com/blog/vas-clanek"
         />
       </div>
       <div>
-        <Label>Meta Description</Label>
+        <Label>Meta popis</Label>
         <Textarea
           value={block.content.seoDescription || ""}
           onChange={(e) =>
             updateField(block, onUpdate, "seoDescription", e.target.value)
           }
-          placeholder="Description for search engines"
+          placeholder="Popis pro vyhledávače"
           rows={2}
         />
         <p className="mt-1 text-xs text-muted-foreground">
-          {(block.content.seoDescription || "").length}/160 characters
+          {(block.content.seoDescription || "").length}/160 znaků
         </p>
       </div>
       <div className="rounded border p-3">
         <p className="mb-1 text-xs font-medium text-muted-foreground">
-          Google Preview
+          Náhled ve vyhledávači
         </p>
         <div className="text-base font-medium text-blue-700 dark:text-blue-400">
-          {block.content.seoTitle || "Page Title"}
+          {block.content.seoTitle || "Titulek stránky"}
         </div>
         <div className="text-xs text-green-700 dark:text-green-400">
           {block.content.seoUrl || "https://example.com/blog/..."}
         </div>
         <div className="text-xs text-muted-foreground">
-          {block.content.seoDescription || "Meta description..."}
+          {block.content.seoDescription || "Meta popis..."}
         </div>
       </div>
     </div>

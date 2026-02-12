@@ -72,20 +72,20 @@ interface DraggableContentBlocksProps {
 }
 
 const blockTypes = [
-  { value: "text", label: "Text Block", icon: Type },
-  { value: "image", label: "Image", icon: ImageIcon },
+  { value: "text", label: "Textový blok", icon: Type },
+  { value: "image", label: "Obrázek", icon: ImageIcon },
   { value: "video", label: "Video", icon: Video },
-  { value: "quote", label: "Quote", icon: Quote },
-  { value: "code", label: "Code Block", icon: Code },
-  { value: "hero", label: "Hero Section", icon: Layout },
-  { value: "table", label: "Table", icon: Table2 },
-  { value: "callout", label: "Callout Box", icon: AlertTriangle },
-  { value: "faq", label: "FAQ Section", icon: HelpCircle },
-  { value: "poll", label: "Poll / Survey", icon: BarChart3 },
-  { value: "highlight", label: "Highlight Box", icon: Highlighter },
-  { value: "social", label: "Social Embed", icon: Share2 },
-  { value: "divider", label: "Divider", icon: Minus },
-  { value: "seo", label: "SEO Preview", icon: Search },
+  { value: "quote", label: "Citace", icon: Quote },
+  { value: "code", label: "Blok kódu", icon: Code },
+  { value: "hero", label: "Hero sekce", icon: Layout },
+  { value: "table", label: "Tabulka", icon: Table2 },
+  { value: "callout", label: "Upozornění", icon: AlertTriangle },
+  { value: "faq", label: "Časté dotazy", icon: HelpCircle },
+  { value: "poll", label: "Anketa", icon: BarChart3 },
+  { value: "highlight", label: "Zvýraznění", icon: Highlighter },
+  { value: "social", label: "Sociální sítě", icon: Share2 },
+  { value: "divider", label: "Oddělovač", icon: Minus },
+  { value: "seo", label: "SEO náhled", icon: Search },
 ];
 
 const defaultContentMap: Record<string, Record<string, string>> = {
@@ -95,7 +95,7 @@ const defaultContentMap: Record<string, Record<string, string>> = {
   quote: { quote: "", author: "" },
   code: { language: "javascript", code: "" },
   hero: { title: "", subtitle: "", background: "" },
-  table: { headers: '["Column 1","Column 2"]', rows: '[["",""]]\n' },
+  table: { headers: '["Sloupec 1","Sloupec 2"]', rows: '[["",""]]\n' },
   callout: { type: "info", title: "", content: "" },
   faq: { items: "[]" },
   poll: { question: "", options: "[]" },
@@ -152,7 +152,7 @@ const DraggableContentBlocks = ({
         >
           <SelectTrigger className="w-64">
             <Plus className="mr-2 size-4" />
-            <SelectValue placeholder="Add content block" />
+            <SelectValue placeholder="Přidat blok obsahu" />
           </SelectTrigger>
           <SelectContent>
             {blockTypes.map((type) => (
@@ -194,10 +194,10 @@ const DraggableContentBlocks = ({
           <CardContent className="flex flex-col items-center justify-center py-12 text-center">
             <Layout className="mb-4 size-12 text-muted-foreground" />
             <h3 className="mb-2 text-lg font-semibold">
-              No content blocks yet
+              Zatím žádné bloky obsahu
             </h3>
             <p className="mb-4 text-sm text-muted-foreground">
-              Add your first content block to start building your blog post
+              Přidejte první blok obsahu a začněte vytvářet článek
             </p>
           </CardContent>
         </Card>
@@ -214,18 +214,18 @@ interface SortableBlockProps {
 
 const blockLabel: Record<string, string> = {
   text: "Text",
-  image: "Image",
+  image: "Obrázek",
   video: "Video",
-  quote: "Quote",
-  code: "Code",
+  quote: "Citace",
+  code: "Kód",
   hero: "Hero",
-  table: "Table",
-  callout: "Callout",
+  table: "Tabulka",
+  callout: "Upozornění",
   faq: "FAQ",
-  poll: "Poll",
-  highlight: "Highlight",
-  social: "Social",
-  divider: "Divider",
+  poll: "Anketa",
+  highlight: "Zvýraznění",
+  social: "Sociální",
+  divider: "Oddělovač",
   seo: "SEO",
 };
 
@@ -266,7 +266,7 @@ const SortableBlock = ({ block, onUpdate, onRemove }: SortableBlockProps) => {
         </button>
         <div className="flex-1">
           <span className="text-sm font-medium">
-            {blockLabel[block.type] || block.type} Block
+            Blok: {blockLabel[block.type] || block.type}
           </span>
         </div>
         <Button

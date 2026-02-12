@@ -75,7 +75,7 @@ const AdminBlogEditorPage = () => {
 
       if (error) throw error;
       if (!data) {
-        toast.error("Blog not found");
+        toast.error("Článek nenalezen");
         navigate("/admin/blogs");
         return;
       }
@@ -92,7 +92,7 @@ const AdminBlogEditorPage = () => {
       });
     } catch (error) {
       console.error("Error fetching blog:", error);
-      toast.error("Failed to load blog");
+      toast.error("Nepodařilo se načíst článek");
     } finally {
       setLoading(false);
     }
@@ -101,6 +101,8 @@ const AdminBlogEditorPage = () => {
   const generateSlug = (title: string) => {
     return title
       .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-|-$/g, "");
   };
@@ -115,12 +117,12 @@ const AdminBlogEditorPage = () => {
 
   const handleSave = async (status?: "draft" | "published") => {
     if (!formData.title.trim()) {
-      toast.error("Please enter a title");
+      toast.error("Zadejte prosím název článku");
       return;
     }
 
     if (!formData.slug.trim()) {
-      toast.error("Please enter a slug");
+      toast.error("Zadejte prosím URL adresu (slug)");
       return;
     }
 
@@ -162,7 +164,7 @@ const AdminBlogEditorPage = () => {
           .eq("id", id);
 
         if (error) throw error;
-        toast.success("Blog updated successfully");
+        toast.success("Článek byl úspěšně aktualizován");
       } else {
         const { data, error } = await supabase
           .from("blogs")
@@ -171,15 +173,15 @@ const AdminBlogEditorPage = () => {
           .single();
 
         if (error) throw error;
-        toast.success("Blog created successfully");
+        toast.success("Článek byl úspěšně vytvořen");
         navigate(`/admin/blogs/edit/${data.id}`);
       }
     } catch (error: any) {
       console.error("Error saving blog:", error);
       if (error.code === "23505") {
-        toast.error("A blog with this slug already exists");
+        toast.error("Článek s touto URL adresou již existuje");
       } else {
-        toast.error("Failed to save blog");
+        toast.error("Nepodařilo se uložit článek");
       }
     } finally {
       setLoading(false);
@@ -189,7 +191,7 @@ const AdminBlogEditorPage = () => {
   if (loading && isEditing) {
     return (
       <div className="flex h-96 items-center justify-center">
-        <p className="text-muted-foreground">Loading blog...</p>
+        <p className="text-muted-foreground">Načítání článku...</p>
       </div>
     );
   }
@@ -203,10 +205,10 @@ const AdminBlogEditorPage = () => {
           </Button>
           <div>
             <h1 className="text-3xl font-bold tracking-tight">
-              {isEditing ? "Edit Blog Post" : "Create New Blog Post"}
+              {isEditing ? "Upravit článek" : "Nový článek"}
             </h1>
             <p className="text-muted-foreground">
-              {isEditing ? "Update your blog post" : "Create a new blog post with rich content"}
+              {isEditing ? "Aktualizujte svůj článek" : "Vytvořte nový článek s bohatým obsahem"}
             </p>
           </div>
         </div>
@@ -217,14 +219,14 @@ const AdminBlogEditorPage = () => {
             disabled={loading}
           >
             <Save className="mr-2 size-4" />
-            Save Draft
+            Uložit koncept
           </Button>
           <Button
             onClick={() => handleSave("published")}
             disabled={loading}
           >
             <Eye className="mr-2 size-4" />
-            Publish
+            Publikovat
           </Button>
         </div>
       </div>
@@ -233,56 +235,56 @@ const AdminBlogEditorPage = () => {
         <div className="lg:col-span-2">
           <Card>
             <CardHeader>
-              <CardTitle>Blog Content</CardTitle>
+              <CardTitle>Obsah článku</CardTitle>
               <CardDescription>
-                Write your blog post content using the editor below
+                Napište obsah článku pomocí editoru níže
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="title">Title</Label>
+                <Label htmlFor="title">Název</Label>
                 <Input
                   id="title"
                   value={formData.title}
                   onChange={(e) => handleTitleChange(e.target.value)}
-                  placeholder="Enter blog title"
+                  placeholder="Zadejte název článku"
                   className="text-lg font-semibold"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="slug">Slug (URL)</Label>
+                <Label htmlFor="slug">URL adresa (slug)</Label>
                 <Input
                   id="slug"
                   value={formData.slug}
                   onChange={(e) =>
                     setFormData({ ...formData, slug: e.target.value })
                   }
-                  placeholder="blog-post-url"
+                  placeholder="url-adresa-clanku"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="excerpt">Excerpt</Label>
+                <Label htmlFor="excerpt">Krátký popis</Label>
                 <Textarea
                   id="excerpt"
                   value={formData.excerpt}
                   onChange={(e) =>
                     setFormData({ ...formData, excerpt: e.target.value })
                   }
-                  placeholder="Brief description of the blog post"
+                  placeholder="Stručný popis článku pro náhled"
                   rows={3}
                 />
               </div>
 
               <Tabs defaultValue="wysiwyg" className="w-full">
                 <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="wysiwyg">WYSIWYG Editor</TabsTrigger>
-                  <TabsTrigger value="blocks">Content Blocks</TabsTrigger>
+                  <TabsTrigger value="wysiwyg">Vizuální editor</TabsTrigger>
+                  <TabsTrigger value="blocks">Bloky obsahu</TabsTrigger>
                 </TabsList>
                 <TabsContent value="wysiwyg" className="mt-6">
                   <div className="space-y-2">
-                    <Label>Main Content</Label>
+                    <Label>Hlavní obsah</Label>
                     <BlogEditor
                       content={formData.content}
                       onChange={(content) =>
@@ -293,9 +295,9 @@ const AdminBlogEditorPage = () => {
                 </TabsContent>
                 <TabsContent value="blocks" className="mt-6">
                   <div className="space-y-2">
-                    <Label>Drag & Drop Content Blocks</Label>
+                    <Label>Přetáhněte bloky obsahu</Label>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Add and arrange content blocks to build your blog post layout
+                      Přidávejte a uspořádávejte bloky pro vytvoření rozvržení článku
                     </p>
                     <DraggableContentBlocks
                       blocks={formData.contentBlocks}
@@ -313,12 +315,12 @@ const AdminBlogEditorPage = () => {
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Settings</CardTitle>
-              <CardDescription>Configure blog post settings</CardDescription>
+              <CardTitle>Nastavení</CardTitle>
+              <CardDescription>Konfigurace článku</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="status">Status</Label>
+                <Label htmlFor="status">Stav</Label>
                 <Select
                   value={formData.status}
                   onValueChange={(value: "draft" | "published" | "archived") =>
@@ -329,28 +331,28 @@ const AdminBlogEditorPage = () => {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="draft">Draft</SelectItem>
-                    <SelectItem value="published">Published</SelectItem>
-                    <SelectItem value="archived">Archived</SelectItem>
+                    <SelectItem value="draft">Koncept</SelectItem>
+                    <SelectItem value="published">Publikováno</SelectItem>
+                    <SelectItem value="archived">Archivováno</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="featured_image">Featured Image URL</Label>
+                <Label htmlFor="featured_image">URL náhledového obrázku</Label>
                 <Input
                   id="featured_image"
                   value={formData.featured_image}
                   onChange={(e) =>
                     setFormData({ ...formData, featured_image: e.target.value })
                   }
-                  placeholder="https://example.com/image.jpg"
+                  placeholder="https://example.com/obrazek.jpg"
                 />
                 {formData.featured_image && (
                   <div className="mt-2">
                     <img
                       src={formData.featured_image}
-                      alt="Featured"
+                      alt="Náhled"
                       className="w-full rounded-lg border object-cover"
                     />
                   </div>
@@ -358,17 +360,17 @@ const AdminBlogEditorPage = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="tags">Tags</Label>
+                <Label htmlFor="tags">Štítky</Label>
                 <Input
                   id="tags"
                   value={formData.tags}
                   onChange={(e) =>
                     setFormData({ ...formData, tags: e.target.value })
                   }
-                  placeholder="tag1, tag2, tag3"
+                  placeholder="štítek1, štítek2, štítek3"
                 />
                 <p className="text-xs text-muted-foreground">
-                  Separate tags with commas
+                  Štítky oddělujte čárkou
                 </p>
               </div>
             </CardContent>

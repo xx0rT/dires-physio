@@ -45,6 +45,7 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { format } from "date-fns";
+import { cs } from "date-fns/locale";
 
 interface Blog {
   id: string;
@@ -84,7 +85,7 @@ const AdminBlogsPage = () => {
       setBlogs(data || []);
     } catch (error) {
       console.error("Error fetching blogs:", error);
-      toast.error("Failed to load blogs");
+      toast.error("Nepodařilo se načíst články");
     } finally {
       setLoading(false);
     }
@@ -101,13 +102,13 @@ const AdminBlogsPage = () => {
 
       if (error) throw error;
 
-      toast.success("Blog deleted successfully");
+      toast.success("Článek byl úspěšně smazán");
       fetchBlogs();
       setDeleteDialogOpen(false);
       setBlogToDelete(null);
     } catch (error) {
       console.error("Error deleting blog:", error);
-      toast.error("Failed to delete blog");
+      toast.error("Nepodařilo se smazat článek");
     }
   };
 
@@ -123,11 +124,11 @@ const AdminBlogsPage = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "published":
-        return <Badge className="bg-green-500">Published</Badge>;
+        return <Badge className="bg-green-500">Publikováno</Badge>;
       case "draft":
-        return <Badge variant="secondary">Draft</Badge>;
+        return <Badge variant="secondary">Koncept</Badge>;
       case "archived":
-        return <Badge variant="outline">Archived</Badge>;
+        return <Badge variant="outline">Archivováno</Badge>;
       default:
         return <Badge>{status}</Badge>;
     }
@@ -137,24 +138,24 @@ const AdminBlogsPage = () => {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Blog Management</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Správa blogu</h1>
           <p className="text-muted-foreground">
-            Create and manage your blog posts
+            Vytvářejte a spravujte blogové články
           </p>
         </div>
         <Button asChild>
           <Link to="/admin/blogs/new">
             <Plus className="mr-2 size-4" />
-            New Blog Post
+            Nový článek
           </Link>
         </Button>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Blog Posts</CardTitle>
+          <CardTitle>Články</CardTitle>
           <CardDescription>
-            Manage all your blog posts in one place
+            Spravujte všechny své články na jednom místě
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -162,7 +163,7 @@ const AdminBlogsPage = () => {
             <div className="relative flex-1">
               <Search className="absolute top-3 left-3 size-4 text-muted-foreground" />
               <Input
-                placeholder="Search blogs..."
+                placeholder="Hledat články..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10"
@@ -171,28 +172,28 @@ const AdminBlogsPage = () => {
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-full md:w-48">
                 <Filter className="mr-2 size-4" />
-                <SelectValue placeholder="Filter by status" />
+                <SelectValue placeholder="Filtrovat podle stavu" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="published">Published</SelectItem>
-                <SelectItem value="draft">Draft</SelectItem>
-                <SelectItem value="archived">Archived</SelectItem>
+                <SelectItem value="all">Všechny stavy</SelectItem>
+                <SelectItem value="published">Publikováno</SelectItem>
+                <SelectItem value="draft">Koncept</SelectItem>
+                <SelectItem value="archived">Archivováno</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           {loading ? (
             <div className="flex h-64 items-center justify-center">
-              <p className="text-muted-foreground">Loading blogs...</p>
+              <p className="text-muted-foreground">Načítání článků...</p>
             </div>
           ) : filteredBlogs.length === 0 ? (
             <div className="flex h-64 flex-col items-center justify-center gap-2">
-              <p className="text-muted-foreground">No blogs found</p>
+              <p className="text-muted-foreground">Žádné články nenalezeny</p>
               <Button asChild variant="outline" size="sm">
                 <Link to="/admin/blogs/new">
                   <Plus className="mr-2 size-4" />
-                  Create your first blog
+                  Vytvořit první článek
                 </Link>
               </Button>
             </div>
@@ -201,12 +202,12 @@ const AdminBlogsPage = () => {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Title</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Views</TableHead>
-                    <TableHead>Published</TableHead>
-                    <TableHead>Updated</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
+                    <TableHead>Název</TableHead>
+                    <TableHead>Stav</TableHead>
+                    <TableHead>Zobrazení</TableHead>
+                    <TableHead>Publikováno</TableHead>
+                    <TableHead>Aktualizováno</TableHead>
+                    <TableHead className="text-right">Akce</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -240,17 +241,17 @@ const AdminBlogsPage = () => {
                         {blog.published_at ? (
                           <div className="flex items-center gap-1 text-sm">
                             <Calendar className="size-4 text-muted-foreground" />
-                            {format(new Date(blog.published_at), "MMM d, yyyy")}
+                            {format(new Date(blog.published_at), "d. MMM yyyy", { locale: cs })}
                           </div>
                         ) : (
                           <span className="text-sm text-muted-foreground">
-                            Not published
+                            Nepublikováno
                           </span>
                         )}
                       </TableCell>
                       <TableCell>
                         <span className="text-sm text-muted-foreground">
-                          {format(new Date(blog.updated_at), "MMM d, yyyy")}
+                          {format(new Date(blog.updated_at), "d. MMM yyyy", { locale: cs })}
                         </span>
                       </TableCell>
                       <TableCell className="text-right">
@@ -284,10 +285,9 @@ const AdminBlogsPage = () => {
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Blog Post</DialogTitle>
+            <DialogTitle>Smazat článek</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this blog post? This action cannot
-              be undone.
+              Opravdu chcete smazat tento článek? Tuto akci nelze vrátit zpět.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -295,10 +295,10 @@ const AdminBlogsPage = () => {
               variant="outline"
               onClick={() => setDeleteDialogOpen(false)}
             >
-              Cancel
+              Zrušit
             </Button>
             <Button variant="destructive" onClick={handleDeleteBlog}>
-              Delete
+              Smazat
             </Button>
           </DialogFooter>
         </DialogContent>
