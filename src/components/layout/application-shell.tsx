@@ -334,6 +334,8 @@ function UserMenu() {
 }
 
 function OrganizationSwitcher() {
+  const navigate = useNavigate();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -356,7 +358,7 @@ function OrganizationSwitcher() {
       <DropdownMenuContent align="start" className="w-56">
         <DropdownMenuLabel>Kurzy Fyzioterapie</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate('/prehled/moje-kurzy')}>
           <div className="flex items-center gap-2">
             <div className="flex size-6 items-center justify-center rounded bg-neutral-200 dark:bg-neutral-800">
               <img
@@ -371,7 +373,7 @@ function OrganizationSwitcher() {
           </div>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate('/kurzy')}>
           <Plus className="mr-2 size-4" />
           Zapsat se na kurz
         </DropdownMenuItem>
@@ -966,7 +968,7 @@ const navigationData: NavigationConfig = {
           items: [
             { id: "overview", label: "Přehled", icon: Home, path: "/prehled" },
             { id: "analytics", label: "Pokrok", icon: BarChart3, path: "/prehled/analytika" },
-            { id: "api", label: "Moje Lekce", icon: BookOpen, path: "/prehled/api" },
+            { id: "my-courses-home", label: "Moje Kurzy", icon: BookOpen, path: "/prehled/moje-kurzy" },
           ],
         },
       ],
@@ -1047,7 +1049,8 @@ export function ApplicationShell({
     const path = location.pathname;
     if (path === "/prehled") return "home";
     if (path.startsWith("/prehled/analytika")) return "analytics";
-    if (path.startsWith("/prehled/integrace") || path.startsWith("/prehled/moje-kurzy")) return "integrations";
+    if (path.startsWith("/prehled/moje-kurzy")) return "home";
+    if (path.startsWith("/prehled/integrace")) return "integrations";
     if (path.startsWith("/prehled/fakturace")) return "billing";
     return "home";
   };
