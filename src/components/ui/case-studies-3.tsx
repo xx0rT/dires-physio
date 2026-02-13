@@ -101,7 +101,7 @@ const CaseStudies3 = ({
                       </span>
                     </h2>
                     <div className="flex items-center gap-2 font-medium">
-                      Read case study
+                      Přečíst článek
                       <MoveRight className="h-4 w-4 transition-transform duration-500 ease-out group-hover:translate-x-1" />
                     </div>
                   </div>
