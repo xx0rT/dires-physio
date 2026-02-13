@@ -1,7 +1,8 @@
-import { MoveRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
 
@@ -12,9 +13,60 @@ interface Blog {
   excerpt: string;
   featured_image: string;
   tags: string[];
+  published_at: string | null;
+  created_at: string;
 }
 
-export function BlogShowcaseSection({ className }: { className?: string }) {
+interface BlogPostProps {
+  title: string;
+  slug: string;
+  date: string;
+  className?: string;
+}
+
+const BlogPost = ({ title, slug, date, className }: BlogPostProps) => {
+  const navigate = useNavigate();
+
+  return (
+    <div
+      className={cn(
+        "flex w-full flex-col gap-[1.875rem] border-b py-10 lg:max-w-[28.125rem]",
+        className,
+      )}
+    >
+      <button
+        onClick={() => navigate(`/blog/${slug}`)}
+        className="group inline-block text-left text-2xl leading-[1.22] font-semibold hover:underline"
+      >
+        {title}
+      </button>
+      <div className="flex w-full flex-col gap-5">
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-medium text-foreground/60">
+            by Fyzioterapie tým
+          </span>
+          <span className="text-sm text-muted-foreground">•</span>
+          <span className="text-sm text-muted-foreground">{date}</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+interface BlogShowcaseSectionProps {
+  className?: string;
+}
+
+function formatDate(dateStr: string | null) {
+  if (!dateStr) return "";
+  return new Date(dateStr).toLocaleDateString("cs-CZ", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
+export function BlogShowcaseSection({ className }: BlogShowcaseSectionProps) {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -23,10 +75,10 @@ export function BlogShowcaseSection({ className }: { className?: string }) {
     (async () => {
       const { data } = await supabase
         .from("blogs")
-        .select("id, title, slug, excerpt, featured_image, tags")
+        .select("id, title, slug, excerpt, featured_image, tags, published_at, created_at")
         .eq("status", "published")
         .order("published_at", { ascending: false })
-        .limit(3);
+        .limit(4);
 
       setBlogs(data ?? []);
       setLoading(false);
@@ -37,81 +89,103 @@ export function BlogShowcaseSection({ className }: { className?: string }) {
     return null;
   }
 
-  const [featuredBlog, ...otherBlogs] = blogs;
+  const topPost = blogs[0];
+  const latestPosts = blogs.slice(1);
 
   return (
     <section className={cn("py-32", className)}>
-      <div className="container mx-auto flex justify-center">
-        <div className="border border-border max-w-7xl w-full">
-          <div
-            onClick={() => navigate(`/blog/${featuredBlog.slug}`)}
-            className="group grid gap-4 overflow-hidden px-6 transition-colors duration-500 ease-out hover:bg-muted/40 lg:grid-cols-2 xl:px-28 cursor-pointer"
-          >
-            <div className="flex flex-col justify-between gap-4 pt-8 md:pt-16 lg:pb-16">
-              <div className="flex items-center gap-2 text-2xl font-medium">
-                Blog
-              </div>
-              <div>
-                <span className="text-xs text-muted-foreground sm:text-sm">
-                  {featuredBlog.tags?.[0] || "Fyzioterapie"}
-                </span>
-                <h2 className="mt-4 mb-5 text-2xl font-semibold text-balance sm:text-3xl sm:leading-10">
-                  {featuredBlog.title}
-                </h2>
-                <p className="text-sm text-muted-foreground line-clamp-3 mb-5">
-                  {featuredBlog.excerpt}
-                </p>
-                <div className="flex items-center gap-2 font-medium">
-                  Přečíst článek
-                  <MoveRight className="h-4 w-4 transition-transform duration-500 ease-out group-hover:translate-x-1" />
-                </div>
-              </div>
-            </div>
-            <div className="relative isolate py-16">
-              <div className="relative isolate h-full border border-border bg-background p-2">
-                <div className="h-full overflow-hidden">
-                  <img
-                    src={featuredBlog.featured_image || '/demo-img.png'}
-                    alt={featuredBlog.title}
-                    className="aspect-14/9 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-                  />
+      <div className="container">
+        <div className="mb-10 grid grid-cols-[minmax(18.75rem,1fr)] items-start justify-start gap-2.5 md:mb-20 lg:mb-24 lg:grid-cols-[minmax(18.75rem,1fr)_minmax(12.5rem,28.125rem)] lg:gap-20">
+          <h1 className="text-6xl leading-[1.22] font-bold md:text-[5rem] md:font-semibold lg:text-[7.5rem]">
+            Blog
+          </h1>
+          <div className="pb-5">
+            <p className="text-base text-foreground sm:text-lg">
+              <span className="text-muted-foreground">
+                Inspirace se setkává s inovací
+              </span>
+              <br />
+              <strong>Blog Fyzioterapie</strong>
+            </p>
+            <div className="mt-6 rounded-lg border p-4">
+              <div className="flex items-center gap-3">
+                <img
+                  src="https://images.pexels.com/photos/5327585/pexels-photo-5327585.jpeg?auto=compress&cs=tinysrgb&w=80"
+                  alt="Author profile"
+                  className="h-12 w-12 rounded-full object-cover"
+                />
+                <div>
+                  <p className="text-sm font-medium">Fyzioterapie tým</p>
+                  <p className="text-xs text-muted-foreground">
+                    Odborný obsah
+                  </p>
                 </div>
               </div>
             </div>
           </div>
-          <div className="flex border-t border-border">
-            <div className="hidden w-28 shrink-0 bg-[radial-gradient(var(--muted-foreground)_1px,transparent_1px)] [background-size:10px_10px] opacity-15 xl:block"></div>
-            <div className="grid lg:grid-cols-2">
-              {otherBlogs.map((blog, idx) => (
-                <div
-                  key={blog.id}
-                  onClick={() => navigate(`/blog/${blog.slug}`)}
-                  className={`group flex flex-col justify-between gap-12 border-border bg-background px-6 py-8 transition-colors duration-500 ease-out hover:bg-muted/40 md:py-16 lg:pb-16 xl:gap-16 cursor-pointer ${
-                    idx === 0
-                      ? "xl:border-l xl:pl-8"
-                      : "border-t lg:border-t-0 lg:border-l xl:border-r xl:pl-8"
-                  }`}
+        </div>
+        <div className="grid w-full grid-cols-[minmax(18.75rem,1fr)] gap-20 pb-[6.25rem] lg:grid-cols-[minmax(18.75rem,1fr)_minmax(12.5rem,28.125rem)]">
+          <div>
+            <div className="flex flex-col gap-[1.875rem]">
+              <button
+                onClick={() => navigate(`/blog/${topPost.slug}`)}
+                className="group flex aspect-[1.736111111] w-full overflow-hidden rounded-[0.625rem]"
+              >
+                <AspectRatio
+                  ratio={1.736111111}
+                  className="m-auto overflow-hidden"
                 >
-                  <div className="flex items-center gap-2 text-2xl font-medium">
-                    Blog
-                  </div>
-                  <div>
-                    <span className="text-xs text-muted-foreground sm:text-sm">
-                      {blog.tags?.[0] || "Fyzioterapie"}
-                    </span>
-                    <h2 className="mt-4 mb-5 text-2xl font-semibold text-balance sm:text-3xl sm:leading-10">
-                      {blog.title}
-                    </h2>
-                    <div className="flex items-center gap-2 font-medium">
-                      Přečíst článek
-                      <MoveRight className="h-4 w-4 transition-transform duration-500 ease-out group-hover:translate-x-1" />
-                    </div>
-                  </div>
+                  <img
+                    src={topPost.featured_image || '/demo-img.png'}
+                    alt={topPost.title}
+                    className="block size-full object-cover object-center"
+                  />
+                </AspectRatio>
+              </button>
+              <div className="flex w-full flex-col gap-5">
+                <button
+                  onClick={() => navigate(`/blog/${topPost.slug}`)}
+                  className="group inline-block text-left text-2xl leading-[1.22] font-semibold hover:underline md:text-4xl"
+                >
+                  {topPost.title}
+                </button>
+                <p className="text-lg text-foreground">{topPost.excerpt}</p>
+              </div>
+              <div className="flex w-full flex-col gap-5">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-foreground/60">
+                    by Fyzioterapie tým
+                  </span>
+                  <span className="text-sm text-muted-foreground">•</span>
+                  <span className="text-sm text-muted-foreground">
+                    {formatDate(topPost.published_at || topPost.created_at)}
+                  </span>
                 </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col gap-10">
+            <div className="text-5xl leading-[1.2] font-semibold">Nejnovější</div>
+            <div className="-mt-10 flex flex-col">
+              {latestPosts.map((post, i) => (
+                <BlogPost
+                  key={`${post.id}-${i}`}
+                  title={post.title}
+                  slug={post.slug}
+                  date={formatDate(post.published_at || post.created_at)}
+                />
               ))}
             </div>
-            <div className="hidden w-28 shrink-0 bg-[radial-gradient(var(--muted-foreground)_1px,transparent_1px)] [background-size:10px_10px] opacity-15 xl:block"></div>
           </div>
+        </div>
+        <div className="flex justify-center">
+          <Button
+            onClick={() => navigate('/blog')}
+            size="lg"
+            className="min-w-[200px]"
+          >
+            Zobrazit více článků
+          </Button>
         </div>
       </div>
     </section>
