@@ -1,5 +1,6 @@
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
+  Award,
   Bell,
   BookOpen,
   Check,
@@ -10,11 +11,15 @@ import {
   HelpCircle,
   Home,
   type LucideIcon,
+  Layers,
   PanelLeft,
   PanelLeftClose,
   Plus,
+  Receipt,
   Settings,
   Shield,
+  ShoppingBag,
+  Target,
   Users,
   BarChart3,
   CreditCard,
@@ -530,21 +535,21 @@ function SidebarPanel({ module, utilities, panelHeader }: SidebarPanelProps) {
                       "flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors",
                       setupOpen && "hidden",
                       isSetupActive
-                        ? "bg-blue-100/50 font-medium text-blue-600 dark:bg-blue-900/50 dark:text-blue-400"
+                        ? "bg-neutral-200/70 font-medium text-neutral-900 dark:bg-neutral-800/70 dark:text-neutral-100"
                         : "text-neutral-600 hover:bg-neutral-200/50 dark:text-neutral-400 dark:hover:bg-neutral-800/50"
                     )}
                   >
                     <Settings
                       className={cn(
                         "size-4",
-                        isSetupActive ? "text-blue-600 dark:text-blue-400" : "text-neutral-500 dark:text-neutral-500"
+                        isSetupActive ? "text-neutral-900 dark:text-neutral-100" : "text-neutral-500 dark:text-neutral-500"
                       )}
                     />
                     <span className="font-medium">Konfigurace</span>
                     <ChevronRight
                       className={cn(
                         "ml-auto size-4",
-                        isSetupActive ? "text-blue-400" : "text-neutral-400 dark:text-neutral-600"
+                        isSetupActive ? "text-neutral-500" : "text-neutral-400 dark:text-neutral-600"
                       )}
                     />
                   </CollapsibleTrigger>
@@ -657,7 +662,7 @@ function NavItem({ item, isActive }: { item: NavItemConfig; isActive: boolean })
       className={cn(
         "group flex h-8 items-center justify-between rounded-lg p-2 text-sm leading-none transition-[background-color,color,font-weight] duration-75",
         isActive
-          ? "bg-blue-100/50 font-medium text-blue-600 hover:bg-blue-100/80 active:bg-blue-100 dark:bg-blue-900/50 dark:text-blue-400 dark:hover:bg-blue-900/80 dark:active:bg-blue-900"
+          ? "bg-neutral-200/70 font-medium text-neutral-900 hover:bg-neutral-200 active:bg-neutral-300 dark:bg-neutral-800/70 dark:text-neutral-100 dark:hover:bg-neutral-800 dark:active:bg-neutral-700"
           : "text-neutral-700 hover:bg-black/5 active:bg-black/10 dark:text-neutral-300 dark:hover:bg-white/5 dark:active:bg-white/10"
       )}
     >
@@ -665,7 +670,7 @@ function NavItem({ item, isActive }: { item: NavItemConfig; isActive: boolean })
         <Icon
           className={cn(
             "size-4 shrink-0",
-            isActive ? "text-blue-600 dark:text-blue-400" : "text-neutral-600 dark:text-neutral-400"
+            isActive ? "text-neutral-900 dark:text-neutral-100" : "text-neutral-600 dark:text-neutral-400"
           )}
         />
         <span className="truncate">{item.label}</span>
@@ -948,7 +953,7 @@ function MobileNavItem({
       className={cn(
         "group flex h-8 items-center justify-between rounded-lg p-2 text-sm leading-none transition-[background-color,color,font-weight] duration-75",
         isActive
-          ? "bg-blue-100/50 font-medium text-blue-600 hover:bg-blue-100/80 active:bg-blue-100 dark:bg-blue-900/50 dark:text-blue-400 dark:hover:bg-blue-900/80 dark:active:bg-blue-900"
+          ? "bg-neutral-200/70 font-medium text-neutral-900 hover:bg-neutral-200 active:bg-neutral-300 dark:bg-neutral-800/70 dark:text-neutral-100 dark:hover:bg-neutral-800 dark:active:bg-neutral-700"
           : "text-neutral-700 hover:bg-black/5 active:bg-black/10 dark:text-neutral-300 dark:hover:bg-white/5 dark:active:bg-white/10"
       )}
     >
@@ -956,7 +961,7 @@ function MobileNavItem({
         <Icon
           className={cn(
             "size-4 shrink-0",
-            isActive ? "text-blue-600 dark:text-blue-400" : "text-neutral-600 dark:text-neutral-400"
+            isActive ? "text-neutral-900 dark:text-neutral-100" : "text-neutral-600 dark:text-neutral-400"
           )}
         />
         <span className="truncate">{item.label}</span>
@@ -976,24 +981,25 @@ export interface NavigationConfig {
 
 const navigationData: NavigationConfig = {
   railIcons: [
-    { moduleId: "home", label: "Domů", icon: Home, defaultPath: "/prehled" },
-    { moduleId: "analytics", label: "Statistiky", icon: BarChart3, defaultPath: "/prehled/analytika" },
+    { moduleId: "home", label: "Domu", icon: Home, defaultPath: "/prehled" },
+    { moduleId: "analytics", label: "Statistiky", icon: BarChart3, defaultPath: "/prehled/pokrok" },
     { moduleId: "integrations", label: "Kurzy", icon: BookOpen, defaultPath: "/prehled/moje-kurzy" },
-    { moduleId: "billing", label: "Platby", icon: CreditCard, defaultPath: "/prehled/fakturace" },
+    { moduleId: "billing", label: "Platby", icon: CreditCard, defaultPath: "/prehled/predplatne" },
   ] as RailIconConfig[],
   modules: [
     {
       id: "home",
-      label: "Domů",
+      label: "Domu",
       icon: Home,
       defaultPath: "/prehled",
       sections: [
         {
           id: "main",
           items: [
-            { id: "overview", label: "Přehled", icon: Home, path: "/prehled" },
-            { id: "analytics", label: "Pokrok", icon: BarChart3, path: "/prehled/analytika" },
+            { id: "overview", label: "Prehled", icon: Home, path: "/prehled" },
             { id: "my-courses-home", label: "Moje Kurzy", icon: BookOpen, path: "/prehled/moje-kurzy" },
+            { id: "progress-home", label: "Pokrok", icon: BarChart3, path: "/prehled/pokrok" },
+            { id: "certificates-home", label: "Certifikaty", icon: Award, path: "/prehled/certifikaty" },
           ],
         },
       ],
@@ -1002,13 +1008,15 @@ const navigationData: NavigationConfig = {
       id: "analytics",
       label: "Statistiky",
       icon: BarChart3,
-      defaultPath: "/prehled/analytika",
+      defaultPath: "/prehled/pokrok",
       sections: [
         {
           id: "main",
           items: [
-            { id: "overview", label: "Celkový Pokrok", icon: BarChart3, path: "/prehled/analytika" },
-            { id: "reports", label: "Výsledky Testů", icon: FileText, path: "/prehled/analytika" },
+            { id: "progress", label: "Pokrok", icon: BarChart3, path: "/prehled/pokrok" },
+            { id: "test-results", label: "Vysledky Testu", icon: Target, path: "/prehled/vysledky-testu" },
+            { id: "certificates", label: "Certifikaty", icon: Award, path: "/prehled/certifikaty" },
+            { id: "study-time", label: "Studijni doba", icon: Layers, path: "/prehled/analytika" },
           ],
         },
       ],
@@ -1023,7 +1031,8 @@ const navigationData: NavigationConfig = {
           id: "main",
           items: [
             { id: "my-courses", label: "Moje Kurzy", icon: BookOpen, path: "/prehled/moje-kurzy" },
-            { id: "all-courses", label: "Prohlizet Kurzy", icon: Users, path: "/prehled/integrace" },
+            { id: "all-courses", label: "Prohlidnout Kurzy", icon: Users, path: "/prehled/integrace" },
+            { id: "course-certificates", label: "Certifikaty", icon: Award, path: "/prehled/certifikaty" },
           ],
         },
       ],
@@ -1032,20 +1041,22 @@ const navigationData: NavigationConfig = {
       id: "billing",
       label: "Platby",
       icon: CreditCard,
-      defaultPath: "/prehled/fakturace",
+      defaultPath: "/prehled/predplatne",
       sections: [
         {
           id: "main",
           items: [
-            { id: "overview", label: "Předplatné", icon: CreditCard, path: "/prehled/fakturace" },
-            { id: "invoices", label: "Faktury", icon: FileText, path: "/prehled/fakturace" },
+            { id: "subscription", label: "Predplatne", icon: CreditCard, path: "/prehled/predplatne" },
+            { id: "invoices", label: "Faktury", icon: FileText, path: "/prehled/faktury" },
+            { id: "orders", label: "Objednavky", icon: ShoppingBag, path: "/prehled/fakturace" },
+            { id: "payment-methods", label: "Platebni metody", icon: Receipt, path: "/prehled/nastaveni" },
           ],
         },
       ],
     },
   ] as NavModuleConfig[],
   utilities: [
-    { id: "settings", label: "Nastavení", icon: Settings, path: "/prehled/nastaveni" },
+    { id: "settings", label: "Nastaveni", icon: Settings, path: "/prehled/nastaveni" },
     { id: "help", label: "Pomoc & Podpora", icon: HelpCircle, path: "#" },
   ] as NavItemConfig[],
 };
@@ -1073,9 +1084,14 @@ export function ApplicationShell({
     if (resolveActiveModuleIdProp) return resolveActiveModuleIdProp(location.pathname);
     const path = location.pathname;
     if (path === "/prehled") return "home";
+    if (path.startsWith("/prehled/pokrok")) return "analytics";
+    if (path.startsWith("/prehled/vysledky-testu")) return "analytics";
     if (path.startsWith("/prehled/analytika")) return "analytics";
-    if (path.startsWith("/prehled/moje-kurzy")) return "home";
+    if (path.startsWith("/prehled/certifikaty")) return "analytics";
+    if (path.startsWith("/prehled/moje-kurzy")) return "integrations";
     if (path.startsWith("/prehled/integrace")) return "integrations";
+    if (path.startsWith("/prehled/predplatne")) return "billing";
+    if (path.startsWith("/prehled/faktury")) return "billing";
     if (path.startsWith("/prehled/fakturace")) return "billing";
     return "home";
   };

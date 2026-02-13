@@ -20,6 +20,11 @@ import IntegrationsPage from './pages/integrations-page'
 import MyCoursesPage from './pages/my-courses-page'
 import MyCourseDetailPage from './pages/my-course-detail-page'
 import SettingsPage from './pages/settings-page'
+import SubscriptionPage from './pages/subscription-page'
+import InvoicesPage from './pages/invoices-page'
+import ProgressPage from './pages/progress-page'
+import TestResultsPage from './pages/test-results-page'
+import CertificatesPage from './pages/certificates-page'
 import SignInPage from './pages/sign-in-page'
 import SignUpPage from './pages/sign-up-page'
 import VerifyEmailPage from './pages/verify-email-page'
@@ -76,6 +81,11 @@ export default function App() {
             <Route path="integrace" element={<IntegrationsPage />} />
             <Route path="moje-kurzy" element={<MyCoursesPage />} />
             <Route path="moje-kurzy/:courseId" element={<MyCourseDetailPage />} />
+            <Route path="predplatne" element={<SubscriptionPage />} />
+            <Route path="faktury" element={<InvoicesPage />} />
+            <Route path="pokrok" element={<ProgressPage />} />
+            <Route path="vysledky-testu" element={<TestResultsPage />} />
+            <Route path="certifikaty" element={<CertificatesPage />} />
             <Route path="nastaveni" element={<SettingsPage />} />
           </Route>
           <Route path="/admin" element={<AdminLayout />}>
