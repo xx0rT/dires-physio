@@ -1,6 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom'
 import { useAuth } from '@/lib/auth-context'
 import { ApplicationShell } from '@/components/layout/application-shell'
+import { SelectedCourseProvider } from '@/lib/selected-course-context'
 
 export default function DashboardLayout() {
   const { user, loading } = useAuth()
@@ -18,8 +19,10 @@ export default function DashboardLayout() {
   }
 
   return (
-    <ApplicationShell>
-      <Outlet />
-    </ApplicationShell>
+    <SelectedCourseProvider>
+      <ApplicationShell>
+        <Outlet />
+      </ApplicationShell>
+    </SelectedCourseProvider>
   )
 }

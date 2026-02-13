@@ -2,6 +2,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   Bell,
   BookOpen,
+  Check,
   ChevronDown,
   ChevronRight,
   ExternalLink,
@@ -23,6 +24,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 import { cn } from "@/lib/utils";
 import { useAdmin } from "@/lib/use-admin";
+import { useSelectedCourse } from "@/lib/selected-course-context";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -335,6 +337,19 @@ function UserMenu() {
 
 function OrganizationSwitcher() {
   const navigate = useNavigate();
+  const { courses, selectedCourseId, setSelectedCourseId, selectedCourse } = useSelectedCourse();
+
+  const handleSelectCourse = (courseId: string) => {
+    setSelectedCourseId(courseId);
+    navigate("/prehled");
+  };
+
+  const handleShowAll = () => {
+    setSelectedCourseId(null);
+    navigate("/prehled");
+  };
+
+  const triggerLabel = selectedCourse ? selectedCourse.title : "Moje Kurzy";
 
   return (
     <DropdownMenu>
@@ -350,28 +365,38 @@ function OrganizationSwitcher() {
             />
           </div>
           <span className="flex-1 truncate text-sm font-medium text-neutral-900 dark:text-neutral-100">
-            Moje Kurzy
+            {triggerLabel}
           </span>
           <ChevronDown className="size-4 text-neutral-500 dark:text-neutral-500" />
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-56">
-        <DropdownMenuLabel>Kurzy Fyzioterapie</DropdownMenuLabel>
+      <DropdownMenuContent align="start" className="w-64">
+        <DropdownMenuLabel>Moje Kurzy</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => navigate('/prehled/moje-kurzy')}>
-          <div className="flex items-center gap-2">
-            <div className="flex size-6 items-center justify-center rounded bg-neutral-200 dark:bg-neutral-800">
-              <img
-                src="/logo.svg"
-                alt="Moje Kurzy"
-                width={16}
-                height={16}
-                className="size-4"
-              />
+        <DropdownMenuItem onClick={handleShowAll}>
+          <div className="flex items-center gap-2 w-full">
+            <div className="flex size-6 items-center justify-center rounded bg-neutral-200 dark:bg-neutral-800 shrink-0">
+              <Home className="size-3.5" />
             </div>
-            <span>Moje Kurzy</span>
+            <span className="truncate flex-1">Prehled</span>
+            {!selectedCourseId && <Check className="size-4 text-blue-600 shrink-0" />}
           </div>
         </DropdownMenuItem>
+        {courses.length > 0 && <DropdownMenuSeparator />}
+        {courses.map((course) => (
+          <DropdownMenuItem
+            key={course.id}
+            onClick={() => handleSelectCourse(course.id)}
+          >
+            <div className="flex items-center gap-2 w-full">
+              <div className="flex size-6 items-center justify-center rounded bg-neutral-200 dark:bg-neutral-800 shrink-0">
+                <BookOpen className="size-3.5" />
+              </div>
+              <span className="truncate flex-1">{course.title}</span>
+              {selectedCourseId === course.id && <Check className="size-4 text-blue-600 shrink-0" />}
+            </div>
+          </DropdownMenuItem>
+        ))}
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => navigate('/kurzy')}>
           <Plus className="mr-2 size-4" />

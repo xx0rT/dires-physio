@@ -12,6 +12,8 @@ import { toast } from 'sonner'
 import { PhysioAnalyticsChart } from '@/components/dashboard/physio-analytics-chart'
 import { PhysioTodoList } from '@/components/dashboard/physio-todo-list'
 import { SubscriptionTimerCard } from '@/components/dashboard/subscription-timer-card'
+import { CourseDashboard } from '@/components/dashboard/course-dashboard'
+import { useSelectedCourse } from '@/lib/selected-course-context'
 import { supabase } from '@/lib/supabase'
 
 interface Course {
@@ -35,6 +37,7 @@ interface Enrollment {
 export default function DashboardPage() {
   const { user } = useAuth()
   const { subscription, hasActiveSubscription, refetch } = useSubscription()
+  const { selectedCourse } = useSelectedCourse()
   const [enrollments, setEnrollments] = useState<Enrollment[]>([])
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
@@ -163,6 +166,10 @@ export default function DashboardPage() {
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
       </div>
     )
+  }
+
+  if (selectedCourse) {
+    return <CourseDashboard course={selectedCourse} />
   }
 
   return (
