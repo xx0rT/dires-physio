@@ -52,7 +52,7 @@ interface CourseShowcaseProps {
   className?: string
 }
 
-type GridSize = 2 | 3 | 4
+type LayoutMode = 'large' | 'grid' | 'list'
 
 function formatPrice(price: number) {
   return new Intl.NumberFormat('cs-CZ', {
@@ -62,7 +62,40 @@ function formatPrice(price: number) {
   }).format(price)
 }
 
-function CourseShowcaseCard({ course }: { course: ShowcaseCourse }) {
+function CourseCardActions({ course }: { course: ShowcaseCourse }) {
+  if (course.isPurchased) {
+    return (
+      <Button size="sm" className="h-9 gap-1.5 rounded-lg px-4 text-xs" asChild>
+        <Link to={course.cta.url}>
+          <Play className="h-3.5 w-3.5" fill="currentColor" />
+          Pokracovat
+        </Link>
+      </Button>
+    )
+  }
+  if (course.onBuy) {
+    return (
+      <Button
+        size="sm"
+        className="h-9 gap-1.5 rounded-lg px-4 text-xs"
+        onClick={(e) => {
+          e.preventDefault()
+          course.onBuy?.()
+        }}
+      >
+        <ShoppingCart className="h-3.5 w-3.5" />
+        Koupit
+      </Button>
+    )
+  }
+  return (
+    <Button size="sm" className="h-9 gap-1.5 rounded-lg px-4 text-xs" asChild>
+      <Link to={course.cta.url}>{course.cta.text}</Link>
+    </Button>
+  )
+}
+
+function CourseGridCard({ course }: { course: ShowcaseCourse }) {
   const [hovered, setHovered] = useState(false)
 
   return (
@@ -178,64 +211,245 @@ function CourseShowcaseCard({ course }: { course: ShowcaseCourse }) {
             </Button>
           )}
           <div className="flex-1" />
-          {course.isPurchased ? (
-            <Button
-              size="sm"
-              className="h-9 gap-1.5 rounded-lg px-4 text-xs"
-              asChild
-            >
-              <Link to={course.cta.url}>
-                <Play className="h-3.5 w-3.5" fill="currentColor" />
-                Pokracovat
-              </Link>
-            </Button>
-          ) : course.onBuy ? (
-            <Button
-              size="sm"
-              className="h-9 gap-1.5 rounded-lg px-4 text-xs"
-              onClick={(e) => {
-                e.preventDefault()
-                course.onBuy?.()
-              }}
-            >
-              <ShoppingCart className="h-3.5 w-3.5" />
-              Koupit
-            </Button>
-          ) : (
-            <Button
-              size="sm"
-              className="h-9 gap-1.5 rounded-lg px-4 text-xs"
-              asChild
-            >
-              <Link to={course.cta.url}>
-                {course.cta.text}
-              </Link>
-            </Button>
-          )}
+          <CourseCardActions course={course} />
         </div>
       </div>
     </div>
   )
 }
 
-const GRID_OPTIONS: { value: GridSize; icon: typeof Grid2x2; label: string }[] = [
-  { value: 2, icon: Grid2x2, label: '2 sloupce' },
-  { value: 3, icon: Grid3x3, label: '3 sloupce' },
-  { value: 4, icon: LayoutList, label: '4 sloupce' },
+function CourseLargeCard({ course }: { course: ShowcaseCourse }) {
+  const [hovered, setHovered] = useState(false)
+
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:border-primary/30 hover:shadow-xl"
+    >
+      <div className="relative aspect-[2/1] shrink-0 overflow-hidden">
+        <img
+          src={course.image}
+          alt={course.title}
+          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+
+        <div className="absolute left-5 top-5 flex items-center gap-2">
+          {course.badge && (
+            <Badge className="border-0 bg-white/15 px-3 py-1 text-sm text-white backdrop-blur-md">
+              {course.badge}
+            </Badge>
+          )}
+          {course.isPurchased && (
+            <Badge className="border-0 bg-emerald-500/90 px-3 py-1 text-sm text-white">
+              Zakoupeno
+            </Badge>
+          )}
+        </div>
+
+        <AnimatePresence>
+          {hovered && !course.isPurchased && course.onPreview && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[2px]"
+            >
+              <motion.div
+                initial={{ scale: 0.8 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0.8 }}
+                transition={{ duration: 0.2 }}
+              >
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  className="gap-2 rounded-full bg-white/95 text-black shadow-xl hover:bg-white"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    course.onPreview?.()
+                  }}
+                >
+                  <Eye className="h-5 w-5" />
+                  Nahled obsahu
+                </Button>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <div className="absolute bottom-5 left-5 right-5">
+          <div className="flex items-center gap-1 mb-2">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <Star key={star} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+            ))}
+            <span className="ml-1 text-xs text-white/80">5.0</span>
+          </div>
+          <h3 className="text-2xl font-bold text-white leading-tight mb-2">{course.title}</h3>
+          <p className="text-sm text-white/70 line-clamp-2 max-w-2xl">{course.description}</p>
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center gap-1.5 rounded-full bg-muted px-3 py-1.5 text-xs font-medium">
+            <Film className="h-3.5 w-3.5 text-muted-foreground" />
+            {course.videos} videi
+          </div>
+          <div className="flex items-center gap-1.5 rounded-full bg-muted px-3 py-1.5 text-xs font-medium">
+            <Clock className="h-3.5 w-3.5 text-muted-foreground" />
+            {course.duration}
+          </div>
+          <div className="flex items-center gap-1.5 rounded-full bg-muted px-3 py-1.5 text-xs font-medium">
+            <BookOpen className="h-3.5 w-3.5 text-muted-foreground" />
+            {course.lessons} lekci
+          </div>
+          {!course.isPurchased && course.price > 0 && (
+            <div className="flex items-center gap-2">
+              {course.originalPrice && course.originalPrice > course.price && (
+                <span className="text-sm text-muted-foreground line-through">
+                  {formatPrice(course.originalPrice)}
+                </span>
+              )}
+              <span className="text-lg font-bold">{formatPrice(course.price)}</span>
+            </div>
+          )}
+        </div>
+
+        <div className="flex items-center gap-2">
+          {course.onPreview && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-10 gap-2 rounded-lg px-4"
+              onClick={(e) => {
+                e.preventDefault()
+                course.onPreview?.()
+              }}
+            >
+              <Eye className="h-4 w-4" />
+              Nahled
+            </Button>
+          )}
+          <CourseCardActions course={course} />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function CourseListCard({ course }: { course: ShowcaseCourse }) {
+  return (
+    <div className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:border-primary/30 hover:shadow-md sm:flex-row">
+      <div className="relative w-full shrink-0 overflow-hidden sm:w-56 md:w-64">
+        <div className="aspect-[16/10] sm:aspect-auto sm:h-full">
+          <img
+            src={course.image}
+            alt={course.title}
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/10 sm:bg-gradient-to-r" />
+        <div className="absolute left-3 top-3 flex items-center gap-1.5">
+          {course.badge && (
+            <Badge className="border-0 bg-white/15 text-xs text-white backdrop-blur-md">
+              {course.badge}
+            </Badge>
+          )}
+          {course.isPurchased && (
+            <Badge className="border-0 bg-emerald-500/90 text-xs text-white">
+              Zakoupeno
+            </Badge>
+          )}
+        </div>
+      </div>
+
+      <div className="flex flex-1 flex-col justify-between p-4 sm:p-5">
+        <div>
+          <div className="mb-1.5 flex items-center gap-1">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <Star key={star} className="h-3 w-3 fill-amber-400 text-amber-400" />
+            ))}
+            <span className="ml-1 text-xs text-muted-foreground">5.0</span>
+          </div>
+          <h3 className="text-base font-bold leading-snug mb-1">{course.title}</h3>
+          <p className="text-sm text-muted-foreground line-clamp-2">{course.description}</p>
+        </div>
+
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-3">
+          <div className="flex items-center gap-3 text-xs text-muted-foreground">
+            <span className="flex items-center gap-1">
+              <Film className="h-3 w-3" />
+              {course.videos}
+            </span>
+            <span className="flex items-center gap-1">
+              <Clock className="h-3 w-3" />
+              {course.duration}
+            </span>
+            {!course.isPurchased && course.price > 0 && (
+              <span className="text-sm font-bold text-foreground">
+                {formatPrice(course.price)}
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            {course.onPreview && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 gap-1.5 rounded-lg px-2.5 text-xs"
+                onClick={(e) => {
+                  e.preventDefault()
+                  course.onPreview?.()
+                }}
+              >
+                <Eye className="h-3 w-3" />
+                Nahled
+              </Button>
+            )}
+            <CourseCardActions course={course} />
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function RenderCourseCard({ course, layout }: { course: ShowcaseCourse; layout: LayoutMode }) {
+  switch (layout) {
+    case 'large':
+      return <CourseLargeCard course={course} />
+    case 'list':
+      return <CourseListCard course={course} />
+    default:
+      return <CourseGridCard course={course} />
+  }
+}
+
+const LAYOUT_OPTIONS: { value: LayoutMode; icon: typeof Grid2x2; label: string }[] = [
+  { value: 'large', icon: Grid2x2, label: 'Velke karty' },
+  { value: 'grid', icon: Grid3x3, label: 'Mrizka' },
+  { value: 'list', icon: LayoutList, label: 'Seznam' },
 ]
 
 const INITIAL_VISIBLE = 3
 
 const CourseShowcase = ({ className, courses }: CourseShowcaseProps) => {
   const [expanded, setExpanded] = useState(false)
-  const [gridSize, setGridSize] = useState<GridSize>(3)
+  const [layout, setLayout] = useState<LayoutMode>('grid')
   const hasMore = courses.length > INITIAL_VISIBLE
   const toggleRef = useRef<HTMLDivElement>(null)
+
   const gridClass = {
-    2: 'grid-cols-1 md:grid-cols-2',
-    3: 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3',
-    4: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
-  }[gridSize]
+    large: 'grid-cols-1 md:grid-cols-2',
+    grid: 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3',
+    list: 'grid-cols-1',
+  }[layout]
+
+  const gapClass = layout === 'list' ? 'gap-3' : 'gap-6'
 
   const getScrollParent = (el: HTMLElement): HTMLElement | null => {
     let parent = el.parentElement
@@ -293,16 +507,16 @@ const CourseShowcase = ({ className, courses }: CourseShowcaseProps) => {
             {courses.reduce((sum, c) => sum + c.videos, 0)} videi
           </span>
           <div className="flex items-center rounded-lg border border-border p-0.5">
-            {GRID_OPTIONS.map((option) => {
+            {LAYOUT_OPTIONS.map((option) => {
               const Icon = option.icon
               return (
                 <button
                   type="button"
                   key={option.value}
-                  onClick={() => setGridSize(option.value)}
+                  onClick={() => setLayout(option.value)}
                   className={cn(
                     'rounded-md p-1.5 transition-colors',
-                    gridSize === option.value
+                    layout === option.value
                       ? 'bg-primary text-primary-foreground'
                       : 'text-muted-foreground hover:text-foreground'
                   )}
@@ -316,19 +530,24 @@ const CourseShowcase = ({ className, courses }: CourseShowcaseProps) => {
         </div>
       </div>
 
-      <div className={cn('grid gap-6', gridClass)}>
+      <motion.div
+        layout
+        className={cn('grid', gapClass, gridClass)}
+        transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+      >
         {courses.slice(0, INITIAL_VISIBLE).map((course) => (
           <motion.div
             key={course.title}
+            layout
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
             className="h-full"
           >
-            <CourseShowcaseCard course={course} />
+            <RenderCourseCard course={course} layout={layout} />
           </motion.div>
         ))}
-      </div>
+      </motion.div>
 
       <AnimatePresence initial={false}>
         {expanded && (
@@ -352,7 +571,7 @@ const CourseShowcase = ({ className, courses }: CourseShowcaseProps) => {
             }}
             className="overflow-hidden"
           >
-            <div className={cn('grid gap-6 pt-6', gridClass)}>
+            <div className={cn('grid pt-6', gapClass, gridClass)}>
               {courses.slice(INITIAL_VISIBLE).map((course, idx) => (
                 <motion.div
                   key={course.title}
@@ -375,7 +594,7 @@ const CourseShowcase = ({ className, courses }: CourseShowcaseProps) => {
                   }}
                   className="h-full"
                 >
-                  <CourseShowcaseCard course={course} />
+                  <RenderCourseCard course={course} layout={layout} />
                 </motion.div>
               ))}
             </div>
