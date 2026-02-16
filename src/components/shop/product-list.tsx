@@ -1,78 +1,10 @@
-import { ArrowRight, BookOpen, Clock, Infinity, ShoppingCart, Truck } from "lucide-react";
+import { BookOpen, Clock, Infinity, ShoppingCart, Truck } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import { cn } from "@/lib/utils";
+import { PRODUCTS, type ProductData } from "@/lib/products-data";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-
-interface Product {
-  name: string;
-  subtitle: string;
-  description: string;
-  image: string;
-  price: number;
-  originalPrice?: number;
-  pricePrefix?: string;
-  features?: string[];
-  note?: string;
-  badge?: string;
-  ctaPrimary: { label: string; url: string };
-  ctaSecondary?: { label: string; url: string };
-}
-
-const PRODUCTS: Product[] = [
-  {
-    name: "Lineseat",
-    subtitle: "Ergonomicky sedak",
-    description:
-      "Nase pomucka pro stabilni a funkcni sed v aute nebo v kancelari.",
-    image:
-      "https://images.pexels.com/photos/4498136/pexels-photo-4498136.jpeg?auto=compress&cs=tinysrgb&w=800",
-    price: 2900,
-    originalPrice: 3900,
-    badge: "Akce",
-    note: "Akce je platna do vyprodani zasob!",
-    ctaPrimary: { label: "Koupit", url: "/obchod" },
-    ctaSecondary: { label: "O produktu", url: "/obchod" },
-  },
-  {
-    name: "Correctfoot",
-    subtitle: "Balancni desticka",
-    description: "Balancni desticka pro trenink koncetin.",
-    image:
-      "https://images.pexels.com/photos/4498606/pexels-photo-4498606.jpeg?auto=compress&cs=tinysrgb&w=800",
-    price: 2900,
-    pricePrefix: "od",
-    note: "Vyber ze dvou variant.",
-    ctaPrimary: { label: "Koupit", url: "/obchod" },
-    ctaSecondary: { label: "O produktu", url: "/obchod" },
-  },
-  {
-    name: "4CORE",
-    subtitle: "Treninkovy program",
-    description: "Online treninkovy program pro zlepseni kondice a zdravi.",
-    image:
-      "https://images.pexels.com/photos/4056535/pexels-photo-4056535.jpeg?auto=compress&cs=tinysrgb&w=800",
-    price: 4900,
-    features: ["70 dni treninku", "15 minut denne"],
-    note: "Dozivotni pristup!",
-    ctaPrimary: { label: "Koupit", url: "/obchod" },
-    ctaSecondary: { label: "Vyzkouset", url: "/obchod" },
-  },
-  {
-    name: "Fyziotrenink",
-    subtitle: "Kniha",
-    description:
-      "Aktualizovane vydani knihy Fyziotrenink - Pohyb jako lek.",
-    image:
-      "https://images.pexels.com/photos/3747468/pexels-photo-3747468.jpeg?auto=compress&cs=tinysrgb&w=800",
-    price: 450,
-    note: "Cena je vcetne dopravy!",
-    ctaPrimary: { label: "Koupit", url: "/obchod" },
-    ctaSecondary: { label: "O knize", url: "/obchod" },
-  },
-];
 
 interface ProductShowcaseProps {
   className?: string;
@@ -96,16 +28,19 @@ const ProductShowcase = ({ className }: ProductShowcaseProps) => {
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {PRODUCTS.map((product) => (
-          <ProductCard key={product.name} product={product} />
+          <ProductCard key={product.slug} product={product} />
         ))}
       </div>
     </section>
   );
 };
 
-const ProductCard = ({ product }: { product: Product }) => {
+const ProductCard = ({ product }: { product: ProductData }) => {
   return (
-    <div className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/50 bg-card transition-all duration-300 hover:border-border hover:shadow-lg">
+    <Link
+      to={`/produkt/${product.slug}`}
+      className="group flex flex-col overflow-hidden rounded-2xl border border-border/50 bg-card transition-all duration-300 hover:border-border hover:shadow-lg"
+    >
       <div className="relative aspect-[4/3] overflow-hidden bg-muted">
         <img
           src={product.image}
@@ -178,23 +113,11 @@ const ProductCard = ({ product }: { product: Product }) => {
           )}
         </div>
 
-        <div className="mt-4 flex gap-2">
-          <Button asChild className="flex-1">
-            <Link to={product.ctaPrimary.url}>
-              {product.ctaPrimary.label}
-              <ArrowRight className="ml-1 size-4" />
-            </Link>
-          </Button>
-          {product.ctaSecondary && (
-            <Button variant="outline" asChild className="flex-1">
-              <Link to={product.ctaSecondary.url}>
-                {product.ctaSecondary.label}
-              </Link>
-            </Button>
-          )}
+        <div className="mt-4 rounded-lg bg-primary px-4 py-2.5 text-center text-sm font-medium text-primary-foreground transition-colors group-hover:bg-primary/90">
+          Zobrazit detail
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
