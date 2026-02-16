@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import PhotoSwipeLightbox from "photoswipe/lightbox";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Controller, type ControllerRenderProps, useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { z } from "zod";
@@ -229,47 +230,50 @@ function ProductDetail({ product }: { product: ProductData }) {
                   </Button>
                 </div>
 
-                <div
-                  ref={stickyFormRef}
-                  className="fixed inset-x-0 bottom-0 z-50 w-full translate-y-full border-t bg-background transition-all duration-300"
-                >
-                  <div className="flex items-center justify-between gap-2 px-4 py-2.5">
-                    <div className="hidden items-center gap-5 md:flex">
-                      <div className="size-[5.625rem] overflow-hidden rounded-[0.375rem]">
-                        <img
-                          src={product.image}
-                          alt={product.name}
-                          className="block size-full object-cover object-center"
-                        />
-                      </div>
-                      <div>
-                        <div className="mb-1 text-lg font-medium">
-                          {product.name}
+                {createPortal(
+                  <div
+                    ref={stickyFormRef}
+                    className="fixed inset-x-0 bottom-0 z-50 w-full translate-y-full border-t bg-background transition-all duration-300"
+                  >
+                    <div className="flex items-center justify-between gap-2 px-4 py-2.5">
+                      <div className="hidden items-center gap-5 md:flex">
+                        <div className="size-[5.625rem] overflow-hidden rounded-[0.375rem]">
+                          <img
+                            src={product.image}
+                            alt={product.name}
+                            className="block size-full object-cover object-center"
+                          />
                         </div>
-                        <ProductPrice
-                          size="sm"
-                          regular={regular}
-                          sale={sale}
-                          currency={currency}
+                        <div>
+                          <div className="mb-1 text-lg font-medium">
+                            {product.name}
+                          </div>
+                          <ProductPrice
+                            size="sm"
+                            regular={regular}
+                            sale={sale}
+                            currency={currency}
+                          />
+                        </div>
+                      </div>
+                      <div className="flex flex-1 gap-3 md:flex-none">
+                        <Controller
+                          control={form.control}
+                          name="quantity"
+                          render={({ field }) => (
+                            <Field className="hidden md:grid">
+                              <Quantity field={field} min={1} max={99} />
+                            </Field>
+                          )}
                         />
+                        <div className="flex-1 md:flex-none">
+                          <Button className="w-full">Pridat do kosiku</Button>
+                        </div>
                       </div>
                     </div>
-                    <div className="flex flex-1 gap-3 md:flex-none">
-                      <Controller
-                        control={form.control}
-                        name="quantity"
-                        render={({ field }) => (
-                          <Field className="hidden md:grid">
-                            <Quantity field={field} min={1} max={99} />
-                          </Field>
-                        )}
-                      />
-                      <div className="flex-1 md:flex-none">
-                        <Button className="w-full">Pridat do kosiku</Button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                  </div>,
+                  document.body,
+                )}
               </form>
 
               <div className="flex flex-col gap-4">
