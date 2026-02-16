@@ -40,6 +40,11 @@ import {
 } from "@/components/ui/carousel";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import {
+  CorrectfootExerciseGuide,
+  CorrectfootProductDescription,
+  CorrectfootVariants,
+} from "@/components/shop/correctfoot-sections";
 
 interface DetailImage {
   src: string;
@@ -301,6 +306,14 @@ function ProductDetail({ product }: { product: ProductData }) {
             </div>
           </div>
         </div>
+
+        {product.slug === "correctfoot" && (
+          <>
+            <CorrectfootProductDescription />
+            <CorrectfootExerciseGuide />
+            <CorrectfootVariants />
+          </>
+        )}
       </div>
     </section>
   );

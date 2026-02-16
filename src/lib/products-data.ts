@@ -129,8 +129,36 @@ export const PRODUCTS: ProductData[] = [
     name: "Correctfoot",
     subtitle: "Balancni desticka",
     description: "Balancni desticka pro trenink koncetin.",
-    image: "/postup-prvni.jpg",
+    image: "/correctfoot-carbon-2048x1245.jpg",
     images: [
+      {
+        src: "/correctfoot-carbon-2048x1245.jpg",
+        thumbnail: "/correctfoot-carbon-2048x1245.jpg",
+        alt: "Correctfoot Carbon varianta",
+        width: 2048,
+        height: 1245,
+      },
+      {
+        src: "/correctfoot-wood-2048x1545.jpg",
+        thumbnail: "/correctfoot-wood-2048x1545.jpg",
+        alt: "Correctfoot Wood varianta",
+        width: 2048,
+        height: 1545,
+      },
+      {
+        src: "/popis-correctfoot.jpg",
+        thumbnail: "/popis-correctfoot.jpg",
+        alt: "Correctfoot - popis desticky s nohou",
+        width: 1600,
+        height: 900,
+      },
+      {
+        src: "/popis-correctfoot2.jpg",
+        thumbnail: "/popis-correctfoot2.jpg",
+        alt: "Correctfoot - detail balancni zony",
+        width: 1600,
+        height: 900,
+      },
       {
         src: "/postup-prvni.jpg",
         thumbnail: "/postup-prvni.jpg",
