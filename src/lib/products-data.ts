@@ -52,32 +52,35 @@ export const PRODUCTS: ProductData[] = [
     subtitle: "Ergonomicky sedak",
     description:
       "Nase pomucka pro stabilni a funkcni sed v aute nebo v kancelari.",
-    image:
-      "https://images.pexels.com/photos/4498136/pexels-photo-4498136.jpeg?auto=compress&cs=tinysrgb&w=800",
+    image: "/lefttop1.png",
     images: [
       {
-        src: "https://images.pexels.com/photos/4498136/pexels-photo-4498136.jpeg?auto=compress&cs=tinysrgb&w=1280",
-        thumbnail:
-          "https://images.pexels.com/photos/4498136/pexels-photo-4498136.jpeg?auto=compress&cs=tinysrgb&w=200",
+        src: "/lefttop1.png",
+        thumbnail: "/lefttop1.png",
         alt: "Lineseat ergonomicky sedak",
         width: 1280,
         height: 853,
       },
       {
-        src: "https://images.pexels.com/photos/4397840/pexels-photo-4397840.jpeg?auto=compress&cs=tinysrgb&w=1280",
-        thumbnail:
-          "https://images.pexels.com/photos/4397840/pexels-photo-4397840.jpeg?auto=compress&cs=tinysrgb&w=200",
-        alt: "Lineseat detail",
+        src: "/IMG_9113_lineseat.png.webp",
+        thumbnail: "/IMG_9113_lineseat.png.webp",
+        alt: "Lineseat pohled shora",
         width: 1280,
         height: 853,
       },
       {
-        src: "https://images.pexels.com/photos/6454128/pexels-photo-6454128.jpeg?auto=compress&cs=tinysrgb&w=1280",
-        thumbnail:
-          "https://images.pexels.com/photos/6454128/pexels-photo-6454128.jpeg?auto=compress&cs=tinysrgb&w=200",
-        alt: "Lineseat v pouziti",
+        src: "/CCC1D0D9-63F3-44A1-96BD-F5EA2903CBAD_1_201_a-e1719591631832.jpeg.webp",
+        thumbnail: "/CCC1D0D9-63F3-44A1-96BD-F5EA2903CBAD_1_201_a-e1719591631832.jpeg.webp",
+        alt: "Lineseat detail materialu",
         width: 1280,
         height: 853,
+      },
+      {
+        src: "/MG_0170-1024x683-1.jpg.webp",
+        thumbnail: "/MG_0170-1024x683-1.jpg.webp",
+        alt: "Lineseat v aute",
+        width: 1024,
+        height: 683,
       },
     ],
     price: {

@@ -164,21 +164,21 @@ const INSTRUCTIONS = [
     step: "1",
     title: "Umistete na sedadlo",
     description:
-      "Polozte lineseat na sedadlo v aute nebo na kancelarskou zidli. Protiskluzova spodni strana zajisti, ze sedak zustane na miste.",
+      "Polozte lineseat na sedadlo v aute nebo na kancelarskou zidli. Protiskluzova spodni strana zajisti, ze sedak zustane na miste a nebude se posouvat behem sezeni. Neni potreba zadne upevneni ani pasky - staci jednoduche polozeni na povrch sedadla. Sedak se prisedi na jakoukoliv rovnou plochu, at uz je to sedadlo v osobnim aute, dodavce, kancelarskem kresle nebo doma u jidelniho stolu. Doporucujeme umistit sedak co nejblize k zadni operce, aby byla zajistena maximalni podpora panve a spodni casti zad.",
     image: "/MG_0170-1024x683-1.jpg.webp",
   },
   {
     step: "2",
     title: "Sednte si prirozene",
     description:
-      "Sedak sam navede vasi panev do spravne pozice. Kombinace pruznych a pevnych materialu podpori aktivni sed bez namah.",
+      "Sedak sam navede vasi panev do spravne pozice diky unikatni kombinaci pruznych a pevnych materialu, ktere podporuji aktivni sed bez namah. Jakmile si sednete, pocitite jemny tlak pod sedacimi kostmi, ktery prirozene nakloni panev do optimalni pozice. Tato pozice uvolni bederni pater a umozni hrudniku se otevrit. Nemusite premyslet o drzeni tela - sedak pracuje za vas. Behem prvnich minut si mozna vsimnete, ze sedite vyse a rovneji nez obvykle. To je spravne - vase telo se prisposobuje zdravejsi pozici, ktera snizuje zatez na meziobratlove plotenky a okolni svaly.",
     image: "/IMG_9113_lineseat.png.webp",
   },
   {
     step: "3",
     title: "Uzivejte si zdravy sed",
     description:
-      "Vase telo si rychle zvykne na spravne drzeni. Pocitite uvolneni v zadech a zlepseni dychani jiz po prvnich minutach.",
+      "Vase telo si rychle zvykne na spravne drzeni. Pocitite uvolneni v zadech a zlepseni dychani jiz po prvnich minutach pouzivani. Doporucujeme zacinat s kratsimi intervaly okolo 30-60 minut a postupne prodluzovat dobu sezeni, jak si vase svaly zvykaji na novou pozici. Vetsi uzivatelu hlasi vyrazne zlepseni do dvou tydnu pravidelnaho pouzivani. Lineseat muzete snadno prenast mezi autem a kancelari - je lehky a kompaktni. Pravidelnym pouzivanim posilujete hluboky stabilizacni system, zlepsujete dychani a predchazite chronickym bolestem zad, ktere jsou spojeny s dlouhodobym sezenim v nespravne pozici.",
     image: "/lefttop1.png",
   },
 ];
