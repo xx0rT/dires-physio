@@ -82,4 +82,52 @@ const FieldError = React.forwardRef<HTMLParagraphElement, FieldErrorProps>(
 )
 FieldError.displayName = "FieldError"
 
-export { Field, FieldLabel, FieldLegend, FieldSet, FieldError }
+const FieldGroup = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex flex-col gap-2", className)}
+    {...props}
+  />
+))
+FieldGroup.displayName = "FieldGroup"
+
+const FieldContent = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex flex-col gap-0.5", className)}
+    {...props}
+  />
+))
+FieldContent.displayName = "FieldContent"
+
+const FieldTitle = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => (
+  <p
+    ref={ref}
+    className={cn("text-sm font-medium", className)}
+    {...props}
+  />
+))
+FieldTitle.displayName = "FieldTitle"
+
+const FieldDescription = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => (
+  <p
+    ref={ref}
+    className={cn("text-xs text-muted-foreground", className)}
+    {...props}
+  />
+))
+FieldDescription.displayName = "FieldDescription"
+
+export { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel, FieldLegend, FieldSet, FieldError, FieldTitle }
