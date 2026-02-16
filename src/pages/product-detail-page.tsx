@@ -45,6 +45,20 @@ import {
   CorrectfootProductDescription,
   CorrectfootVariants,
 } from "@/components/shop/correctfoot-sections";
+import {
+  FourcoreAudience,
+  FourcoreHighlights,
+  FourcoreProgramPhases,
+} from "@/components/shop/fourcore-sections";
+import {
+  FyziotreninkAbout,
+  FyziotreninkChapters,
+} from "@/components/shop/fyziotrenink-sections";
+import {
+  LineseatBenefits,
+  LineseatInstructions,
+  LineseatUseCases,
+} from "@/components/shop/lineseat-sections";
 
 interface DetailImage {
   src: string;
@@ -307,16 +321,48 @@ function ProductDetail({ product }: { product: ProductData }) {
           </div>
         </div>
 
-        {product.slug === "correctfoot" && (
-          <>
-            <CorrectfootProductDescription />
-            <CorrectfootExerciseGuide />
-            <CorrectfootVariants />
-          </>
-        )}
+        <ProductDetailSections slug={product.slug} />
       </div>
     </section>
   );
+}
+
+function ProductDetailSections({ slug }: { slug: string }) {
+  switch (slug) {
+    case "lineseat":
+      return (
+        <>
+          <LineseatBenefits />
+          <LineseatUseCases />
+          <LineseatInstructions />
+        </>
+      );
+    case "correctfoot":
+      return (
+        <>
+          <CorrectfootProductDescription />
+          <CorrectfootExerciseGuide />
+          <CorrectfootVariants />
+        </>
+      );
+    case "4core":
+      return (
+        <>
+          <FourcoreHighlights />
+          <FourcoreProgramPhases />
+          <FourcoreAudience />
+        </>
+      );
+    case "fyziotrenink":
+      return (
+        <>
+          <FyziotreninkAbout />
+          <FyziotreninkChapters />
+        </>
+      );
+    default:
+      return null;
+  }
 }
 
 function ProductImages({
