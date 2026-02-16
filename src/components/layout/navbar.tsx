@@ -187,6 +187,38 @@ const NAVIGATION: MenuItem[] = [
     title: "Obchod",
     id: 2,
     url: "/obchod",
+    featuredLinks: [
+      {
+        label: "Lineseat",
+        icon: ShoppingBag,
+        description: "Pomucka pro stabilni a funkcni sed v aute i kancelari",
+        background:
+          "https://images.pexels.com/photos/4498136/pexels-photo-4498136.jpeg?auto=compress&cs=tinysrgb&w=800",
+        url: "/obchod",
+      },
+      {
+        label: "Correctfoot",
+        icon: LayoutGrid,
+        description: "Balancni desticka pro trenink koncetin",
+        background:
+          "https://images.pexels.com/photos/4498606/pexels-photo-4498606.jpeg?auto=compress&cs=tinysrgb&w=800",
+        url: "/obchod",
+      },
+    ],
+    links: [
+      {
+        label: "4CORE Program",
+        icon: Zap,
+        description: "Online treninkovy program - 70 dni, 15 minut denne",
+        url: "/obchod",
+      },
+      {
+        label: "Fyziotrenink",
+        icon: BookOpen,
+        description: "Kniha Pohyb jako lek - aktualizovane vydani",
+        url: "/obchod",
+      },
+    ],
   },
   {
     title: "Kurzy",
