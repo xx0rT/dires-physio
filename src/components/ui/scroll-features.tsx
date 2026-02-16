@@ -9,11 +9,6 @@ import { useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
-const getAnimationRange = (index: number, totalFeatures: number) => {
-  const cardPosition = index / totalFeatures;
-  return [0, cardPosition, 1];
-};
-
 interface Statistics {
   value: string;
   label: string;
@@ -59,7 +54,9 @@ function AnimationWrapper({
 function TestimonialCard({ testimonial }: { testimonial: ScrollTestimonial }) {
   return (
     <div className="hidden h-96 flex-1/2 shrink-0 flex-col items-start justify-end rounded-lg border bg-muted p-6 sm:flex lg:h-full">
-      <p className="mt-8 text-lg leading-tight">&ldquo;{testimonial.quote}&rdquo;</p>
+      <p className="mt-8 text-lg leading-tight">
+        &ldquo;{testimonial.quote}&rdquo;
+      </p>
       <p className="mt-4 text-sm font-medium">
         &mdash; {testimonial.author}{" "}
         <span className="font-light">{testimonial.designation}</span>
@@ -77,16 +74,10 @@ function ScrollProgressIndicator({
   activeIndex: number;
   scrollYProgress: MotionValue<number>;
 }) {
-  const range = getAnimationRange(
-    Math.max(0, activeIndex - 0.5),
-    totalFeatures,
-  );
-  const nextRange = getAnimationRange(
-    Math.min(totalFeatures, activeIndex + 0.5),
-    totalFeatures,
-  );
-  const currentRange = [range[1], nextRange[1]];
-  const width = useTransform(scrollYProgress, currentRange, ["0%", "100%"]);
+  const segmentSize = 1 / totalFeatures;
+  const start = activeIndex * segmentSize;
+  const end = (activeIndex + 1) * segmentSize;
+  const width = useTransform(scrollYProgress, [start, end], ["0%", "100%"]);
 
   return (
     <div className="mt-14 hidden w-fit items-center justify-center gap-3 rounded-full bg-muted px-6 py-4 lg:flex">
@@ -127,7 +118,7 @@ function FeatureCard({
   return (
     <div
       className={cn(
-        "flex w-full flex-col-reverse justify-between gap-8 px-10 py-4 lg:absolute lg:top-1/2 lg:left-1/2 lg:h-full lg:-translate-x-1/2 lg:-translate-y-1/2 lg:flex-row lg:items-center lg:border-l",
+        "flex w-full flex-col-reverse justify-between gap-8 py-4 lg:absolute lg:top-1/2 lg:left-1/2 lg:h-full lg:-translate-x-1/2 lg:-translate-y-1/2 lg:flex-row lg:items-center lg:border-l lg:px-10",
       )}
     >
       <div className="flex flex-2/5 flex-col gap-8 lg:h-full lg:gap-0">
@@ -148,7 +139,9 @@ function FeatureCard({
 
         <div className="flex flex-col gap-1 lg:mt-auto">
           <AnimationWrapper delay={0.3}>
-            <p className="text-6xl font-medium">{feature.statistics.value}</p>
+            <p className="text-6xl font-medium">
+              {feature.statistics.value}
+            </p>
           </AnimationWrapper>
           <AnimationWrapper delay={0.45}>
             <p className="text-sm font-light">{feature.statistics.label}</p>
@@ -186,62 +179,58 @@ export function ScrollFeatures({
   className,
 }: ScrollFeaturesProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ container: ref });
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end end"],
+  });
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
     const unsubscribe = scrollYProgress.on("change", (latest) => {
-      let minDistance = Infinity;
-      let temp = 0;
-      features.forEach((_, index) => {
-        const range = getAnimationRange(index, features.length);
-        const position = range[1];
-        const distance = Math.abs(latest - position);
-        if (distance < minDistance) {
-          minDistance = distance;
-          temp = index;
-        }
-      });
-      setActiveIndex(temp);
+      const segmentSize = 1 / features.length;
+      const idx = Math.min(
+        features.length - 1,
+        Math.floor(latest / segmentSize),
+      );
+      setActiveIndex(idx);
     });
     return () => unsubscribe();
   }, [features, scrollYProgress]);
 
   return (
-    <section ref={ref} className={cn("h-screen overflow-y-auto", className)}>
-      <div className="container">
-        <div className="sticky top-0 hidden h-screen w-full flex-col items-center justify-center gap-10 lg:flex">
-          <div className="relative h-full w-full lg:h-1/2">
-            <AnimatePresence mode="popLayout">
-              <FeatureCard
-                key={`feature-${activeIndex}`}
-                index={activeIndex}
-                feature={features[activeIndex]}
-                testimonial={testimonial}
-                totalFeatures={features.length}
-                scrollYProgress={scrollYProgress}
-              />
-            </AnimatePresence>
-          </div>
+    <section
+      ref={ref}
+      className={cn("relative", className)}
+      style={{ height: `${(features.length + 1) * 100}vh` }}
+    >
+      <div className="sticky top-0 hidden h-screen w-full flex-col items-center justify-center gap-10 lg:flex">
+        <div className="relative h-full w-full lg:h-1/2">
+          <AnimatePresence mode="popLayout">
+            <FeatureCard
+              key={`feature-${activeIndex}`}
+              index={activeIndex}
+              feature={features[activeIndex]}
+              testimonial={testimonial}
+              totalFeatures={features.length}
+              scrollYProgress={scrollYProgress}
+            />
+          </AnimatePresence>
         </div>
-        <div className="flex w-full flex-col items-center justify-center gap-10 overflow-y-auto py-32 lg:hidden">
-          <div className="relative h-full w-full lg:h-1/2">
-            {features.map((feature, index) => (
-              <FeatureCard
-                key={`feature-mobile-${index}`}
-                index={index}
-                feature={feature}
-                testimonial={testimonial}
-                totalFeatures={features.length}
-                scrollYProgress={scrollYProgress}
-              />
-            ))}
-          </div>
+      </div>
+
+      <div className="flex w-full flex-col items-center justify-center gap-10 py-16 lg:hidden">
+        <div className="relative h-full w-full">
+          {features.map((feature, index) => (
+            <FeatureCard
+              key={`feature-mobile-${index}`}
+              index={index}
+              feature={feature}
+              testimonial={testimonial}
+              totalFeatures={features.length}
+              scrollYProgress={scrollYProgress}
+            />
+          ))}
         </div>
-        <div
-          style={{ height: `${features.length * 75}vh` }}
-          className="hidden lg:block"
-        />
       </div>
     </section>
   );
