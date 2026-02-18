@@ -42,6 +42,7 @@ const TextReveal: FC<TextRevealProps> = ({
   const targetRef = useRef<HTMLDivElement | null>(null);
   const { scrollYProgress } = useScroll({
     target: targetRef,
+    offset: ["start start", "end start"],
   });
 
   const words = children.split(" ");
@@ -49,10 +50,10 @@ const TextReveal: FC<TextRevealProps> = ({
   return (
     <div
       ref={targetRef}
-      className={cn("relative z-0 h-[200vh] mx-auto", className)}
+      className={cn("relative z-0 h-[300vh] mx-auto", className)}
       style={{ maxWidth: maxWidth || "56rem" }}
     >
-      <div className="sticky top-0 mx-auto flex h-[50%] items-center justify-center bg-transparent px-[1rem] py-[5rem]">
+      <div className="sticky top-0 mx-auto flex h-screen items-center justify-center bg-transparent px-[1rem] py-[5rem]">
         <div className="flex flex-col justify-center items-center w-full">
           <span className="text-center text-lg font-medium tracking-tight text-foreground">
             {title}
