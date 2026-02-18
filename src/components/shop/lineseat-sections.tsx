@@ -264,7 +264,7 @@ export function LineseatVideoTutorial() {
       <div ref={containerRef} className="relative h-[300vh]">
         <div className="sticky top-4 overflow-hidden rounded-3xl bg-black" style={{ height: "calc(100vh - 2rem)" }}>
           <div className="grid h-full grid-cols-1 lg:grid-cols-2">
-            <div className="relative h-1/2 lg:h-full">
+            <div className="relative h-[42%] lg:h-full">
               <video
                 ref={videoRef}
                 src="/New-Rajden1.mp4"
@@ -273,14 +273,15 @@ export function LineseatVideoTutorial() {
                 preload="auto"
                 className="h-full w-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/20 lg:block hidden" />
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60 lg:hidden" />
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/20 hidden lg:block" />
             </div>
 
-            <div className="flex h-1/2 flex-col justify-start px-8 py-8 pt-12 lg:h-full lg:px-16 lg:pb-0 lg:pt-40">
-              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-white/40">
+            <div className="flex h-[58%] flex-col justify-center overflow-y-auto px-5 py-4 lg:h-full lg:justify-start lg:overflow-visible lg:px-16 lg:pb-0 lg:pt-40">
+              <p className="mb-1.5 lg:mb-3 text-[10px] lg:text-xs font-semibold uppercase tracking-[0.2em] text-white/40">
                 Navod k pouziti
               </p>
-              <h2 className="mb-10 text-2xl font-semibold tracking-tight text-white lg:text-4xl">
+              <h2 className="mb-4 lg:mb-10 text-xl lg:text-4xl font-semibold tracking-tight text-white">
                 Jak pouzivat lineseat
               </h2>
 
@@ -290,11 +291,11 @@ export function LineseatVideoTutorial() {
                   return (
                     <div
                       key={s.step}
-                      className="group relative flex gap-6 pb-8 last:pb-0"
+                      className="group relative flex gap-4 lg:gap-6 pb-4 lg:pb-8 last:pb-0"
                     >
                       <div className="flex flex-col items-center">
                         <div
-                          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border text-sm font-bold transition-all duration-500"
+                          className="flex h-8 w-8 lg:h-10 lg:w-10 shrink-0 items-center justify-center rounded-full border text-xs lg:text-sm font-bold transition-all duration-500"
                           style={{
                             borderColor: isActive
                               ? "rgba(255,255,255,0.9)"
@@ -321,11 +322,11 @@ export function LineseatVideoTutorial() {
                       </div>
 
                       <div
-                        className="flex flex-col gap-1.5 pt-1.5 transition-all duration-500"
+                        className="flex flex-col gap-1 pt-1 lg:gap-1.5 lg:pt-1.5 transition-all duration-500"
                         style={{ opacity: isActive ? 1 : 0.25 }}
                       >
                         <h3
-                          className="text-base font-semibold text-white lg:text-lg"
+                          className="text-sm lg:text-lg font-semibold text-white"
                           style={{
                             transform: isActive
                               ? "translateX(0)"
@@ -336,7 +337,7 @@ export function LineseatVideoTutorial() {
                           {s.title}
                         </h3>
                         <p
-                          className="max-w-sm text-sm leading-relaxed text-white/60 lg:text-base"
+                          className="max-w-sm text-xs lg:text-base leading-relaxed text-white/60"
                           style={{
                             maxHeight: isActive ? "8rem" : "0",
                             overflow: "hidden",
@@ -351,7 +352,7 @@ export function LineseatVideoTutorial() {
                 })}
               </div>
 
-              <div className="mt-10 flex gap-2">
+              <div className="mt-4 lg:mt-10 flex gap-2">
                 {VIDEO_STEPS.map((_, i) => (
                   <div
                     key={`dot-${i}`}

@@ -527,13 +527,13 @@ const CourseShowcase = ({ className, courses }: CourseShowcaseProps) => {
               {expanded && courses.slice(INITIAL_VISIBLE).map((course, idx) => (
                 <motion.div
                   key={course.title}
-                  initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                  initial={{ opacity: 0, y: 32, scale: 0.97 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                  exit={{ opacity: 0, y: -12, scale: 0.97, transition: { duration: 0.2 } }}
                   transition={{
-                    duration: 0.35,
-                    delay: idx * 0.06,
-                    ease: [0.25, 0.1, 0.25, 1],
+                    duration: 0.5,
+                    delay: idx * 0.14,
+                    ease: [0.22, 1, 0.36, 1],
                   }}
                   layout
                   className="h-full"
