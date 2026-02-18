@@ -276,7 +276,7 @@ export function LineseatVideoTutorial() {
               <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/20 lg:block hidden" />
             </div>
 
-            <div className="flex h-1/2 flex-col justify-center px-8 py-8 lg:h-full lg:px-16 lg:py-0">
+            <div className="flex h-1/2 flex-col justify-start px-8 py-8 pt-12 lg:h-full lg:px-16 lg:pb-0 lg:pt-20">
               <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-white/40">
                 Navod k pouziti
               </p>
