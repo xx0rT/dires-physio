@@ -260,9 +260,9 @@ export function LineseatVideoTutorial() {
   });
 
   return (
-    <section className="relative">
+    <section className="relative px-4 lg:px-8">
       <div ref={containerRef} className="relative h-[300vh]">
-        <div className="sticky top-0 h-screen overflow-hidden bg-black">
+        <div className="sticky top-4 overflow-hidden rounded-3xl bg-black" style={{ height: "calc(100vh - 2rem)" }}>
           <div className="grid h-full grid-cols-1 lg:grid-cols-2">
             <div className="relative h-1/2 lg:h-full">
               <video
