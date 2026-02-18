@@ -45,20 +45,25 @@ export function CourseCard({
     minimumFractionDigits: 0,
   }).format(price)
 
+  const isClickable = isPurchased || isCompleted
+  const CardWrapper = isClickable ? Link : 'div'
+  const cardProps = isClickable ? { to: `/kurz/${id}` } : {}
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, delay: index * 0.06 }}
     >
-      <div
-        className={`rounded-xl border p-4 transition-all duration-200 ${
+      <CardWrapper
+        {...(cardProps as { to: string })}
+        className={`group block rounded-xl border p-4 transition-all duration-200 ${
           isLocked
-            ? 'opacity-50 bg-muted/30'
+            ? 'opacity-50 bg-muted/30 cursor-default'
             : isCompleted
-              ? 'border-emerald-200 bg-emerald-50/50 dark:border-emerald-900/40 dark:bg-emerald-950/20'
+              ? 'border-emerald-200 bg-emerald-50/50 dark:border-emerald-900/40 dark:bg-emerald-950/20 hover:border-emerald-300 hover:shadow-sm cursor-pointer'
               : isPurchased
-                ? 'border-primary/20 bg-primary/[0.02]'
+                ? 'border-primary/20 bg-primary/[0.02] hover:border-primary/40 hover:shadow-sm cursor-pointer'
                 : 'hover:border-border/80 hover:bg-accent/30'
         }`}
       >
@@ -86,7 +91,7 @@ export function CourseCard({
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-2 flex-wrap min-w-0">
-                <h3 className="text-sm font-semibold leading-tight">{title}</h3>
+                <h3 className="text-sm font-semibold leading-tight group-hover:underline">{title}</h3>
                 {isCompleted && (
                   <Badge className="gap-1 bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800 text-[10px] px-1.5 py-0">
                     Dokonceno
@@ -123,7 +128,7 @@ export function CourseCard({
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => onPreview(id)}
+                      onClick={(e) => { e.stopPropagation(); onPreview(id) }}
                       className="h-7 rounded-lg px-2.5 text-xs gap-1"
                     >
                       <Eye className="h-3 w-3" />
@@ -132,7 +137,7 @@ export function CourseCard({
                     {isAuthenticated ? (
                       <Button
                         size="sm"
-                        onClick={() => onBuy(id)}
+                        onClick={(e) => { e.stopPropagation(); onBuy(id) }}
                         disabled={buying}
                         className="h-7 rounded-lg px-3 text-xs gap-1"
                       >
@@ -155,7 +160,7 @@ export function CourseCard({
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => onPreview(id)}
+                      onClick={(e) => { e.stopPropagation(); e.preventDefault(); onPreview(id) }}
                       className="h-7 rounded-lg px-2.5 text-xs gap-1"
                     >
                       <Eye className="h-3 w-3" />
@@ -175,7 +180,7 @@ export function CourseCard({
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => onPreview(id)}
+                      onClick={(e) => { e.stopPropagation(); e.preventDefault(); onPreview(id) }}
                       className="h-7 rounded-lg px-2.5 text-xs gap-1"
                     >
                       <Eye className="h-3 w-3" />
@@ -207,7 +212,7 @@ export function CourseCard({
             </div>
           </div>
         </div>
-      </div>
+      </CardWrapper>
     </motion.div>
   )
 }

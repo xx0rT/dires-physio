@@ -80,6 +80,7 @@ function CourseCardActions({ course }: { course: ShowcaseCourse }) {
         className="h-9 gap-1.5 rounded-lg px-4 text-xs"
         onClick={(e) => {
           e.preventDefault()
+          e.stopPropagation()
           course.onBuy?.()
         }}
       >
@@ -99,10 +100,11 @@ function CourseGridCard({ course }: { course: ShowcaseCourse }) {
   const [hovered, setHovered] = useState(false)
 
   return (
-    <div
+    <Link
+      to={course.cta.url}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:border-primary/30 hover:shadow-lg"
+      className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:border-primary/30 hover:shadow-lg cursor-pointer"
     >
       <div className="relative aspect-[16/9] shrink-0 overflow-hidden">
         <img
@@ -143,7 +145,7 @@ function CourseGridCard({ course }: { course: ShowcaseCourse }) {
                 <Button
                   variant="secondary"
                   size="lg"
-                  className="gap-2 rounded-full bg-white/95 text-black shadow-xl hover:bg-white"
+                  className="gap-2 rounded-full bg-white/95 text-black shadow-xl hover:bg-white relative z-10"
                   onClick={(e) => {
                     e.preventDefault()
                     e.stopPropagation()
@@ -190,7 +192,7 @@ function CourseGridCard({ course }: { course: ShowcaseCourse }) {
           <span className="ml-1 text-xs text-muted-foreground">5.0</span>
         </div>
 
-        <h3 className="mb-1 text-lg font-bold leading-tight">{course.title}</h3>
+        <h3 className="mb-1 text-lg font-bold leading-tight group-hover:underline">{course.title}</h3>
         <p className="mb-4 line-clamp-2 text-sm text-muted-foreground">
           {course.description}
         </p>
@@ -203,6 +205,7 @@ function CourseGridCard({ course }: { course: ShowcaseCourse }) {
               className="h-9 gap-1.5 rounded-lg px-3 text-xs"
               onClick={(e) => {
                 e.preventDefault()
+                e.stopPropagation()
                 course.onPreview?.()
               }}
             >
@@ -214,7 +217,7 @@ function CourseGridCard({ course }: { course: ShowcaseCourse }) {
           <CourseCardActions course={course} />
         </div>
       </div>
-    </div>
+    </Link>
   )
 }
 
@@ -222,10 +225,11 @@ function CourseLargeCard({ course }: { course: ShowcaseCourse }) {
   const [hovered, setHovered] = useState(false)
 
   return (
-    <div
+    <Link
+      to={course.cta.url}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:border-primary/30 hover:shadow-xl"
+      className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:border-primary/30 hover:shadow-xl cursor-pointer"
     >
       <div className="relative aspect-[2/1] shrink-0 overflow-hidden">
         <img
@@ -288,7 +292,7 @@ function CourseLargeCard({ course }: { course: ShowcaseCourse }) {
             ))}
             <span className="ml-1 text-xs text-white/80">5.0</span>
           </div>
-          <h3 className="text-2xl font-bold text-white leading-tight mb-2">{course.title}</h3>
+          <h3 className="text-2xl font-bold text-white leading-tight mb-2 group-hover:underline">{course.title}</h3>
           <p className="text-sm text-white/70 line-clamp-2 max-w-2xl">{course.description}</p>
         </div>
       </div>
@@ -327,6 +331,7 @@ function CourseLargeCard({ course }: { course: ShowcaseCourse }) {
               className="h-10 gap-2 rounded-lg px-4"
               onClick={(e) => {
                 e.preventDefault()
+                e.stopPropagation()
                 course.onPreview?.()
               }}
             >
@@ -337,13 +342,13 @@ function CourseLargeCard({ course }: { course: ShowcaseCourse }) {
           <CourseCardActions course={course} />
         </div>
       </div>
-    </div>
+    </Link>
   )
 }
 
 function CourseListCard({ course }: { course: ShowcaseCourse }) {
   return (
-    <div className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:border-primary/30 hover:shadow-md sm:flex-row">
+    <Link to={course.cta.url} className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:border-primary/30 hover:shadow-md sm:flex-row cursor-pointer">
       <div className="relative w-full shrink-0 overflow-hidden sm:w-56 md:w-64">
         <div className="aspect-[16/10] sm:aspect-auto sm:h-full">
           <img
@@ -375,7 +380,7 @@ function CourseListCard({ course }: { course: ShowcaseCourse }) {
             ))}
             <span className="ml-1 text-xs text-muted-foreground">5.0</span>
           </div>
-          <h3 className="text-base font-bold leading-snug mb-1">{course.title}</h3>
+          <h3 className="text-base font-bold leading-snug mb-1 group-hover:underline">{course.title}</h3>
           <p className="text-sm text-muted-foreground line-clamp-2">{course.description}</p>
         </div>
 
@@ -403,6 +408,7 @@ function CourseListCard({ course }: { course: ShowcaseCourse }) {
                 className="h-8 gap-1.5 rounded-lg px-2.5 text-xs"
                 onClick={(e) => {
                   e.preventDefault()
+                  e.stopPropagation()
                   course.onPreview?.()
                 }}
               >
@@ -414,7 +420,7 @@ function CourseListCard({ course }: { course: ShowcaseCourse }) {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   )
 }
 

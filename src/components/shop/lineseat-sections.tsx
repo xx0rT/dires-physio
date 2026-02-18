@@ -263,8 +263,8 @@ export function LineseatVideoTutorial() {
     <section className="relative px-4 lg:px-8">
       <div ref={containerRef} className="relative h-[300vh]">
         <div className="sticky top-4 overflow-hidden rounded-3xl bg-black" style={{ height: "calc(100vh - 2rem)" }}>
-          <div className="grid h-full grid-cols-1 lg:grid-cols-2">
-            <div className="relative h-[42%] lg:h-full">
+          <div className="grid h-full grid-cols-1 grid-rows-[2fr_3fr] lg:grid-cols-2 lg:grid-rows-1">
+            <div className="relative">
               <video
                 ref={videoRef}
                 src="/New-Rajden1.mp4"
@@ -277,7 +277,7 @@ export function LineseatVideoTutorial() {
               <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/20 hidden lg:block" />
             </div>
 
-            <div className="flex h-[58%] flex-col justify-center overflow-y-auto px-5 py-4 lg:h-full lg:justify-start lg:overflow-visible lg:px-16 lg:pb-0 lg:pt-40">
+            <div className="flex flex-col justify-center overflow-y-auto px-5 py-4 lg:justify-start lg:overflow-visible lg:px-16 lg:pb-0 lg:pt-40">
               <p className="mb-1.5 lg:mb-3 text-[10px] lg:text-xs font-semibold uppercase tracking-[0.2em] text-white/40">
                 Navod k pouziti
               </p>
