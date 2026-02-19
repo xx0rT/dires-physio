@@ -12,13 +12,13 @@ export const BenefitsSection = () => {
         src="/lýtko.png"
         alt=""
         aria-hidden="true"
-        className="absolute left-0 top-0 h-full w-auto max-w-xs opacity-[0.1] pointer-events-none select-none object-contain dark:opacity-[0.05]"
+        className="absolute left-0 top-0 h-full w-auto max-w-xs opacity-[0.2] pointer-events-none select-none object-contain dark:opacity-[0.12] mix-blend-multiply"
       />
       <img
         src="/rameno.png"
         alt=""
         aria-hidden="true"
-        className="absolute right-0 bottom-0 h-full w-auto max-w-xs opacity-[0.1] pointer-events-none select-none object-contain dark:opacity-[0.05]"
+        className="absolute right-0 bottom-0 h-full w-auto max-w-xs opacity-[0.2] pointer-events-none select-none object-contain dark:opacity-[0.12] mix-blend-multiply"
       />
       <div className="container flex flex-col items-center justify-center mx-auto">
         <div className="flex max-w-4xl mx-auto w-full justify-center">

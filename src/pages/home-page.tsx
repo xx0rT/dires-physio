@@ -10,6 +10,8 @@ import { ServicesSection } from '@/components/layout/sections/services'
 import { TeamSection } from '@/components/layout/sections/team'
 import { TestimonialSection } from '@/components/layout/sections/testimonial'
 
+const decorClass = "absolute pointer-events-none select-none object-contain mix-blend-multiply"
+
 export default function HomePage() {
   return (
     <>
@@ -26,7 +28,7 @@ export default function HomePage() {
           src="/pattern.png"
           alt=""
           aria-hidden="true"
-          className="absolute -left-20 top-1/2 -translate-y-1/2 h-[130%] w-auto opacity-[0.06] pointer-events-none select-none object-contain dark:opacity-[0.04] dark:invert"
+          className={`${decorClass} -left-20 top-1/2 -translate-y-1/2 h-[130%] w-auto opacity-[0.12] dark:opacity-[0.08]`}
         />
         <FeaturesSection />
       </div>
@@ -36,7 +38,7 @@ export default function HomePage() {
           src="/rameno.png"
           alt=""
           aria-hidden="true"
-          className="absolute -right-16 top-0 h-full w-auto opacity-[0.1] pointer-events-none select-none object-contain dark:opacity-[0.05]"
+          className={`${decorClass} -right-16 top-0 h-full w-auto opacity-[0.18] dark:opacity-[0.1]`}
         />
         <TestimonialSection />
       </div>
@@ -46,7 +48,7 @@ export default function HomePage() {
           src="/pattern_(kopie).png"
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 w-full h-full opacity-[0.05] pointer-events-none select-none object-cover dark:opacity-[0.03]"
+          className={`${decorClass} inset-0 w-full h-full object-cover opacity-[0.1] dark:opacity-[0.06]`}
           style={{ maskImage: "linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)", WebkitMaskImage: "linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)" }}
         />
         <ServicesSection />
@@ -57,7 +59,7 @@ export default function HomePage() {
           src="/lýtko.png"
           alt=""
           aria-hidden="true"
-          className="absolute -left-12 top-1/2 -translate-y-1/2 h-[110%] w-auto opacity-[0.09] pointer-events-none select-none object-contain dark:opacity-[0.05]"
+          className={`${decorClass} -left-12 top-1/2 -translate-y-1/2 h-[110%] w-auto opacity-[0.18] dark:opacity-[0.1]`}
         />
         <Feature283 />
       </div>
@@ -67,7 +69,7 @@ export default function HomePage() {
           src="/pattern.png"
           alt=""
           aria-hidden="true"
-          className="absolute -right-20 top-1/2 -translate-y-1/2 h-[120%] w-auto opacity-[0.05] pointer-events-none select-none object-contain dark:opacity-[0.03] dark:invert"
+          className={`${decorClass} -right-20 top-1/2 -translate-y-1/2 h-[120%] w-auto opacity-[0.1] dark:opacity-[0.06]`}
         />
         <TeamSection />
       </div>
@@ -77,7 +79,7 @@ export default function HomePage() {
           src="/rameno.png"
           alt=""
           aria-hidden="true"
-          className="absolute -right-10 bottom-0 h-[90%] w-auto opacity-[0.09] pointer-events-none select-none object-contain dark:opacity-[0.05]"
+          className={`${decorClass} -right-10 bottom-0 h-[90%] w-auto opacity-[0.18] dark:opacity-[0.09]`}
         />
         <BlogShowcaseSection />
       </div>
@@ -87,7 +89,7 @@ export default function HomePage() {
           src="/lýtko.png"
           alt=""
           aria-hidden="true"
-          className="absolute -right-8 top-0 h-full w-auto opacity-[0.14] pointer-events-none select-none object-contain dark:opacity-[0.07]"
+          className={`${decorClass} -right-8 top-0 h-full w-auto opacity-[0.22] dark:opacity-[0.12]`}
         />
         <PricingSection />
       </div>
@@ -97,7 +99,7 @@ export default function HomePage() {
           src="/pattern_(kopie).png"
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 w-full h-full opacity-[0.05] pointer-events-none select-none object-cover dark:opacity-[0.03]"
+          className={`${decorClass} inset-0 w-full h-full object-cover opacity-[0.1] dark:opacity-[0.06]`}
           style={{ maskImage: "linear-gradient(to right, black 0%, transparent 50%)", WebkitMaskImage: "linear-gradient(to right, black 0%, transparent 50%)" }}
         />
         <FAQSection />
@@ -108,13 +110,13 @@ export default function HomePage() {
           src="/lýtko.png"
           alt=""
           aria-hidden="true"
-          className="absolute left-0 top-1/2 -translate-y-1/2 h-[110%] w-auto opacity-[0.08] pointer-events-none select-none object-contain dark:opacity-[0.04]"
+          className={`${decorClass} left-0 top-1/2 -translate-y-1/2 h-[110%] w-auto opacity-[0.16] dark:opacity-[0.08]`}
         />
         <img
           src="/rameno.png"
           alt=""
           aria-hidden="true"
-          className="absolute right-0 top-1/2 -translate-y-1/2 h-[110%] w-auto opacity-[0.08] pointer-events-none select-none object-contain dark:opacity-[0.04]"
+          className={`${decorClass} right-0 top-1/2 -translate-y-1/2 h-[110%] w-auto opacity-[0.16] dark:opacity-[0.08]`}
         />
         <ContactSection />
       </div>

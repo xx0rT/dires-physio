@@ -38,13 +38,13 @@ export const HeroSection = () => {
                 src="/rameno.png"
                 alt=""
                 aria-hidden="true"
-                className="absolute left-0 top-8 h-[88%] w-auto opacity-[0.18] pointer-events-none select-none object-contain z-0 dark:opacity-[0.09]"
+                className="absolute left-0 top-8 h-[88%] w-auto opacity-[0.25] pointer-events-none select-none object-contain z-0 dark:opacity-[0.15] mix-blend-multiply"
             />
             <img
                 src="/pattern_(kopie).png"
                 alt=""
                 aria-hidden="true"
-                className="absolute inset-0 w-full h-full opacity-[0.07] pointer-events-none select-none object-cover z-0 dark:opacity-[0.04]"
+                className="absolute inset-0 w-full h-full opacity-[0.15] pointer-events-none select-none object-cover z-0 dark:opacity-[0.08] mix-blend-multiply"
                 style={{ maskImage: "linear-gradient(to right, transparent 0%, black 35%, black 65%, transparent 100%)", WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 35%, black 65%, transparent 100%)" }}
             />
             <div className="container relative z-10 mx-auto w-full px-4 flex-1 flex flex-col pt-4">
