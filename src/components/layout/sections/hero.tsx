@@ -11,7 +11,6 @@ interface TeamMember {
   name: string
   role: string
   avatar_url: string
-  slug: string
 }
 
 const ease = [0.25, 0.4, 0.25, 1] as const
@@ -19,18 +18,13 @@ const ease = [0.25, 0.4, 0.25, 1] as const
 const stagger = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.12, delayChildren: 0.15 },
+    transition: { staggerChildren: 0.12, delayChildren: 0.1 },
   },
 }
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
+  hidden: { opacity: 0, y: 24 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease } },
-}
-
-const imgReveal = {
-  hidden: { opacity: 0, scale: 0.97 },
-  visible: { opacity: 1, scale: 1, transition: { duration: 0.9, ease } },
 }
 
 export const HeroSection = () => {
@@ -39,7 +33,7 @@ export const HeroSection = () => {
   useEffect(() => {
     supabase
       .from("team_members")
-      .select("id, name, role, avatar_url, slug")
+      .select("id, name, role, avatar_url")
       .eq("is_active", true)
       .order("order_index")
       .then(({ data }) => setMembers(data ?? []))
@@ -53,95 +47,48 @@ export const HeroSection = () => {
   }))
 
   return (
-    <section className="pt-28 pb-16 lg:pt-32 lg:pb-20">
-      <div className="lg:border-y">
-        <motion.div
-          className="container flex flex-col max-lg:divide-y lg:flex-row"
-          variants={stagger}
-          initial="hidden"
-          animate="visible"
-        >
-          <div className="flex-1 lg:border-l">
-            <div className="py-8 lg:border-b lg:pr-8 lg:pb-8 lg:pl-4">
-              <motion.h1
-                className="text-[2.5rem] leading-[1.15] font-semibold tracking-tight md:text-[3.5rem] md:leading-[1.12] lg:text-6xl"
-                variants={fadeUp}
-              >
-                Náš tým{" "}
-                {tooltipItems.length > 0 && (
-                  <span className="inline-flex items-start gap-4 align-middle">
-                    <span className="relative flex items-start">
-                      <span className="flex [&>div:nth-child(1)]:-rotate-3 [&>div:nth-child(2)]:rotate-2 [&>div:nth-child(3)]:-rotate-1 [&>div]:transition-transform [&>div]:duration-300 [&>div:hover]:rotate-0">
-                        <AnimatedTooltip items={tooltipItems} />
-                      </span>
+    <section className="relative overflow-hidden pt-32 pb-20 lg:pt-40 lg:pb-28">
+      <img
+        src="/pattern_(kopie).png"
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 h-full w-full select-none object-cover opacity-[0.06] mix-blend-multiply dark:opacity-[0.04]"
+      />
+
+      <motion.div
+        className="container relative"
+        variants={stagger}
+        initial="hidden"
+        animate="visible"
+      >
+        <div className="grid grid-cols-1 items-start gap-12 md:grid-cols-2 lg:gap-16">
+          <div className="space-y-8">
+            <motion.h1
+              className="text-4xl leading-[1.15] font-semibold tracking-tight md:text-5xl lg:text-[3.5rem]"
+              variants={fadeUp}
+            >
+              Náš tým{" "}
+              {tooltipItems.length > 0 && (
+                <span className="inline-flex items-center gap-4 align-middle">
+                  <span className="relative flex items-center">
+                    <span className="flex [&>div:nth-child(1)]:-rotate-3 [&>div:nth-child(2)]:rotate-2 [&>div:nth-child(3)]:-rotate-1 [&>div]:transition-transform [&>div]:duration-300 [&>div:hover]:rotate-0">
+                      <AnimatedTooltip items={tooltipItems} />
                     </span>
                   </span>
-                )}{" "}
-                vytváří profesionální{" "}
-                <span className="bg-gradient-to-r from-sky-600 to-sky-400 bg-clip-text text-transparent">
-                  vzdělávání
-                </span>{" "}
-                v oblasti fyzioterapie.
-              </motion.h1>
-              <motion.p
-                className="mt-6 max-w-xl text-lg leading-relaxed tracking-tight text-muted-foreground md:text-xl"
-                variants={fadeUp}
-              >
-                Od myšlenky k realizaci — připravujeme ucelené kurzy,
-                certifikace a nástroje pro fyzioterapeuty všech úrovní.
-              </motion.p>
-            </div>
-
-            <motion.div
-              className="relative mt-10 aspect-[3/2.4] overflow-hidden rounded-xl lg:mr-8 lg:mb-10 lg:ml-4"
-              variants={imgReveal}
-            >
-              <img
-                src="/MG_0170-1024x683-1.jpg.webp"
-                alt="Dires tým při práci"
-                className="h-full w-full object-cover"
-              />
-            </motion.div>
-          </div>
-
-          <div className="lg:border-x lg:px-8">
-            <div className="flex justify-center gap-6 pt-8 lg:gap-8 lg:pt-0">
-              <motion.div
-                className="relative mt-16 aspect-[1/1.1] h-[200px] overflow-hidden rounded-xl lg:mt-32 lg:h-[296px]"
-                variants={imgReveal}
-              >
-                <img
-                  src="/Dires.png"
-                  alt="Dires"
-                  className="h-full w-full object-cover"
-                />
-              </motion.div>
-              <motion.div
-                className="relative mt-8 aspect-[1/1.1] h-[200px] overflow-hidden rounded-xl lg:mt-16 lg:h-[296px]"
-                variants={imgReveal}
-              >
-                <img
-                  src="/image.png"
-                  alt="Fyzioterapie"
-                  className="h-full w-full object-cover"
-                />
-              </motion.div>
-            </div>
+                </span>
+              )}{" "}
+              vytváří profesionální vzdělávání v oblasti fyzioterapie.
+            </motion.h1>
 
             <motion.p
-              className="mt-10 px-2 leading-relaxed tracking-tight text-muted-foreground md:mt-14 lg:px-4"
+              className="max-w-lg text-lg leading-relaxed text-muted-foreground md:text-xl"
               variants={fadeUp}
             >
-              Naší misí je umožnit každému fyzioterapeutovi dosáhnout svého
-              plného potenciálu. Poskytujeme inovativní nástroje a ucelené
-              kurzy, které zjednodušují vzdělávací proces a pomáhají
-              profesionálům dosahovat výjimečných výsledků.
+              Od myšlenky k realizaci — připravujeme ucelené kurzy,
+              certifikace a nástroje pro fyzioterapeuty všech úrovní.
             </motion.p>
 
-            <motion.div
-              className="mt-8 flex flex-wrap gap-3 px-2 pb-8 lg:px-4"
-              variants={fadeUp}
-            >
+            <motion.div className="flex flex-wrap gap-3" variants={fadeUp}>
               <Button size="lg" asChild>
                 <Link to="/registrace">
                   Začít zdarma
@@ -153,8 +100,19 @@ export const HeroSection = () => {
               </Button>
             </motion.div>
           </div>
-        </motion.div>
-      </div>
+
+          <motion.div
+            className="relative mx-auto w-full max-w-xl overflow-hidden rounded-2xl shadow-2xl lg:pt-4"
+            variants={fadeUp}
+          >
+            <img
+              src="/MG_0170-1024x683-1.jpg.webp"
+              alt="Dires tým při práci"
+              className="h-full w-full rounded-2xl object-cover"
+            />
+          </motion.div>
+        </div>
+      </motion.div>
     </section>
   )
 }
