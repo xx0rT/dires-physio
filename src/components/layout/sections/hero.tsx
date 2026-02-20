@@ -47,69 +47,56 @@ export const HeroSection = () => {
   }))
 
   return (
-    <section className="relative overflow-hidden pt-32 pb-20 lg:pt-40 lg:pb-28">
-      <img
-        src="/pattern_(kopie).png"
-        alt=""
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 h-full w-full select-none object-cover opacity-[0.06] mix-blend-multiply dark:opacity-[0.04]"
-      />
+    <section className="relative pt-36 pb-20 lg:pt-44 lg:pb-28">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <img
+          src="/pattern.png"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full select-none object-cover opacity-[0.07] mix-blend-multiply dark:opacity-[0.04]"
+        />
+      </div>
 
       <motion.div
-        className="container relative"
+        className="container relative z-10"
         variants={stagger}
         initial="hidden"
         animate="visible"
       >
-        <div className="grid grid-cols-1 items-start gap-12 md:grid-cols-2 lg:gap-16">
-          <div className="space-y-8">
-            <motion.h1
-              className="text-4xl leading-[1.15] font-semibold tracking-tight md:text-5xl lg:text-[3.5rem]"
-              variants={fadeUp}
-            >
-              Náš tým{" "}
-              {tooltipItems.length > 0 && (
-                <span className="inline-flex items-center gap-4 align-middle">
-                  <span className="relative flex items-center">
-                    <span className="flex [&>div:nth-child(1)]:-rotate-3 [&>div:nth-child(2)]:rotate-2 [&>div:nth-child(3)]:-rotate-1 [&>div]:transition-transform [&>div]:duration-300 [&>div:hover]:rotate-0">
-                      <AnimatedTooltip items={tooltipItems} />
-                    </span>
-                  </span>
-                </span>
-              )}{" "}
-              vytváří profesionální vzdělávání v oblasti fyzioterapie.
-            </motion.h1>
+        <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
+          <motion.div className="relative mb-8 pt-10" variants={fadeUp}>
+            {tooltipItems.length > 0 && (
+              <span className="relative z-50 flex items-center justify-center [&>div:nth-child(1)]:-rotate-3 [&>div:nth-child(2)]:rotate-2 [&>div:nth-child(3)]:-rotate-1 [&>div]:transition-transform [&>div]:duration-300 [&>div:hover]:rotate-0">
+                <AnimatedTooltip items={tooltipItems} />
+              </span>
+            )}
+          </motion.div>
 
-            <motion.p
-              className="max-w-lg text-lg leading-relaxed text-muted-foreground md:text-xl"
-              variants={fadeUp}
-            >
-              Od myšlenky k realizaci — připravujeme ucelené kurzy,
-              certifikace a nástroje pro fyzioterapeuty všech úrovní.
-            </motion.p>
-
-            <motion.div className="flex flex-wrap gap-3" variants={fadeUp}>
-              <Button size="lg" asChild>
-                <Link to="/registrace">
-                  Začít zdarma
-                  <ArrowRight className="ml-2 size-4" />
-                </Link>
-              </Button>
-              <Button variant="outline" size="lg" asChild>
-                <Link to="/kurzy">Prozkoumat kurzy</Link>
-              </Button>
-            </motion.div>
-          </div>
-
-          <motion.div
-            className="relative mx-auto w-full max-w-xl overflow-hidden rounded-2xl shadow-2xl lg:pt-4"
+          <motion.h1
+            className="text-4xl leading-[1.15] font-semibold tracking-tight md:text-5xl lg:text-[3.5rem]"
             variants={fadeUp}
           >
-            <img
-              src="/MG_0170-1024x683-1.jpg.webp"
-              alt="Dires tým při práci"
-              className="h-full w-full rounded-2xl object-cover"
-            />
+            Náš tým vytváří profesionální vzdělávání v oblasti fyzioterapie.
+          </motion.h1>
+
+          <motion.p
+            className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground md:text-xl"
+            variants={fadeUp}
+          >
+            Od myšlenky k realizaci — připravujeme ucelené kurzy,
+            certifikace a nástroje pro fyzioterapeuty všech úrovní.
+          </motion.p>
+
+          <motion.div className="mt-8 flex flex-wrap justify-center gap-3" variants={fadeUp}>
+            <Button size="lg" asChild>
+              <Link to="/registrace">
+                Začít zdarma
+                <ArrowRight className="ml-2 size-4" />
+              </Link>
+            </Button>
+            <Button variant="outline" size="lg" asChild>
+              <Link to="/kurzy">Prozkoumat kurzy</Link>
+            </Button>
           </motion.div>
         </div>
       </motion.div>
