@@ -597,6 +597,7 @@ export default function AdminCourseEditorPage() {
               <CourseLessonEditor
                 lessons={lessons}
                 onChange={setLessons}
+                courseId={id}
               />
             </TabsContent>
             <TabsContent value="quizzes" className="mt-6">

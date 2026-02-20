@@ -62,6 +62,7 @@ interface LessonVideo {
   video_provider: string;
   video_external_id: string;
   video_url: string;
+  storage_path: string;
   duration_seconds: number;
   order_index: number;
 }
@@ -393,7 +394,7 @@ export default function CoursePartPage() {
         if (lessonIds.length > 0) {
           const { data: videosData } = await supabase
             .from("course_videos")
-            .select("id, lesson_id, title, video_provider, video_external_id, video_url, duration_seconds, order_index")
+            .select("id, lesson_id, title, video_provider, video_external_id, video_url, storage_path, duration_seconds, order_index")
             .in("lesson_id", lessonIds)
             .order("order_index");
 
@@ -654,6 +655,9 @@ export default function CoursePartPage() {
   const remainingSeconds = Math.max(0, totalSeconds - watchedTime);
   const isLastPart = partIndex === lessons.length - 1;
   const isFirstPart = partIndex === 0;
+  const currentLessonVideos = lessonVideos.get(currentLesson.id) ?? [];
+  const storageVideo = currentLessonVideos.find(v => v.video_provider === 'storage' && v.video_url);
+  const isStorageVideo = !!storageVideo;
 
   const nextPartStatus =
     !isLastPart ? getLessonLockStatus(partIndex + 1) : null;
@@ -710,10 +714,35 @@ export default function CoursePartPage() {
           <div className="space-y-6">
             <div className="rounded-2xl border bg-card overflow-hidden shadow-sm">
               <div className="bg-black aspect-video relative">
-                <div
-                  ref={videoRef}
-                  className="w-full h-full [&>div]:w-full [&>div]:h-full [&_iframe]:w-full [&_iframe]:h-full"
-                />
+                {isStorageVideo ? (
+                  <video
+                    className="w-full h-full"
+                    controls
+                    controlsList="nodownload"
+                    onContextMenu={(e) => e.preventDefault()}
+                    src={storageVideo.video_url}
+                    onTimeUpdate={(e) => {
+                      const vid = e.currentTarget;
+                      setWatchedTime(Math.floor(vid.currentTime));
+                      if (vid.duration > 0) {
+                        setVideoProgress((vid.currentTime / vid.duration) * 100);
+                        setVideoDuration(Math.floor(vid.duration));
+                      }
+                    }}
+                    onLoadedMetadata={(e) => {
+                      const vid = e.currentTarget;
+                      setVideoDuration(Math.floor(vid.duration));
+                      if (lastPosition > 0 && lastPosition < vid.duration - 10) {
+                        vid.currentTime = lastPosition;
+                      }
+                    }}
+                  />
+                ) : (
+                  <div
+                    ref={videoRef}
+                    className="w-full h-full [&>div]:w-full [&>div]:h-full [&_iframe]:w-full [&_iframe]:h-full"
+                  />
+                )}
               </div>
               <div className="px-4 sm:px-5 py-3 bg-muted/30 border-t">
                 <div className="relative h-1.5 rounded-full bg-muted overflow-hidden">

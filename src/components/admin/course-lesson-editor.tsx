@@ -36,6 +36,7 @@ export interface LessonData {
 interface CourseLessonEditorProps {
   lessons: LessonData[]
   onChange: (lessons: LessonData[]) => void
+  courseId?: string
 }
 
 function generateId() {
@@ -45,6 +46,7 @@ function generateId() {
 export default function CourseLessonEditor({
   lessons,
   onChange,
+  courseId,
 }: CourseLessonEditorProps) {
   const [expandedLesson, setExpandedLesson] = useState<string | null>(null)
 
@@ -218,7 +220,7 @@ export default function CourseLessonEditor({
 
                 <CourseVideoManager
                   lessonId={lesson.id}
-                  lessonTitle={lesson.title || 'Nova lekce'}
+                  courseId={courseId || ''}
                 />
 
                 <div className="space-y-2">
