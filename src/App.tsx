@@ -3,6 +3,7 @@ import { ThemeProvider } from 'next-themes'
 import { Toaster } from 'sonner'
 import { AuthProvider } from './lib/auth-context'
 import { CartProvider } from './lib/cart-context'
+import { useActivityTracker } from './lib/use-activity-tracker'
 import MarketingLayout from './layouts/marketing-layout'
 import DashboardLayout from './layouts/dashboard-layout'
 import AdminLayout from './layouts/admin-layout'
@@ -48,12 +49,18 @@ import TeamMemberPage from './pages/team-member-page'
 import BlogPage from './pages/blog-page'
 import BlogPostPage from './pages/blog-post-page'
 
+function ActivityTrackerInit() {
+  useActivityTracker()
+  return null
+}
+
 export default function App() {
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <AuthProvider>
         <CartProvider>
         <ScrollToTop />
+        <ActivityTrackerInit />
         <Routes>
           <Route path="/" element={<MarketingLayout />}>
             <Route index element={<HomePage />} />

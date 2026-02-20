@@ -55,6 +55,17 @@ interface CourseLesson {
   duration: number;
 }
 
+interface LessonVideo {
+  id: string;
+  lesson_id: string;
+  title: string;
+  video_provider: string;
+  video_external_id: string;
+  video_url: string;
+  duration_seconds: number;
+  order_index: number;
+}
+
 export default function CoursePartPage() {
   const { courseId, partNumber } = useParams<{ courseId: string; partNumber: string }>();
   const { user } = useAuth();
@@ -64,6 +75,7 @@ export default function CoursePartPage() {
 
   const [course, setCourse] = useState<Course | null>(null);
   const [lessons, setLessons] = useState<CourseLesson[]>([]);
+  const [lessonVideos, setLessonVideos] = useState<Map<string, LessonVideo[]>>(new Map());
   const [completedLessons, setCompletedLessons] = useState<Set<string>>(new Set());
   const [completionDates, setCompletionDates] = useState<Map<string, string>>(new Map());
   const [loading, setLoading] = useState(true);
@@ -374,7 +386,28 @@ export default function CoursePartPage() {
         .eq("course_id", courseId!)
         .order("order_index");
 
-      if (lessonsData) setLessons(lessonsData);
+      if (lessonsData) {
+        setLessons(lessonsData);
+
+        const lessonIds = lessonsData.map((l: CourseLesson) => l.id);
+        if (lessonIds.length > 0) {
+          const { data: videosData } = await supabase
+            .from("course_videos")
+            .select("id, lesson_id, title, video_provider, video_external_id, video_url, duration_seconds, order_index")
+            .in("lesson_id", lessonIds)
+            .order("order_index");
+
+          if (videosData) {
+            const vMap = new Map<string, LessonVideo[]>();
+            for (const v of videosData as LessonVideo[]) {
+              const existing = vMap.get(v.lesson_id) ?? [];
+              existing.push(v);
+              vMap.set(v.lesson_id, existing);
+            }
+            setLessonVideos(vMap);
+          }
+        }
+      }
 
       if (user) {
         const [{ data: enrollmentData }, { data: purchaseData }] = await Promise.all([
@@ -878,7 +911,12 @@ export default function CoursePartPage() {
                           )}>
                             {lesson.title}
                           </span>
-                          <span className="text-xs text-muted-foreground">{lesson.duration} min</span>
+                          <span className="text-xs text-muted-foreground">
+                            {lesson.duration} min
+                            {(lessonVideos.get(lesson.id)?.length ?? 0) > 0 && (
+                              <span className="ml-1">| {lessonVideos.get(lesson.id)!.length} videi</span>
+                            )}
+                          </span>
                         </div>
                         {isCurrent && status === "available" && (
                           <div className="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0 animate-pulse" />

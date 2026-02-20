@@ -18,6 +18,7 @@ import BlogEditor from "@/components/admin/blog-editor"
 import DraggableContentBlocks, {
   type ContentBlock,
 } from "@/components/admin/draggable-content-blocks"
+import CourseVideoManager from "@/components/admin/course-video-manager"
 
 export interface LessonData {
   id: string
@@ -214,6 +215,11 @@ export default function CourseLessonEditor({
                     />
                   </div>
                 </div>
+
+                <CourseVideoManager
+                  lessonId={lesson.id}
+                  lessonTitle={lesson.title || 'Nova lekce'}
+                />
 
                 <div className="space-y-2">
                   <Label className="text-sm font-semibold">
