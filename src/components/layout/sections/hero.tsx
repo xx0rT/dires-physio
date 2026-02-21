@@ -13,6 +13,7 @@ interface TeamMember {
   name: string
   role: string
   avatar_url: string
+  slug: string
 }
 
 interface HeroCard {
@@ -52,7 +53,7 @@ export const HeroSection = () => {
   useEffect(() => {
     supabase
       .from("team_members")
-      .select("id, name, role, avatar_url")
+      .select("id, name, role, avatar_url, slug")
       .eq("is_active", true)
       .order("order_index")
       .then(({ data }) => setMembers(data ?? []))
@@ -64,6 +65,13 @@ export const HeroSection = () => {
     designation: m.role,
     image: m.avatar_url,
   }))
+
+  const handleTooltipClick = (item: { id: number }) => {
+    const member = members[item.id - 1]
+    if (member?.slug) {
+      navigate(`/tym/${member.slug}`)
+    }
+  }
 
   const handleCardClick = (card: HeroCard) => {
     if (card.isExternal || card.href.startsWith("#")) {
@@ -94,11 +102,11 @@ export const HeroSection = () => {
                 Profesionalni vzdelavani v oblasti fyzioterapie
               </h1>
               {tooltipItems.length > 0 && (
-                <div className="flex items-center gap-3 rounded-full border border-border/50 bg-background/80 px-4 py-2 backdrop-blur-sm">
+                <div className="flex items-center gap-3 rounded-full border border-border/50 bg-background/80 px-5 py-2.5 backdrop-blur-sm">
                   <span className="relative z-50 flex items-center justify-center [&>div:nth-child(1)]:-rotate-3 [&>div:nth-child(2)]:rotate-2 [&>div:nth-child(3)]:-rotate-1 [&>div]:transition-transform [&>div]:duration-300 [&>div:hover]:rotate-0">
-                    <AnimatedTooltip items={tooltipItems} />
+                    <AnimatedTooltip items={tooltipItems} onItemClick={handleTooltipClick} />
                   </span>
-                  <span className="text-sm font-medium text-foreground/90">
+                  <span className="ml-1 text-base font-semibold text-foreground">
                     Nas tym
                   </span>
                 </div>

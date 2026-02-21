@@ -14,7 +14,12 @@ interface TooltipItem {
   image: string
 }
 
-export function AnimatedTooltip({ items }: { items: TooltipItem[] }) {
+interface AnimatedTooltipProps {
+  items: TooltipItem[]
+  onItemClick?: (item: TooltipItem) => void
+}
+
+export function AnimatedTooltip({ items, onItemClick }: AnimatedTooltipProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const springConfig = { stiffness: 100, damping: 5 }
   const x = useMotionValue(0)
@@ -57,7 +62,7 @@ export function AnimatedTooltip({ items }: { items: TooltipItem[] }) {
                   rotate,
                   whiteSpace: "nowrap",
                 }}
-                className="absolute -top-16 -left-1/2 z-50 flex translate-x-1/2 flex-col items-center justify-center rounded-md bg-foreground px-4 py-2 text-xs shadow-xl"
+                className="absolute -top-16 left-1/2 z-50 flex -translate-x-1/2 flex-col items-center justify-center rounded-md bg-foreground px-4 py-2 text-xs shadow-xl"
               >
                 <div className="absolute inset-x-10 -bottom-px z-30 h-px w-[20%] bg-gradient-to-r from-transparent via-sky-500 to-transparent" />
                 <div className="absolute -bottom-px left-10 z-30 h-px w-[40%] bg-gradient-to-r from-transparent via-sky-300 to-transparent" />
@@ -72,7 +77,8 @@ export function AnimatedTooltip({ items }: { items: TooltipItem[] }) {
           </AnimatePresence>
           <div
             onMouseMove={handleMouseMove}
-            className="relative size-10 overflow-hidden rounded-full border-2 border-background object-cover object-top shadow-md"
+            onClick={onItemClick ? (e) => { e.stopPropagation(); onItemClick(item) } : undefined}
+            className={`relative size-10 overflow-hidden rounded-full border-2 border-background object-cover object-top shadow-md${onItemClick ? " cursor-pointer" : ""}`}
           >
             <img
               src={item.image}
