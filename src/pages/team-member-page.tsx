@@ -7,7 +7,6 @@ import {
   CheckCircle2,
   ChevronRight,
   Clock,
-  GraduationCap,
   Home,
   Mail,
   MapPin,
@@ -17,10 +16,8 @@ import {
   Star,
   Users,
   ArrowLeft,
-  Sparkles,
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -60,22 +57,6 @@ const formatCZK = (amount: number) =>
     maximumFractionDigits: 0,
   }).format(amount)
 
-const stagger = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.07, delayChildren: 0.15 },
-  },
-}
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] as const },
-  },
-}
-
 const fadeIn = {
   hidden: { opacity: 0 },
   visible: {
@@ -91,23 +72,6 @@ const scaleIn = {
     scale: 1,
     transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] as const },
   },
-}
-
-function StatItem({ value, label, icon: Icon }: { value: string; label: string; icon: typeof Award }) {
-  return (
-    <motion.div
-      variants={fadeUp}
-      className="flex items-center gap-3 rounded-2xl border border-neutral-200/60 bg-white/80 px-5 py-4 backdrop-blur-sm dark:border-neutral-800 dark:bg-neutral-900/80"
-    >
-      <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-neutral-100 dark:bg-neutral-800">
-        <Icon className="size-4.5 text-neutral-600 dark:text-neutral-400" />
-      </div>
-      <div>
-        <p className="text-lg font-bold leading-none text-neutral-900 dark:text-neutral-100">{value}</p>
-        <p className="mt-1 text-xs text-neutral-500">{label}</p>
-      </div>
-    </motion.div>
-  )
 }
 
 function SpecBadge({ label, index }: { label: string; index: number }) {
@@ -159,8 +123,10 @@ export default function TeamMemberPage() {
     target: heroRef,
     offset: ['start start', 'end start'],
   })
-  const heroImageY = useTransform(scrollYProgress, [0, 1], ['0%', '20%'])
-  const heroOverlayOpacity = useTransform(scrollYProgress, [0, 0.5], [0.4, 0.75])
+  const heroImageY = useTransform(scrollYProgress, [0, 1], ['0%', '25%'])
+  const heroScale = useTransform(scrollYProgress, [0, 1], [1, 1.08])
+  const textY = useTransform(scrollYProgress, [0, 1], ['0%', '40%'])
+  const textOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0])
 
   useEffect(() => {
     const fetchMember = async () => {
@@ -231,19 +197,20 @@ export default function TeamMemberPage() {
 
   return (
     <div className="pb-24">
-      <div ref={heroRef} className="relative h-[420px] overflow-hidden sm:h-[480px] lg:h-[540px]">
-        <motion.div className="absolute inset-0" style={{ y: heroImageY }}>
+      <div ref={heroRef} className="relative h-[520px] overflow-hidden sm:h-[600px] lg:h-[680px]">
+        <motion.div
+          className="absolute inset-0"
+          style={{ y: heroImageY, scale: heroScale }}
+        >
           <img
             src={member.avatar_url}
             alt={member.name}
-            className="h-[130%] w-full object-cover"
+            className="h-full w-full object-cover"
           />
         </motion.div>
-        <motion.div
-          className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/10"
-          style={{ opacity: heroOverlayOpacity }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent" />
+
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/5" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/30 to-transparent" />
 
         <div className="absolute inset-x-0 top-0 z-10">
           <div className="mx-auto max-w-6xl px-4 pt-6 sm:px-6 lg:px-8">
@@ -292,62 +259,70 @@ export default function TeamMemberPage() {
           </div>
         </div>
 
-        <div className="absolute inset-x-0 bottom-0 z-10">
-          <div className="mx-auto max-w-6xl px-4 pb-10 sm:px-6 lg:px-8">
+        <motion.div
+          className="absolute inset-x-0 bottom-0 z-10"
+          style={{ y: textY, opacity: textOpacity }}
+        >
+          <div className="mx-auto max-w-6xl px-4 pb-12 sm:px-6 lg:px-8">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+              transition={{ duration: 0.7, delay: 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
-              <div className="flex flex-wrap items-center gap-2 mb-4">
-                <Badge className="border-0 bg-white/10 text-white/90 backdrop-blur-md text-xs font-medium px-3 py-1">
-                  {member.role}
-                </Badge>
-                <Badge className="border-0 bg-emerald-500/15 text-emerald-200 backdrop-blur-md text-xs font-medium px-3 py-1">
-                  <CheckCircle2 className="mr-1.5 size-3" />
-                  Overeny odbornik
-                </Badge>
-              </div>
-              <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.25 }}
+                className="mb-3 text-sm font-medium uppercase tracking-widest text-white/50"
+              >
+                {member.role}
+              </motion.p>
+
+              <h1 className="text-5xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl">
                 {member.name}
               </h1>
-              <p className="mt-3 max-w-xl text-base leading-relaxed text-white/60 sm:text-lg">
+
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                className="mt-4 max-w-2xl text-base leading-relaxed text-white/55 sm:text-lg"
+              >
                 {member.description}
-              </p>
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.55 }}
+                className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-white/45"
+              >
+                <span className="flex items-center gap-1.5">
+                  <Award className="size-3.5 text-white/35" />
+                  {member.experience_years} let zkusenosti
+                </span>
+                <span className="hidden sm:inline text-white/20">|</span>
+                <span className="flex items-center gap-1.5">
+                  <MapPin className="size-3.5 text-white/35" />
+                  {member.location}
+                </span>
+                <span className="hidden sm:inline text-white/20">|</span>
+                <span className="flex items-center gap-1.5">
+                  <Star className="size-3.5 text-amber-400/70" />
+                  4.9 hodnoceni
+                </span>
+                <span className="hidden sm:inline text-white/20">|</span>
+                <span className="flex items-center gap-1.5">
+                  <Clock className="size-3.5 text-white/35" />
+                  {formatCZK(member.hourly_rate)} / hod
+                </span>
+              </motion.div>
             </motion.div>
           </div>
-        </div>
+        </motion.div>
       </div>
 
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          animate="visible"
-          className="-mt-10 relative z-20 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4"
-        >
-          <StatItem
-            value={`${member.experience_years} let`}
-            label="Zkusenosti"
-            icon={Award}
-          />
-          <StatItem
-            value={`${member.specializations.length}`}
-            label="Specializaci"
-            icon={ShieldCheck}
-          />
-          <StatItem
-            value={formatCZK(member.hourly_rate)}
-            label="Za hodinu"
-            icon={Clock}
-          />
-          <StatItem
-            value="4.9"
-            label="Hodnoceni"
-            icon={Star}
-          />
-        </motion.div>
-
         <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_380px] lg:gap-12">
           <div className="space-y-10">
             <motion.section
@@ -356,14 +331,9 @@ export default function TeamMemberPage() {
               whileInView="visible"
               viewport={{ once: true, margin: '-40px' }}
             >
-              <div className="mb-5 flex items-center gap-3">
-                <div className="flex size-9 items-center justify-center rounded-xl bg-neutral-100 dark:bg-neutral-800">
-                  <Users className="size-4 text-neutral-600 dark:text-neutral-400" />
-                </div>
-                <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                  O mne
-                </h2>
-              </div>
+              <h2 className="mb-4 text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
+                O mne
+              </h2>
               <div className="rounded-2xl border border-neutral-200/60 bg-white p-6 sm:p-8 dark:border-neutral-800 dark:bg-neutral-900">
                 <p className="text-base leading-[1.85] text-neutral-600 dark:text-neutral-400">
                   {member.bio}
@@ -377,14 +347,9 @@ export default function TeamMemberPage() {
               whileInView="visible"
               viewport={{ once: true, margin: '-40px' }}
             >
-              <div className="mb-5 flex items-center gap-3">
-                <div className="flex size-9 items-center justify-center rounded-xl bg-teal-100 dark:bg-teal-900/30">
-                  <Sparkles className="size-4 text-teal-600 dark:text-teal-400" />
-                </div>
-                <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                  Specializace
-                </h2>
-              </div>
+              <h2 className="mb-4 text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
+                Specializace
+              </h2>
               <div className="flex flex-wrap gap-2.5">
                 {member.specializations.map((spec, i) => (
                   <SpecBadge key={spec} label={spec} index={i} />
@@ -399,14 +364,9 @@ export default function TeamMemberPage() {
                 whileInView="visible"
                 viewport={{ once: true, margin: '-40px' }}
               >
-                <div className="mb-5 flex items-center gap-3">
-                  <div className="flex size-9 items-center justify-center rounded-xl bg-amber-100 dark:bg-amber-900/30">
-                    <Award className="size-4 text-amber-600 dark:text-amber-400" />
-                  </div>
-                  <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                    Certifikace
-                  </h2>
-                </div>
+                <h2 className="mb-4 text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
+                  Certifikace
+                </h2>
                 <div className="grid gap-3 sm:grid-cols-2">
                   {member.certifications.map((cert, i) => (
                     <CertCard
@@ -428,14 +388,9 @@ export default function TeamMemberPage() {
                 whileInView="visible"
                 viewport={{ once: true, margin: '-40px' }}
               >
-                <div className="mb-5 flex items-center gap-3">
-                  <div className="flex size-9 items-center justify-center rounded-xl bg-blue-100 dark:bg-blue-900/30">
-                    <GraduationCap className="size-4 text-blue-600 dark:text-blue-400" />
-                  </div>
-                  <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                    Vzdelani
-                  </h2>
-                </div>
+                <h2 className="mb-4 text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
+                  Vzdelani
+                </h2>
                 <div className="space-y-3">
                   {member.education.map((edu, i) => (
                     <CertCard
