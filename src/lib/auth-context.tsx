@@ -21,15 +21,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const navigate = useNavigate()
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-      setUser(session?.user ?? null)
+    supabase.auth.getSession().then(({ data: { session: s } }) => {
+      setSession(s)
+      setUser(s?.user ?? null)
       setLoading(false)
     })
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
-      setUser(session?.user ?? null)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      setSession((prev) => {
+        if (prev?.access_token === newSession?.access_token) return prev
+        return newSession
+      })
+      setUser((prev) => {
+        const newUser = newSession?.user ?? null
+        if (prev?.id === newUser?.id) return prev
+        return newUser
+      })
     })
 
     return () => subscription.unsubscribe()

@@ -115,116 +115,122 @@ export default function AdminOverviewPage() {
   const [loading, setLoading] = useState(true)
 
   const fetchTraffic = useCallback(async () => {
-    const now = new Date()
-    const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString()
-    const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString()
+    try {
+      const now = new Date()
+      const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString()
+      const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString()
 
-    const [
-      { data: allActivity },
-      { data: todayActivity },
-      { data: weekActivity },
-      { data: recentRows },
-    ] = await Promise.all([
-      supabase
-        .from('user_activity')
-        .select('id, user_id, session_id, event_type, page_path, page_title, device_type, duration_seconds, created_at')
-        .eq('event_type', 'page_view')
-        .order('created_at', { ascending: false })
-        .limit(5000),
-      supabase
-        .from('user_activity')
-        .select('id', { count: 'exact', head: true })
-        .eq('event_type', 'page_view')
-        .gte('created_at', todayStart),
-      supabase
-        .from('user_activity')
-        .select('id', { count: 'exact', head: true })
-        .eq('event_type', 'page_view')
-        .gte('created_at', weekAgo),
-      supabase
-        .from('user_activity')
-        .select('id, user_id, session_id, event_type, page_path, page_title, device_type, duration_seconds, created_at')
-        .order('created_at', { ascending: false })
-        .limit(20),
-    ])
+      const [
+        { data: allActivity },
+        { count: todayCount },
+        { count: weekCount },
+        { data: recentRows },
+      ] = await Promise.all([
+        supabase
+          .from('user_activity')
+          .select('id, user_id, session_id, event_type, page_path, page_title, device_type, duration_seconds, created_at')
+          .eq('event_type', 'page_view')
+          .order('created_at', { ascending: false })
+          .limit(500),
+        supabase
+          .from('user_activity')
+          .select('id', { count: 'exact', head: true })
+          .eq('event_type', 'page_view')
+          .gte('created_at', todayStart),
+        supabase
+          .from('user_activity')
+          .select('id', { count: 'exact', head: true })
+          .eq('event_type', 'page_view')
+          .gte('created_at', weekAgo),
+        supabase
+          .from('user_activity')
+          .select('id, user_id, session_id, event_type, page_path, page_title, device_type, duration_seconds, created_at')
+          .order('created_at', { ascending: false })
+          .limit(20),
+      ])
 
-    const rows = allActivity ?? []
-    const sessions = new Set(rows.map(r => r.session_id))
-    const users = new Set(rows.filter(r => r.user_id).map(r => r.user_id))
-    const totalDuration = rows.reduce((s, r) => s + (r.duration_seconds || 0), 0)
+      const rows = allActivity ?? []
+      const sessions = new Set(rows.map(r => r.session_id))
+      const users = new Set(rows.filter(r => r.user_id).map(r => r.user_id))
+      const totalDuration = rows.reduce((s, r) => s + (r.duration_seconds || 0), 0)
 
-    const pageCount = new Map<string, { title: string; count: number }>()
-    for (const r of rows) {
-      const existing = pageCount.get(r.page_path)
-      if (existing) {
-        existing.count++
-      } else {
-        pageCount.set(r.page_path, { title: r.page_title || r.page_path, count: 1 })
+      const pageCount = new Map<string, { title: string; count: number }>()
+      for (const r of rows) {
+        const existing = pageCount.get(r.page_path)
+        if (existing) {
+          existing.count++
+        } else {
+          pageCount.set(r.page_path, { title: r.page_title || r.page_path, count: 1 })
+        }
       }
-    }
-    const topPages = Array.from(pageCount.entries())
-      .map(([path, data]) => ({ path, title: data.title, views: data.count }))
-      .sort((a, b) => b.views - a.views)
-      .slice(0, 8)
+      const topPages = Array.from(pageCount.entries())
+        .map(([path, data]) => ({ path, title: data.title, views: data.count }))
+        .sort((a, b) => b.views - a.views)
+        .slice(0, 8)
 
-    const devices = { desktop: 0, mobile: 0, tablet: 0 }
-    for (const r of rows) {
-      const d = r.device_type as keyof typeof devices
-      if (d in devices) devices[d]++
-    }
+      const devices = { desktop: 0, mobile: 0, tablet: 0 }
+      for (const r of rows) {
+        const d = r.device_type as keyof typeof devices
+        if (d in devices) devices[d]++
+      }
 
-    setTraffic({
-      totalPageViews: rows.length,
-      uniqueSessions: sessions.size,
-      uniqueUsers: users.size,
-      avgDuration: rows.length > 0 ? Math.round(totalDuration / rows.length) : 0,
-      topPages,
-      deviceBreakdown: devices,
-      recentActivity: (recentRows ?? []) as ActivityRow[],
-      todayPageViews: (todayActivity as any)?.length ?? 0,
-      weekPageViews: (weekActivity as any)?.length ?? 0,
-    })
+      setTraffic({
+        totalPageViews: rows.length,
+        uniqueSessions: sessions.size,
+        uniqueUsers: users.size,
+        avgDuration: rows.length > 0 ? Math.round(totalDuration / rows.length) : 0,
+        topPages,
+        deviceBreakdown: devices,
+        recentActivity: (recentRows ?? []) as ActivityRow[],
+        todayPageViews: todayCount ?? 0,
+        weekPageViews: weekCount ?? 0,
+      })
+    } catch {
+      // silently handle errors so loading always resolves
+    }
   }, [])
 
   useEffect(() => {
     const fetchAll = async () => {
-      const [
-        { count: usersCount },
-        { count: coursesCount },
-        { count: enrollmentsCount },
-        { data: purchases },
-        { count: activeSubsCount },
-        { data: recent },
-      ] = await Promise.all([
-        supabase.from('profiles').select('*', { count: 'exact', head: true }),
-        supabase.from('courses').select('*', { count: 'exact', head: true }),
-        supabase.from('course_enrollments').select('*', { count: 'exact', head: true }),
-        supabase.from('course_purchases').select('amount_paid'),
-        supabase
-          .from('subscriptions')
-          .select('*', { count: 'exact', head: true })
-          .in('status', ['active', 'trialing']),
-        supabase
-          .from('profiles')
-          .select('id, email, full_name, created_at')
-          .order('created_at', { ascending: false })
-          .limit(5),
-      ])
+      try {
+        const [
+          { count: usersCount },
+          { count: coursesCount },
+          { count: enrollmentsCount },
+          { data: purchases },
+          { count: activeSubsCount },
+          { data: recent },
+        ] = await Promise.all([
+          supabase.from('profiles').select('*', { count: 'exact', head: true }),
+          supabase.from('courses').select('*', { count: 'exact', head: true }),
+          supabase.from('course_enrollments').select('*', { count: 'exact', head: true }),
+          supabase.from('course_purchases').select('amount_paid'),
+          supabase
+            .from('subscriptions')
+            .select('*', { count: 'exact', head: true })
+            .in('status', ['active', 'trialing']),
+          supabase
+            .from('profiles')
+            .select('id, email, full_name, created_at')
+            .order('created_at', { ascending: false })
+            .limit(5),
+        ])
 
-      const totalRevenue = purchases?.reduce((sum, p) => sum + Number(p.amount_paid || 0), 0) ?? 0
+        const totalRevenue = purchases?.reduce((sum, p) => sum + Number(p.amount_paid || 0), 0) ?? 0
 
-      setStats({
-        totalUsers: usersCount ?? 0,
-        totalCourses: coursesCount ?? 0,
-        totalEnrollments: enrollmentsCount ?? 0,
-        totalPurchases: purchases?.length ?? 0,
-        totalRevenue,
-        activeSubscriptions: activeSubsCount ?? 0,
-      })
-      setRecentUsers(recent ?? [])
-
-      await fetchTraffic()
-      setLoading(false)
+        setStats({
+          totalUsers: usersCount ?? 0,
+          totalCourses: coursesCount ?? 0,
+          totalEnrollments: enrollmentsCount ?? 0,
+          totalPurchases: purchases?.length ?? 0,
+          totalRevenue,
+          activeSubscriptions: activeSubsCount ?? 0,
+        })
+        setRecentUsers(recent ?? [])
+        await fetchTraffic()
+      } finally {
+        setLoading(false)
+      }
     }
     fetchAll()
   }, [fetchTraffic])
